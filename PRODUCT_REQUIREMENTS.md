@@ -345,3 +345,78 @@ REQ-ACCESS-005 Capability evaluation shall remain modular so payment, verificati
 
 ## Exact next requirements milestone
 Define detailed moderator workflows and safety operations, then analytics/reporting requirements.
+
+
+## 28. Moderator workflows and safety operations
+
+### Report intake
+REQ-MOD-001 Users shall be able to report supported users, profiles, messages and other reportable content.
+REQ-MOD-002 Report intake shall collect a report reason, optional context and references to the reported subject without requiring users to expose unnecessary personal information.
+REQ-MOD-003 The system shall preserve relevant report-time context according to retention policy so later content edits or deletion do not silently invalidate authorized review.
+REQ-MOD-004 Duplicate or repeated reports may be linked for operational awareness without discarding independent reporter evidence.
+REQ-MOD-005 The system shall provide reporters with an understandable acknowledgement and, where policy permits, status information without exposing confidential enforcement details.
+
+### Triage and queues
+REQ-MOD-006 Reports shall enter a triage workflow with configurable severity and priority signals.
+REQ-MOD-007 The system shall support queues segmented by supported factors such as report type, severity, category, geography, language and assigned team.
+REQ-MOD-008 Automated signals may assist prioritization but shall not be treated as an unexplained substitute for required human review policies.
+REQ-MOD-009 Moderators shall only access queues and evidence authorized by their role and jurisdictional/operator scope.
+REQ-MOD-010 Queue assignment, reassignment and escalation actions shall be auditable.
+
+### Case and evidence handling
+REQ-MOD-011 A moderation case shall maintain a stable identifier and lifecycle independent from individual UI sessions.
+REQ-MOD-012 Authorized reviewers shall be able to review relevant evidence references, prior actions and policy context.
+REQ-MOD-013 Evidence access shall follow least-privilege rules and sensitive evidence access shall be auditable.
+REQ-MOD-014 The system shall distinguish original user content, derived moderation signals and reviewer notes.
+REQ-MOD-015 Reviewer notes shall support restricted visibility and shall not become visible to ordinary users by default.
+REQ-MOD-016 Evidence retention and deletion shall follow explicit policy rather than ad hoc moderator behavior.
+
+### Enforcement actions
+REQ-MOD-017 Supported enforcement actions shall include warning, content restriction/removal where applicable, feature restriction, communication restriction, temporary suspension and permanent account action.
+REQ-MOD-018 Enforcement shall support duration, scope, reason category and effective-time metadata.
+REQ-MOD-019 Safety restrictions shall propagate consistently to discovery, messaging, payments and other protected capabilities according to centralized access policy.
+REQ-MOD-020 Automated enforcement, if enabled, shall have explicit thresholds, scope and review/escalation rules.
+REQ-MOD-021 High-impact actions shall require the configured authorization level and audit record.
+REQ-MOD-022 Enforcement reversals or modifications shall preserve the historical decision trail.
+
+### Escalation and urgent safety operations
+REQ-MOD-023 The workflow shall support escalation of urgent or high-severity cases.
+REQ-MOD-024 Operators shall define emergency operational procedures outside ordinary queue ordering where required.
+REQ-MOD-025 The application shall not promise emergency-response services unless a deployment explicitly provides and documents such services.
+REQ-MOD-026 Safety incidents affecting platform integrity shall support linkage between multiple related reports or cases.
+REQ-MOD-027 Operational handoffs shall preserve current state, responsible role and next required action.
+
+### Appeals and review
+REQ-MOD-028 Deployments may enable appeals for supported enforcement actions.
+REQ-MOD-029 Appeals shall be linked to the original action while maintaining an independent review lifecycle.
+REQ-MOD-030 Appeal reviewers shall receive the policy-defined evidence and history required for review.
+REQ-MOD-031 Appeal outcomes shall record uphold, modify, reverse or other configured results with an audit trail.
+REQ-MOD-032 The system shall support policy-defined limits on appeal eligibility and timing.
+
+## 29. Safety consistency and abuse prevention
+
+REQ-SAFE-008 Safety restrictions shall be enforced server-side across all relevant clients and APIs.
+REQ-SAFE-009 A block shall consistently prevent policy-prohibited interaction paths, including indirect discovery or communication paths where applicable.
+REQ-SAFE-010 Rate limits shall support differentiated policies by action risk and abuse signals.
+REQ-SAFE-011 The system shall support configurable limits for registration, authentication attempts, messaging, discovery actions, reports and other abuse-sensitive operations.
+REQ-SAFE-012 Abuse controls shall favor measurable, explainable signals and operational review over hidden permanent penalties where policy permits.
+REQ-SAFE-013 Security or safety controls shall generate privacy-conscious observability rather than indiscriminate collection of user data.
+REQ-SAFE-014 Repeated or coordinated abuse indicators shall support escalation to authorized operational workflows.
+REQ-SAFE-015 Safety policy changes shall be versioned or otherwise traceable when they affect enforcement decisions.
+
+## 30. Safety operations acceptance principles
+
+The safety system shall be evaluated as an end-to-end workflow, not merely as isolated buttons.
+
+Minimum workflow scenarios shall eventually test:
+1. User blocks another user and prohibited interaction paths are consistently removed.
+2. User reports a message and the report reaches an authorized moderation queue.
+3. A high-severity case is escalated without waiting behind ordinary low-priority work.
+4. A moderator action changes protected capabilities consistently across API and clients.
+5. Evidence access is restricted and audited.
+6. A reversible enforcement action can be modified while preserving history.
+7. An appeal, when enabled, remains traceable to the original decision.
+8. Interrupted operational work can be handed off with a clear next action.
+
+## Exact next requirements milestone
+Define analytics and reporting requirements, followed by accessibility and operational quality requirements.
