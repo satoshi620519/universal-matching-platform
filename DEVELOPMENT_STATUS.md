@@ -29,6 +29,7 @@ STATUS: Milestone 1 in progress
 - M1 account activation service tests added for allowed and denied states.
 - API capability access application service added, reusing the centralized capability gate.
 - Capability access service tests added for verification, entitlement and effective-time decisions.
+- Domain package entrypoint explicitly exports domain modules and exposes its source entrypoint for workspace typechecking.
 
 ## Milestone 0 completion gate — COMPLETE
 - Root pnpm workspace and Turborepo configuration: complete.
@@ -75,6 +76,7 @@ Validate capability access and account activation application services, then con
 - Account lifecycle tests: CI validation passed.
 - Account activation service tests: added; latest CI validation pending.
 - Capability access service tests: added; latest CI validation pending.
+- Domain package workspace entrypoint: added; latest CI validation pending.
 
 ## Milestone 1 progress
 - M0 completion formally recorded.
@@ -88,6 +90,7 @@ Validate capability access and account activation application services, then con
 - Account lifecycle has explicit allowed transitions based on the recorded lifecycle requirements.
 - Account activation service delegates state validation to the domain layer and has application-level tests.
 - API capability access service provides a stable application-level decision result and reason while delegating authorization logic to the domain gate.
+- Domain package now has an explicit workspace entrypoint so API consumers can typecheck against the package contract.
 
 ## Exact next action
 Run and verify CI for the latest capability/account application-service changes. If green, continue with the next smallest vertical-slice application service already supported by the recorded requirements, and add its tests. Do not recreate completed foundations.
