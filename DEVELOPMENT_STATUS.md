@@ -1,75 +1,63 @@
 # Development Status
 
 CURRENT PHASE: Phase 1 — Product requirements and architecture planning
-CURRENT MILESTONE: Foundation decisions and technical architecture preparation
-CURRENT TASK: Define the complete technical architecture before implementation
+CURRENT MILESTONE: Technical architecture draft completed
+CURRENT TASK: Validate and finalize architecture decisions before implementation
 STATUS: In progress
 
 ## Completed
-- Project foundation documents created.
-- GitHub established as the persistent source of truth.
-- Direct ChatGPT GitHub read/write/delete operations tested successfully.
-- Codex environment connected and repository documentation reviewed successfully.
-- Core product direction confirmed:
-  - Universal platform supporting multiple matching categories.
-  - Global availability from the beginning.
-  - Web, iOS, Android, backend, database, admin console, configuration system, and documentation are in Version 1.0 scope.
-  - Multiple matching methods are required.
-  - Payment functionality is required.
-  - Identity verification is required.
-  - Safety, privacy, internationalization, and geographic awareness are core requirements.
-  - Buyers need both Quick Launch configuration and Advanced Customization.
-- Development workflow confirmed:
-  - ChatGPT leads development and manages GitHub.
-  - Codex is used at major milestones for independent review, testing, security checks, and QA.
-  - Progress must be recorded frequently during work, not only at session end.
+- Project foundation and continuity rules established.
+- GitHub established as persistent source of truth.
+- ChatGPT GitHub read/write/delete operations tested.
+- Codex repository environment/documentation access tested.
+- Core product scope confirmed: global, multi-category matching; Web+iOS+Android; backend; database; admin; configuration; payments; identity verification; safety; privacy; internationalization; geographic awareness.
+- Initial technical architecture research completed.
+- ARCHITECTURE_DRAFT.md created with recommended stack and modular system boundaries.
+
+## Current architecture draft
+- Web/Admin: Next.js + TypeScript.
+- Mobile: React Native + Expo + TypeScript.
+- API: NestJS + TypeScript.
+- Primary data: PostgreSQL.
+- Cache/queues/rate limiting: Redis.
+- Media: S3-compatible storage abstraction.
+- Realtime: authorized realtime/WebSocket layer.
+- Architecture style: monorepo + modular monolith with future service boundaries.
+- Matching: configurable strategy-based engine.
+- Buyer customization: configuration-driven.
+- Third-party payments and identity verification: provider abstraction.
 
 ## In progress
-- Technical architecture planning.
-
-The architecture proposal must cover:
-1. Technology stack.
-2. Monorepo/project structure.
-3. Web application architecture.
-4. iOS and Android strategy.
-5. Backend/API architecture.
-6. Database and data access architecture.
-7. Authentication and account security.
-8. Identity verification integration architecture.
-9. Payment architecture.
-10. Internationalization/localization.
-11. Geographic and region-aware matching.
-12. Safety, moderation, privacy, and security.
-13. Buyer configuration/customization system.
-14. Media/storage and notifications.
-15. Testing, deployment, observability, and scalability foundations.
+Architecture validation and detailed requirements definition.
 
 ## Not started
 - PRODUCT_REQUIREMENTS.md
-- ARCHITECTURE.md
+- Final ARCHITECTURE.md
 - DATA_MODEL.md
 - CONFIGURATION_SYSTEM_SPEC.md
 - UX_SPEC.md
 - Implementation milestones
+- Application source code
 
 ## Files changed in current planning cycle
-- DECISIONS.md updated with confirmed scope and continuity policy.
+- DECISIONS.md
+- DEVELOPMENT_STATUS.md
+- ARCHITECTURE_DRAFT.md
 
-## Decisions made
-See DECISIONS.md, especially decisions 13–20.
+## Research notes
+Current official documentation supports PostgreSQL-centered authentication/data access patterns and authorized realtime access controls. Supabase documentation describes Auth and Realtime architectures based around PostgreSQL and row-level access controls. Expo documentation notes that Next.js integration exists but is not the default universal workflow; therefore Web and Mobile should remain separate first-class apps while sharing domain packages selectively. Stripe Identity supports multiple verification check types, but provider coverage must be validated per target market before final provider selection.
 
 ## Known issues / risks
-- Existing DEVELOPMENT_STATUS.md was outdated and still listed Phase 0; this update establishes the actual current state.
-- The exact technology stack has not yet been approved.
-- No implementation code has been started intentionally.
+- Payment and identity providers require a country/coverage matrix before final selection.
+- Global deployment strategy needs separate architecture work.
+- Advanced search engine choice should follow discovery requirements.
+- No implementation has started intentionally.
 
 ## Test status
-- ChatGPT GitHub write/delete operations: passed.
-- Codex repository environment/documentation access: passed.
+- GitHub operations: passed.
+- Codex repository access: passed.
+- Architecture research: completed.
 - Product implementation tests: not started.
 
 ## Exact next action
-Research and prepare a concrete recommended technical architecture for the approved global, commercial, Web+iOS+Android Universal Matching Platform. Record the proposal in a new architecture planning document before any implementation code is created.
-
-## Continuity requirement
-After every meaningful planning or implementation milestone, update this file with the exact current state, completed work, unfinished work, changed files, decisions, test results, and next action.
+Create PRODUCT_REQUIREMENTS.md defining the complete Version 1.0 functional requirements and non-functional requirements. Use the approved product direction and ARCHITECTURE_DRAFT.md as inputs. After each major requirements section, record progress and unresolved decisions.
