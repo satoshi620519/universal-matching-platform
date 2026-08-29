@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the API application boundary and then establish the database/migration boundary.
+CURRENT TASK: Validate the database/migration boundary and then continue to the first vertical-slice application services.
 STATUS: Milestone 1 in progress
 
 ## Completed
@@ -19,6 +19,8 @@ STATUS: Milestone 1 in progress
 - M1 canonical domain primitives implemented: EntityId, InstantString and DomainError.
 - M1 domain primitive unit tests implemented, including normalization and validation edge cases.
 - M1 API application boundary created: AppModule and isolated HealthController.
+- M1 database configuration boundary created and tested.
+- M1 database package and migration directory boundary created; no product schema has been invented yet.
 
 ## Milestone 0 completion gate — COMPLETE
 - Root pnpm workspace and Turborepo configuration: complete.
@@ -51,24 +53,28 @@ STATUS: Milestone 1 in progress
 5. Add automated tests for the new foundation.
 
 ## Current task
-Validate the API application boundary and then establish the database/migration boundary. Do not rebuild M0 or implement unrelated product features.
+Validate the database/migration boundary and then continue to the first vertical-slice application services. Do not rebuild M0 or invent a full product schema before the relevant requirements are recorded.
 
 ## Test status
 - GitHub operations: passed.
 - Codex repository access: passed.
 - Requirements document integrity check: passed.
 - M0 CI validation: passed (install/typecheck/lint/test/build).
-- M1 domain primitive tests: passed in the last successful CI run.
-- API application boundary: added; latest CI validation pending.
+- M1 domain primitive tests: passed.
+- API application boundary: added; CI validation previously passed.
+- Database configuration tests: added; CI validation pending for the latest migration-boundary commits.
 
 ## Milestone 1 progress
 - M0 completion formally recorded.
 - Canonical domain primitives implemented and covered by tests.
 - Edge-case coverage added for identifier normalization and timestamp offsets.
-- API bootstrap now delegates to an explicit AppModule and isolated HealthController.
+- API bootstrap delegates to an explicit AppModule and isolated HealthController.
+- Database configuration boundary implemented with required URL and validated pool size.
+- Database package boundary created with a reserved migrations directory.
+- Migration configuration points to `packages/database/migrations` and `schema_migrations` without creating product tables prematurely.
 
 ## Exact next action
-Validate the latest M1 commit through CI. If green, add only the minimal database/migration package boundary and tests, then record that completion before continuing.
+Run and verify CI for the latest database/migration-boundary changes. If green, implement the smallest first vertical-slice application service that is already supported by the recorded product requirements, and add its tests. Do not recreate completed foundations.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action. Never recreate completed work unless verification proves it is missing or broken.
