@@ -245,3 +245,103 @@ REQ-NOTIF-024 One channel failure does not prevent independently authorized fall
 
 ## Next requirements milestone
 Define the payment entitlement model and identity verification levels, including configurable access rules linking entitlement and verification state to product capabilities.
+
+
+## 25. Payment products, plans and entitlement model
+
+### Core model
+Payment processing and product access shall be separated. A successful provider transaction is evidence of a commercial event; an entitlement is the independently managed authorization granting a product capability. This separation prevents application features from depending directly on a single payment provider or transaction record.
+
+REQ-PAY-006 The system shall model products, offers/plans, purchases, payment attempts, transactions and entitlements as distinct concepts.
+REQ-PAY-007 A product or plan may grant one or more capabilities for a defined period or quantity.
+REQ-PAY-008 Entitlements shall be the authoritative application-level record used when checking paid access.
+REQ-PAY-009 Payment-provider identifiers shall not be embedded as the only source of feature authorization.
+REQ-PAY-010 Operators shall be able to configure supported products and offers without changing ordinary application feature code.
+
+### Supported commercial models
+REQ-PAY-011 Version 1.0 shall support one-time purchases.
+REQ-PAY-012 Version 1.0 shall support recurring subscriptions.
+REQ-PAY-013 The architecture shall support trials, promotional access, complimentary entitlements and future usage-based models.
+REQ-PAY-014 A plan may have regional availability, currency and tax-related configuration boundaries.
+REQ-PAY-015 An entitlement may be time-limited, renewable, revocable or quantity-limited.
+
+### Entitlement lifecycle
+REQ-PAY-016 Entitlement lifecycle shall support at minimum pending, active, scheduled-expiration, expired, revoked and suspended states.
+REQ-PAY-017 Access decisions shall consider entitlement state and effective time.
+REQ-PAY-018 Renewal, cancellation, refund, chargeback or provider reversal events shall be processed through explicit entitlement transition rules.
+REQ-PAY-019 Administrative grants and revocations shall be audited.
+REQ-PAY-020 Historical commercial events shall not be overwritten when entitlement state changes.
+
+### Provider integration and resilience
+REQ-PAY-021 Payment providers shall be implemented behind a provider abstraction.
+REQ-PAY-022 External payment events shall be verified before changing commercial or entitlement state.
+REQ-PAY-023 Provider callbacks shall be idempotently processed.
+REQ-PAY-024 Temporary provider-processing failures shall be observable and recoverable without duplicate entitlement grants.
+REQ-PAY-025 Regional or platform-specific payment constraints shall be represented as configuration rather than assumptions embedded throughout product code.
+
+### Capability gates
+REQ-PAY-026 Product capabilities may require an active entitlement, a verification level, geographic eligibility, account status or a combination of supported policy conditions.
+REQ-PAY-027 Capability decisions shall be centralized and auditable.
+REQ-PAY-028 Loss of an entitlement shall consistently remove only capabilities governed by that entitlement policy.
+REQ-PAY-029 Operators shall be able to preview supported entitlement rules before activation where administration capabilities permit.
+
+## 26. Identity verification levels and capability gates
+
+### Verification principles
+Verification strength shall be risk-based and use-case-specific. The platform shall not assume that every feature requires government-document verification. Identity assurance, authentication strength and feature authorization shall remain conceptually separate.
+
+REQ-IDV-006 The system shall support configurable verification levels rather than a single universal verified/unverified flag.
+REQ-IDV-007 Verification requirements may vary by category, geography, product capability and operator policy.
+REQ-IDV-008 The system shall minimize collection and exposure of identity evidence.
+REQ-IDV-009 Ordinary application components shall consume verification outcomes and permitted attributes rather than raw verification documents.
+REQ-IDV-010 Verification providers shall be replaceable without changing core capability policy.
+
+### Initial platform levels
+The platform shall support the following abstract levels. These are product levels, not claims of equivalence to any jurisdiction's official assurance standard.
+
+- Level 0 — Self-asserted: account exists; identity attributes have not been independently verified.
+- Level 1 — Basic verified attribute: selected attributes or contact channels have been validated by an approved method.
+- Level 2 — Identity verified: approved provider process establishes the configured confidence required for the deployment.
+- Level 3 — Enhanced verification: additional checks or review required by high-risk capabilities or operator policy.
+
+REQ-IDV-011 Operators shall define which supported checks satisfy each platform verification level.
+REQ-IDV-012 Verification level definitions may vary by supported regional workflow while preserving a consistent application-level outcome.
+REQ-IDV-013 A higher verification level shall satisfy lower-level capability requirements unless explicitly overridden by policy.
+REQ-IDV-014 Verification status shall distinguish not-started, pending, additional-information-required, verified, failed, expired and revoked outcomes where applicable.
+REQ-IDV-015 Verification results shall include sufficient provider and policy version metadata for audit without exposing unnecessary sensitive evidence.
+
+### Capability linkage
+REQ-IDV-016 Product capabilities may declare a minimum verification level.
+REQ-IDV-017 Capability policy may combine verification requirements with entitlement, geography, account status and safety restrictions.
+REQ-IDV-018 Failure, expiry or revocation of verification shall trigger policy-driven reevaluation of affected capabilities.
+REQ-IDV-019 Verification completion shall not automatically expose additional personal data to other users.
+REQ-IDV-020 Users shall receive understandable status and next-step information when verification blocks a requested capability.
+
+### Manual review and exceptions
+REQ-IDV-021 The system shall support provider escalation or authorized manual review where a configured workflow requires it.
+REQ-IDV-022 Manual verification decisions shall record authorized actor, decision time and reason category.
+REQ-IDV-023 Exception handling shall be time-bounded and auditable.
+REQ-IDV-024 Operators shall not be able to silently bypass immutable audit requirements for sensitive verification decisions.
+
+## 27. Combined access decision model
+
+A requested capability shall be evaluated as a policy decision rather than inferred from one boolean flag.
+
+Conceptual decision inputs may include:
+- Account state.
+- Safety restrictions.
+- Geographic eligibility.
+- Category policy.
+- Required verification level.
+- Active entitlement.
+- Role/administrative permission.
+- Feature availability for the deployment.
+
+REQ-ACCESS-001 The backend shall make authoritative capability decisions for protected actions.
+REQ-ACCESS-002 Client applications may use capability information for user experience but shall not be the final authority.
+REQ-ACCESS-003 Capability denials shall support machine-readable reason categories suitable for recovery UX without exposing sensitive security logic.
+REQ-ACCESS-004 Policy changes affecting access shall be auditable.
+REQ-ACCESS-005 Capability evaluation shall remain modular so payment, verification and safety providers can change independently.
+
+## Exact next requirements milestone
+Define detailed moderator workflows and safety operations, then analytics/reporting requirements.
