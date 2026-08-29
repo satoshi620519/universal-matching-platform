@@ -1,63 +1,79 @@
 # Development Status
 
 CURRENT PHASE: Phase 1 — Product requirements and architecture planning
-CURRENT MILESTONE: Technical architecture draft completed
-CURRENT TASK: Validate and finalize architecture decisions before implementation
+CURRENT MILESTONE: Initial architecture and Version 1.0 requirements baseline created
+CURRENT TASK: Expand detailed requirements before final architecture approval
 STATUS: In progress
 
 ## Completed
 - Project foundation and continuity rules established.
 - GitHub established as persistent source of truth.
-- ChatGPT GitHub read/write/delete operations tested.
-- Codex repository environment/documentation access tested.
-- Core product scope confirmed: global, multi-category matching; Web+iOS+Android; backend; database; admin; configuration; payments; identity verification; safety; privacy; internationalization; geographic awareness.
-- Initial technical architecture research completed.
-- ARCHITECTURE_DRAFT.md created with recommended stack and modular system boundaries.
+- ChatGPT GitHub operations tested.
+- Codex repository access tested.
+- Core global product direction confirmed.
+- ARCHITECTURE_DRAFT.md created.
+- PRODUCT_REQUIREMENTS.md created with initial uniquely identified Version 1.0 requirements.
 
-## Current architecture draft
-- Web/Admin: Next.js + TypeScript.
-- Mobile: React Native + Expo + TypeScript.
-- API: NestJS + TypeScript.
-- Primary data: PostgreSQL.
-- Cache/queues/rate limiting: Redis.
-- Media: S3-compatible storage abstraction.
-- Realtime: authorized realtime/WebSocket layer.
-- Architecture style: monorepo + modular monolith with future service boundaries.
-- Matching: configurable strategy-based engine.
-- Buyer customization: configuration-driven.
-- Third-party payments and identity verification: provider abstraction.
+## Current baseline
+Architecture draft:
+- Next.js + TypeScript for Web/Admin.
+- React Native + Expo + TypeScript for iOS/Android.
+- NestJS + TypeScript API.
+- PostgreSQL primary data.
+- Redis for cache/queues/rate limiting.
+- S3-compatible media abstraction.
+- Monorepo + modular monolith.
+- Strategy-based matching.
+- Configuration-driven buyer customization.
+- Replaceable payment and identity-verification providers.
+
+Requirements baseline covers:
+- Actors and product scope.
+- Authentication.
+- Configurable profiles.
+- Multiple discovery/matching methods.
+- Messaging and notifications.
+- Global geography.
+- Internationalization.
+- Safety and moderation.
+- Identity verification.
+- Payments.
+- Administration.
+- Buyer customization.
+- Privacy/security.
+- Non-functional requirements and traceability.
 
 ## In progress
-Architecture validation and detailed requirements definition.
+Detailed requirements expansion.
 
-## Not started
-- PRODUCT_REQUIREMENTS.md
-- Final ARCHITECTURE.md
-- DATA_MODEL.md
-- CONFIGURATION_SYSTEM_SPEC.md
-- UX_SPEC.md
-- Implementation milestones
-- Application source code
+## Remaining requirement sections
+1. Detailed onboarding/account flows.
+2. Category and configurable profile model.
+3. Complete messaging behavior.
+4. Notification matrix.
+5. Payment entitlement model.
+6. Identity verification level definitions.
+7. Moderator workflows.
+8. Analytics/reporting.
+9. Accessibility.
+10. Performance/availability targets.
+11. Data retention/deletion.
+12. Buyer installation/deployment requirements.
 
 ## Files changed in current planning cycle
 - DECISIONS.md
 - DEVELOPMENT_STATUS.md
 - ARCHITECTURE_DRAFT.md
-
-## Research notes
-Current official documentation supports PostgreSQL-centered authentication/data access patterns and authorized realtime access controls. Supabase documentation describes Auth and Realtime architectures based around PostgreSQL and row-level access controls. Expo documentation notes that Next.js integration exists but is not the default universal workflow; therefore Web and Mobile should remain separate first-class apps while sharing domain packages selectively. Stripe Identity supports multiple verification check types, but provider coverage must be validated per target market before final provider selection.
-
-## Known issues / risks
-- Payment and identity providers require a country/coverage matrix before final selection.
-- Global deployment strategy needs separate architecture work.
-- Advanced search engine choice should follow discovery requirements.
-- No implementation has started intentionally.
+- PRODUCT_REQUIREMENTS.md
 
 ## Test status
 - GitHub operations: passed.
 - Codex repository access: passed.
-- Architecture research: completed.
-- Product implementation tests: not started.
+- Requirements traceability baseline: established.
+- Application implementation tests: not started.
 
 ## Exact next action
-Create PRODUCT_REQUIREMENTS.md defining the complete Version 1.0 functional requirements and non-functional requirements. Use the approved product direction and ARCHITECTURE_DRAFT.md as inputs. After each major requirements section, record progress and unresolved decisions.
+Expand PRODUCT_REQUIREMENTS.md with detailed onboarding/account flows and the configurable category/profile model. Record progress immediately after completing that requirements section.
+
+## Continuity requirement
+Do not advance through major work without updating this record at meaningful milestones. If interrupted, this file must identify the exact unfinished task and immediate next action.
