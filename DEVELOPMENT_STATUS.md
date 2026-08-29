@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: API architecture and client contract baseline completed
-CURRENT TASK: Define event and asynchronous processing architecture
+CURRENT MILESTONE: Event and asynchronous processing architecture completed
+CURRENT TASK: Define realtime architecture
 STATUS: In progress
 
 ## Phase transition
@@ -60,7 +60,9 @@ Define relational data model and ownership boundaries.
 - Central capability evaluation, deny precedence, caching and enforcement integration defined.
 - API_ARCHITECTURE.md created.
 - Versioning, resource conventions, error contracts, pagination, idempotency and client compatibility defined.
-- Next: event and asynchronous processing architecture.
+- EVENT_AND_ASYNC_ARCHITECTURE.md created.
+- Transactional outbox, retries, dead-letter handling, ordering and consumer idempotency defined.
+- Next: realtime architecture.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -86,7 +88,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create EVENT_AND_ASYNC_ARCHITECTURE.md defining domain-event publication, transactional outbox, background jobs, retries, dead-letter handling and consumer idempotency.
+Create REALTIME_ARCHITECTURE.md defining realtime connection lifecycle, event subscriptions, authorization, delivery guarantees, reconnection and fallback behavior.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
