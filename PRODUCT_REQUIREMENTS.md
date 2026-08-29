@@ -1,160 +1,73 @@
-# Product Requirements — Universal Matching Platform
+undefined
 
-## Status
-Draft in progress. Phase 1 deliverable. Requirements describe what the product must provide; implementation details belong in architecture documents.
+## 19. Detailed onboarding and account lifecycle
 
-## 1. Product purpose
-The product shall provide a commercially distributable, globally deployable platform for building matching services across multiple categories without requiring the core product to be redesigned for each category.
+### Onboarding principles
+Onboarding shall be configurable by deployment and category. The platform shall support progressive onboarding so non-critical information can be collected later while critical eligibility, safety, consent and verification requirements are enforced before restricted capabilities are granted.
 
-Supported examples include dating, friendship, business networking, mentorship, communities, hobbies, and custom categories.
+REQ-ONBOARD-001 The system shall support configurable onboarding steps and ordering.
+REQ-ONBOARD-002 Operators shall be able to mark supported onboarding steps as required, optional, or conditionally required.
+REQ-ONBOARD-003 The system shall support save-and-resume for incomplete onboarding.
+REQ-ONBOARD-004 The system shall explain when a user cannot continue because of an unmet required condition.
+REQ-ONBOARD-005 The system shall record applicable consent and policy acknowledgements.
+REQ-ONBOARD-006 The system shall support progressive profile completion after account creation.
+REQ-ONBOARD-007 Onboarding rules shall support geographic, category, age/eligibility, verification and operator-policy conditions.
+REQ-ONBOARD-008 The system shall distinguish account creation from activation of restricted product capabilities.
+REQ-ONBOARD-009 The system shall provide safe failure and recovery paths when verification or an external provider is unavailable.
+REQ-ONBOARD-010 Administrators shall be able to view operational onboarding status without exposing unnecessary sensitive information.
 
-## 2. Product actors
-- End user: creates an account, profile and participates in discovery, matching and communication.
-- Verified user: end user with one or more completed verification levels.
-- Moderator: handles safety queues and moderation actions within assigned permissions.
-- Administrator: manages platform and operational settings.
-- Buyer/operator: deploys and configures a branded instance.
-- Developer/customizer: performs advanced source-level extensions.
+### Account lifecycle states
+The requirements model shall support at minimum: draft/pending onboarding, active, restricted, suspended, pending deletion, deleted/anonymized where applicable. Exact state transitions will be defined in the account lifecycle specification.
 
-## 3. Version 1.0 product scope
-Version 1.0 shall include:
-- Web application.
-- iOS application.
-- Android application.
-- Backend API and background processing.
-- Primary database.
-- Administration console.
-- Buyer configuration system.
-- Discovery and multiple matching methods.
-- Messaging and notifications.
-- Safety, reporting, blocking and moderation.
-- Payments.
-- Identity verification integration.
-- Internationalization and localization.
-- Geographic and region-aware operation.
-- Analytics foundations.
-- Installation, deployment, administration and customization documentation.
+## 20. Configurable category model
 
-## 4. Account and authentication requirements
-REQ-AUTH-001 The system shall support account registration and sign-in.
-REQ-AUTH-002 The system shall support secure account recovery.
-REQ-AUTH-003 The system shall support configurable verification levels.
-REQ-AUTH-004 The system shall support session and device management.
-REQ-AUTH-005 The system shall support account deletion and privacy-related lifecycle controls subject to operator policy and applicable requirements.
+A category is a deployment-level product mode describing a matching use case. Categories shall configure behavior rather than fork the core application.
 
-## 5. Profile requirements
-REQ-PROFILE-001 The system shall support configurable profile schemas.
-REQ-PROFILE-002 Operators shall be able to define profile fields and field visibility rules.
-REQ-PROFILE-003 Users shall be able to manage permitted profile information and media.
-REQ-PROFILE-004 The system shall support category-specific profile extensions without redesigning the core identity model.
-REQ-PROFILE-005 The system shall support configurable profile completion requirements.
+REQ-CATEGORY-001 The system shall support multiple categories in one deployment where enabled.
+REQ-CATEGORY-002 A category shall be able to define its display name, description, localized content and branding overrides.
+REQ-CATEGORY-003 A category shall be able to define its profile schema from supported field types.
+REQ-CATEGORY-004 A category shall be able to define discovery and matching strategies from supported platform capabilities.
+REQ-CATEGORY-005 A category shall be able to define communication eligibility.
+REQ-CATEGORY-006 A category shall be able to define verification requirements.
+REQ-CATEGORY-007 A category shall be able to define safety and moderation policy overrides within operator permissions.
+REQ-CATEGORY-008 Category configuration shall not require duplicating core user identity records.
+REQ-CATEGORY-009 The system shall support disabling a category without corrupting historical records.
+REQ-CATEGORY-010 Category configuration changes shall be auditable and version-aware where changes affect active users.
 
-## 6. Discovery and matching requirements
-REQ-MATCH-001 The system shall support multiple discovery and matching strategies.
-REQ-MATCH-002 Operators shall be able to enable or disable supported strategies.
-REQ-MATCH-003 The initial product shall support mutual-interest matching.
-REQ-MATCH-004 The initial product shall support card/swipe-style discovery.
-REQ-MATCH-005 The initial product shall support searchable/filterable discovery where enabled.
-REQ-MATCH-006 The system shall support configurable rule or criteria matching.
-REQ-MATCH-007 The architecture shall permit scoring and recommendation strategies to be added without replacing the matching core.
-REQ-MATCH-008 Matching eligibility shall respect configured geography, safety restrictions, verification rules and operator policy.
+## 21. Configurable profile schema
 
-## 7. Communication requirements
-REQ-COMM-001 The system shall support authorized direct messaging where permitted by matching and safety policy.
-REQ-COMM-002 The system shall support message delivery state and appropriate user controls.
-REQ-COMM-003 The system shall support moderation and reporting of communication content.
-REQ-COMM-004 Communication permissions shall be configurable by category and deployment policy.
+The profile system shall separate stable account identity from configurable category profile data.
 
-## 8. Notifications requirements
-REQ-NOTIF-001 The system shall support in-app notifications.
-REQ-NOTIF-002 The system shall support configurable external notification channels.
-REQ-NOTIF-003 Users shall be able to manage notification preferences subject to mandatory safety or operational notices.
+REQ-PROFILE-006 Operators shall be able to create supported profile field definitions without source-code changes.
+REQ-PROFILE-007 Supported field types shall include text, long text, number, date, boolean, single choice, multiple choice, controlled taxonomy reference, URL where permitted, and media reference.
+REQ-PROFILE-008 Each field shall support localized label and help content.
+REQ-PROFILE-009 Each field shall support validation constraints appropriate to its type.
+REQ-PROFILE-010 Each field shall support visibility rules including self-only, matched users, eligible discovery users, administrators, and other supported policy scopes.
+REQ-PROFILE-011 Fields shall support required, optional and conditionally required behavior.
+REQ-PROFILE-012 Conditional field behavior shall be based on supported rule expressions rather than arbitrary executable code.
+REQ-PROFILE-013 Operators shall be able to define field ordering and grouping.
+REQ-PROFILE-014 Schema changes shall preserve historical data where compatible and provide controlled migration requirements where incompatible.
+REQ-PROFILE-015 Sensitive fields shall support stricter access and retention policies.
 
-## 9. Geographic requirements
-REQ-GEO-001 The system shall support global operation.
-REQ-GEO-002 The system shall support country and sub-country geographic hierarchy.
-REQ-GEO-003 Operators shall be able to define supported service areas.
-REQ-GEO-004 Matching and discovery shall support configurable geographic constraints.
-REQ-GEO-005 Precise location shall be privacy-controlled and shall not be public by default.
+## 22. Onboarding and category acceptance examples
 
-## 10. Internationalization requirements
-REQ-I18N-001 The system shall support multiple languages.
-REQ-I18N-002 Operators shall be able to configure enabled languages.
-REQ-I18N-003 User-visible product content shall support localization.
-REQ-I18N-004 The architecture shall support locale-sensitive formatting for dates, times, numbers and currencies.
-REQ-I18N-005 The product shall support right-to-left languages where enabled.
+Example A: Quick-launch friendship service
+- Minimal registration.
+- Email verification required.
+- Profile completion can continue after entry.
+- Search and mutual-interest matching enabled.
+- Identity document verification optional.
 
-## 11. Safety and moderation requirements
-REQ-SAFE-001 Users shall be able to block other users.
-REQ-SAFE-002 Users shall be able to report users and supported content.
-REQ-SAFE-003 The system shall provide moderation workflows for authorized staff.
-REQ-SAFE-004 The system shall support configurable enforcement actions.
-REQ-SAFE-005 Safety-sensitive actions shall be auditable.
-REQ-SAFE-006 The product shall include abuse-prevention and rate-limiting capabilities.
-REQ-SAFE-007 Safety restrictions shall affect discovery and communication consistently.
+Example B: High-trust business matching service
+- Organization or professional profile fields enabled.
+- Restricted discovery until required verification is complete.
+- Criteria matching and search enabled.
+- Communication permissions controlled by operator policy.
 
-## 12. Identity verification requirements
-REQ-IDV-001 The system shall support multiple verification levels.
-REQ-IDV-002 Operators shall be able to configure when verification is required.
-REQ-IDV-003 The identity verification integration shall be replaceable by provider.
-REQ-IDV-004 Verification results shall be represented without unnecessarily exposing sensitive verification documents to ordinary application components.
-REQ-IDV-005 Verification status shall be usable by discovery, payments and safety policy where configured.
+Example C: Custom community service
+- Operator defines custom profile fields and matching criteria.
+- Selected geographic service areas.
+- Category-specific moderation policy.
+- Branding and localization configured without source-code changes.
 
-## 13. Payment requirements
-REQ-PAY-001 The system shall support configurable commercial/payment flows.
-REQ-PAY-002 The initial product architecture shall support recurring and one-time payment models.
-REQ-PAY-003 Payment providers shall be abstracted to avoid core dependence on one provider.
-REQ-PAY-004 Payment status and entitlement state shall be auditable.
-REQ-PAY-005 Regional payment availability shall be configurable.
-
-## 14. Administration requirements
-REQ-ADMIN-001 The system shall provide an administration console.
-REQ-ADMIN-002 Administrators shall have role-based permissions.
-REQ-ADMIN-003 Administration shall cover users, profiles, reports, moderation, verification status, configuration and operational settings.
-REQ-ADMIN-004 Sensitive administrative actions shall be audited.
-REQ-ADMIN-005 Administration shall support deployment-level configuration without ordinary source-code changes.
-
-## 15. Buyer customization requirements
-REQ-CONFIG-001 Buyers shall be able to customize branding.
-REQ-CONFIG-002 Buyers shall be able to configure supported languages and regions.
-REQ-CONFIG-003 Buyers shall be able to configure profile schemas.
-REQ-CONFIG-004 Buyers shall be able to configure enabled discovery and matching methods.
-REQ-CONFIG-005 Buyers shall be able to configure verification and safety policies within supported capabilities.
-REQ-CONFIG-006 The product shall distinguish Quick Launch configuration from Advanced Customization.
-
-## 16. Privacy and security requirements
-REQ-SEC-001 Authorization shall be enforced server-side.
-REQ-SEC-002 Access to private user data shall follow least-privilege principles.
-REQ-SEC-003 Sensitive operational actions shall be auditable.
-REQ-SEC-004 The product shall support secure handling of secrets and credentials.
-REQ-SEC-005 The product shall support abuse prevention, rate limiting and suspicious activity controls.
-REQ-SEC-006 Realtime communication channels shall require authorization.
-
-## 17. Non-functional requirements
-REQ-NFR-001 The product shall be designed for maintainability and modular extension.
-REQ-NFR-002 The product shall support independent deployment configuration.
-REQ-NFR-003 The product shall provide testable and traceable requirements.
-REQ-NFR-004 The product shall provide observability foundations for production operation.
-REQ-NFR-005 The product shall support scalable background processing.
-REQ-NFR-006 The product shall provide installation and operational documentation for buyers.
-
-## 18. Acceptance and traceability
-Each requirement shall have a unique identifier and shall eventually map to architecture, implementation, tests, and acceptance evidence.
-
-## Open requirement work
-The following sections still require detailed requirements before this document is finalized:
-1. Detailed onboarding and account flows.
-2. Profile schema and category model.
-3. Complete messaging behavior.
-4. Notification matrix.
-5. Payment entitlement and marketplace policy.
-6. Identity verification level definitions.
-7. Full moderator workflows.
-8. Analytics and reporting requirements.
-9. Accessibility requirements.
-10. Performance and availability targets.
-11. Data retention and deletion policy.
-12. Detailed buyer installation and deployment requirements.
-
-## Exact next action
-Expand the open requirement sections, beginning with onboarding/account flows and the configurable category/profile model. Update DEVELOPMENT_STATUS.md after this milestone.
+These examples are illustrative acceptance contexts, not restrictions on future categories.
