@@ -60,3 +60,20 @@ The following are intentionally deferred to Phase 2 architecture work:
 - Jurisdiction-specific compliance implementation matrix.
 
 Deferral is intentional. These decisions require detailed architecture, deployment constraints, regional analysis and implementation trade-off review rather than assumptions during product requirements planning.
+
+
+## Technology stack baseline — 2026-08-30
+
+29. Use TypeScript and Node.js LTS across the primary application stack.
+30. Use pnpm workspaces with Turborepo for the monorepo.
+31. Use Next.js for Web and Administration applications.
+32. Use React Native + Expo for iOS and Android.
+33. Use NestJS with Fastify for the modular-monolith backend API.
+34. Use PostgreSQL as the authoritative relational database with Prisma for typed access and migrations.
+35. Use Redis with BullMQ for initial queues/background jobs while retaining the transactional outbox reliability boundary.
+36. Use Socket.IO behind a provider-neutral realtime gateway abstraction.
+37. Use S3-compatible object storage abstraction.
+38. Keep authentication provider-neutral and API-owned; start with email/password, verification and reset capabilities.
+39. Use Vitest/Supertest/Playwright as the primary automated testing baseline, with Expo-compatible mobile tests.
+40. Use Docker Compose for local supporting infrastructure and GitHub Actions for CI.
+41. Keep deployment containerized and provider-neutral; payment, identity verification, messaging, production cloud, search and observability vendors remain explicit future adapter selections.
