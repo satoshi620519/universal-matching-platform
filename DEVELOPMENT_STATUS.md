@@ -3,7 +3,7 @@
 CURRENT PHASE: Phase 3 — Implementation planning
 CURRENT MILESTONE: Technology stack baseline completed
 CURRENT TASK: Milestone 0 — monorepo and engineering foundation
-STATUS: Phase 2 complete; Phase 3 in progress
+STATUS: Phase 2 complete; Phase 3 implementation planning complete; Milestone 0 in progress
 
 ## Phase transition
 Phase 1 is complete. Product requirements have been reviewed for cross-domain consistency. Confirmed principles and intentionally unresolved provider/implementation choices are recorded in DECISIONS.md.
@@ -44,7 +44,12 @@ Phase 1 is complete. Product requirements have been reviewed for cross-domain co
 10. Create implementation-ready milestones.
 
 ## Current task
-Define relational data model and ownership boundaries.
+Milestone 0 — create monorepo and engineering foundation.
+
+## M0 planned structure and acceptance checklist
+Planned structure: apps/web, apps/admin, apps/mobile, apps/api, apps/worker, packages/domain, packages/types, packages/config, packages/api-client, packages/ui, packages/i18n, infrastructure, tests.
+
+Acceptance: root install works; workspace typecheck/lint/test/build commands exist; minimal API health endpoint exists; Docker Compose defines PostgreSQL and Redis; CI executes baseline checks; setup instructions are documented.
 
 ## Phase 2 progress — completed
 - Bounded contexts defined.
@@ -93,7 +98,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Start Milestone 0 implementation: create the monorepo workspace and engineering foundation, then run install, typecheck, lint, tests and minimal health checks.
+Create the Milestone 0 monorepo file structure and root workspace configuration. Do not implement product features.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
