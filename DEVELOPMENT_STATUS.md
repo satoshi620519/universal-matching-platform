@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 1 — Product requirements and architecture planning
-CURRENT MILESTONE: Moderator workflows and safety operations completed
-CURRENT TASK: Define analytics and reporting requirements
+CURRENT MILESTONE: Final Phase 1 requirements domains completed
+CURRENT TASK: Phase 1 consistency review and unresolved-decision audit
 STATUS: In progress
 
 ## Completed
@@ -20,12 +20,14 @@ STATUS: In progress
 - Payment products/plans and entitlement lifecycle.
 - Configurable identity verification levels and capability gates.
 - Combined backend-authoritative access decision model.
-- Report intake and triage requirements.
-- Moderation case/evidence handling.
-- Enforcement, escalation and operational handoff.
-- Appeals/review boundaries.
-- Cross-product safety consistency and abuse prevention requirements.
-- End-to-end safety workflow acceptance scenarios.
+- Report intake, moderation workflow and safety operations.
+- Cross-product safety consistency and abuse prevention.
+- Privacy-conscious analytics and operator reporting requirements.
+- Accessibility requirements.
+- Performance, availability and observability requirements.
+- Data retention/deletion lifecycle requirements.
+- Buyer installation, deployment and customization requirements.
+- Phase 1 requirements completion gate defined.
 
 ## Current architecture baseline
 - Next.js + TypeScript: Web/Admin.
@@ -51,16 +53,36 @@ PRODUCT_REQUIREMENTS.md now includes:
 28 Moderator workflows and safety operations.
 29 Safety consistency and abuse prevention.
 30 Safety operations acceptance principles.
+31 Analytics and reporting.
+32 Accessibility.
+33 Operational quality.
+34 Data retention and deletion.
+35 Buyer installation and deployment.
+Phase 1 completion gate.
 
 ## In progress
-Analytics and reporting requirements.
+Cross-domain consistency review and unresolved-decision audit.
 
-## Remaining requirement sections
-1. Analytics/reporting.
-2. Accessibility.
-3. Performance/availability targets.
-4. Data retention/deletion.
-5. Buyer installation/deployment requirements.
+## Potential unresolved decisions to audit
+- Exact initial authentication providers/methods.
+- Exact payment provider(s) and platform purchase strategy.
+- Exact identity-verification provider(s) and region coverage.
+- Initial matching algorithms and ranking explainability.
+- Initial search technology.
+- Initial realtime transport.
+- Initial analytics/observability providers.
+- Hosting/deployment topology.
+- Supported compliance baseline and jurisdiction-specific requirements.
+
+These are intentionally recorded as unresolved rather than silently assumed.
+
+## Remaining before Phase 2
+1. Cross-domain consistency review.
+2. Requirements traceability review.
+3. Update DECISIONS.md with newly finalized architectural principles where appropriate.
+4. Explicitly list unresolved implementation/provider decisions.
+5. Mark Phase 1 complete.
+6. Begin Phase 2 detailed architecture and data modeling.
 
 ## Files changed in current planning cycle
 - DECISIONS.md
@@ -75,7 +97,7 @@ Analytics and reporting requirements.
 - Application implementation tests: not started.
 
 ## Exact next action
-Expand PRODUCT_REQUIREMENTS.md with privacy-conscious product analytics, operator reporting, commercial metrics boundaries, safety operations metrics, configurable event taxonomy and data access controls. Update this status record immediately after that milestone.
+Review all Phase 1 requirements for contradictions and missing cross-domain dependencies. Then update DEVELOPMENT_STATUS.md and DECISIONS.md with the review outcome before creating detailed Phase 2 architecture artifacts.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
