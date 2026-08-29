@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 1 — Product requirements and architecture planning
-CURRENT MILESTONE: Payment entitlement and identity verification requirements completed
-CURRENT TASK: Define moderator workflows and safety operations
+CURRENT MILESTONE: Moderator workflows and safety operations completed
+CURRENT TASK: Define analytics and reporting requirements
 STATUS: In progress
 
 ## Completed
@@ -16,14 +16,16 @@ STATUS: In progress
 - Detailed onboarding/account lifecycle requirements.
 - Configurable multi-category model.
 - Configurable profile schema requirements.
-- Detailed messaging eligibility, lifecycle, safety and realtime resilience requirements.
-- Detailed notification policy, preferences, priorities and delivery reliability requirements.
-- Payment products/plans model.
-- Entitlement lifecycle and capability authorization model.
-- Provider-independent payment integration requirements.
-- Configurable identity verification levels.
-- Verification state, privacy and capability-gating requirements.
-- Combined access decision model separating client UX from backend authority.
+- Detailed messaging and notification requirements.
+- Payment products/plans and entitlement lifecycle.
+- Configurable identity verification levels and capability gates.
+- Combined backend-authoritative access decision model.
+- Report intake and triage requirements.
+- Moderation case/evidence handling.
+- Enforcement, escalation and operational handoff.
+- Appeals/review boundaries.
+- Cross-product safety consistency and abuse prevention requirements.
+- End-to-end safety workflow acceptance scenarios.
 
 ## Current architecture baseline
 - Next.js + TypeScript: Web/Admin.
@@ -46,17 +48,19 @@ PRODUCT_REQUIREMENTS.md now includes:
 25 Payment products, plans and entitlement model.
 26 Identity verification levels and capability gates.
 27 Combined access decision model.
+28 Moderator workflows and safety operations.
+29 Safety consistency and abuse prevention.
+30 Safety operations acceptance principles.
 
 ## In progress
-Detailed moderator workflows and safety operations.
+Analytics and reporting requirements.
 
 ## Remaining requirement sections
-1. Moderator workflows and safety operations.
-2. Analytics/reporting.
-3. Accessibility.
-4. Performance/availability targets.
-5. Data retention/deletion.
-6. Buyer installation/deployment requirements.
+1. Analytics/reporting.
+2. Accessibility.
+3. Performance/availability targets.
+4. Data retention/deletion.
+5. Buyer installation/deployment requirements.
 
 ## Files changed in current planning cycle
 - DECISIONS.md
@@ -71,7 +75,7 @@ Detailed moderator workflows and safety operations.
 - Application implementation tests: not started.
 
 ## Exact next action
-Expand PRODUCT_REQUIREMENTS.md with report intake, triage, evidence handling, moderation queues, enforcement actions, appeals/review boundaries, audit requirements, operational escalation and safety consistency rules. Update this status record immediately after that milestone.
+Expand PRODUCT_REQUIREMENTS.md with privacy-conscious product analytics, operator reporting, commercial metrics boundaries, safety operations metrics, configurable event taxonomy and data access controls. Update this status record immediately after that milestone.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
