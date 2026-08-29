@@ -16,6 +16,8 @@ STATUS: Milestone 0 complete; Milestone 1 in progress
 - Technology stack baseline selected and recorded.
 - Milestone 0 engineering foundation implemented.
 - M0 GitHub Actions validation passed: install, typecheck, lint, test and build.
+- M1 canonical domain primitives implemented: EntityId, InstantString and DomainError.
+- M1 domain primitive unit tests implemented, including normalization and validation edge cases.
 
 ## Milestone 0 completion gate — COMPLETE
 - Root pnpm workspace and Turborepo configuration: complete.
@@ -48,21 +50,22 @@ STATUS: Milestone 0 complete; Milestone 1 in progress
 5. Add automated tests for the new foundation.
 
 ## Current task
-Create the minimal shared domain foundation required for the first vertical slice. Do not rebuild M0 or implement unrelated product features.
+Establish the minimal API application boundary and its tests for the first vertical slice. Do not rebuild M0 or implement unrelated product features.
 
 ## Test status
 - GitHub operations: passed.
 - Codex repository access: passed.
 - Requirements document integrity check: passed.
 - M0 CI validation: passed (install/typecheck/lint/test/build).
-- Milestone 1 tests: not started.
+- M1 domain primitive tests: added; CI validation pending for the latest commit.
 
 ## Milestone 1 progress
 - M0 completion formally recorded.
-- Next work is limited to shared domain primitives and first-slice application boundaries.
+- Canonical domain primitives implemented and covered by tests.
+- Edge-case coverage added for identifier normalization and timestamp offsets.
 
 ## Exact next action
-Inspect the existing M0 workspace files, then add only the minimal domain primitives and tests required for Milestone 1. Record each completed item before moving to the next.
+Validate the latest M1 commit through CI. If green, add only the minimal API application/module boundary needed for the first vertical slice, then record that completion before continuing.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action. Never recreate completed work unless verification proves it is missing or broken.
