@@ -1,33 +1,23 @@
 # Development Status
 
-CURRENT PHASE: Phase 1 — Product requirements and architecture planning
-CURRENT MILESTONE: Final Phase 1 requirements domains completed
-CURRENT TASK: Phase 1 consistency review and unresolved-decision audit
+CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
+CURRENT MILESTONE: Phase 1 requirements completed and consistency-reviewed
+CURRENT TASK: Define bounded contexts and canonical domain/data model
 STATUS: In progress
+
+## Phase transition
+Phase 1 is complete. Product requirements have been reviewed for cross-domain consistency. Confirmed principles and intentionally unresolved provider/implementation choices are recorded in DECISIONS.md.
 
 ## Completed
 - Project foundation and continuity rules established.
 - GitHub is the persistent source of truth.
 - ChatGPT GitHub operations tested.
 - Codex repository access tested.
-- Core global product direction confirmed.
-- Initial technical architecture drafted.
-- Product requirements baseline created and integrity-checked.
-- Detailed onboarding/account lifecycle requirements.
-- Configurable multi-category model.
-- Configurable profile schema requirements.
-- Detailed messaging and notification requirements.
-- Payment products/plans and entitlement lifecycle.
-- Configurable identity verification levels and capability gates.
-- Combined backend-authoritative access decision model.
-- Report intake, moderation workflow and safety operations.
-- Cross-product safety consistency and abuse prevention.
-- Privacy-conscious analytics and operator reporting requirements.
-- Accessibility requirements.
-- Performance, availability and observability requirements.
-- Data retention/deletion lifecycle requirements.
-- Buyer installation, deployment and customization requirements.
-- Phase 1 requirements completion gate defined.
+- Complete Phase 1 product requirements across onboarding, categories, profiles, matching, messaging, notifications, payments, verification, safety, moderation, analytics, accessibility, operational quality, data lifecycle and buyer deployment.
+- Cross-domain consistency review completed.
+- Architecture principles aligned with requirements.
+- Explicit unresolved implementation/provider decisions recorded.
+- Phase 1 completion gate satisfied.
 
 ## Current architecture baseline
 - Next.js + TypeScript: Web/Admin.
@@ -41,48 +31,31 @@ STATUS: In progress
 - Configuration-driven customization.
 - Replaceable external providers.
 
-## Current requirements progress
-PRODUCT_REQUIREMENTS.md now includes:
-1–18 Core product requirements.
-19–22 Detailed onboarding, category and profile requirements.
-23 Detailed messaging requirements.
-24 Detailed notification requirements.
-25 Payment products, plans and entitlement model.
-26 Identity verification levels and capability gates.
-27 Combined access decision model.
-28 Moderator workflows and safety operations.
-29 Safety consistency and abuse prevention.
-30 Safety operations acceptance principles.
-31 Analytics and reporting.
-32 Accessibility.
-33 Operational quality.
-34 Data retention and deletion.
-35 Buyer installation and deployment.
-Phase 1 completion gate.
+## Phase 2 objectives
+1. Define bounded contexts and module ownership.
+2. Define canonical domain model and entity relationships.
+3. Define PostgreSQL data model and migration boundaries.
+4. Define authentication and authorization architecture.
+5. Define API contracts and client boundaries.
+6. Define asynchronous workflows and realtime architecture.
+7. Define configuration resolution architecture.
+8. Define external provider adapter boundaries.
+9. Convert ARCHITECTURE_DRAFT.md into reviewed ARCHITECTURE.md.
+10. Create implementation-ready milestones.
 
-## In progress
-Cross-domain consistency review and unresolved-decision audit.
+## Current task
+Define bounded contexts and canonical domain/data model.
 
-## Potential unresolved decisions to audit
-- Exact initial authentication providers/methods.
-- Exact payment provider(s) and platform purchase strategy.
-- Exact identity-verification provider(s) and region coverage.
-- Initial matching algorithms and ranking explainability.
-- Initial search technology.
-- Initial realtime transport.
-- Initial analytics/observability providers.
-- Hosting/deployment topology.
-- Supported compliance baseline and jurisdiction-specific requirements.
-
-These are intentionally recorded as unresolved rather than silently assumed.
-
-## Remaining before Phase 2
-1. Cross-domain consistency review.
-2. Requirements traceability review.
-3. Update DECISIONS.md with newly finalized architectural principles where appropriate.
-4. Explicitly list unresolved implementation/provider decisions.
-5. Mark Phase 1 complete.
-6. Begin Phase 2 detailed architecture and data modeling.
+## Key unresolved decisions for Phase 2
+- Authentication methods/providers.
+- Payment provider strategy.
+- Identity-verification provider strategy.
+- Hosting topology.
+- Search technology.
+- Realtime transport.
+- Observability stack.
+- Monorepo tooling.
+- Compliance implementation matrix.
 
 ## Files changed in current planning cycle
 - DECISIONS.md
@@ -97,7 +70,7 @@ These are intentionally recorded as unresolved rather than silently assumed.
 - Application implementation tests: not started.
 
 ## Exact next action
-Review all Phase 1 requirements for contradictions and missing cross-domain dependencies. Then update DEVELOPMENT_STATUS.md and DECISIONS.md with the review outcome before creating detailed Phase 2 architecture artifacts.
+Create DOMAIN_MODEL.md defining bounded contexts, aggregate ownership, canonical entities, lifecycle states and major relationships before selecting provider-specific implementation details.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
