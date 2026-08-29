@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: Phase 1 requirements completed and consistency-reviewed
-CURRENT TASK: Define bounded contexts and canonical domain/data model
+CURRENT MILESTONE: Initial bounded contexts and canonical domain model completed
+CURRENT TASK: Define relational data model and ownership boundaries
 STATUS: In progress
 
 ## Phase transition
@@ -44,7 +44,16 @@ Phase 1 is complete. Product requirements have been reviewed for cross-domain co
 10. Create implementation-ready milestones.
 
 ## Current task
-Define bounded contexts and canonical domain/data model.
+Define relational data model and ownership boundaries.
+
+## Phase 2 progress
+- Bounded contexts defined.
+- Canonical domain entities defined.
+- Major entity lifecycles defined.
+- Cross-context ownership rules defined.
+- Candidate domain events identified.
+- DOMAIN_MODEL.md created.
+- Next: relational data model, keys, cardinalities and sensitive-data boundaries.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -70,7 +79,7 @@ Define bounded contexts and canonical domain/data model.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create DOMAIN_MODEL.md defining bounded contexts, aggregate ownership, canonical entities, lifecycle states and major relationships before selecting provider-specific implementation details.
+Create DATA_MODEL_DRAFT.md mapping canonical entities to relational ownership, primary/foreign keys, cardinalities, sensitive-data boundaries, indexes and migration principles.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
