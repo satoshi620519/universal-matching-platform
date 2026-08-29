@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 3 — Implementation planning
-CURRENT MILESTONE: Implementation milestones completed
-CURRENT TASK: Select concrete technology stack
+CURRENT MILESTONE: Technology stack baseline completed
+CURRENT TASK: Milestone 0 — monorepo and engineering foundation
 STATUS: Phase 2 complete; Phase 3 in progress
 
 ## Phase transition
@@ -93,7 +93,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create TECHNOLOGY_STACK_DECISION.md selecting concrete technology choices for monorepo, backend, web, mobile, database access, authentication, async jobs, realtime, testing and deployment before implementation begins.
+Start Milestone 0 implementation: create the monorepo workspace and engineering foundation, then run install, typecheck, lint, tests and minimal health checks.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
@@ -103,3 +103,11 @@ Record meaningful progress during work. If interrupted, this file must identify 
 - IMPLEMENTATION_MILESTONES.md created.
 - Milestones M0 through M11 defined with dependencies, deliverables and completion gates.
 - Next: concrete technology stack selection before implementation.
+
+
+## Technology stack planning completed
+- TECHNOLOGY_STACK_DECISION.md created.
+- Concrete baseline selected for monorepo, Web/Admin, mobile, API, database, jobs, realtime, storage, testing, local infrastructure, CI and deployment.
+- DECISIONS.md updated with technology decisions 29–41.
+- Deferred provider choices remain adapter-based and do not block Milestone 0.
+- Next: Milestone 0 implementation — monorepo and engineering foundation.
