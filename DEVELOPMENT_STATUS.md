@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate account lifecycle rules and then continue with the first vertical-slice application service.
+CURRENT TASK: Validate the account activation application service and continue with the next smallest supported vertical-slice service.
 STATUS: Milestone 1 in progress
 
 ## Completed
@@ -25,6 +25,8 @@ STATUS: Milestone 1 in progress
 - M1 capability-gate tests added for eligible access and denial cases.
 - M1 account lifecycle state rules added for onboarding, activation, restriction, suspension and deletion/anonymization.
 - M1 account lifecycle tests added for valid and invalid transitions.
+- M1 account activation application service added, reusing the domain lifecycle rule.
+- M1 account activation service tests added for allowed and denied states.
 
 ## Milestone 0 completion gate — COMPLETE
 - Root pnpm workspace and Turborepo configuration: complete.
@@ -57,7 +59,7 @@ STATUS: Milestone 1 in progress
 5. Add automated tests for the new foundation.
 
 ## Current task
-Validate account lifecycle rules and then continue with the first vertical-slice application service. Do not rebuild M0 or invent a full product schema before the relevant requirements are recorded.
+Validate the account activation application service and continue with the next smallest supported vertical-slice service. Do not rebuild M0 or invent a full product schema before the relevant requirements are recorded.
 
 ## Test status
 - GitHub operations: passed.
@@ -68,7 +70,8 @@ Validate account lifecycle rules and then continue with the first vertical-slice
 - API application boundary: CI validation previously passed.
 - Database configuration/migration boundary: CI validation previously passed.
 - Capability-gate tests: CI validation previously passed.
-- Account lifecycle tests: added; latest CI validation pending.
+- Account lifecycle tests: CI validation passed.
+- Account activation service tests: added; latest CI validation pending.
 
 ## Milestone 1 progress
 - M0 completion formally recorded.
@@ -79,10 +82,11 @@ Validate account lifecycle rules and then continue with the first vertical-slice
 - Database package boundary created with a reserved migrations directory.
 - Migration configuration points to `packages/database/migrations` and `schema_migrations` without creating product tables prematurely.
 - Capability access policy has a small domain-level gate that can combine verification and entitlement state without coupling the domain to a payment or verification provider.
-- Account lifecycle now has explicit allowed transitions based on the recorded lifecycle requirements.
+- Account lifecycle has explicit allowed transitions based on the recorded lifecycle requirements.
+- Account activation service delegates state validation to the domain layer and has application-level tests.
 
 ## Exact next action
-Run and verify CI for the latest account-lifecycle changes. If green, implement the smallest first vertical-slice application service already supported by the recorded requirements, and add its tests. Do not recreate completed foundations.
+Run and verify CI for the latest account-activation service changes. If green, continue with the next smallest vertical-slice application service already supported by the recorded requirements, and add its tests. Do not recreate completed foundations.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action. Never recreate completed work unless verification proves it is missing or broken.
