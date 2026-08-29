@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: Centralized authorization architecture completed
-CURRENT TASK: Define API architecture and client contracts
+CURRENT MILESTONE: API architecture and client contract baseline completed
+CURRENT TASK: Define event and asynchronous processing architecture
 STATUS: In progress
 
 ## Phase transition
@@ -58,7 +58,9 @@ Define relational data model and ownership boundaries.
 - Migration and indexing principles defined.
 - AUTHORIZATION_ARCHITECTURE.md created.
 - Central capability evaluation, deny precedence, caching and enforcement integration defined.
-- Next: API architecture and client contracts.
+- API_ARCHITECTURE.md created.
+- Versioning, resource conventions, error contracts, pagination, idempotency and client compatibility defined.
+- Next: event and asynchronous processing architecture.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -84,7 +86,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create API_ARCHITECTURE.md defining API boundaries, resource conventions, versioning, authentication flow, error contracts, idempotency and client compatibility.
+Create EVENT_AND_ASYNC_ARCHITECTURE.md defining domain-event publication, transactional outbox, background jobs, retries, dead-letter handling and consumer idempotency.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
