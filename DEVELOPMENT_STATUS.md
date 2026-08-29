@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: Relational data model baseline completed
-CURRENT TASK: Define centralized authorization architecture
+CURRENT MILESTONE: Centralized authorization architecture completed
+CURRENT TASK: Define API architecture and client contracts
 STATUS: In progress
 
 ## Phase transition
@@ -56,7 +56,9 @@ Define relational data model and ownership boundaries.
 - DATA_MODEL_DRAFT.md created.
 - Relational ownership, keys, cardinalities and sensitive-data boundaries defined.
 - Migration and indexing principles defined.
-- Next: centralized authorization architecture.
+- AUTHORIZATION_ARCHITECTURE.md created.
+- Central capability evaluation, deny precedence, caching and enforcement integration defined.
+- Next: API architecture and client contracts.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -82,7 +84,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create AUTHORIZATION_ARCHITECTURE.md defining request-time capability evaluation, policy inputs, precedence rules, caching boundaries and enforcement integration.
+Create API_ARCHITECTURE.md defining API boundaries, resource conventions, versioning, authentication flow, error contracts, idempotency and client compatibility.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
