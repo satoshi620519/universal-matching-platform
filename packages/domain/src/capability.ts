@@ -2,6 +2,7 @@ export type VerificationLevel = 0 | 1 | 2 | 3;
 export type EntitlementState = 'pending' | 'active' | 'scheduled-expiration' | 'expired' | 'revoked' | 'suspended';
 
 export interface CapabilityContext {
+  readonly currentVerificationLevel: VerificationLevel;
   readonly requiredVerificationLevel?: VerificationLevel;
   readonly entitlementState?: EntitlementState;
   readonly entitlementEffectiveAt?: string;
@@ -9,8 +10,18 @@ export interface CapabilityContext {
 }
 
 export function canUseCapability(context: CapabilityContext): boolean {
-  if (context.requiredVerificationLevel !== undefined && context.requiredVerificationLevel < 0) return false;
-  if (context.entitlementState !== undefined && context.entitlementState !== 'active' && context.entitlementState !== 'scheduled-expiration') {
+  if (
+    context.requiredVerificationLevel !== undefined &&
+    context.currentVerificationLevel < context.requiredVerificationLevel
+  ) {
+    return false;
+  }
+
+  if (
+    context.entitlementState !== undefined &&
+    context.entitlementState !== 'active' &&
+    context.entitlementState !== 'scheduled-expiration'
+  ) {
     return false;
   }
 
