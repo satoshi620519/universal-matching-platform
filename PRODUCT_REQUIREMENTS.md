@@ -420,3 +420,126 @@ Minimum workflow scenarios shall eventually test:
 
 ## Exact next requirements milestone
 Define analytics and reporting requirements, followed by accessibility and operational quality requirements.
+
+
+## 31. Analytics and reporting requirements
+
+### Principles
+Analytics shall support product improvement, operations, commercial administration and safety effectiveness while minimizing unnecessary personal data. The analytics architecture shall separate event collection, aggregation and reporting access.
+
+REQ-AN-001 Analytics events shall use a documented event taxonomy with stable event names and version-aware schemas.
+REQ-AN-002 New analytics events shall define purpose, fields, data classification and retention expectations before production use.
+REQ-AN-003 Event collection shall avoid unnecessary direct identifiers and sensitive content.
+REQ-AN-004 Product analytics shall distinguish raw operational telemetry from business reporting and user-facing audit history.
+REQ-AN-005 Analytics processing shall support aggregation without requiring unrestricted access to underlying user records.
+
+### Product metrics
+Version 1.0 reporting shall support configurable aggregation for:
+- Account and onboarding funnel completion.
+- Profile completion.
+- Discovery and matching activity.
+- Conversation activation and engagement at aggregate level.
+- Feature adoption.
+- Geographic and category-level usage where policy permits.
+- Notification effectiveness at aggregate level.
+
+REQ-AN-006 Operators shall be able to select supported reporting periods and scopes.
+REQ-AN-007 Metrics shall document their calculation definition to prevent ambiguous interpretation.
+REQ-AN-008 Metric definitions shall be version-aware when formulas materially change.
+REQ-AN-009 Dashboards shall clearly distinguish unavailable data from zero values.
+REQ-AN-010 Product analytics shall not silently repurpose sensitive verification or moderation evidence as ordinary engagement data.
+
+### Commercial reporting
+REQ-AN-011 Authorized operators shall be able to report products, purchases, subscription lifecycle and entitlement activity at appropriate aggregation levels.
+REQ-AN-012 Commercial reports shall distinguish gross events from provider reversals, refunds and chargebacks where applicable.
+REQ-AN-013 Revenue-related metrics shall identify calculation scope and currency/region boundaries.
+REQ-AN-014 Analytics reports shall not be the authoritative financial ledger; payment-provider and accounting integrations remain distinct sources for financial reconciliation.
+
+### Safety operations metrics
+REQ-AN-015 Authorized safety operators shall be able to measure report volumes, queue age, review time, enforcement categories and appeal outcomes.
+REQ-AN-016 Safety metrics shall support identification of operational bottlenecks without exposing unnecessary reporter or subject identities.
+REQ-AN-017 High-level safety effectiveness metrics may be aggregated by category or region only when privacy and policy conditions permit.
+REQ-AN-018 Moderation metrics shall preserve distinction between reports received, actions taken and confirmed policy violations.
+
+### Access and governance
+REQ-AN-019 Analytics access shall be role-controlled.
+REQ-AN-020 Sensitive or small-cohort reports shall support suppression or aggregation controls where required.
+REQ-AN-021 Export of analytics data shall be permission-controlled and auditable.
+REQ-AN-022 Dashboard configuration changes that alter interpretation or visibility shall be traceable.
+REQ-AN-023 Operators shall be able to configure supported retention periods and disable non-essential analytics where deployment policy requires.
+
+## 32. Accessibility requirements
+
+Accessibility shall be treated as a product requirement across Web, iOS and Android rather than a late visual adjustment.
+
+REQ-A11Y-001 Interactive functionality shall support keyboard or platform-equivalent navigation where applicable.
+REQ-A11Y-002 Controls shall expose accessible names, roles and states through platform accessibility APIs.
+REQ-A11Y-003 User flows shall not rely solely on color, sound, motion or precise pointer gestures to convey essential information.
+REQ-A11Y-004 Text and interface scaling shall be supported within reasonable product layout constraints.
+REQ-A11Y-005 Focus order and focus visibility shall be predictable for supported keyboard interfaces.
+REQ-A11Y-006 Dynamic status changes shall be communicated through appropriate platform mechanisms.
+REQ-A11Y-007 Time-limited interactions shall provide appropriate warning, extension or alternative behavior where applicable.
+REQ-A11Y-008 Media and important visual information shall support appropriate text alternatives where applicable.
+REQ-A11Y-009 Accessibility preferences shall be respected when supported by the operating system or platform.
+REQ-A11Y-010 Accessibility acceptance testing shall be part of major user-flow validation.
+
+## 33. Operational quality requirements
+
+### Performance
+REQ-NFR-007 Performance targets shall be defined per critical user journey rather than as one global page-load number.
+REQ-NFR-008 Critical operations shall include authentication, onboarding progression, discovery retrieval, matching actions, message sending and protected capability checks.
+REQ-NFR-009 Background processing shall not unnecessarily block user-facing transactions.
+REQ-NFR-010 Performance measurements shall distinguish client latency, API latency, database latency and third-party provider latency where observable.
+
+### Availability and resilience
+REQ-NFR-011 The system shall identify critical dependencies and define degraded behavior where practical.
+REQ-NFR-012 Failure of optional integrations shall not unnecessarily disable unrelated core capabilities.
+REQ-NFR-013 Retryable background operations shall use bounded retries and observability.
+REQ-NFR-014 Production failures shall produce actionable logs, metrics or alerts appropriate to operational severity.
+REQ-NFR-015 Backup and recovery requirements shall be defined before production deployment.
+REQ-NFR-016 Schema and configuration changes shall have rollback or recovery procedures appropriate to their risk.
+
+### Observability
+REQ-NFR-017 The system shall provide structured logs for important backend operations.
+REQ-NFR-018 Requests and asynchronous workflows shall support correlation identifiers where practical.
+REQ-NFR-019 Observability shall minimize unnecessary sensitive user content.
+REQ-NFR-020 Operational dashboards shall distinguish healthy, degraded and failed states.
+
+## 34. Data retention and deletion requirements
+
+REQ-DATA-001 Data classes shall have documented retention purposes and policies.
+REQ-DATA-002 User-initiated deletion shall trigger a documented lifecycle rather than assuming immediate destruction of all related records.
+REQ-DATA-003 Legal, security, fraud-prevention and safety retention exceptions shall be explicit, scoped and time-bounded where applicable.
+REQ-DATA-004 Deletion workflows shall distinguish deletion, anonymization, revocation of access and archival.
+REQ-DATA-005 Backups shall follow a documented expiration and recovery lifecycle.
+REQ-DATA-006 Derived analytics and aggregates shall be evaluated separately for re-identification risk and retention policy.
+REQ-DATA-007 Sensitive identity-verification evidence shall have stricter retention and access requirements.
+REQ-DATA-008 Operators shall be able to explain supported deletion states to users without exposing internal security controls.
+REQ-DATA-009 Retention policy changes shall be traceable.
+REQ-DATA-010 Scheduled deletion/anonymization jobs shall be observable and failure-aware.
+
+## 35. Buyer installation and deployment requirements
+
+REQ-DEPLOY-001 Buyers shall receive documented supported deployment prerequisites.
+REQ-DEPLOY-002 Environment-specific configuration shall be externalized from ordinary application source code.
+REQ-DEPLOY-003 Secrets shall not be stored in ordinary configuration files committed to source control.
+REQ-DEPLOY-004 Installation documentation shall distinguish Quick Launch configuration from Advanced Customization.
+REQ-DEPLOY-005 Supported integrations shall document required credentials, callbacks and operational dependencies.
+REQ-DEPLOY-006 Deployment validation shall provide a documented readiness checklist.
+REQ-DEPLOY-007 Buyers shall be able to configure branding, enabled categories, languages, regions and supported policy settings through documented mechanisms.
+REQ-DEPLOY-008 Upgrade documentation shall describe compatibility, migrations and rollback considerations.
+REQ-DEPLOY-009 Production deployment shall include documented backup, monitoring and incident-contact responsibilities.
+REQ-DEPLOY-010 Custom extensions shall have documented boundaries so buyer modifications do not unnecessarily fork core modules.
+
+## Phase 1 requirements completion gate
+
+Phase 1 is considered complete only when:
+1. PRODUCT_REQUIREMENTS.md has been reviewed for cross-platform and multi-category consistency.
+2. Every major Version 1.0 domain has uniquely identifiable requirements.
+3. Architecture decisions can trace back to requirement domains.
+4. Unresolved product decisions are explicitly listed rather than silently assumed.
+5. The next phase can create detailed architecture and data models without redefining the product vision.
+6. DEVELOPMENT_STATUS.md records the transition and exact next task.
+
+## Exact next milestone
+Perform a Phase 1 requirements consistency review, identify unresolved decisions, update DECISIONS.md where required, then transition to Phase 2 detailed architecture and data modeling.
