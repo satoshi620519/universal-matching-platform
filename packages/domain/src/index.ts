@@ -1,1 +1,22 @@
-export {};
+export type EntityId = string & { readonly __brand: 'EntityId' };
+
+export function createEntityId(value: string): EntityId {
+  const normalized = value.trim();
+  if (!normalized) throw new Error('EntityId must not be empty');
+  return normalized as EntityId;
+}
+
+export type InstantString = string & { readonly __brand: 'InstantString' };
+
+export function createInstantString(value: string): InstantString {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) throw new Error('Invalid instant');
+  return date.toISOString() as InstantString;
+}
+
+export class DomainError extends Error {
+  constructor(public readonly code: string, message: string) {
+    super(message);
+    this.name = 'DomainError';
+  }
+}
