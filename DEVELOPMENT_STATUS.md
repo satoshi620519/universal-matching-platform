@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 3 — Implementation planning
-CURRENT MILESTONE: Technology stack baseline completed
-CURRENT TASK: Milestone 0 — monorepo and engineering foundation
+CURRENT MILESTONE: Milestone 0 — engineering foundation
+CURRENT TASK: Validate Milestone 0 install, typecheck, lint, test and build
 STATUS: Phase 2 complete; Phase 3 implementation planning complete; Milestone 0 in progress
 
 ## Phase transition
@@ -96,9 +96,20 @@ Acceptance: root install works; workspace typecheck/lint/test/build commands exi
 - Codex repository access: passed.
 - Requirements document integrity check: passed.
 - Application implementation tests: not started.
+- M0 validation commands: pending execution.
+
+## M0 implementation progress
+- Root pnpm workspace and Turborepo configuration created.
+- Application workspace baseline created for Web, Admin, Mobile, API and Worker.
+- Shared package baseline created for domain, types, config, API client, UI and i18n.
+- NestJS/Fastify API health baseline created.
+- Docker Compose baseline created for PostgreSQL and Redis.
+- GitHub Actions baseline CI created.
+- Development setup documentation created.
+- No product features intentionally implemented in M0.
 
 ## Exact next action
-Create the Milestone 0 monorepo file structure and root workspace configuration. Do not implement product features.
+Validate the Milestone 0 baseline by running dependency installation, typecheck, lint, tests and build. Record actual results and fix only M0 foundation failures.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
