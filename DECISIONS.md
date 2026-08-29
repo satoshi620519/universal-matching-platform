@@ -29,3 +29,34 @@
 - Update the status record whenever a meaningful milestone, decision, implementation step, or interruption point is reached.
 - Before ending any work session, record the exact next action and unfinished state.
 - Do not rely on conversation memory as the sole source of project state.
+
+
+## Phase 1 consistency review outcome — 2026-08-30
+
+The Phase 1 requirements were reviewed across onboarding, categories, profiles, matching, messaging, notifications, payments, identity verification, safety, moderation, analytics, accessibility, operations, data lifecycle and buyer deployment.
+
+### Confirmed cross-domain principles
+
+21. Protected capabilities are centrally authorized server-side; clients may improve UX but are not the authority for payment, verification, safety or policy decisions.
+22. Payment providers and identity-verification providers remain replaceable integrations; product requirements define capabilities before selecting vendors.
+23. Safety enforcement must propagate through the same capability model used by entitlement and verification, preventing inconsistent behavior across Web, iOS and Android.
+24. Category-specific behavior shall be configuration-driven where feasible, while shared trust, audit, account and safety foundations remain platform-wide.
+25. Geographic operation shall be policy-aware and privacy-aware; precise location is not a prerequisite for general matching.
+26. Analytics is an operational layer and not an unrestricted secondary copy of the transactional user database.
+27. Buyer customization must have explicit supported boundaries so Quick Launch changes do not require modification of protected core modules.
+28. Version 1.0 architecture shall prioritize a coherent modular monolith over premature microservice decomposition.
+
+### Explicitly unresolved implementation decisions
+
+The following are intentionally deferred to Phase 2 architecture work:
+- Authentication provider and supported login methods.
+- Payment provider selection and app-store/platform purchase integration boundaries.
+- Identity-verification providers and regional coverage.
+- Hosting/cloud topology and multi-region rollout strategy.
+- Search technology.
+- Realtime transport implementation.
+- Analytics and observability vendor stack.
+- Monorepo tooling.
+- Jurisdiction-specific compliance implementation matrix.
+
+Deferral is intentional. These decisions require detailed architecture, deployment constraints, regional analysis and implementation trade-off review rather than assumptions during product requirements planning.
