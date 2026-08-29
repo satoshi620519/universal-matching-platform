@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: Initial bounded contexts and canonical domain model completed
-CURRENT TASK: Define relational data model and ownership boundaries
+CURRENT MILESTONE: Relational data model baseline completed
+CURRENT TASK: Define centralized authorization architecture
 STATUS: In progress
 
 ## Phase transition
@@ -53,7 +53,10 @@ Define relational data model and ownership boundaries.
 - Cross-context ownership rules defined.
 - Candidate domain events identified.
 - DOMAIN_MODEL.md created.
-- Next: relational data model, keys, cardinalities and sensitive-data boundaries.
+- DATA_MODEL_DRAFT.md created.
+- Relational ownership, keys, cardinalities and sensitive-data boundaries defined.
+- Migration and indexing principles defined.
+- Next: centralized authorization architecture.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -79,7 +82,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create DATA_MODEL_DRAFT.md mapping canonical entities to relational ownership, primary/foreign keys, cardinalities, sensitive-data boundaries, indexes and migration principles.
+Create AUTHORIZATION_ARCHITECTURE.md defining request-time capability evaluation, policy inputs, precedence rules, caching boundaries and enforcement integration.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
