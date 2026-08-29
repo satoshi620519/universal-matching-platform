@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { canUseCapability, CapabilityContext } from '@universal/domain/capability.js';
+import { canUseCapability, CapabilityContext } from '@universal/domain';
 
 export type CapabilityAccessReason = 'allowed' | 'verification-required' | 'entitlement-required' | 'not-yet-effective';
 
