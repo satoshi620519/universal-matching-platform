@@ -20,3 +20,6 @@ export class DomainError extends Error {
     this.name = 'DomainError';
   }
 }
+
+export * from './account.js';
+export * from './capability.js';
