@@ -1,9 +1,9 @@
 # Development Status
 
-CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: Configuration architecture completed
-CURRENT TASK: Integrate Phase 2 architecture into final blueprint
-STATUS: In progress
+CURRENT PHASE: Phase 3 — Implementation planning
+CURRENT MILESTONE: Phase 2 architecture integration completed
+CURRENT TASK: Define dependency-ordered implementation milestones
+STATUS: Phase 2 complete; Phase 3 in progress
 
 ## Phase transition
 Phase 1 is complete. Product requirements have been reviewed for cross-domain consistency. Confirmed principles and intentionally unresolved provider/implementation choices are recorded in DECISIONS.md.
@@ -46,7 +46,7 @@ Phase 1 is complete. Product requirements have been reviewed for cross-domain co
 ## Current task
 Define relational data model and ownership boundaries.
 
-## Phase 2 progress
+## Phase 2 progress — completed
 - Bounded contexts defined.
 - Canonical domain entities defined.
 - Major entity lifecycles defined.
@@ -66,7 +66,8 @@ Define relational data model and ownership boundaries.
 - Connection lifecycle, subscriptions, reconciliation, ordering and fallback behavior defined.
 - CONFIGURATION_ARCHITECTURE.md created.
 - Configuration layers, precedence, typed schemas, versioning, publication, rollback and purchaser customization boundaries defined.
-- Next: integrate all Phase 2 architecture artifacts into ARCHITECTURE.md.
+- ARCHITECTURE.md created as the integrated implementation blueprint.
+- Phase 2 architecture integration completed.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -92,7 +93,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create ARCHITECTURE.md as the Phase 2 integration document linking completed domain, data, authorization, API, async, realtime and configuration architecture into one coherent implementation blueprint, then update DEVELOPMENT_STATUS.md to close the Phase 2 architecture milestone.
+Create IMPLEMENTATION_MILESTONES.md with dependency-ordered, testable vertical milestones and explicit completion gates before writing application code.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
