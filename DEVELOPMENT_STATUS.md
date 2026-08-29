@@ -2,8 +2,8 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Establish the first production-oriented domain foundation without duplicating M0 work.
-STATUS: Milestone 0 complete; Milestone 1 in progress
+CURRENT TASK: Validate the API application boundary and then establish the database/migration boundary.
+STATUS: Milestone 1 in progress
 
 ## Completed
 - Project foundation and continuity rules established.
@@ -18,6 +18,7 @@ STATUS: Milestone 0 complete; Milestone 1 in progress
 - M0 GitHub Actions validation passed: install, typecheck, lint, test and build.
 - M1 canonical domain primitives implemented: EntityId, InstantString and DomainError.
 - M1 domain primitive unit tests implemented, including normalization and validation edge cases.
+- M1 API application boundary created: AppModule and isolated HealthController.
 
 ## Milestone 0 completion gate — COMPLETE
 - Root pnpm workspace and Turborepo configuration: complete.
@@ -50,22 +51,24 @@ STATUS: Milestone 0 complete; Milestone 1 in progress
 5. Add automated tests for the new foundation.
 
 ## Current task
-Establish the minimal API application boundary and its tests for the first vertical slice. Do not rebuild M0 or implement unrelated product features.
+Validate the API application boundary and then establish the database/migration boundary. Do not rebuild M0 or implement unrelated product features.
 
 ## Test status
 - GitHub operations: passed.
 - Codex repository access: passed.
 - Requirements document integrity check: passed.
 - M0 CI validation: passed (install/typecheck/lint/test/build).
-- M1 domain primitive tests: added; CI validation pending for the latest commit.
+- M1 domain primitive tests: passed in the last successful CI run.
+- API application boundary: added; latest CI validation pending.
 
 ## Milestone 1 progress
 - M0 completion formally recorded.
 - Canonical domain primitives implemented and covered by tests.
 - Edge-case coverage added for identifier normalization and timestamp offsets.
+- API bootstrap now delegates to an explicit AppModule and isolated HealthController.
 
 ## Exact next action
-Validate the latest M1 commit through CI. If green, add only the minimal API application/module boundary needed for the first vertical slice, then record that completion before continuing.
+Validate the latest M1 commit through CI. If green, add only the minimal database/migration package boundary and tests, then record that completion before continuing.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action. Never recreate completed work unless verification proves it is missing or broken.
