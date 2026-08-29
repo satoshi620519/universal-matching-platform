@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AccountState, canTransitionAccountState } from '@universal/domain/account.js';
+import { AccountState, canTransitionAccountState } from '@universal/domain';
 
 export interface AccountActivationResult {
   readonly state: 'active';
