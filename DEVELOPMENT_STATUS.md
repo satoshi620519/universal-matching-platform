@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 3 — Implementation planning
-CURRENT MILESTONE: Phase 2 architecture integration completed
-CURRENT TASK: Define dependency-ordered implementation milestones
+CURRENT MILESTONE: Implementation milestones completed
+CURRENT TASK: Select concrete technology stack
 STATUS: Phase 2 complete; Phase 3 in progress
 
 ## Phase transition
@@ -93,7 +93,13 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create IMPLEMENTATION_MILESTONES.md with dependency-ordered, testable vertical milestones and explicit completion gates before writing application code.
+Create TECHNOLOGY_STACK_DECISION.md selecting concrete technology choices for monorepo, backend, web, mobile, database access, authentication, async jobs, realtime, testing and deployment before implementation begins.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
+
+
+## Phase 3 progress
+- IMPLEMENTATION_MILESTONES.md created.
+- Milestones M0 through M11 defined with dependencies, deliverables and completion gates.
+- Next: concrete technology stack selection before implementation.
