@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the new entitlement lifecycle rules, then continue with the smallest supported payment/verification vertical slice.
+CURRENT TASK: Validate the verification domain lifecycle and continue with the smallest supported payment/verification vertical slice.
 STATUS: Milestone 1 in progress
 
 ## Completed
@@ -32,6 +32,8 @@ STATUS: Milestone 1 in progress
 - Domain package entrypoint explicitly exports domain modules and exposes its source entrypoint for workspace typechecking.
 - M1 entitlement lifecycle state rules added for pending, active, scheduled-expiration, expired, revoked and suspended states.
 - M1 entitlement lifecycle tests added for valid renewal/expiration paths and terminal states.
+- M1 verification domain lifecycle added with verification status, level and optional expiry semantics.
+- M1 verification lifecycle tests added for verified, pending, revoked and expired cases.
 
 ## Milestone 0 completion gate — COMPLETE
 - Root pnpm workspace and Turborepo configuration: complete.
@@ -64,7 +66,7 @@ STATUS: Milestone 1 in progress
 5. Add automated tests for the new foundation.
 
 ## Current task
-Validate the entitlement lifecycle rules. If green, continue with the smallest payment/verification vertical-slice application service supported by the recorded requirements. Do not rebuild M0 or invent a full product schema before the relevant requirements are recorded.
+Validate the verification domain lifecycle. If green, continue with the smallest payment/verification application service supported by the recorded requirements. Do not rebuild M0 or invent a full product schema before the relevant requirements are recorded.
 
 ## Test status
 - GitHub operations: passed.
@@ -79,7 +81,8 @@ Validate the entitlement lifecycle rules. If green, continue with the smallest p
 - Account activation service tests: CI validation passed.
 - Capability access service tests: CI validation passed.
 - Domain package workspace entrypoint: CI validation passed.
-- Entitlement lifecycle tests: added; latest CI validation pending.
+- Entitlement lifecycle tests: CI validation passed.
+- Verification lifecycle tests: added; latest CI validation pending.
 
 ## Milestone 1 progress
 - M0 completion formally recorded.
@@ -95,9 +98,10 @@ Validate the entitlement lifecycle rules. If green, continue with the smallest p
 - API capability access service provides a stable application-level decision result and reason while delegating authorization logic to the domain gate.
 - Domain package has an explicit workspace entrypoint so API consumers can typecheck against the package contract.
 - Entitlement lifecycle has explicit allowed transitions consistent with the payment requirements; provider-specific transaction handling remains intentionally unimplemented.
+- Verification lifecycle has explicit usable/expired semantics while remaining provider-agnostic.
 
 ## Exact next action
-Run and verify CI for the entitlement lifecycle changes. If green, implement the smallest payment/verification application service already supported by the recorded requirements, and add its tests. Do not recreate completed foundations.
+Run and verify CI for the verification lifecycle changes. If green, implement the smallest verification application service already supported by the recorded requirements, and add its tests. Do not recreate completed foundations.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action. Never recreate completed work unless verification proves it is missing or broken.
