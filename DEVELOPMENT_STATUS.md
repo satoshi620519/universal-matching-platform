@@ -1,8 +1,8 @@
 # Development Status
 
 CURRENT PHASE: Phase 2 — Detailed architecture and data modeling
-CURRENT MILESTONE: Event and asynchronous processing architecture completed
-CURRENT TASK: Define realtime architecture
+CURRENT MILESTONE: Realtime architecture completed
+CURRENT TASK: Define configuration architecture
 STATUS: In progress
 
 ## Phase transition
@@ -62,7 +62,9 @@ Define relational data model and ownership boundaries.
 - Versioning, resource conventions, error contracts, pagination, idempotency and client compatibility defined.
 - EVENT_AND_ASYNC_ARCHITECTURE.md created.
 - Transactional outbox, retries, dead-letter handling, ordering and consumer idempotency defined.
-- Next: realtime architecture.
+- REALTIME_ARCHITECTURE.md created.
+- Connection lifecycle, subscriptions, reconciliation, ordering and fallback behavior defined.
+- Next: configuration architecture.
 
 ## Key unresolved decisions for Phase 2
 - Authentication methods/providers.
@@ -88,7 +90,7 @@ Define relational data model and ownership boundaries.
 - Application implementation tests: not started.
 
 ## Exact next action
-Create REALTIME_ARCHITECTURE.md defining realtime connection lifecycle, event subscriptions, authorization, delivery guarantees, reconnection and fallback behavior.
+Create CONFIGURATION_ARCHITECTURE.md defining deployment, category and feature configuration layers, precedence, versioning, publication, rollback and runtime resolution.
 
 ## Continuity requirement
 Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
