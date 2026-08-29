@@ -1,64 +1,66 @@
 # Development Status
 
 CURRENT PHASE: Phase 1 — Product requirements and architecture planning
-CURRENT MILESTONE: Initial architecture and Version 1.0 requirements baseline created
-CURRENT TASK: Expand detailed requirements before final architecture approval
+CURRENT MILESTONE: Detailed onboarding and configurable profile/category requirements completed
+CURRENT TASK: Define detailed messaging and notification requirements
 STATUS: In progress
 
 ## Completed
 - Project foundation and continuity rules established.
-- GitHub established as persistent source of truth.
+- GitHub is the persistent source of truth.
 - ChatGPT GitHub operations tested.
 - Codex repository access tested.
 - Core global product direction confirmed.
-- ARCHITECTURE_DRAFT.md created.
-- PRODUCT_REQUIREMENTS.md created with initial uniquely identified Version 1.0 requirements.
+- Initial technical architecture drafted.
+- Initial Version 1.0 requirements baseline created.
+- Detailed onboarding requirements added.
+- Configurable multi-category model defined.
+- Configurable profile schema requirements defined.
+- Progressive onboarding and account lifecycle principles recorded.
 
-## Current baseline
-Architecture draft:
-- Next.js + TypeScript for Web/Admin.
-- React Native + Expo + TypeScript for iOS/Android.
-- NestJS + TypeScript API.
-- PostgreSQL primary data.
-- Redis for cache/queues/rate limiting.
-- S3-compatible media abstraction.
+## Current architecture baseline
+- Next.js + TypeScript: Web/Admin.
+- React Native + Expo + TypeScript: iOS/Android.
+- NestJS + TypeScript: API.
+- PostgreSQL: primary data.
+- Redis: cache/queues/rate limiting.
+- S3-compatible storage abstraction.
 - Monorepo + modular monolith.
 - Strategy-based matching.
-- Configuration-driven buyer customization.
-- Replaceable payment and identity-verification providers.
+- Configuration-driven customization.
+- Replaceable external providers.
 
-Requirements baseline covers:
-- Actors and product scope.
-- Authentication.
-- Configurable profiles.
-- Multiple discovery/matching methods.
-- Messaging and notifications.
-- Global geography.
-- Internationalization.
-- Safety and moderation.
+## Current requirements baseline
+PRODUCT_REQUIREMENTS.md now covers:
+- Product actors and Version 1.0 scope.
+- Authentication and account lifecycle foundations.
+- Detailed progressive/configurable onboarding.
+- Configurable categories without forking the core.
+- Configurable profile schemas and privacy controls.
+- Multiple matching strategies.
+- Communication baseline.
+- Notifications baseline.
+- Global geography and internationalization.
+- Safety/moderation.
 - Identity verification.
 - Payments.
-- Administration.
-- Buyer customization.
-- Privacy/security.
-- Non-functional requirements and traceability.
+- Administration and buyer customization.
+- Security and non-functional requirements.
 
 ## In progress
-Detailed requirements expansion.
+Expand detailed communication and notification requirements.
 
 ## Remaining requirement sections
-1. Detailed onboarding/account flows.
-2. Category and configurable profile model.
-3. Complete messaging behavior.
-4. Notification matrix.
-5. Payment entitlement model.
-6. Identity verification level definitions.
-7. Moderator workflows.
-8. Analytics/reporting.
-9. Accessibility.
-10. Performance/availability targets.
-11. Data retention/deletion.
-12. Buyer installation/deployment requirements.
+1. Complete messaging behavior.
+2. Notification matrix and delivery policy.
+3. Payment entitlement model.
+4. Identity verification level definitions.
+5. Moderator workflows.
+6. Analytics/reporting.
+7. Accessibility.
+8. Performance/availability targets.
+9. Data retention/deletion.
+10. Buyer installation/deployment requirements.
 
 ## Files changed in current planning cycle
 - DECISIONS.md
@@ -73,7 +75,7 @@ Detailed requirements expansion.
 - Application implementation tests: not started.
 
 ## Exact next action
-Expand PRODUCT_REQUIREMENTS.md with detailed onboarding/account flows and the configurable category/profile model. Record progress immediately after completing that requirements section.
+Expand PRODUCT_REQUIREMENTS.md with detailed messaging behavior, conversation eligibility rules, message states, moderation handling, notification events, delivery preferences, and failure/retry behavior. Update this status record immediately after that milestone.
 
 ## Continuity requirement
-Do not advance through major work without updating this record at meaningful milestones. If interrupted, this file must identify the exact unfinished task and immediate next action.
+Record meaningful progress during work. If interrupted, this file must identify the exact unfinished task and immediate next action.
