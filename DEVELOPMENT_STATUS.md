@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the metric definition model CI, then continue with the next smallest aggregation/reporting slice.
+CURRENT TASK: Validate the metric report result model CI, then continue with the next smallest analytics vertical slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Analytics Event Taxonomy CI #124 passed: install, typecheck, lint, test and build all green.
-- Analytics Event Taxonomy is CI-validated and complete.
-- Metric Definition model implemented for documented, version-aware calculations and supported reporting periods.
-- Metric Definition tests implemented.
-- Current immediate action: verify CI for metric definition commits.
+- Metric Definition Model CI passed: install, typecheck, lint, test and build all green.
+- Metric Definition Model is CI-validated and complete.
+- Metric Report Result model implemented to support reporting periods/scopes and explicitly distinguish unavailable data from measured zero.
+- Metric Report Result tests implemented.
+- Current immediate action: verify CI for metric report result commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -43,6 +43,8 @@ STATUS: Milestone 1 in progress
 - Analytics event taxonomy model and tests.
 - Analytics event taxonomy CI validation (CI #124).
 - Metric definition model and tests.
+- Metric definition model CI validation.
+- Metric report result model and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -61,13 +63,14 @@ STATUS: Milestone 1 in progress
 - Moderation case lifecycle: CI validated.
 - Moderation action policy: CI validated.
 - Audit record domain model: CI validated.
-- Analytics event taxonomy: CI validated (CI #124).
-- Metric definition model: tests added; latest CI pending.
+- Analytics event taxonomy: CI validated.
+- Metric definition model: CI validated.
+- Metric report result model: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the metric definition model commits.
-2. If green: mark Metric Definition Model CI-validated.
-3. Then implement the smallest aggregation/reporting result slice required by REQ-AN-005 through REQ-AN-010, without recreating event taxonomy or metric definitions.
+1. Check CI triggered by the metric report result model commits.
+2. If green: mark Metric Report Result Model CI-validated.
+3. Then continue with the next smallest analytics vertical slice, reusing Analytics Event Taxonomy, Metric Definition and Metric Report rather than recreating them.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
