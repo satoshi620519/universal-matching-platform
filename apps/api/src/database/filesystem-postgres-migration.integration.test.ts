@@ -32,6 +32,7 @@ describe.skipIf(!DATABASE_URL)(
       await database.$connect();
 
       try {
+        await database.$executeRawUnsafe('DROP TABLE IF EXISTS safety_enforcements');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
@@ -50,7 +51,30 @@ describe.skipIf(!DATABASE_URL)(
           'SELECT version FROM schema_migrations ORDER BY version',
         );
         expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3, 4]);
+
+        const tables = await database.$queryRawUnsafe<Array<{ table_name: string }>>(
+          `SELECT table_name FROM information_schema.tables
+           WHERE table_schema = 'public'
+             AND table_name IN (
+               'accounts',
+               'authentication_identities',
+               'verification_requests',
+               'verification_outcomes',
+               'safety_enforcements',
+               'schema_migrations'
+             )
+           ORDER BY table_name`,
+        );
+        expect(tables.map(({ table_name }) => table_name)).toEqual([
+          'accounts',
+          'authentication_identities',
+          'safety_enforcements',
+          'schema_migrations',
+          'verification_outcomes',
+          'verification_requests',
+        ]);
       } finally {
+        await database.$executeRawUnsafe('DROP TABLE IF EXISTS safety_enforcements');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
