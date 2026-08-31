@@ -46,3 +46,5 @@ export * from './analytics-governance.js';
 export * from './report-privacy-control.js';
 
 export * from './analytics-audit.js';
+
+export * from './analytics-deployment-policy.js';
