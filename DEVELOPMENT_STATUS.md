@@ -116,7 +116,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 
 - Shared request-principal lifecycle CI #253 and progress record CI #254 passed; principal propagation boundary is CI-validated.
 - Runtime composition follow-up CI #261/#262 passed; request-principal propagation and composition-root wiring are CI-validated.
-- Authentication lifecycle contract and integration-style lifecycle tests added to prove adapter resolution occurs once per request and guards/readers consume the stored request principal without re-authentication. CI pending.
+- Authentication lifecycle CI #264 and progress record CI #265 passed; request-once authentication lifecycle invariant is CI-validated.
+- Account activation API boundary implemented by reusing the existing AccountRepository and AccountActivationService; no account lifecycle domain logic was recreated. CI pending.
 
 ## Test status
 - M0 CI validation: passed.
@@ -156,10 +157,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the authentication lifecycle contract/tests.
-2. If green: mark the request-once authentication lifecycle invariant CI-validated.
-3. Keep the anonymous placeholder adapter until a concrete identity-provider requirement slice is selected.
-4. Select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation, preferring an existing domain contract that has not yet crossed the API boundary.
-5. Implement only one coherent API slice at a time and avoid recreating already validated domain logic.
+1. Check CI triggered by the account activation API boundary commits.
+2. If green: mark the account activation HTTP/application boundary CI-validated.
+3. Do not add account state persistence mutation until the repository contract supports an explicit guarded transition; current activation boundary intentionally exposes validated decision flow without bypassing lifecycle invariants.
+4. Select the next existing requirement slice from verification access or another account/auth workflow that has validated domain/application logic but no HTTP boundary.
+5. Implement only one coherent boundary slice at a time and avoid recreating validated logic.
 6. Update this file after every coherent slice.
 
