@@ -3,6 +3,7 @@ import { planMigrations } from './migrations.js';
 
 export interface MigrationExecutor {
   readonly listAppliedVersions: () => Promise<readonly number[]>;
+  /** Applies the migration SQL and records its version atomically. */
   readonly apply: (migration: MigrationArtifact) => Promise<void>;
 }
 
