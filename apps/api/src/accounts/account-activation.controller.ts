@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   NotFoundException,
   Param,
@@ -26,9 +25,14 @@ export class AccountActivationController {
     }
 
     const result = this.activation.activate(account.status);
+    const persisted = await this.accounts.updateStatus(account.id, result.state);
+
+    if (!persisted) {
+      throw new NotFoundException('Account not found');
+    }
 
     return {
-      accountId: account.id,
+      accountId: persisted.id,
       state: result.state,
     };
   }
