@@ -9,6 +9,7 @@ import { AccountActivationService } from './accounts/account-activation.service.
 import { PrismaAccountRepository } from './accounts/prisma-account.repository.js';
 import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.adapter.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
+import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthController } from './health/health.controller.js';
 import { VerificationAccessController } from './verification/verification-access.controller.js';
@@ -24,6 +25,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     AccountActivationService,
     VerificationAccessService,
     AccountLookupService,
+    RequestPrincipalResolver,
     PrismaAccountRepository,
     AnonymousAuthenticationAdapter,
     {
