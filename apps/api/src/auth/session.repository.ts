@@ -3,6 +3,7 @@ export interface AuthenticationSession {
   readonly accountId: string;
   readonly authenticationMethod: string;
   readonly expiresAt: Date;
+  readonly revokedAt: Date | null;
 }
 
 export abstract class SessionRepository {
@@ -11,4 +12,6 @@ export abstract class SessionRepository {
     readonly authenticationMethod: string;
     readonly expiresAt: Date;
   }): Promise<AuthenticationSession>;
+
+  abstract revoke(id: string, revokedAt: Date): Promise<void>;
 }
