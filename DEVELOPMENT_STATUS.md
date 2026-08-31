@@ -394,12 +394,33 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commit: fcee643dad32cd16a9b868f1ecccd088029b2629.
 - This is a CI workflow syntax correction, not a TypeScript source-code diagnosis.
 
+## CI diagnostics — EXACT TYPECHECK ERRORS CAPTURED AND FIXED
+- Valid diagnostics artifact was successfully produced and downloaded from CI run #568.
+- Typecheck passed all packages except @universal/database.
+- Exact errors were:
+  1. FilesystemMigrationArtifactSource imported non-existent assertValidMigrationPlan.
+  2. FilesystemMigrationArtifactSource treated parseMigrationFilename() number result as an object with .version.
+  3. PostgresMigrationExecutor test rootQuery mock did not satisfy the generic SqlMigrationQueryClient query signature.
+- Applied minimal fixes:
+  - Use orderMigrationFilenames() for validation/order and parseMigrationFilename() numeric return directly.
+  - Return loaded MigrationArtifact array after validated ordering.
+  - Make rootQuery mock generic with Promise<T>.
+- Commits: 27574508808c4b046762cc566a7fe75a21a70f95, e2ea949428921031381b59278b917f339143bbcb.
+- This is the first diagnosis based on exact CI compiler output rather than speculation.
+
+## Pipeline state after diagnosis
+- Typecheck was GREEN through 8 other packages; only @universal/database had the three captured errors.
+- Lint had failed only because typecheck was fixed enough to unblock it, exposing the next gate.
+- Test/build were skipped in run #568 because lint failed.
+- Need to verify the new fixes before claiming typecheck or baseline CI green.
+
 ## Exact next action
-1. Verify the CI run triggered by fcee643.
-2. If typecheck fails, download and inspect the generated typecheck-diagnostics artifact.
-3. Fix only exact compiler-reported errors.
-4. Once baseline CI is green, add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
-5. Record the exact continuation checkpoint.
+1. Verify CI triggered by 27574508/e2ea949.
+2. If typecheck passes, inspect lint failure diagnostics as the next exact pipeline gate.
+3. Fix only the exact lint-reported issues.
+4. Continue through test and build gates sequentially until baseline CI is green.
+5. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
+6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
