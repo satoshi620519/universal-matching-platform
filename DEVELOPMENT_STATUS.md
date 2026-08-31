@@ -57,7 +57,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Repository status mapping fix CI #230 passed and progress record CI #231 passed; repository/error boundary slice is CI-validated.
 - Provider-neutral authenticated request context CI #235 passed and progress record CI #236 passed; authentication context boundary is CI-validated.
 - Authentication adapter/unauthorized boundary follow-up CI #243 and progress record CI #244 passed; authentication adapter and 401 boundary are CI-validated.
-- Capability authorization HTTP boundary implemented by reusing CapabilityAccessService; authenticated-but-ineligible requests receive 403 with a controlled capability reason. CI pending.
+- Capability authorization HTTP boundary CI #247 and progress record CI #248 passed; 403 authorization boundary is CI-validated.
+- Shared request principal source and provider-neutral request principal resolver implemented; authentication and authorization guards now consume the same request principal source. CI pending.
 - Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
@@ -151,10 +152,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the capability authorization guard commits.
-2. If green: mark the 403 authorization boundary CI-validated.
-3. Connect the authenticated principal to the request lifecycle through an adapter/middleware boundary so guards consume a single request principal source.
-4. Do not introduce a concrete identity provider yet.
-5. After request-principal propagation is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
+1. Check CI triggered by the shared request-principal lifecycle commits.
+2. If green: mark request-principal propagation CI-validated.
+3. Register a concrete composition root binding for RequestAuthenticationAdapter without selecting an external identity provider; use a safe placeholder adapter only for runtime wiring.
+4. Verify middleware/guard lifecycle ordering so authentication resolution happens once and guards only consume the principal.
+5. After runtime wiring is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
 6. Update this file after every coherent slice.
 
