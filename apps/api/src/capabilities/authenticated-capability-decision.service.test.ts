@@ -17,12 +17,12 @@ describe('AuthenticatedCapabilityDecisionService', () => {
         account: { id: 'account-1', status: 'active' },
       }),
     } as any;
-    const service = new AuthenticatedCapabilityDecisionService(accounts);
+    const safetyRestrictions = { resolveForAccount: vi.fn().mockResolvedValue('none') } as any;
+    const service = new AuthenticatedCapabilityDecisionService(accounts, safetyRestrictions);
 
     await expect(
       service.evaluate(principal, {
         capabilityScope: 'general',
-        safetyRestriction: 'none',
         requiredVerificationLevel: 2,
       }),
     ).resolves.toEqual({ allowed: true, reason: 'allowed' });
@@ -40,7 +40,6 @@ describe('AuthenticatedCapabilityDecisionService', () => {
     await expect(
       service.evaluate(principal, {
         capabilityScope: 'general',
-        safetyRestriction: 'none',
       }),
     ).resolves.toEqual({
       allowed: false,
