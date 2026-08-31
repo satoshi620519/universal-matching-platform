@@ -791,6 +791,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Documented production constraints: replace the no-op sender with a real provider, configure trusted HTTPS base URL, and add retry/outbox semantics so delivery failure cannot strand a pending account.
 - Commits: b6cc3f89ebc06ed663beac7b3ea93b1235d17f3e, 8c0606c01661dd13c58f536312e4dda19c71fd7a, 9acb14aa52a8ce42b620ce593452e63a94e535ba, 218d881801ed8595de8b024d57a8d185ba241a44, eace8d5562f009685e40a4cb9c4b2cb2fc55358f, 4603ec6164ce89d6c8fcec4ef87d48753e26b308, 59d6615748b3b992e910a968a7c520f1c050023a, 5faa7c55e43a70dc4483e70e5b373c6d8d8c4412, 6934d2a2bafe3e6df273b80c6d64053e8b237b4c, 094496640a6643b0731f799c6eeb511ab7ec1bdf, 563224def94c10f5747576f485ea3b8aca5a99d8.
 
+
+## Durable email outbox and retry boundary — IMPLEMENTED, worker scheduling deferred
+- Resumed from the repository's latest verification-delivery checkpoint and avoided reimplementing prior token/link/delivery work.
+- Added EmailOutboxMessage persistence model and ordered SQL migration artifact 0005_create_email_outbox_messages.sql.
+- Added EmailOutboxRepository and Prisma implementation with atomic PostgreSQL claim semantics using FOR UPDATE SKIP LOCKED.
+- Registration now enqueues a verification delivery intent instead of synchronously calling the outbound sender.
+- Added EmailOutboxDispatchService: claim → issue verification token → deliver → mark delivered, with bounded exponential-backoff rescheduling on failure.
+- Raw verification tokens are deliberately not stored in the outbox; tokens are issued only by the dispatcher immediately before delivery.
+- Added dispatcher tests and extended the repository migration sequence regression guard through version 0005.
+- Added EMAIL_OUTBOX_RETRY_BOUNDARY.md documenting five-minute stale-lock recovery and the current at-least-once delivery contract.
+- No scheduler/queue worker was invented; dispatch remains an explicit application boundary pending infrastructure policy.
+- Commits: 10ee4ba297882351af01e43c79733a02a591ce51, c60e97a8148fa44d9c32a0983d6d01c6cf660420, 92a0d11ac42b408109498d250767a99496e0b7d5, 822b2a5ed86bb39cbca3016bc93f9a4263e8402d, 44525c3860e025e560179340c697e76a1797a3b0, 7e1c86a10716802f47e579dc43a678eef7e3dd80, bc8228e3677ea5a4a7d80685e3a041af85020ab4, f5d7d17ee83bcc0f50c9030b1d8fdef69a48265f, e2f053f0674863b5b8ce980626057838024d504f, 07dcffad46e628ca91f371da3c14c0b1cecbbdf9.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
 2. Design durable email delivery retry/outbox semantics so registration and verification delivery can recover safely from provider failures; continue keeping raw verification tokens out of public responses and retain migration generation/application as a deployment prerequisite.
