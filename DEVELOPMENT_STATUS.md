@@ -579,6 +579,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Explicitly preserves the block on hard deletion, anonymization, retention scheduling, legal holds and provider cleanup pending policy.
 - Completion record commit: 54339486d07ab2228aaf2775f08ffbe4242e19cf.
 
+
+## Authenticated capability verification source — IMPLEMENTED, CI PENDING
+- Resumed from the current repository checkpoint and removed a trust-boundary flaw in authenticated capability access.
+- AuthenticatedCapabilityAccessService previously converted RequestPrincipal.verificationLevel into CapabilityContext, allowing authorization to depend on a principal claim rather than the authoritative verification persistence path.
+- It now resolves the authenticated account, loads the latest usable VerificationRecord through VerificationService, and derives currentVerificationLevel server-side; no usable record maps to level 0.
+- The supplied principal verificationLevel is no longer used for authorization decisions.
+- Added regression coverage proving a forged higher principal claim cannot override a lower persisted level, and that sufficient/missing persisted outcomes behave correctly.
+- Commits: 0a0f1f1cf17157198a668e6a797f7fd3880ccafe, b11a8a04fbe791b72edd501bde0ce7bb1218c97c.
+
 ## Exact next action
 1. Verify CI for 1291b4b5 and the preceding authenticated deletion-request commits where workflow evidence becomes available.
 2. Mark the pending-deletion slice complete once CI evidence is available, then inspect the next Milestone 1 requirement gap without expanding destructive privacy behavior.
