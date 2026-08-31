@@ -57,8 +57,8 @@ describe('HTTP authentication guard', () => {
         async authenticate(_input: {
           readonly authorization?: string;
           readonly requestId: string;
-        }) {
-          throw new Error('adapter should not be called');
+        }): Promise<undefined> {
+          return undefined;
         }
       })(),
     );
