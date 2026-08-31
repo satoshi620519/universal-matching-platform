@@ -6,6 +6,7 @@ export {
   orderMigrationFilenames,
   parseMigrationFilename,
   planMigrations,
+  validateMigrationArtifacts,
   type MigrationArtifact,
   type MigrationPlan,
 } from './migrations.js';
