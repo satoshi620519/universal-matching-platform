@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import type { VerificationLevel } from '@universal/domain';
+import type { EntitlementState, VerificationLevel } from '@universal/domain';
 import type { RequestPrincipal } from '../auth/request-principal.js';
 import { AuthenticatedAccountContextService } from '../accounts/authenticated-account-context.service.js';
 import {
@@ -9,6 +9,9 @@ import {
 
 export interface AuthenticatedCapabilityRequirements {
   readonly requiredVerificationLevel?: VerificationLevel;
+  readonly entitlementState?: EntitlementState;
+  readonly entitlementEffectiveAt?: string;
+  readonly now?: string;
 }
 
 @Injectable()
