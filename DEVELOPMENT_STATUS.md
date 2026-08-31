@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the moderation case lifecycle CI, then continue with the smallest moderation action/audit slice.
+CURRENT TASK: Validate the moderation action policy CI, then continue with the smallest auditability slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Safety Report Lifecycle CI #109 passed successfully.
-- Safety Report Lifecycle is CI-validated and complete.
-- The documentation-only follow-up CI #110 was still finishing at the time the next implementation slice began; product-code CI #109 is green.
-- Moderation Case Lifecycle implemented and tested.
-- Current immediate action: verify CI for moderation case lifecycle commits.
+- Moderation Case Lifecycle CI passed: install, typecheck, lint, test and build all green.
+- Moderation Case Lifecycle is CI-validated and complete.
+- Moderation Action Policy implemented using existing Safety Restriction semantics rather than duplicating restriction logic.
+- Moderation Action Policy tests implemented.
+- Current immediate action: verify CI for moderation action commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -35,6 +35,8 @@ STATUS: Milestone 1 in progress
 - Safety report lifecycle and tests.
 - Safety report lifecycle CI validation (CI #109).
 - Moderation case lifecycle and tests.
+- Moderation case lifecycle CI validation.
+- Moderation action policy and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -50,13 +52,14 @@ STATUS: Milestone 1 in progress
 - Verification lifecycle: CI validated.
 - Verification access service: CI validated.
 - Safety restriction policy: CI validated.
-- Safety report lifecycle: CI validated (CI #109).
-- Moderation case lifecycle: tests added; latest CI pending.
+- Safety report lifecycle: CI validated.
+- Moderation case lifecycle: CI validated.
+- Moderation action policy: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the moderation case lifecycle commits.
-2. If green: mark Moderation Case Lifecycle CI-validated.
-3. Then implement the smallest moderation action/audit decision slice supported by the requirements, reusing Safety Restriction and Moderation Case rather than recreating them.
+1. Check CI triggered by moderation action policy commits.
+2. If green: mark Moderation Action Policy CI-validated.
+3. Then implement the smallest auditable safety-sensitive action record required by REQ-SAFE-005 / REQ-ADMIN-004 / REQ-SEC-003, without recreating moderation action or safety restriction logic.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
