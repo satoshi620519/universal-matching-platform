@@ -16,6 +16,7 @@ model Account {
   verificationRequests      VerificationRequest[]
   safetyEnforcements        SafetyEnforcement[]
   authenticationSessions    AuthenticationSession[]
+  emailVerificationTokens   EmailVerificationToken[]
 
   @@map("accounts")
 }
@@ -111,4 +112,18 @@ model AuthenticationSession {
   @@index([accountId, expiresAt])
   @@index([expiresAt])
   @@map("authentication_sessions")
+}
+
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  accountId String   @map("account_id") @db.Uuid
+  tokenHash String   @unique @map("token_hash")
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, expiresAt])
+  @@map("email_verification_tokens")
 }
