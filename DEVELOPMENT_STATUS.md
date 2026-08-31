@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Validate the authenticated capability decision adapter using authoritative account state and explicit safety restriction input.
+CURRENT TASK: Establish the smallest authoritative safety enforcement restriction lifecycle primitive before persistence and capability integration.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -151,11 +151,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Follow-up CI exposed verificationLevel fixture type drift (RequestPrincipal uses string); fixed to '2'.
 - Follow-up fix commit: 19bf4dc985056ff0539092d2c60471d8d3d972e9.
 
+## Authenticated capability decision adapter — COMPLETE
+- CI #490 and #491 completed successfully after aligning the test fixture with RequestPrincipal's authenticationMethod and string verificationLevel contract.
+- Adapter now consumes authoritative Account.status through AuthenticatedAccountContextService.
+- Production semantics were unchanged by fixture corrections.
+
+## Safety restriction authoritative source — IN PROGRESS
+- Requirements review confirmed restrictions require scope, duration/effective time and auditable lifecycle.
+- Current Prisma schema has no persisted enforcement restriction source.
+- Added SafetyEnforcement domain primitive with active/revoked/expired lifecycle and effective/expiry evaluation.
+- Added focused lifecycle tests.
+- Added design checkpoint documenting why authorization must not default restrictions to 'none'.
+- Persistence and capability adapter integration remain pending CI validation of the domain slice.
+
 ## Exact next action
-1. Verify CI for the authenticated capability decision adapter.
-2. If green, mark the AccountState-backed integration complete.
-3. Investigate the narrowest authoritative SafetyRestriction source before persisting or defaulting restrictions.
-4. Keep safety restriction explicit until an authoritative source exists.
+1. Verify CI for the SafetyEnforcement domain primitive.
+2. If green, define the narrow persistence repository boundary.
+3. Add the smallest Prisma model and migration-compatible repository implementation.
+4. Evaluate active enforcement records into SafetyRestriction without bypassing scope semantics.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
