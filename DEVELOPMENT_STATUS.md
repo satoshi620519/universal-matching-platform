@@ -604,9 +604,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Registered PrismaSafetyEnforcementRepository explicitly; the existing AppModule regression test now covers both requirements.
 - Commit: f9d68d2ddbf0741e95da7fd5dc239081ca0822a3.
 
+
+## Email/password credential implementation boundary — COMPLETE
+- Re-read requirements and repository architecture after the latest integration fixes instead of expanding already-complete deletion/safety slices.
+- Identified the next independent Milestone 1 gap: DECISIONS.md selects email/password as an initial capability, but no credential persistence boundary exists beyond provider-neutral AuthenticationIdentity.
+- Added EMAIL_PASSWORD_AUTHENTICATION_IMPLEMENTATION_BOUNDARY.md.
+- Defined the smallest safe next slice as a dedicated credential model linked to AuthenticationIdentity, explicitly keeping password hashes out of Account and deferring JWT/session/reset-token/provider choices.
+- Boundary commit: 595066ccb96c82f1fe623fb878c3eb34a1087a7a.
+
 ## Exact next action
-1. Verify CI for f9d68d2d together with 81b30913/0a0f1f1c/b11a8a04 and the preceding pending-deletion commits where workflow evidence becomes available.
-2. Mark the pending-deletion slice complete once CI evidence is available, then inspect the next Milestone 1 requirement gap without expanding destructive privacy behavior.
+1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
+2. Inspect the physical database conventions and define the smallest additive password-credential persistence contract linked to AuthenticationIdentity.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
