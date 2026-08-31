@@ -334,12 +334,27 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Do not add automatic startup migration or pretend artifacts are bundled until an explicit artifact-loading strategy exists.
 - Candidate next design: injected MigrationArtifactSource port, with filesystem implementation added only alongside packaging/copy guarantees and a test fixture implementation for integration.
 
+## CI status — STILL RED, NO FABRICATED ROOT CAUSE
+- Latest CI #546/#547 remained red at typecheck.
+- PostgreSQL service initialization is successful.
+- GitHub log endpoint continues returning 404/no decoded compiler diagnostics for this job in the current connector session.
+- The stale Prisma import removal did not make CI green, so it was not the sole failure.
+- No speculative production-code changes were stacked against an unknown compiler error.
+
+## Migration artifact source and explicit orchestration — IMPLEMENTED, CI PENDING
+- Added MigrationArtifactSource port to separate artifact loading from migration execution.
+- Added StaticMigrationArtifactSource as a deterministic non-filesystem implementation for tests/composition.
+- Added runMigrations(source, executor), which explicitly loads artifacts and delegates to executePendingMigrations.
+- No automatic application-startup migration was introduced.
+- Runtime filesystem assumptions remain intentionally absent until SQL asset packaging is guaranteed.
+- Commits: bfacbefc6ba35489a811a325f1f9af090f9473bf, de283f6bf79daa7f40255c5e3b190eb2dde420c4, 294c3f61ba26097034c99cc713257753f28af630, f4485e23f3d77b294eb89583eedcc8eebe780522, 6d2784d9c45ffd8c16d46518fcd5ad539d51dad1, 09460d9b921498970a658c1178595d3278eebb83.
+
 ## Exact next action
-1. Verify CI for the stale Prisma import correction and capture exact compiler output if still failing.
-2. Fix only the compiler-reported cause; do not stack speculative changes.
-3. Keep runtime composition blocked from green status until CI passes.
-4. Design MigrationArtifactSource as an explicit port rather than adding unsafe runtime filesystem assumptions.
-5. Add empty-database PostgreSQL integration only after artifact loading and executor composition are green.
+1. Verify CI for MigrationArtifactSource and explicit runner additions.
+2. Continue exact compiler-error diagnosis; do not claim runtime composition green while baseline typecheck is red.
+3. Inspect repository package/asset build configuration to determine how SQL migration artifacts can be packaged for production.
+4. Implement a filesystem artifact source only together with verified SQL asset copy/build behavior.
+5. Add empty-database PostgreSQL integration using StaticMigrationArtifactSource first, then packaged filesystem artifacts.
 6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
