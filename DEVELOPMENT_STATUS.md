@@ -665,9 +665,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Intentionally did not expose an HTTP endpoint before defining transport validation, duplicate identity semantics, email normalization, password policy and rate limiting.
 - Commits: 40f430296bf92aa79ea910e955eb70748b46c272, ab874d10e4b832ebc70f3c440d450ebffd60f4ef, 90af49876e6c5023d3ec30bbf7b2f73daac0f280, b5a0ee89e3fa8cc2e658e58f141a753b61b604d3.
 
+
+## Registration transport prerequisites and password policy — IMPLEMENTED/DEFINED, CI PENDING
+- Re-read REQ-AUTH-001 and REQ-SAFE-006 before exposing registration transport.
+- Added REGISTRATION_TRANSPORT_SEMANTICS.md defining explicit prerequisites for provider-subject normalization, duplicate identity behavior, password policy and rate limiting.
+- Added PasswordPolicy abstraction and MinimumPasswordPolicy with explicit 12-character minimum and bounded maximum input length; hashing remains separate from policy.
+- Added regression coverage for minimum acceptance/rejection and maximum-length rejection.
+- Did not add a public HTTP endpoint or claim that rate limiting is implemented; the service remains internal until the remaining transport boundaries are concrete.
+- Commits: 3560273938653899a70bae9c7fb71a9d473eae95, b4ca231cdb67f7ed090b40b54c56a85ef77b035c, 38da10a67aa0958bc65983cfbde398db490dc13f.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Define registration transport semantics (email normalization, duplicate identity handling, password policy and rate limiting) before exposing PasswordRegistrationService through HTTP.
+2. Inspect existing HTTP error/validation and request-throttling conventions; implement the remaining normalization, duplicate-safe transport contract and rate-limit boundary before adding a public registration controller.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
