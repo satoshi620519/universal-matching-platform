@@ -16,6 +16,7 @@ export class EmailVerificationDeliveryService {
   async issueAndDeliver(input: {
     readonly accountId: string;
     readonly emailAddress: string;
+    readonly messageId: string;
   }): Promise<void> {
     const token = await this.verification.issue(input.accountId);
     const link = buildEmailVerificationLink(
@@ -24,6 +25,7 @@ export class EmailVerificationDeliveryService {
     );
 
     await this.email.send({
+      messageId: input.messageId,
       to: input.emailAddress,
       subject: 'Verify your email address',
       text: 'Verify your email address by opening: ' + link,
