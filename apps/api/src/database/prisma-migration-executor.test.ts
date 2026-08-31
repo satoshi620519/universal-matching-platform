@@ -14,7 +14,10 @@ describe('createPrismaMigrationExecutor', () => {
       .fn()
       .mockResolvedValue([{ version: 2 }, { version: 7 }]);
     const executeRawUnsafe = vi.fn().mockResolvedValue(0);
-    const prisma = { executeRawUnsafe, queryRawUnsafe } as never;
+    const prisma = {
+      $executeRawUnsafe: executeRawUnsafe,
+      $queryRawUnsafe: queryRawUnsafe,
+    } as never;
 
     const executor = createPrismaMigrationExecutor(prisma);
 
