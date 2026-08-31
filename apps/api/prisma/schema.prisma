@@ -28,6 +28,7 @@ model AuthenticationIdentity {
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
   account         Account  @relation(fields: [accountId], references: [id])
+  passwordCredential PasswordCredential?
 
   @@unique([providerType, providerSubject])
   @@index([accountId])
@@ -82,4 +83,16 @@ model SafetyEnforcement {
 
   @@index([accountId, status, effectiveAt])
   @@map("safety_enforcements")
+}
+
+
+model PasswordCredential {
+  authenticationIdentityId String   @id @map("authentication_identity_id") @db.Uuid
+  passwordHash             String   @map("password_hash")
+  status                   String
+  createdAt                DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  authenticationIdentity   AuthenticationIdentity @relation(fields: [authenticationIdentityId], references: [id], onDelete: Cascade)
+
+  @@map("password_credentials")
 }
