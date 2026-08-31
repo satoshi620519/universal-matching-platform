@@ -120,7 +120,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Account activation boundary CI #268/#269 failed at API test typecheck only: test repository stubs did not preserve the abstract repository method signatures and used an unverified literal AccountState.
 - Account activation follow-up CI #272/#273 passed; Account Activation HTTP/application boundary is CI-validated.
 - Verification access CI #276/#277 passed; Verification Access HTTP/application boundary is CI-validated.
-- Capability access API boundary implemented by reusing CapabilityAccessService and domain CapabilityContext rules; no authorization decision logic was recreated. CI pending.
+- Capability access CI #280/#281 passed; Capability Access HTTP/application boundary is CI-validated.
+- Runtime validation added at the Capability Access HTTP boundary for verification levels and entitlement states, preventing TypeScript-only casts from becoming public API acceptance rules. CI pending.
 
 ## Test status
 - M0 CI validation: passed.
@@ -160,10 +161,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the capability access API boundary commits.
-2. If green: mark the capability access HTTP/application boundary CI-validated.
-3. Review API input validation for verification levels and entitlement states before exposing these decision endpoints as public contracts; do not let TypeScript casts become runtime validation.
-4. Select the next runnable workflow boundary from existing validated domain/application logic.
+1. Check CI triggered by the capability access runtime-validation changes.
+2. If green: mark runtime input validation for the capability access public contract CI-validated.
+3. Apply the same boundary-validation review to previously exposed verification access query inputs before adding further public decision endpoints.
+4. Select the next runnable workflow boundary from existing validated domain/application logic only after the validation checkpoint is green.
 5. Keep each slice small and preserve established domain contracts.
 6. Update this file after every coherent slice.
 
