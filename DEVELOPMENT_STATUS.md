@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Define verification persistence independently before integrating verification outcomes with identity authentication.
+CURRENT TASK: Implement the additive provider-neutral verification persistence model and validate it.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -77,12 +77,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Explicitly prevented verification evidence or level/status fields from being copied into authentication_identities.
 - Deferred association-key design until verification persistence ownership is explicitly implemented.
 
+## Verification persistence planning — COMPLETE
+- Traced VerificationRecord outcome semantics into DATA_MODEL_DRAFT.md verification_requests and verification_outcomes ownership.
+- Added VERIFICATION_PERSISTENCE_PLAN.md.
+- Preserved separation from AuthenticationIdentity.
+- Explicitly excluded raw provider responses, documents, biometrics and secrets from ordinary persistence.
+
 ## Exact next action
-1. Define the smallest provider-neutral verification persistence model from the existing VerificationRecord domain.
-2. Keep raw provider evidence outside ordinary application records.
-3. Add a dedicated additive migration rather than modifying authentication_identities speculatively.
-4. Add focused domain/persistence tests and verify CI.
-5. Record the exact continuation checkpoint.
+1. Add additive migration 0003 for verification_requests and verification_outcomes.
+2. Add exact Prisma mappings.
+3. Extend PostgreSQL migration integration coverage through version 3.
+4. Verify typecheck, lint, tests and build in CI.
+5. Record commit and exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
