@@ -2,8 +2,8 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Select the next runnable identity workflow after the authenticated Principal → Capability boundary.
-STATUS: Authenticated capability slice implemented and CI evidence recorded; next slice must be grounded in existing contracts.
+CURRENT TASK: Inspect the next identity workflow after CI-validating authenticated account lookup.
+STATUS: Authenticated account lookup slice is CI validated; next slice must remain grounded in existing contracts.
 
 ## Continuation protocol — READ FIRST
 GitHub main is the persistent source of truth. Before every new work session:
@@ -29,6 +29,16 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Checkpoint commit: fa79dd6dcb6a4aeddd4b706c023536185aca3d4b.
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
+
+### CI-validated authenticated account lookup slice
+- GET /accounts/authenticated resolves the account from RequestPrincipal.accountId.
+- No client-supplied accountId is accepted by the authenticated route.
+- Missing authentication is rejected with UnauthorizedException.
+- Missing authenticated account is rejected with NotFoundException.
+- Legacy GET /accounts/:accountId remains unchanged.
+- Focused controller tests cover principal-derived lookup, unauthenticated rejection and missing account handling.
+- Implementation commits: ff18c005446c327cb9c31d1368fe8042652d649e and 8c840dc4e3c4d56c60e05c1b0b3718c62f640673.
+- GitHub Actions CI run #322 for 8c840dc4e3c4d56c60e05c1b0b3718c62f640673 completed successfully (install, typecheck, lint, test, build).
 
 ### Verified baseline
 - Account Lookup HTTP boundary: CI validated.
@@ -62,10 +72,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect existing account, verification and authentication application services for an identity workflow that can be completed without inventing a token/session contract.
-2. Prefer a small vertical slice that uses existing AccountRepository and RequestPrincipal.accountId.
-3. Candidate direction: authenticated account lookup/profile context, but only if the existing AccountRepository contract supports lookup by the authenticated accountId.
-4. Keep legacy routes unchanged.
-5. Add focused tests.
-6. Run full CI.
-7. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
+1. Inspect existing verification and account application services for the next authenticated workflow that can reuse RequestPrincipal.accountId without inventing a token/session contract.
+2. Prefer a read-only or narrowly scoped workflow before adding mutation semantics.
+3. Keep legacy routes unchanged and preserve existing repository contracts.
+4. Add focused tests for principal-derived identity and failure boundaries.
+5. Run full CI.
+6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
