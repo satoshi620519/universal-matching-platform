@@ -38,3 +38,5 @@ export * from './analytics-event.js';
 export * from './metric-definition.js';
 
 export * from './metric-report.js';
+
+export * from './safety-metric.js';
