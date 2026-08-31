@@ -751,9 +751,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Prisma migration directory was absent in the repository; schema changes are recorded but an actual generated migration remains required before deployment.
 - Commits: 3ffb38f77d7867afc055bba293f7cbf12c9c02d7, 22d1e625410a97fc43d1108608269d5f42574166, 83198fd301eb5aa05e75a69db27be8b6d6b10d3b, 728f5d479d38a9dae1aad1d08bc547a0df0e78bf, 80721e2b1af9ad9467a53ba0dd897b25de24ed0c, c725991a2fc436fe0ba9e838ecf3e33c6b9c9b0e, 60c875834141c26d8c3dc5509a0524a3aad89834, 5d2d94a65308d7e8366ff2f9493857a9249d6cdc.
 
+
+## Password sign-in and authenticated sign-out HTTP boundary — IMPLEMENTED, migration/CI pending
+- Added PasswordSignInTransportService: rate limiting precedes credential verification and session issuance occurs only after authenticated PasswordSignInService results.
+- Added POST /auth/sign-in; rejected credentials return the same HTTP 200 empty object regardless of unknown identity or password mismatch, while success returns the newly issued opaque credential.
+- Added POST /auth/sign-out using RequestPrincipalResolver and current authenticated sessionId to persist revocation with HTTP 204.
+- Fixed an initial sign-out controller assumption by aligning it with the repository's existing header-based RequestPrincipalResolver pattern rather than introducing a nonexistent decorator/guard.
+- Wired both controllers/services into AppModule and documented the public contract in PASSWORD_SIGN_IN_OUT_CONTRACT.md.
+- Existing Prisma schema changes still require a generated/applied migration before deployment; connector execution environment cannot honestly claim migration or full CI success.
+- Commits: e1a13eaf01ce066188aeb865f13c2cab81d367e0, fc08a3be0d0caebe46cd35a11885122346f7abbd, 00ccd02a5c28543e84f7ea5bfc032d2bf2208d72, ca588f4a8bc596ceb1f29c56cf76630128c67245, bbc266d1b29c3047c8f2ae69f815ffe7e8fd8071, 16706095207c32e147a444aa0918f9a6f95a1e6a.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Generate/apply the Prisma migration in a runnable environment, then integrate PasswordSignInService + SessionIssuanceService behind a duplicate-safe sign-in HTTP transport/controller and define logout revocation behavior.
+2. Add controller-level integration/regression tests for sign-in/sign-out contracts, then inspect session repository idempotent revocation/error semantics and authentication credential rotation before expanding auth features.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
