@@ -121,7 +121,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Account activation follow-up CI #272/#273 passed; Account Activation HTTP/application boundary is CI-validated.
 - Verification access CI #276/#277 passed; Verification Access HTTP/application boundary is CI-validated.
 - Capability access CI #280/#281 passed; Capability Access HTTP/application boundary is CI-validated.
-- Runtime validation added at the Capability Access HTTP boundary for verification levels and entitlement states, preventing TypeScript-only casts from becoming public API acceptance rules. CI pending.
+- Capability access runtime validation CI #283/#284 passed; the public Capability Access input contract is CI-validated.
+- Verification Access runtime validation added for level, status and ISO date-time query inputs, removing TypeScript-only casts from the public verification decision boundary. CI pending.
 
 ## Test status
 - M0 CI validation: passed.
@@ -161,9 +162,9 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the capability access runtime-validation changes.
-2. If green: mark runtime input validation for the capability access public contract CI-validated.
-3. Apply the same boundary-validation review to previously exposed verification access query inputs before adding further public decision endpoints.
+1. Check CI triggered by the Verification Access runtime-validation changes.
+2. If green: mark runtime input validation for the Verification Access public contract CI-validated.
+3. Review Account Activation's request body/path inputs for equivalent runtime validation before exposing further account workflow endpoints.
 4. Select the next runnable workflow boundary from existing validated domain/application logic only after the validation checkpoint is green.
 5. Keep each slice small and preserve established domain contracts.
 6. Update this file after every coherent slice.
