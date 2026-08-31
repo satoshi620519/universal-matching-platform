@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { AccountRepository, AccountRecord, CreateAccountRecord } from './account.repository.js';
+import type { AccountState } from '@universal/domain';
+import {
+  AccountRepository,
+  AccountRecord,
+  CreateAccountRecord,
+} from './account.repository.js';
 import { DatabaseService } from '../database/database.service.js';
 
 @Injectable()
@@ -14,10 +19,23 @@ export class PrismaAccountRepository implements AccountRepository {
       },
     });
 
-    return record;
+    return this.toAccountRecord(record);
   }
 
   async findById(id: string): Promise<AccountRecord | null> {
-    return this.database.account.findUnique({ where: { id } });
+    const record = await this.database.account.findUnique({ where: { id } });
+    return record ? this.toAccountRecord(record) : null;
+  }
+
+  private toAccountRecord(record: {
+    id: string;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }): AccountRecord {
+    return {
+      ...record,
+      status: record.status as AccountState,
+    };
   }
 }
