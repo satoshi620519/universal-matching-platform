@@ -33,3 +33,16 @@ export function canUseCapability(context: CapabilityContext): boolean {
 
   return true;
 }
+
+
+export type CapabilityDecisionReason =
+  | 'allowed'
+  | 'verification-insufficient'
+  | 'entitlement-missing'
+  | 'account-restricted'
+  | 'safety-restricted';
+
+export interface CapabilityDecision {
+  readonly allowed: boolean;
+  readonly reason: CapabilityDecisionReason;
+}
