@@ -2,8 +2,8 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Advance from the CI-validated authenticated HTTP boundary review to the next grounded implementation slice.
-STATUS: Authenticated account lookup and remaining authenticated HTTP boundary review are CI validated; no concrete classification inconsistency was found, so no guard migration or focused test change was required.
+CURRENT TASK: Validate the first grounded Account persistence migration against the repository database boundary and CI.
+STATUS: Authenticated HTTP boundary is CI validated; the first Account SQL migration has now been added from the existing Prisma physical schema, but migration execution against an empty database is not yet CI validated.
 
 ## Continuation protocol — READ FIRST
 GitHub main is the persistent source of truth. Before every new work session:
@@ -17,12 +17,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
+### Initial Account migration artifact — pending CI/database validation
+- Confirmed `apps/api/prisma/schema.prisma` is the physical persistence contract consumed by `PrismaAccountRepository` and `DatabaseService`.
+- Added `packages/database/migrations/0001_create_accounts.sql` with the grounded `accounts` table definition: UUID primary key, required status, `created_at` and `updated_at` as `TIMESTAMPTZ(6)` with current-time defaults.
+- Implementation commit: `f74a00033b135d46d56d5f13be0f36c8ebf06e21`.
+- No migration execution has been claimed yet; current CI does not provision PostgreSQL or execute migration artifacts.
+- The migration is intentionally limited to the currently grounded Prisma Account schema and does not add logical-model fields that are not present in the physical schema.
+
 ### CI-validated authenticated HTTP boundary review
 - Reviewed remaining authenticated HTTP boundaries for classification of authentication/principal state versus malformed client input.
 - `401` remains the contract for absent or invalid authentication state; `403` remains the contract for valid authenticated principals denied by authorization; `400` remains the contract for malformed route/query/body input.
 - No concrete inconsistency requiring a guard migration or focused test was found.
 - No implementation files changed in this review slice.
-- Latest main CI run #378 for commit `1083415ccdc1ee71036a8bc5b8d4257b3f0d44d6` completed successfully (install, typecheck, lint, test, build).
+- Latest prior main CI run #378 for commit `1083415ccdc1ee71036a8bc5b8d4257b3f0d44d6` completed successfully (install, typecheck, lint, test, build).
 
 ### CI-validated HTTP authentication principal validation
 - HttpAuthenticationGuard validates pre-attached and adapter-returned principals through the shared authenticated-principal contract before allowing the request.
@@ -55,10 +62,10 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #358 for dd26cb00837f8c6a63e6ba220893f218e152d119 completed successfully (install, typecheck, lint, test, build).
 
 ## Exact next action
-1. Identify the next implementation slice that is explicitly grounded in existing repository contracts after the authenticated HTTP boundary review.
-2. Prefer an existing domain/application contract over inventing identity transport, token, JWT, session or provider persistence contracts.
-3. If no grounded implementation slice exists, document the blocking constraint rather than introducing speculative infrastructure.
-4. For any concrete implementation change, add focused tests, run full CI, and record the checkpoint before advancing.
+1. Verify CI for the migration commit and confirm that baseline CI remains green.
+2. Add a focused empty-database migration test only if an existing repository-supported database test path can be grounded without inventing infrastructure.
+3. If CI has no PostgreSQL/migration execution path, implement the smallest repository-consistent migration execution/test boundary before claiming the M1 migration gate complete.
+4. Do not introduce token, JWT, session or identity-provider persistence contracts while they remain ungrounded.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
@@ -66,6 +73,8 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - No token format, JWT parser, session store or external identity-provider contract is currently grounded in the repository.
 - Do not replace the legacy capability route with mandatory authentication until a real authentication adapter exists.
 - Do not invent identity transport or persistence contracts.
+- `packages/database/migrations` is the repository-defined migration artifact boundary.
+- The current Account migration is derived only from the physical Prisma schema; logical-model fields not present in Prisma are not silently added.
 
 ## Completed — DO NOT RECREATE
 - Project foundation and continuity rules.
