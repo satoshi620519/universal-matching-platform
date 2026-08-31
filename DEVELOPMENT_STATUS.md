@@ -781,9 +781,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Schema changes require generated/applied Prisma migration before deployment.
 - Commits: 2cfc284ee174ed8b1493d52a85165adaa3c2b899, 1f1e8dba3926d1efe2b0864bc7146ce14e840ca6, 50ef49f75b1f287c6539da802497031a13c575a6, ddb1795afebab9173169535837af59379bd6d4c0, e630d082b572016b382178ba03051495abe65b37, 8cd84c4150f32e73832f90d895cb75c9f5ce9ea9, 37dab6335d26a4e0f9c5acfe9b3f8b423a3e9143, 9582c6237dd05c8112eb7b890f9e54d749b62c3d, 07f181cba0c0c4a530a710496189af782c34b8cc.
 
+
+## Verification delivery abstraction and registration integration — IMPLEMENTED, production provider/retry deferred
+- Added OutboundEmailSender abstraction and a safe default no-op infrastructure adapter rather than pretending an external email provider exists.
+- Added EmailVerificationUrlPolicy with environment-backed base URL selection and centralized verification-link construction.
+- Added EmailVerificationDeliveryService to issue raw one-time tokens and pass them directly to the delivery boundary without exposing them through registration HTTP responses.
+- Integrated successful pending password registration with verification issuance/delivery after persistence.
+- Added regression coverage for token issuance and trusted link construction.
+- Documented production constraints: replace the no-op sender with a real provider, configure trusted HTTPS base URL, and add retry/outbox semantics so delivery failure cannot strand a pending account.
+- Commits: b6cc3f89ebc06ed663beac7b3ea93b1235d17f3e, 8c0606c01661dd13c58f536312e4dda19c71fd7a, 9acb14aa52a8ce42b620ce593452e63a94e535ba, 218d881801ed8595de8b024d57a8d185ba241a44, eace8d5562f009685e40a4cb9c4b2cb2fc55358f, 4603ec6164ce89d6c8fcec4ef87d48753e26b308, 59d6615748b3b992e910a968a7c520f1c050023a, 5faa7c55e43a70dc4483e70e5b373c6d8d8c4412, 6934d2a2bafe3e6df273b80c6d64053e8b237b4c, 094496640a6643b0731f799c6eeb511ab7ec1bdf, 563224def94c10f5747576f485ea3b8aca5a99d8.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Design an outbound email delivery abstraction and verification-link construction policy, then connect registration to verification-token issuance without exposing raw tokens through the public registration response; keep migration generation/application as a deployment prerequisite.
+2. Design durable email delivery retry/outbox semantics so registration and verification delivery can recover safely from provider failures; continue keeping raw verification tokens out of public responses and retain migration generation/application as a deployment prerequisite.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
