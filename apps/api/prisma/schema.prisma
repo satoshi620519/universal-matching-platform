@@ -15,6 +15,7 @@ model Account {
   authenticationIdentities AuthenticationIdentity[]
   verificationRequests      VerificationRequest[]
   safetyEnforcements        SafetyEnforcement[]
+  authenticationSessions    AuthenticationSession[]
 
   @@map("accounts")
 }
@@ -95,4 +96,18 @@ model PasswordCredential {
   authenticationIdentity   AuthenticationIdentity @relation(fields: [authenticationIdentityId], references: [id], onDelete: Cascade)
 
   @@map("password_credentials")
+}
+
+model AuthenticationSession {
+  id                   String   @id @default(uuid()) @db.Uuid
+  accountId            String   @map("account_id") @db.Uuid
+  authenticationMethod String   @map("authentication_method")
+  expiresAt            DateTime @map("expires_at") @db.Timestamptz(6)
+  revokedAt            DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  account              Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, expiresAt])
+  @@index([expiresAt])
+  @@map("authentication_sessions")
 }
