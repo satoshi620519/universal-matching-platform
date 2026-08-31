@@ -26,3 +26,4 @@ export * from './capability.js';
 export * from './entitlement.js';
 export * from './verification.js';
 export * from './safety-restriction.js';
+export * from './report.js';
