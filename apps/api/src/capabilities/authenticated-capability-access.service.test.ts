@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { AuthenticatedAccountContextService } from '../accounts/authenticated-account-context.service.js';
 import { CapabilityAccessService } from './capability-access.service.js';
 import { AuthenticatedCapabilityAccessService } from './authenticated-capability-access.service.js';
@@ -38,6 +38,19 @@ describe('authenticated capability access service', () => {
     const service = new AuthenticatedCapabilityAccessService(missing, new CapabilityAccessService());
 
     await expect(service.evaluate(principal, {})).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('rejects an invalid verification level as an authentication failure', async () => {
+    const service = new AuthenticatedCapabilityAccessService(
+      context(),
+      new CapabilityAccessService(),
+    );
+
+    await expect(service.evaluate({
+      accountId: 'account-1',
+      authenticationMethod: 'test',
+      verificationLevel: 'invalid',
+    }, {})).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
   it('rejects a missing verification level', async () => {
