@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the safety report lifecycle CI, then continue with the smallest moderation workflow slice.
+CURRENT TASK: Validate the moderation case lifecycle CI, then continue with the smallest moderation action/audit slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Safety Restriction Domain Policy CI #102 passed: install, typecheck, lint, test and build all green.
-- Safety Restriction Domain Policy is CI-validated and complete.
-- Safety Report lifecycle implemented for user/content/message reporting.
-- Report lifecycle tests implemented.
-- Current immediate action: verify CI for safety report lifecycle commits.
+- Safety Report Lifecycle CI #109 passed successfully.
+- Safety Report Lifecycle is CI-validated and complete.
+- The documentation-only follow-up CI #110 was still finishing at the time the next implementation slice began; product-code CI #109 is green.
+- Moderation Case Lifecycle implemented and tested.
+- Current immediate action: verify CI for moderation case lifecycle commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -33,18 +33,8 @@ STATUS: Milestone 1 in progress
 - Safety restriction domain policy and tests.
 - Safety restriction CI validation (CI #102).
 - Safety report lifecycle and tests.
-
-## Current architecture baseline
-- Next.js + TypeScript: Web/Admin.
-- React Native + Expo + TypeScript: iOS/Android.
-- NestJS + TypeScript + Fastify: API.
-- PostgreSQL: primary data.
-- Redis: cache/queues/rate limiting.
-- S3-compatible storage abstraction.
-- Monorepo + modular monolith.
-- Strategy-based matching.
-- Configuration-driven customization.
-- Replaceable external providers.
+- Safety report lifecycle CI validation (CI #109).
+- Moderation case lifecycle and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -57,15 +47,16 @@ STATUS: Milestone 1 in progress
 - Capability access service: CI validated.
 - Domain package workspace entrypoint: CI validated.
 - Entitlement lifecycle: CI validated.
-- Verification lifecycle: CI validated (CI #98).
-- Verification access service: CI validated (CI #101).
-- Safety restriction domain policy: CI validated (CI #102).
-- Safety report lifecycle: tests added; latest CI pending.
+- Verification lifecycle: CI validated.
+- Verification access service: CI validated.
+- Safety restriction policy: CI validated.
+- Safety report lifecycle: CI validated (CI #109).
+- Moderation case lifecycle: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by `feat: add safety report lifecycle`, `test: cover safety report lifecycle`, and `feat: export safety report lifecycle`.
-2. If green: mark Safety Report Lifecycle CI-validated.
-3. Then implement the smallest moderator workflow/case lifecycle supported by REQ-SAFE-003 and REQ-ADMIN-003, without rebuilding report or safety restriction work.
+1. Check CI triggered by the moderation case lifecycle commits.
+2. If green: mark Moderation Case Lifecycle CI-validated.
+3. Then implement the smallest moderation action/audit decision slice supported by the requirements, reusing Safety Restriction and Moderation Case rather than recreating them.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
