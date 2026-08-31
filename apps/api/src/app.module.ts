@@ -17,6 +17,7 @@ import { AccountActivationController } from './accounts/account-activation.contr
 import { AccountActivationService } from './accounts/account-activation.service.js';
 import { PrismaAccountRepository } from './accounts/prisma-account.repository.js';
 import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.adapter.js';
+import { OpaqueSessionAuthenticationAdapter } from './auth/opaque-session-authentication.adapter.js';
 import { AuthenticationIdentityRepository } from './auth/authentication-identity.repository.js';
 import { AuthenticationIdentityService } from './auth/authentication-identity.service.js';
 import { PrismaAuthenticationIdentityRepository } from './auth/prisma-authentication-identity.repository.js';
@@ -83,6 +84,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     VerificationCapabilityAccessService,
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
+    OpaqueSessionAuthenticationAdapter,
     {
       provide: AccountRepository,
       useExisting: PrismaAccountRepository,
@@ -125,7 +127,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     },
     {
       provide: RequestAuthenticationAdapter,
-      useExisting: AnonymousAuthenticationAdapter,
+      useExisting: OpaqueSessionAuthenticationAdapter,
     },
   ],
 })
