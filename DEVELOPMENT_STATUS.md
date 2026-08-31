@@ -711,9 +711,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Documented duplicate-safe response semantics, generic invalid input handling, rate-limit ordering and the process-local limiter production limitation in PUBLIC_PASSWORD_REGISTRATION_CONTRACT.md.
 - Commits: 06709755845102e0ec4eb495c1c473be9c6caf24, a1cdd48fb10e49bf1bf2ccc328fc7ca385c6ded1, 0c68cad25ed1a56fc535593e270bd7844cf2c7ee, f644b75b651bac9e9a3ab34242eaaad14d3d2e1d, 85461b4a83d2431fead6026b093e10f8b94e3f7b.
 
+
+## Password sign-in credential verification boundary — IMPLEMENTED, CI PENDING
+- Reviewed workspace scripts and current auth repositories; full local CI execution is not available through the repository connector, so no false green claim was made.
+- Fixed a formatting defect in PrismaPasswordRegistrationRepository discovered during integration review.
+- Added PasswordSignInService with conservative email normalization, provider identity lookup, active identity/credential checks and PasswordHasher.verify against the stored opaque hash.
+- Sign-in returns a stable authenticated/rejected result and does not expose whether rejection came from unknown identity, disabled credential or incorrect password.
+- Added regression coverage for success, unknown identity without hash verification, disabled credential without hash verification and malformed email short-circuiting.
+- Registered PasswordSignInService in AppModule. Session issuance remains deliberately separate from credential verification.
+- Commits: 04fb711363a6ae4a9b4615c999bc5f95b70eb9d3, c9110cb9e12c92f31042a34788a80cafe05593b7, 13935d8e14165e25eed0f8095efe12e9638fe153, 65f674462982b5fda21bb4b806745c2c7897d0e7.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Run the API test/typecheck/format CI-equivalent commands, fix integration issues, and then inspect the next authentication lifecycle gap (sign-in/session issuance or verification activation).
+2. Inspect existing session/token/authentication adapter contracts and implement session issuance after successful PasswordSignInService verification, preserving the separation between credential verification and request authentication.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
