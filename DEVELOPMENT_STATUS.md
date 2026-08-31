@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the accessibility assurance contract CI, then continue with the next unimplemented operational quality slice.
+CURRENT TASK: Validate the operational performance target contract CI, then continue with resilience requirements.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -32,7 +32,10 @@ STATUS: Milestone 1 in progress
 - Replacement CI #165 passed and progress record CI #166 also passed; Accessibility Flow Communication Contract is CI-validated.
 - Accessibility Assurance Contract implemented for REQ-A11Y-007 through REQ-A11Y-010: time-limit alternatives, important visual text alternatives, supported platform preference respect, and major user-flow accessibility acceptance.
 - Accessibility Assurance Contract tests implemented.
-- Current immediate action: verify CI for accessibility assurance contract commits.
+- Accessibility Assurance Contract CI #169 passed and progress record CI #170 also passed; Accessibility requirements slice REQ-A11Y-001 through REQ-A11Y-010 is CI-validated and complete.
+- Operational Performance Target Contract implemented for REQ-NFR-007, REQ-NFR-008 and REQ-NFR-010 foundations: per-journey targets, all critical journeys, and explicit latency dimensions.
+- Operational Performance Target Contract tests implemented.
+- Current immediate action: verify CI for operational performance target contract commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -77,6 +80,7 @@ STATUS: Milestone 1 in progress
 - Accessibility control contract and tests.
 - Accessibility flow communication contract and tests.
 - Accessibility assurance contract and tests.
+- Operational performance target contract and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -105,12 +109,13 @@ STATUS: Milestone 1 in progress
 - Analytics deployment retention policy: CI validated (CI #155).
 - Accessibility control contract: CI validated (CI #159).
 - Accessibility flow communication contract: CI validated after targeted test typing fix (CI #165).
-- Accessibility assurance contract: tests added; latest CI pending.
+- Accessibility assurance contract: CI validated (CI #169).
+- Operational performance target contract: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the accessibility assurance contract commits.
-2. If green: mark Accessibility Assurance Contract CI-validated and mark the Accessibility requirements slice complete.
-3. Re-read PRODUCT_REQUIREMENTS.md from the next unimplemented operational quality section and select the smallest domain/application slice without recreating completed work.
+1. Check CI triggered by the operational performance target contract commits.
+2. If green: mark Operational Performance Target Contract CI-validated.
+3. Then implement the smallest resilience/degraded dependency slice for REQ-NFR-009 through REQ-NFR-013 without recreating completed performance contracts.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
