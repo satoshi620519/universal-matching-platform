@@ -146,6 +146,8 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Account state is sourced authoritatively; safety restriction remains an explicit requirement input until an authoritative persistence source exists.
 - Added focused tests for active and restricted accounts.
 - Registered adapter through Nest DI.
+- Initial CI exposed a test fixture drift: RequestPrincipal requires authenticationMethod; fixed without changing production semantics.
+- Fix commit: 968b6ccc10cbe67c27aa2aab216508ab23fabb6d.
 
 ## Exact next action
 1. Verify CI for the authenticated capability decision adapter.
