@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import type { SqlMigrationClient, SqlMigrationQueryClient } from './postgres-migration-executor.js';
 import { PostgresMigrationExecutor } from './postgres-migration-executor.js';
 
 describe('PostgresMigrationExecutor', () => {
@@ -14,13 +15,17 @@ describe('PostgresMigrationExecutor', () => {
     await expect(executor.listAppliedVersions()).resolves.toEqual([1, 4]);
   });
 
-  it('applies SQL and records the version inside one transaction', async () => {
+  it('applies SQL and records the version through the transaction-scoped client', async () => {
     const events: string[] = [];
-    const client = {
-      query: vi.fn(async (sql: string) => {
-        events.push(sql);
-      }),
-      transaction: vi.fn(async (operation: (tx: { query: typeof query }) => Promise<void>) => operation({ query })),
+    const rootQuery = vi.fn();
+    const txQuery = vi.fn(async (sql: string) => {
+      events.push(sql);
+    });
+    const client: SqlMigrationClient = {
+      query: rootQuery,
+      transaction: async <T>(
+        operation: (tx: SqlMigrationQueryClient) => Promise<T>,
+      ) => operation({ query: txQuery }),
     };
     const executor = new PostgresMigrationExecutor(client);
 
@@ -30,13 +35,12 @@ describe('PostgresMigrationExecutor', () => {
       sql: 'CREATE TABLE safety_enforcements ();',
     });
 
-    expect(client.transaction).toHaveBeenCalledTimes(1);
-    expect(events).not.toEqual([]);
     expect(events).toEqual([
       'CREATE TABLE safety_enforcements ();',
       'INSERT INTO schema_migrations (version) VALUES ($1)',
     ]);
-    expect(client.query).toHaveBeenLastCalledWith(
+    expect(rootQuery).not.toHaveBeenCalled();
+    expect(txQuery).toHaveBeenLastCalledWith(
       'INSERT INTO schema_migrations (version) VALUES ($1)',
       [4],
     );
