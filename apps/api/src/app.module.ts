@@ -27,6 +27,7 @@ import { PrismaPasswordCredentialRepository } from './auth/prisma-password-crede
 import { PasswordRegistrationRepository } from './auth/password-registration.repository.js';
 import { PrismaPasswordRegistrationRepository } from './auth/prisma-password-registration.repository.js';
 import { PasswordRegistrationService } from './auth/password-registration.service.js';
+import { MinimumPasswordPolicy, PasswordPolicy } from './auth/password-policy.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
@@ -58,6 +59,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     PrismaPasswordCredentialRepository,
     PrismaPasswordRegistrationRepository,
     PasswordRegistrationService,
+    MinimumPasswordPolicy,
     NodeScryptPasswordHasher,
     PrismaVerificationRepository,
     PrismaSafetyEnforcementRepository,
@@ -81,6 +83,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: PasswordPolicy,
+      useExisting: MinimumPasswordPolicy,
     },
     {
       provide: PasswordRegistrationRepository,
