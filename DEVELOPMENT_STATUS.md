@@ -647,9 +647,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added PASSWORD_REGISTRATION_USE_CASE_BOUNDARY.md defining the required atomic workflow and the next prerequisite: a transaction-capable registration persistence boundary that receives only an opaque password hash.
 - Boundary commit: f2bbb88b3ccfbde92f53593095d54930ce7f68a8.
 
+
+## Atomic password registration persistence boundary — IMPLEMENTED, CI PENDING
+- Inspected DatabaseService and confirmed the Prisma interactive transaction boundary is available through $transaction.
+- Added PasswordRegistrationRepository so the dependent Account, AuthenticationIdentity and PasswordCredential writes are represented as one persistence operation.
+- Added PrismaPasswordRegistrationRepository using one transaction callback; credential persistence receives only passwordHash.
+- Added focused regression coverage asserting all three writes occur through the transaction and failures propagate without a fallback write path.
+- Registered concrete and abstract repository providers in AppModule.
+- Commits: 72e921cf1b9e96ee4ca137f007ad9142fb03efb0, 93cbea6e76b4203746eeaf3948e6897c30c4645c, 2292a4177fdfb48422429c6474986e9b30a43bb7, b1cf721a1ab28c82430c1d0b9e6c317bb020f0a6.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Inspect DatabaseService transaction conventions and implement the smallest transaction-capable registration persistence boundary before exposing a registration use case.
+2. Implement a PasswordRegistrationService that hashes plaintext through PasswordHasher before calling the atomic repository, with duplicate/provider identity behavior explicitly mapped.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
