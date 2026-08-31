@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the operational resilience contract CI, then continue with operational observability and recovery requirements.
+CURRENT TASK: Validate the operational observability and recovery contract CI, then continue with data retention and deletion requirements.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -36,8 +36,10 @@ STATUS: Milestone 1 in progress
 - Operational Performance Target Contract implemented for REQ-NFR-007, REQ-NFR-008 and REQ-NFR-010 foundations: per-journey targets, all critical journeys, and explicit latency dimensions.
 - Operational Performance Target Contract CI #173 passed and progress record CI #174 also passed; performance requirements foundation is CI-validated.
 - Operational Resilience Contract implemented for REQ-NFR-009, REQ-NFR-011, REQ-NFR-012 and REQ-NFR-013: non-blocking background operations, degraded critical dependencies, optional failure isolation, and bounded observable retries.
-- Operational Resilience Contract tests implemented.
-- Current immediate action: verify CI for operational resilience contract commits.
+- Operational Resilience Contract CI #177 passed and progress record CI #178 also passed; resilience foundation is CI-validated.
+- Operational Observability and Recovery Contract implemented for REQ-NFR-014 through REQ-NFR-020: actionable failure signals, backup/recovery/rollback readiness, structured operation records, correlation support, sensitive-content minimization, and healthy/degraded/failed states.
+- Operational Observability and Recovery Contract tests implemented.
+- Current immediate action: verify CI for operational observability and recovery contract commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -84,6 +86,7 @@ STATUS: Milestone 1 in progress
 - Accessibility assurance contract and tests.
 - Operational performance target contract and tests.
 - Operational resilience contract and tests.
+- Operational observability and recovery contract and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -114,12 +117,13 @@ STATUS: Milestone 1 in progress
 - Accessibility flow communication contract: CI validated after targeted test typing fix (CI #165).
 - Accessibility assurance contract: CI validated (CI #169).
 - Operational performance target contract: CI validated (CI #173).
-- Operational resilience contract: tests added; latest CI pending.
+- Operational resilience contract: CI validated (CI #177).
+- Operational observability and recovery contract: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the operational resilience contract commits.
-2. If green: mark Operational Resilience Contract CI-validated.
-3. Then implement the smallest observability/recovery slice for REQ-NFR-014 through REQ-NFR-020 without recreating completed resilience contracts.
+1. Check CI triggered by the operational observability and recovery contract commits.
+2. If green: mark Operational Observability and Recovery Contract CI-validated and mark the Operational Quality slice complete through REQ-NFR-020.
+3. Then implement the smallest data retention and deletion slice starting with REQ-DATA-001 through REQ-DATA-005 without recreating completed operational contracts.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
