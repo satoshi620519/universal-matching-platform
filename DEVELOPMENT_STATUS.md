@@ -117,7 +117,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Shared request-principal lifecycle CI #253 and progress record CI #254 passed; principal propagation boundary is CI-validated.
 - Runtime composition follow-up CI #261/#262 passed; request-principal propagation and composition-root wiring are CI-validated.
 - Authentication lifecycle CI #264 and progress record CI #265 passed; request-once authentication lifecycle invariant is CI-validated.
-- Account activation API boundary implemented by reusing the existing AccountRepository and AccountActivationService; no account lifecycle domain logic was recreated. CI pending.
+- Account activation boundary CI #268/#269 failed at API test typecheck only: test repository stubs did not preserve the abstract repository method signatures and used an unverified literal AccountState.
+- Targeted test-only fix applied by implementing the exact repository signatures and typing fixture state through the domain AccountState contract. Follow-up CI pending.
 
 ## Test status
 - M0 CI validation: passed.
