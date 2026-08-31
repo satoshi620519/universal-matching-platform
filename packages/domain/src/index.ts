@@ -32,3 +32,5 @@ export * from './moderation-case.js';
 export * from './moderation-action.js';
 
 export * from './audit-record.js';
+
+export * from './analytics-event.js';
