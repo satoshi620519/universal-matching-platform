@@ -22,3 +22,5 @@ export {
 } from './migration-source.js';
 
 export { runMigrations } from './migration-runner.js';
+
+export { FilesystemMigrationArtifactSource } from './filesystem-migration-artifact-source.js';
