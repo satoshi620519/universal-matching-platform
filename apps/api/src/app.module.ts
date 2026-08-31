@@ -14,6 +14,7 @@ import { AccountActivationService } from './accounts/account-activation.service.
 import { PrismaAccountRepository } from './accounts/prisma-account.repository.js';
 import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.adapter.js';
 import { AuthenticationIdentityRepository } from './auth/authentication-identity.repository.js';
+import { AuthenticationIdentityService } from './auth/authentication-identity.service.js';
 import { PrismaAuthenticationIdentityRepository } from './auth/prisma-authentication-identity.repository.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
@@ -35,6 +36,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     RequestPrincipalResolver,
     PrismaAccountRepository,
     PrismaAuthenticationIdentityRepository,
+    AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     {
       provide: AccountRepository,
