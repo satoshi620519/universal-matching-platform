@@ -55,7 +55,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Database foundation CI #217 passed after the targeted Prisma Client generation fix; database baseline is CI-validated.
 - Account repository and structured API error boundary follow-up CI #229 reached API typecheck and exposed one remaining persistence/domain boundary mismatch: Prisma persisted status is string while AccountRecord requires AccountState.
 - Repository status mapping fix CI #230 passed and progress record CI #231 passed; repository/error boundary slice is CI-validated.
-- Provider-neutral authenticated request context implemented: RequestPrincipal contract, correlation-aware AuthenticatedRequestContext, and boundary tests. CI pending.
+- Provider-neutral authenticated request context CI #235 passed and progress record CI #236 passed; authentication context boundary is CI-validated.
+- Provider-neutral authentication adapter contract and unauthorized HTTP guard boundary implemented; CI pending.
 - Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
@@ -149,10 +150,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the provider-neutral authenticated request context commits.
-2. If green: mark the authentication context boundary CI-validated.
-3. Implement an authentication adapter boundary that can populate RequestPrincipal without coupling application code to a specific provider.
-4. Add the smallest unauthorized/forbidden HTTP boundary behavior and tests.
-5. Keep registration, recovery, session/device management and verification workflows as later requirement slices; do not implement provider-specific flows prematurely.
+1. Check CI triggered by the authentication adapter and HTTP guard commits.
+2. If green: mark the authentication adapter/unauthorized boundary CI-validated.
+3. Add an authorization boundary that distinguishes authenticated identity from permission/capability access and returns 403 for denied access.
+4. Reuse the existing Capability Gate and Capability Access Service contracts; do not recreate authorization domain logic.
+5. After authorization HTTP boundary is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
 6. Update this file after every coherent slice.
 
