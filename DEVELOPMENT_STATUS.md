@@ -318,12 +318,28 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - No automatic startup migration was introduced; execution remains an explicit next concern.
 - Commits: 6b9aa13603aad8b86c5d3c35b1dfabb8576e8597, 40f8e3d77052100697e4e6aafaa346a090536593, 9cdccaf554984d2cf4ab99f84ff27d6912590bca, e85c4a40f1fb4357e742e3818953126259d92f11.
 
+## Migration runtime composition CI — FAILURE UNDER INVESTIGATION
+- CI runs #544/#545 failed at monorepo typecheck before lint/test/build.
+- Failure happened after runtime composition commits, so composition cannot yet be treated as green.
+- Workflow job confirms PostgreSQL service started successfully; database topology is not the failure point.
+- GitHub job-log retrieval returned no decoded compiler text in this session, so no error message is being fabricated.
+- Static source inspection found and removed a stale unused Prisma type import from the new migration adapter.
+- Commit: 716f93f2e1114671375aab2a21e7d3b8370f673c.
+- Further CI diagnosis must use the next run's exact compiler output before additional speculative production changes.
+
+## Migration artifact discovery — INVESTIGATED
+- Authoritative repository artifacts currently live under packages/database/migrations.
+- Production package exports source TypeScript directly and has no asset-copy pipeline for SQL files.
+- Therefore runtime filesystem discovery inside built API output is not yet production-safe.
+- Do not add automatic startup migration or pretend artifacts are bundled until an explicit artifact-loading strategy exists.
+- Candidate next design: injected MigrationArtifactSource port, with filesystem implementation added only alongside packaging/copy guarantees and a test fixture implementation for integration.
+
 ## Exact next action
-1. Verify CI for runtime composition and package export correction.
-2. Wait for the currently-running prior CI rather than treating it as green prematurely.
-3. Inspect migration artifact loading/discovery requirements for a migration service.
-4. Add explicit migration orchestration (not automatic application startup) once artifact loading has a production-safe source.
-5. Add empty-database PostgreSQL integration coverage using the existing CI DATABASE_URL topology.
+1. Verify CI for the stale Prisma import correction and capture exact compiler output if still failing.
+2. Fix only the compiler-reported cause; do not stack speculative changes.
+3. Keep runtime composition blocked from green status until CI passes.
+4. Design MigrationArtifactSource as an explicit port rather than adding unsafe runtime filesystem assumptions.
+5. Add empty-database PostgreSQL integration only after artifact loading and executor composition are green.
 6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
