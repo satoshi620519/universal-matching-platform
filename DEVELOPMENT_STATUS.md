@@ -692,9 +692,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Registration transport can now enforce a limiter before password hashing or database writes, but public exposure still requires duplicate-safe response mapping and controller-level integration.
 - Commits: f704415e2d951f3fa5e76eac76091b8c2e14ccb6, 93d2dc05ed73d7879ae24249591ba31d7c2165e6, 27b1313e013a6aec718518acecf6459f8e033113, 9fe55cb90035885f5dcf14691a1bef356769dbed, 3c7a03a65449fb9b22dbe0e44d3329448dbe969e.
 
+
+## Registration duplicate-safe transport boundary — IMPLEMENTED, CI PENDING
+- Added DuplicateAuthenticationIdentityError and mapped Prisma P2002 uniqueness failures from the atomic registration repository to the stable application error.
+- Added PasswordRegistrationTransportService integrating rate limiting before validation/hashing, conservative email normalization, PasswordPolicy validation and generic invalid-input responses.
+- Duplicate identity submissions are intentionally transport-indistinguishable from successful submission to reduce account enumeration at this boundary.
+- Added focused tests for rate-limit ordering, generic invalid input rejection, normalization and duplicate-safe completion.
+- Registered the transport service in AppModule.
+- Public HTTP controller is still deferred; request-body DTO shape, privacy-conscious rate-limit key derivation and response status contract must be defined without leaking duplicate identity state.
+- Commits: ee6c9a5ede005bcf3f1d5c4b84ed67a63973fb3d, 2ef3e974b4b972ad6dfa154eeae42e16125fffee, 6ece751401b5a8b71871d8c5f2f5b35fa8ed83a6, b1a849271412133a42199f9bb47579c577e968a8, 4019d35910179a724a0dbd1dc0d3469888243a27, 115931dd7bda9b0ead580d321a569f94ec188abe.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Inspect database uniqueness/error conventions and implement duplicate-safe registration response mapping plus controller-level validation and rate-limit integration.
+2. Define the public registration request/response contract and privacy-conscious rate-limit key derivation, then add the minimal HTTP controller on top of PasswordRegistrationTransportService.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
