@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { orderMigrationFilenames, parseMigrationFilename } from './migrations';
+import { orderMigrationFilenames, parseMigrationFilename } from './migrations.js';
 
 describe('parseMigrationFilename', () => {
   it('parses a valid positive migration version', () => {
