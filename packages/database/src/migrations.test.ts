@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { orderMigrationFilenames, parseMigrationFilename } from './migrations.js';
+import {
+  orderMigrationFilenames,
+  parseMigrationFilename,
+  planMigrations,
+} from './migrations.js';
 
 describe('parseMigrationFilename', () => {
   it('parses a valid positive migration version', () => {
@@ -34,6 +38,38 @@ describe('orderMigrationFilenames', () => {
         '0001_create_accounts.sql',
         '0001_create_entitlements.sql',
       ]),
+    ).toThrow('Duplicate migration version: 1');
+  });
+});
+
+describe('planMigrations', () => {
+  const migrations = [
+    { version: 2, filename: '0002_add_status.sql', sql: 'SELECT 2;' },
+    { version: 1, filename: '0001_create_accounts.sql', sql: 'SELECT 1;' },
+    { version: 3, filename: '0003_add_index.sql', sql: 'SELECT 3;' },
+  ];
+
+  it('returns only unapplied migrations in version order', () => {
+    expect(planMigrations(migrations, new Set([1]))).toEqual({
+      pending: [migrations[1], migrations[2]],
+    });
+  });
+
+  it('returns no work when every migration is applied', () => {
+    expect(planMigrations(migrations, new Set([1, 2, 3]))).toEqual({
+      pending: [],
+    });
+  });
+
+  it('rejects duplicate versions', () => {
+    expect(
+      planMigrations(
+        [
+          { version: 1, filename: '0001_create_accounts.sql', sql: '' },
+          { version: 1, filename: '0001_other.sql', sql: '' },
+        ],
+        new Set(),
+      ),
     ).toThrow('Duplicate migration version: 1');
   });
 });
