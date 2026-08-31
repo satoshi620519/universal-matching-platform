@@ -62,6 +62,6 @@ describe('authenticated capability access service', () => {
     await expect(service.evaluate({
       accountId: 'account-1',
       authenticationMethod: 'test',
-    }, {})).rejects.toBeInstanceOf(BadRequestException);
+    }, {})).rejects.toBeInstanceOf(UnauthorizedException);
   });
 });
