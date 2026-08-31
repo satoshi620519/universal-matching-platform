@@ -30,6 +30,10 @@ import { PasswordRegistrationService } from './auth/password-registration.servic
 import { PasswordRegistrationTransportService } from './auth/password-registration-transport.service.js';
 import { PasswordRegistrationController } from './auth/password-registration.controller.js';
 import { PasswordSignInService } from './auth/password-sign-in.service.js';
+import { SessionRepository } from './auth/session.repository.js';
+import { PrismaSessionRepository } from './auth/prisma-session.repository.js';
+import { SessionIssuanceService } from './auth/session-issuance.service.js';
+import { SessionRevocationService } from './auth/session-revocation.service.js';
 import { MinimumPasswordPolicy, PasswordPolicy } from './auth/password-policy.js';
 import { RequestRateLimiter } from './common/rate-limit/request-rate-limiter.js';
 import { InMemoryRequestRateLimiter } from './common/rate-limit/in-memory-request-rate-limiter.js';
@@ -66,6 +70,9 @@ import { HealthStatusService } from './health/health-status.service.js';
     PasswordRegistrationService,
     PasswordRegistrationTransportService,
     PasswordSignInService,
+    SessionIssuanceService,
+    SessionRevocationService,
+    PrismaSessionRepository,
     MinimumPasswordPolicy,
     InMemoryRequestRateLimiter,
     NodeScryptPasswordHasher,
@@ -91,6 +98,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: SessionRepository,
+      useExisting: PrismaSessionRepository,
     },
     {
       provide: RequestRateLimiter,
