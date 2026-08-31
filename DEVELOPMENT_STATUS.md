@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Establish the smallest authoritative safety enforcement restriction lifecycle primitive before persistence and capability integration.
+CURRENT TASK: Reduce authoritative active safety enforcement records into a deterministic scope-specific SafetyRestriction.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -176,11 +176,29 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Persistence commits: 4f1d0ad0be72fbe6d0e122c5a2a01b93aec34f41, 22b172dba79967360a385ac7e3c248c3814d7170, 4663949881bb4f8f4b911f09ceeef5addb0ae8c9, 1a88b5318430b8b4e345041de5dfcd7c5559aa40, b3816daa01657f9e77b6fea7a250e2bf7bdfaf1b.
 - CI exposed a persistence-to-domain type boundary: Prisma strings are not domain SafetyRestriction unions; explicit reconstruction mapping added in 8e754c62ad24fb42836443b4e70320954370c1ac.
 
+## Safety restriction persistence — CI VALIDATING
+- CI #503 typecheck and lint are green; tests/build were still running at the latest checkpoint.
+- Follow-on documentation CI #504 is also running.
+
+## Effective safety restriction resolver — IMPLEMENTED, CI PENDING
+- Added resolveEffectiveSafetyRestriction() for deterministic reduction of multiple active records.
+- Scope semantics:
+  - communication-restricted applies only to communication scope.
+  - feature-restricted applies to all protected scopes.
+  - suspended applies to all scopes.
+- Deterministic precedence:
+  1. suspended
+  2. communication-restricted within communication scope
+  3. feature-restricted
+  4. none
+- Added focused tests for empty records, scope applicability and simultaneous restriction precedence.
+- Resolver intentionally consumes already-active records; lifecycle filtering remains the repository/domain lifecycle responsibility.
+
 ## Exact next action
-1. Verify CI for SafetyEnforcement persistence and repository boundary.
-2. If green, add the narrow evaluation service that reduces active records to the effective SafetyRestriction for a capability scope.
-3. Define deterministic precedence when multiple active enforcement records exist.
-4. Add focused scope/lifecycle composition tests.
+1. Verify CI #503/#504 and the resolver implementation CI.
+2. If persistence is green, mark authoritative safety source complete.
+3. Add a narrow application service that loads active records and resolves the effective restriction for a requested capability scope.
+4. Feed that resolved restriction into AuthenticatedCapabilityDecisionService without changing domain precedence.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
