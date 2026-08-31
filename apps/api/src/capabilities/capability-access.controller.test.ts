@@ -15,6 +15,20 @@ describe('capability access API boundary', () => {
     expect(() => controller.evaluate({ currentVerificationLevel: '1', entitlementState: 'unknown' })).toThrow();
   });
 
+  it('rejects an invalid entitlement effective date at the HTTP boundary', () => {
+    expect(() => controller.evaluate({
+      currentVerificationLevel: '1',
+      entitlementEffectiveAt: 'not-a-date',
+    })).toThrow();
+  });
+
+  it('rejects an invalid current time at the HTTP boundary', () => {
+    expect(() => controller.evaluate({
+      currentVerificationLevel: '1',
+      now: 'not-a-date',
+    })).toThrow();
+  });
+
   it('allows a capability when all domain requirements are satisfied', () => {
     expect(
       controller.evaluate({
