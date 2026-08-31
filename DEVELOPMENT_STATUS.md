@@ -740,9 +740,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Intentionally did not add a bearer secret/token yet; raw credential presentation must be designed so the database never stores a reusable raw secret and revocation remains enforceable.
 - Commits: 3576ba38e241750d1242116e0a23d86123b93cb3, 505a5cc9682ce7bcad454aaff328531b1f026850, 1fd0fc9e70a6e525576485b2aafdca8d4cbe9724, 0a8d6d80b71eaf225f969f6cc86a35b3d1033e6d, f97c516c4588efff70b8cebca1c5fb4eaa96f066, 11bca8c83f13944491d898720593c5c82392a438, 2ed8a6977fb2688c5dcb3ae3a2772348245aeba6.
 
+
+## Opaque session credential and request authentication — IMPLEMENTED, migration/CI pending
+- Extended AuthenticationSession with a unique credentialHash and added opaque 32-byte credential generation; only the SHA-256 hash is persisted.
+- Extended SessionRepository/PrismaSessionRepository with credential-hash lookup.
+- SessionIssuanceService now returns the raw credential once while persisting only its hash.
+- Added OpaqueSessionAuthenticationAdapter parsing Bearer credentials, hashing for lookup, and rejecting missing, revoked or expired sessions before producing RequestPrincipal.
+- Added regression coverage for active session resolution and missing/revoked/expired rejection.
+- Switched RequestAuthenticationAdapter DI binding from anonymous-only to the opaque session adapter.
+- Prisma migration directory was absent in the repository; schema changes are recorded but an actual generated migration remains required before deployment.
+- Commits: 3ffb38f77d7867afc055bba293f7cbf12c9c02d7, 22d1e625410a97fc43d1108608269d5f42574166, 83198fd301eb5aa05e75a69db27be8b6d6b10d3b, 728f5d479d38a9dae1aad1d08bc547a0df0e78bf, 80721e2b1af9ad9467a53ba0dd897b25de24ed0c, c725991a2fc436fe0ba9e838ecf3e33c6b9c9b0e, 60c875834141c26d8c3dc5509a0524a3aad89834, 5d2d94a65308d7e8366ff2f9493857a9249d6cdc.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Add a migration and design an opaque session credential representation (hashed at rest), session lookup contract and RequestAuthenticationAdapter implementation before exposing sign-in HTTP.
+2. Generate/apply the Prisma migration in a runnable environment, then integrate PasswordSignInService + SessionIssuanceService behind a duplicate-safe sign-in HTTP transport/controller and define logout revocation behavior.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
