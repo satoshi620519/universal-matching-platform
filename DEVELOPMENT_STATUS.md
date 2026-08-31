@@ -506,8 +506,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This keeps migration execution explicit and does not introduce application-startup migration.
 - Commit: b194a9eb39974bd0a3c2f4cd523884f19cce58c5.
 
+
+## Prisma migration executor PostgreSQL integration — IMPLEMENTED, CI PENDING
+- Verified the prior real PostgreSQL migration test uses an older direct runner path and does not exercise the current production runtime composition.
+- Added real PostgreSQL integration coverage for DatabaseService → PrismaSqlMigrationClient → PostgresMigrationExecutor.
+- From an empty schema_migrations history, coverage verifies tracking-table initialization, migration SQL application and recorded version retrieval.
+- Added a failing-SQL case proving the transaction does not record the failed version.
+- This closes the runtime-adapter integration gap without introducing automatic startup migration.
+- Commit: 096bfdc5d46cc2a95470617804d2b4387e61a8e1.
+
 ## Exact next action
-1. Verify CI for b194a9eb and the preceding migration artifact integrity hardening commits.
+1. Verify CI for 096bfdc5 and the preceding filesystem migration integration commits.
 2. If CI is green, inspect the existing real PostgreSQL migration integration fixture before adding only the remaining empty-database coverage.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
