@@ -12,7 +12,7 @@ import {
 } from './observability/request-context.js';
 
 describe('HTTP application boundary', () => {
-  it('serves health and preserves an incoming correlation id', async () => {
+  async function createApp(): Promise<NestFastifyApplication> {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -32,6 +32,12 @@ describe('HTTP application boundary', () => {
     });
 
     await app.init();
+    await app.getHttpAdapter().getInstance().ready();
+    return app;
+  }
+
+  it('serves health and preserves an incoming correlation id', async () => {
+    const app = await createApp();
 
     try {
       const correlationId = 'integration-correlation-id';
@@ -46,7 +52,7 @@ describe('HTTP application boundary', () => {
       expect(response.statusCode).toBe(200);
       expect(response.json()).toEqual({
         status: 'ok',
-        service: 'api',
+        database: 'configured',
       });
       expect(response.headers[CORRELATION_ID_HEADER]).toBe(correlationId);
     } finally {
@@ -55,25 +61,7 @@ describe('HTTP application boundary', () => {
   });
 
   it('generates a correlation id when the request does not provide one', async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-    const app = moduleRef.createNestApplication<NestFastifyApplication>(
-      new FastifyAdapter(),
-    );
-
-    app.useGlobalFilters(new ApiErrorFilter());
-    const adapter = app.get(RequestAuthenticationAdapter);
-    const resolvePrincipal = createRequestPrincipalResolver(adapter);
-    app.getHttpAdapter().getInstance().addHook('onRequest', async (request, reply) => {
-      const correlationId = resolveCorrelationId(
-        request.headers[CORRELATION_ID_HEADER],
-      );
-      reply.header(CORRELATION_ID_HEADER, correlationId);
-      await resolvePrincipal(request);
-    });
-
-    await app.init();
+    const app = await createApp();
 
     try {
       const response = await app.getHttpAdapter().getInstance().inject({
