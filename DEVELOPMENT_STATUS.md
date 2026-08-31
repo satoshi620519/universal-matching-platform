@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Define the verification repository boundary on top of the validated verification persistence model.
+CURRENT TASK: Define the verification lifecycle service above the validated verification repository boundary.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -91,19 +91,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - CI #454 passed typecheck, lint, all tests and build.
 - Raw provider evidence, documents, biometrics and secrets remain outside ordinary persistence.
 
-## Exact next action
-1. Add a provider-neutral VerificationRepository contract.
-2. Implement Prisma persistence operations for request creation and outcome lookup.
-3. Keep domain outcome reconstruction separate from raw provider evidence.
-4. Add focused tests and verify CI.
-5. Record the exact continuation checkpoint.
+## Verification repository boundary — COMPLETE
+- Added provider-neutral VerificationRepository contract.
+- Added PrismaVerificationRepository implementation.
+- Added request creation and latest account outcome lookup operations.
+- Registered repository through Nest DI.
+- CI #460 and #461 completed successfully with typecheck, lint, tests and build green.
+- Provider evidence and provider SDK types remain outside the repository contract.
 
-## Verification migration CI corrective checkpoint — IN PROGRESS
-- CI #452 passed typecheck and lint but failed PostgreSQL migration integration.
-- Root cause was a stale rollback test expectation after splitting verification fixture into versions 3 and 4: setup still applied only versions 1 and 2 while expecting 1..4.
-- Corrected rollback setup to apply all four successful migrations before version-5 failure probe.
-- Corrective commit: ea934a789b54fd2e946ef146c47a339296c69131.
-- Awaiting corrective CI before marking verification persistence complete.
+## Exact next action
+1. Add a focused Verification lifecycle service above the repository boundary.
+2. Centralize request initiation semantics and usable outcome evaluation there.
+3. Reconstruct/use existing VerificationRecord outcome rules rather than duplicating verification policy.
+4. Add focused unit tests and verify CI.
+5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
