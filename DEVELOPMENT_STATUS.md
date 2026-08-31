@@ -639,9 +639,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Explicitly kept plaintext out of repositories and deferred registration transport, sign-in/session issuance, reset delivery and credential policy.
 - Commits: 65f8ef6174e6d7d64f2f8b9d304797571800d358, d7d562042893a0b74331e5cd906f90c3ff6fb79c, db05c4b40a93999c2c5f46a199dd34eb76a82f31, 5761a050b32fd1ce3e66517be8b760873f9168a0, b8a568008af7d4970d1e4bc07d467b975063f56f.
 
+
+## Password registration atomicity boundary — COMPLETE
+- Inspected AccountRepository, AuthenticationIdentityRepository and PasswordCredentialRepository before implementing the requested registration flow.
+- Identified a correctness boundary: the workflow requires three dependent writes, while current repositories have no shared transaction/unit-of-work abstraction.
+- Avoided implementing a superficially complete registration service that could orphan an account or identity if a later credential write fails.
+- Added PASSWORD_REGISTRATION_USE_CASE_BOUNDARY.md defining the required atomic workflow and the next prerequisite: a transaction-capable registration persistence boundary that receives only an opaque password hash.
+- Boundary commit: f2bbb88b3ccfbde92f53593095d54930ce7f68a8.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Define the smallest registration use-case boundary that creates Account, AuthenticationIdentity and PasswordCredential without exposing plaintext beyond PasswordHasher.
+2. Inspect DatabaseService transaction conventions and implement the smallest transaction-capable registration persistence boundary before exposing a registration use case.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
