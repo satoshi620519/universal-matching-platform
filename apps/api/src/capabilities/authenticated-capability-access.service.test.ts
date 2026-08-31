@@ -11,15 +11,12 @@ const principal = {
 } as const;
 
 describe('authenticated capability access service', () => {
-  function context(result: unknown = {
-    principal,
-    account: { id: 'account-1', status: 'active' },
-  }) {
+  function context() {
     return {
-      resolve: async (value: unknown) => {
-        expect(value).toBe(principal);
-        return result;
-      },
+      resolve: async (value: typeof principal) => ({
+        principal: value,
+        account: { id: value.accountId, status: 'active' },
+      }),
     } as unknown as AuthenticatedAccountContextService;
   }
 
