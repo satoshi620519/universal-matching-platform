@@ -30,6 +30,13 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated authenticated capability authentication semantics
+- Malformed or missing verificationLevel claims on an authenticated principal are classified as authentication failures (401), not client request validation failures (400).
+- Capability requirement failures for a valid authenticated principal remain authorization failures (403).
+- Service and HTTP-boundary tests now share the same 401 classification for malformed principal claims.
+- Implementation commits: 916c11a41f170d1fafc8a5ee9ad227ae8b58f4df, 0d805114bd3c231107e7fa213a7369292b313b9e, dd369ae49ee1d8a6aa52ffa8bf84600e579d6e55, 230f72e39490f7a9f908dce990a7b85c5616b3ea, c7bd723eb16fa18e88fbdc79cf32c0de940b7fe7, 401e2116a728e42425d8c30010d92c434de0ddc6.
+- GitHub Actions CI run #368 for 401e2116a728e42425d8c30010d92c434de0ddc6 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated capability authorization authentication boundary
 - CapabilityAuthorizationGuard now requires an authenticated RequestPrincipal instead of treating an absent principal as verification level 0.
 - Missing principals and invalid principal verification levels fail with 401 before capability evaluation.
@@ -142,8 +149,8 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Review HTTP authentication and capability authorization composition for routes that may apply capability checks without first guaranteeing RequestPrincipal population.
-2. Prefer correcting boundary composition or guard semantics using existing RequestPrincipal transport rather than introducing parallel authentication state.
-3. Preserve the distinction between 401 authentication failures and 403 authenticated capability denials.
-4. Add focused tests for any discovered composition gap.
-5. Run full CI and record the checkpoint here before moving to the next slice.
+1. Review remaining authenticated HTTP boundaries for inconsistent classification of malformed authentication/principal state versus malformed client input.
+2. Keep 401 for absent or invalid authentication state, 403 for valid authenticated principals denied by authorization, and 400 for malformed route/query/body input.
+3. Do not introduce a global guard migration unless an existing route composition gap requires it.
+4. Add focused tests only where a concrete inconsistency is found.
+5. Run full CI and record the checkpoint before advancing to another domain slice.
