@@ -17,6 +17,7 @@ model Account {
   safetyEnforcements        SafetyEnforcement[]
   authenticationSessions    AuthenticationSession[]
   emailVerificationTokens   EmailVerificationToken[]
+  emailOutboxMessages       EmailOutboxMessage[]
 
   @@map("accounts")
 }
@@ -126,4 +127,25 @@ model EmailVerificationToken {
 
   @@index([accountId, expiresAt])
   @@map("email_verification_tokens")
+}
+
+
+model EmailOutboxMessage {
+  id           String    @id @default(uuid()) @db.Uuid
+  accountId    String    @map("account_id") @db.Uuid
+  emailAddress String    @map("email_address")
+  kind         String
+  status       String
+  attempts     Int       @default(0)
+  availableAt  DateTime  @default(now()) @map("available_at") @db.Timestamptz(6)
+  lockedAt     DateTime? @map("locked_at") @db.Timestamptz(6)
+  deliveredAt  DateTime? @map("delivered_at") @db.Timestamptz(6)
+  lastError    String?   @map("last_error")
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account      Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([status, availableAt])
+  @@index([accountId, createdAt])
+  @@map("email_outbox_messages")
 }
