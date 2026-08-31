@@ -15,10 +15,12 @@ describe('EmailVerificationDeliveryService', () => {
     await service.issueAndDeliver({
       accountId: 'account-1',
       emailAddress: 'user@example.test',
+      messageId: 'outbox-1',
     });
 
     expect(issue).toHaveBeenCalledWith('account-1');
     expect(send).toHaveBeenCalledWith(expect.objectContaining({
+      messageId: 'outbox-1',
       to: 'user@example.test',
       text: expect.stringContaining('https://app.example.test/auth/email-verification?token=opaque-token'),
     }));
