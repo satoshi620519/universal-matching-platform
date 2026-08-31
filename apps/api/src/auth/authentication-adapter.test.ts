@@ -4,7 +4,10 @@ import { RequestAuthenticationAdapter } from './authentication-adapter.js';
 describe('authentication adapter boundary', () => {
   it('allows adapters to remain independent from a concrete provider', async () => {
     class TestAdapter extends RequestAuthenticationAdapter {
-      async authenticate() {
+      async authenticate(input: {
+        readonly authorization?: string;
+        readonly requestId: string;
+      }) {
         return {
           accountId: '00000000-0000-0000-0000-000000000001',
           authenticationMethod: 'test',
