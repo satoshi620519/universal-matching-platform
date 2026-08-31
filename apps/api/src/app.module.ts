@@ -7,14 +7,17 @@ import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthController } from './health/health.controller.js';
+import { VerificationAccessController } from './verification/verification-access.controller.js';
+import { VerificationAccessService } from './verification/verification-access.service.js';
 import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController, AccountActivationController],
+  controllers: [HealthController, AccountActivationController, VerificationAccessController],
   providers: [
     HealthStatusService,
     AccountActivationService,
+    VerificationAccessService,
     PrismaAccountRepository,
     AnonymousAuthenticationAdapter,
     {
