@@ -9,3 +9,9 @@ export {
   type MigrationArtifact,
   type MigrationPlan,
 } from './migrations.js';
+
+export {
+  PostgresMigrationExecutor,
+  type SqlMigrationClient,
+  type SqlMigrationQueryClient,
+} from './postgres-migration-executor.js';
