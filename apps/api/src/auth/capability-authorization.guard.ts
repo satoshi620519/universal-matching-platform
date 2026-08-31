@@ -4,8 +4,11 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import type { FastifyRequest } from 'fastify';
 import { CapabilityAccessService } from '../capabilities/capability-access.service.js';
+import {
+  getRequestPrincipal,
+  type AuthenticatedFastifyRequest,
+} from './authenticated-request.js';
 
 export interface CapabilityRequirement {
   readonly requiredVerificationLevel?: 0 | 1 | 2 | 3;
@@ -21,14 +24,13 @@ export class CapabilityAuthorizationGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<
-      FastifyRequest & {
-        principal?: { verificationLevel?: string };
-      }
-    >();
+    const request = context
+      .switchToHttp()
+      .getRequest<AuthenticatedFastifyRequest>();
 
+    const principal = getRequestPrincipal(request);
     const currentVerificationLevel = Number(
-      request.principal?.verificationLevel ?? 0,
+      principal?.verificationLevel ?? 0,
     ) as 0 | 1 | 2 | 3;
 
     const decision = this.capabilityAccess.evaluate({
