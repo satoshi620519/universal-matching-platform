@@ -304,12 +304,27 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This is the correct topology to reuse for the first empty-database migration integration test after the current typecheck fix is green.
 - No second database topology should be invented.
 
+## CI PostgreSQL wiring — VERIFIED
+- Existing CI uses PostgreSQL 16 service container.
+- DATABASE_URL is wired to postgresql://postgres:postgres@localhost:5432/universal_matching.
+- This exact topology is the authoritative target for the first migration integration test.
+
+## Migration runtime composition — IMPLEMENTED, CI PENDING
+- Corrected package export surface: PostgresMigrationExecutor and SQL migration port types are now exported from @universal/database.
+- Added Prisma runtime composition factory:
+  DatabaseService → PrismaSqlMigrationClient → PostgresMigrationExecutor.
+- Registered the composed executor in the global DatabaseModule via MIGRATION_EXECUTOR injection token.
+- Added focused composition test proving the API database service produces the concrete PostgreSQL migration executor.
+- No automatic startup migration was introduced; execution remains an explicit next concern.
+- Commits: 6b9aa13603aad8b86c5d3c35b1dfabb8576e8597, 40f8e3d77052100697e4e6aafaa346a090536593, 9cdccaf554984d2cf4ab99f84ff27d6912590bca, e85c4a40f1fb4357e742e3818953126259d92f11.
+
 ## Exact next action
-1. Verify CI for the generic query test-double correction.
-2. If green, inspect the CI environment variables and database URL wiring in ci.yml.
-3. Add runtime composition only if it can be tested against the existing PostgreSQL service.
-4. Add empty-database migration integration coverage using that exact CI PostgreSQL topology.
-5. Record the exact continuation checkpoint.
+1. Verify CI for runtime composition and package export correction.
+2. Wait for the currently-running prior CI rather than treating it as green prematurely.
+3. Inspect migration artifact loading/discovery requirements for a migration service.
+4. Add explicit migration orchestration (not automatic application startup) once artifact loading has a production-safe source.
+5. Add empty-database PostgreSQL integration coverage using the existing CI DATABASE_URL topology.
+6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
