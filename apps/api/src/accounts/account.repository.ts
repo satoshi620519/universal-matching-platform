@@ -15,4 +15,5 @@ export interface CreateAccountRecord {
 export abstract class AccountRepository {
   abstract create(input: CreateAccountRecord): Promise<AccountRecord>;
   abstract findById(id: string): Promise<AccountRecord | null>;
+  abstract updateStatus(id: string, status: AccountState): Promise<AccountRecord | null>;
 }
