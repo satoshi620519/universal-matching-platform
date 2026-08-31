@@ -804,12 +804,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - No scheduler/queue worker was invented; dispatch remains an explicit application boundary pending infrastructure policy.
 - Commits: 10ee4ba297882351af01e43c79733a02a591ce51, c60e97a8148fa44d9c32a0983d6d01c6cf660420, 92a0d11ac42b408109498d250767a99496e0b7d5, 822b2a5ed86bb39cbca3016bc93f9a4263e8402d, 44525c3860e025e560179340c697e76a1797a3b0, 7e1c86a10716802f47e579dc43a678eef7e3dd80, bc8228e3677ea5a4a7d80685e3a041af85020ab4, f5d7d17ee83bcc0f50c9030b1d8fdef69a48265f, e2f053f0674863b5b8ce980626057838024d504f, 07dcffad46e628ca91f371da3c14c0b1cecbbdf9.
 
+
+## Email outbox worker execution boundary — IMPLEMENTED, infrastructure adapter deferred
+- Re-read the persistent repository checkpoint before resuming and did not recreate the already-complete outbox/dispatcher implementation.
+- Added EmailOutboxWorker as an explicit execution boundary around EmailOutboxDispatchService.
+- Supports runOnce() and bounded drain(maxMessages), stopping on empty queue or configured bound.
+- Added focused worker regression tests for one-shot execution, bounded drain and empty-queue termination.
+- Registered the worker in Nest DI without starting any timer or background loop from AppModule.
+- Added EMAIL_OUTBOX_WORKER_BOUNDARY.md documenting why process scheduling remains infrastructure-owned and replaceable.
+- Commits: a94973a413c7dadfb19e253a01f8f2d98421ba67, 8410700e44c880b22ce10bd8864b42dfed606400, 493f46ee0bae59b643e28ac86502c39f3eacc4ef, 1b198ebd0e2fbdec86a8b3bf364ef6e99fdf2b48.
+- CI state: not yet verified in this session; do not infer green until workflow evidence is recorded.
+
 ## Exact next action
-1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Design durable email delivery retry/outbox semantics so registration and verification delivery can recover safely from provider failures; continue keeping raw verification tokens out of public responses and retain migration generation/application as a deployment prerequisite.
-3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
-4. Keep migration execution explicit; do not introduce automatic application-startup migration.
-5. Record the exact CI evidence and continuation checkpoint.
+1. Verify CI/workflow evidence for the durable outbox commits and the new worker-boundary commits; record exact run IDs/results rather than assuming green.
+2. Inspect the repository's deployment/process topology and choose the smallest grounded infrastructure adapter for invoking EmailOutboxWorker (queue, scheduled job, or separate worker process); do not introduce an automatic AppModule timer.
+3. Before adding a real email provider, define provider idempotency/message identifiers and delivery-failure observability so at-least-once retries do not silently duplicate messages.
+4. Keep raw verification tokens out of durable outbox records and public responses.
+5. Keep migration execution explicit and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
