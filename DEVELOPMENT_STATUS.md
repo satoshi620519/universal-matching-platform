@@ -30,6 +30,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated capability authorization authentication boundary
+- CapabilityAuthorizationGuard now requires an authenticated RequestPrincipal instead of treating an absent principal as verification level 0.
+- Missing principals and invalid principal verification levels fail with 401 before capability evaluation.
+- Authenticated principals that fail capability requirements continue to receive 403.
+- Focused tests cover allow, missing-principal rejection, invalid-verification rejection and capability denial.
+- Implementation commits: 359c970facddbed121e7154669f3e3be19449116, 0ad0a87d2197cf147e386a0c95222119e1fabc52.
+- GitHub Actions CI run #361 for 0ad0a87d2197cf147e386a0c95222119e1fabc52 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated durable legacy account activation
 - PATCH /accounts/:accountId/activation now persists the successful domain transition through AccountRepository.updateStatus.
 - Legacy and authenticated activation routes no longer differ in durability semantics.
@@ -134,8 +142,8 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Review AccountRepository implementations and account lifecycle callers for another route where a domain transition is computed but its persistence result is not used as the response source.
-2. Prefer correcting durability/consistency gaps in existing vertical slices over adding speculative endpoints.
-3. Keep authenticated ownership derived from RequestPrincipal and preserve legacy route compatibility.
-4. Add focused tests that distinguish transition calculation from successful persistence.
-5. Run full CI and record the resulting checkpoint here.
+1. Review HTTP authentication and capability authorization composition for routes that may apply capability checks without first guaranteeing RequestPrincipal population.
+2. Prefer correcting boundary composition or guard semantics using existing RequestPrincipal transport rather than introducing parallel authentication state.
+3. Preserve the distinction between 401 authentication failures and 403 authenticated capability denials.
+4. Add focused tests for any discovered composition gap.
+5. Run full CI and record the checkpoint here before moving to the next slice.
