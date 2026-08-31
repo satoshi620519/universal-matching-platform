@@ -8,10 +8,26 @@ datasource db {
 }
 
 model Account {
-  id        String   @id @default(uuid()) @db.Uuid
-  status    String
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+  id                       String                   @id @default(uuid()) @db.Uuid
+  status                   String
+  createdAt                DateTime                 @default(now()) @db.Timestamptz(6)
+  updatedAt                DateTime                 @updatedAt @db.Timestamptz(6)
+  authenticationIdentities AuthenticationIdentity[]
 
   @@map("accounts")
+}
+
+model AuthenticationIdentity {
+  id              String   @id @default(uuid()) @db.Uuid
+  accountId       String   @map("account_id") @db.Uuid
+  providerType    String   @map("provider_type")
+  providerSubject String   @map("provider_subject")
+  status          String
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account         Account  @relation(fields: [accountId], references: [id])
+
+  @@unique([providerType, providerSubject])
+  @@index([accountId])
+  @@map("authentication_identities")
 }
