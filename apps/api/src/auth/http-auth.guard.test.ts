@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { HttpException } from '@nestjs/common';
 import { HttpAuthenticationGuard } from './http-auth.guard.js';
 import { RequestAuthenticationAdapter } from './authentication-adapter.js';
 
@@ -19,6 +18,6 @@ describe('HTTP authentication guard', () => {
           getRequest: () => ({ headers: {} }),
         }),
       } as never),
-    ).rejects.toMatchObject<HttpException>({ status: 401 });
+    ).rejects.toMatchObject({ status: 401 });
   });
 });
