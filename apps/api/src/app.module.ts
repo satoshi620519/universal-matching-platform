@@ -33,6 +33,11 @@ import { PasswordRegistrationController } from './auth/password-registration.con
 import { PasswordSignInService } from './auth/password-sign-in.service.js';
 import { EmailVerificationController } from './auth/email-verification.controller.js';
 import { EmailVerificationService } from './auth/email-verification.service.js';
+import { EmailVerificationDeliveryService } from './auth/email-verification-delivery.service.js';
+import { OutboundEmailSender } from './auth/outbound-email-sender.js';
+import { LoggingOutboundEmailSender } from './auth/logging-outbound-email-sender.js';
+import { EmailVerificationUrlPolicy } from './auth/email-verification-url-policy.js';
+import { EnvironmentEmailVerificationUrlPolicy } from './auth/environment-email-verification-url-policy.js';
 import { EmailVerificationTokenRepository } from './auth/email-verification-token.repository.js';
 import { PrismaEmailVerificationTokenRepository } from './auth/prisma-email-verification-token.repository.js';
 import { PasswordSignInTransportService } from './auth/password-sign-in-transport.service.js';
@@ -79,6 +84,9 @@ import { HealthStatusService } from './health/health-status.service.js';
     PasswordRegistrationTransportService,
     PasswordSignInService,
     EmailVerificationService,
+    EmailVerificationDeliveryService,
+    LoggingOutboundEmailSender,
+    EnvironmentEmailVerificationUrlPolicy,
     PrismaEmailVerificationTokenRepository,
     PasswordSignInTransportService,
     SessionIssuanceService,
@@ -110,6 +118,14 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: OutboundEmailSender,
+      useExisting: LoggingOutboundEmailSender,
+    },
+    {
+      provide: EmailVerificationUrlPolicy,
+      useExisting: EnvironmentEmailVerificationUrlPolicy,
     },
     {
       provide: EmailVerificationTokenRepository,
