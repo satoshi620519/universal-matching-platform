@@ -815,11 +815,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: a94973a413c7dadfb19e253a01f8f2d98421ba67, 8410700e44c880b22ce10bd8864b42dfed606400, 493f46ee0bae59b643e28ac86502c39f3eacc4ef, 1b198ebd0e2fbdec86a8b3bf364ef6e99fdf2b48.
 - CI state: not yet verified in this session; do not infer green until workflow evidence is recorded.
 
+
+## Standalone email outbox process adapter — IMPLEMENTED, CI evidence pending
+- Re-read the persistent checkpoint and verified no workflow runs were returned for the prior durable-outbox and worker-boundary commit SHAs; status remains unverified rather than assumed green.
+- Inspected committed topology: HTTP API bootstrap exists, local PostgreSQL/Redis infrastructure exists, but no queue framework or scheduler/process supervisor is committed.
+- Chose the smallest grounded adapter: a standalone Nest application context that drains one bounded outbox batch and exits.
+- Added EmailOutboxProcessService with structured completion telemetry (processed count and duration).
+- Added apps/api/src/email-outbox-worker.main.ts with EMAIL_OUTBOX_BATCH_SIZE validation (1..1000) and guaranteed application-context shutdown.
+- Added explicit pnpm email-outbox:run command using tsx; no AppModule timer or HTTP-process background loop was introduced.
+- Added focused process-service regression coverage and EMAIL_OUTBOX_PROCESS_ADAPTER.md operational contract.
+- Commits: 78e84c0c51df4193bddc4ffccc5f0b692e6525bd, 523b325ffd91a16041cfb9887b30ed50615613b2, c99321fb38a05f9d8662a70b9d0c03bd8d3fa823, 7606b053c1740cca5c29302a918497440b99e9a0, 4293fee2b103623e534290d31ef24c6aea0ec0b0, 4b17c42d99381b2440fba7fda717bfa984c734c0.
+- CI state: workflow evidence for these commits and preceding outbox commits is not available through the current connector response; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the durable outbox commits and the new worker-boundary commits; record exact run IDs/results rather than assuming green.
-2. Inspect the repository's deployment/process topology and choose the smallest grounded infrastructure adapter for invoking EmailOutboxWorker (queue, scheduled job, or separate worker process); do not introduce an automatic AppModule timer.
-3. Before adding a real email provider, define provider idempotency/message identifiers and delivery-failure observability so at-least-once retries do not silently duplicate messages.
-4. Keep raw verification tokens out of durable outbox records and public responses.
+1. Verify CI/workflow evidence for all recent outbox/process-adapter commits; if workflow runs remain unavailable, preserve that fact rather than claiming validation.
+2. Design the OutboundEmailSender provider message identity/idempotency contract before introducing automated frequent scheduling or a real provider adapter.
+3. Add delivery observability semantics (stable message ID, attempt correlation, safe error classification) without storing raw verification tokens or unnecessary credential data.
+4. Keep the standalone process explicit; do not add an AppModule timer unless deployment topology is intentionally decided.
 5. Keep migration execution explicit and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
