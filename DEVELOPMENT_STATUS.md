@@ -2,8 +2,8 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Advance from the validated Account persistence migration boundary to the next grounded M1 implementation slice.
-STATUS: The first Account migration is now validated against a real PostgreSQL service in CI, including apply, idempotent rerun, and failed-migration rollback semantics. CI #413 is green.
+CURRENT TASK: Select the next grounded M1 implementation slice after the validated HTTP application boundary.
+STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
 GitHub main is the persistent source of truth. Before every new work session:
@@ -17,35 +17,35 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
+### HTTP application integration gate — COMPLETE
+- Added real Fastify/Nest HTTP integration coverage for `GET /health` with both caller-provided and generated correlation IDs.
+- Investigated repeated CI HTTP 500 responses using server-side exception logging rather than speculative production changes.
+- Root cause was confirmed from CI: `HealthStatusService` was undefined in `HealthController` during the real HTTP path.
+- Fixed the Nest ESM/DI boundary by explicitly injecting `HealthStatusService` with `@Inject(HealthStatusService)`.
+- Extracted `configureHttpApplication()` into `apps/api/src/http-application.ts` so production bootstrap and integration tests share the same HTTP filters/hooks without importing the side-effecting entrypoint.
+- CI #426 completed successfully: PostgreSQL service healthy, typecheck, lint, all tests including HTTP integration, and build passed.
+- Final validated DI fix commit: `4b81f338c5dcfc39fe974d8f089560ad269920ff`.
+
 ### Account migration execution gate — COMPLETE
 - `packages/database/migrations/0001_create_accounts.sql` remains grounded exclusively in the physical Prisma Account schema.
 - Added migration planning/execution boundaries and tests in `packages/database/src/migrations.ts`, `packages/database/src/executor.ts`, and their tests.
 - Added the API migration runner and Prisma transaction adapter.
 - Added PostgreSQL integration coverage for migration apply + idempotent rerun and failed-migration rollback.
 - CI provisions PostgreSQL 16 and passes `DATABASE_URL` through Turbo test tasks.
-- Rollback coverage uses a deterministic single-statement PostgreSQL failure (`SELECT definitely_missing_function()`), avoiding a false-positive failure caused by multiple commands in one prepared statement.
 - Final rollback-test commit: `32f519d7419855802b73320ba52161b04d74e64a`.
-- GitHub Actions CI run #413 completed successfully: PostgreSQL service healthy, typecheck, lint, all tests, integration tests, and build passed.
-- Integration result in CI: `apps/api/src/database/migration-integration.test.ts` — 2 tests passed, not skipped.
-- Migration gate is therefore complete and must not be reimplemented.
-
-### CI/test fixes completed during this slice
-- Adapted database executor to the `MigrationPlan.pending` contract and `ReadonlySet` applied-version input.
-- Aligned planner tests with current synchronous duplicate-version validation and pending-plan semantics.
-- Corrected Prisma adapter test doubles to mock `$executeRawUnsafe` / `$queryRawUnsafe`.
-- Passed `DATABASE_URL` explicitly to Turbo test tasks so PostgreSQL integration tests execute in CI.
+- CI #413 completed successfully.
 
 ## Exact next action
-1. Inspect the current Milestone 1 repository state for the next grounded Core API/database/identity implementation gap.
-2. Select the smallest repository-consistent implementation slice; do not invent authentication-provider, JWT, session, payment-provider, or identity-provider contracts that remain unresolved.
-3. Add focused tests before or with the implementation.
-4. Run/verify CI and record the exact commit and CI result here.
-5. Keep this migration gate fixed as completed; do not recreate it.
+1. Inspect the M1 authentication/identity boundary for the smallest grounded implementation gap.
+2. Preserve provider neutrality and do not invent JWT/session/token transport contracts.
+3. The technology baseline permits email/password, verification and reset capabilities, but persistence and security contracts must be grounded before implementation.
+4. Prefer a small tested slice (for example, identity credential domain/persistence planning) over a speculative end-to-end login flow.
+5. Run/verify CI and update this file with commit, CI state, unresolved constraints and exact next action.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
 - AnonymousAuthenticationAdapter currently returns undefined.
-- No token format, JWT parser, session store or external identity-provider contract is currently grounded in the repository.
+- No JWT parser, session store, token format, or external identity-provider contract is currently grounded in the repository.
 - Do not replace the legacy capability route with mandatory authentication until a real authentication adapter exists.
 - Do not invent identity transport or persistence contracts.
 - `packages/database/migrations` is the repository-defined migration artifact boundary.
@@ -57,6 +57,7 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Milestone 0 engineering foundation and CI baseline.
 - Canonical domain primitives and tests.
 - API application boundary.
+- HTTP application integration boundary, correlation propagation and real CI verification.
 - Database configuration/migration boundary.
 - Account lifecycle, activation, lookup and tests.
 - Entitlement lifecycle and tests.
