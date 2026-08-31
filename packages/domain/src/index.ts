@@ -54,3 +54,5 @@ export * from './accessibility-contract.js';
 export * from './accessibility-flow.js';
 
 export * from './accessibility-assurance.js';
+
+export * from './operation-performance-contract.js';
