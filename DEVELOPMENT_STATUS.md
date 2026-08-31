@@ -730,9 +730,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Intentionally did not invent a JWT/cookie/bearer format or claim request authentication is implemented; session persistence, revocation semantics and resolver adapter must be designed together.
 - Commits: 31e49508fa0b33327a6221c3b00fcc567c81d73a, 65f539a37325ee14326abd82b424e604b94a0160, 8b131ac864b7e4d444c17742b17042720849ec48, f363656f8664999e78900011035b36f6683810de.
 
+
+## Persistent session and revocation semantics — IMPLEMENTED, migration/CI pending
+- Located the Prisma schema and existing RequestPrincipal contract; confirmed sessionId is already a supported principal field.
+- Added AuthenticationSession persistence model with account relation, expiry, nullable revocation timestamp and indexes for account/expiry lookup.
+- Extended SessionRepository with explicit revocation and added PrismaSessionRepository persistence adapter.
+- Added SessionRevocationService and wired session repository/issuance/revocation providers in AppModule.
+- Defined usable-session semantics as not revoked and not expired in PERSISTENT_SESSION_SEMANTICS.md.
+- Intentionally did not add a bearer secret/token yet; raw credential presentation must be designed so the database never stores a reusable raw secret and revocation remains enforceable.
+- Commits: 3576ba38e241750d1242116e0a23d86123b93cb3, 505a5cc9682ce7bcad454aaff328531b1f026850, 1fd0fc9e70a6e525576485b2aafdca8d4cbe9724, 0a8d6d80b71eaf225f969f6cc86a35b3d1033e6d, f97c516c4588efff70b8cebca1c5fb4eaa96f066, 11bca8c83f13944491d898720593c5c82392a438, 2ed8a6977fb2688c5dcb3ae3a2772348245aeba6.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Design session persistence and revocation semantics against the existing RequestAuthenticationAdapter/RequestPrincipal contract, then add a persistent session repository before exposing sign-in HTTP.
+2. Add a migration and design an opaque session credential representation (hashed at rest), session lookup contract and RequestAuthenticationAdapter implementation before exposing sign-in HTTP.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
