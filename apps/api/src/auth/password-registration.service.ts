@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { EmailVerificationDeliveryService } from './email-verification-delivery.service.js';
+import { EmailOutboxRepository } from './email-outbox.repository.js';
 import { PasswordHasher } from './password-hasher.js';
 import {
   PasswordRegistrationRepository,
@@ -17,7 +17,7 @@ export class PasswordRegistrationService {
   constructor(
     private readonly passwordHasher: PasswordHasher,
     private readonly registrations: PasswordRegistrationRepository,
-    private readonly verificationDelivery: EmailVerificationDeliveryService,
+    private readonly outbox: EmailOutboxRepository,
   ) {}
 
   async register(
@@ -32,9 +32,10 @@ export class PasswordRegistrationService {
       passwordHash,
     });
 
-    await this.verificationDelivery.issueAndDeliver({
-      accountId: registration.accountId,
+    await this.outbox.enqueue({
+      accountId: registration.account.id,
       emailAddress: input.providerSubject,
+      kind: 'email-verification',
     });
 
     return registration;
