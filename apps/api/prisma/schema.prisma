@@ -13,6 +13,7 @@ model Account {
   createdAt                DateTime                 @default(now()) @db.Timestamptz(6)
   updatedAt                DateTime                 @updatedAt @db.Timestamptz(6)
   authenticationIdentities AuthenticationIdentity[]
+  verificationRequests      VerificationRequest[]
 
   @@map("accounts")
 }
@@ -30,4 +31,36 @@ model AuthenticationIdentity {
   @@unique([providerType, providerSubject])
   @@index([accountId])
   @@map("authentication_identities")
+}
+
+model VerificationRequest {
+  id                String                @id @default(uuid()) @db.Uuid
+  accountId         String                @map("account_id") @db.Uuid
+  requestedLevel    Int                   @map("requested_level")
+  workflowReference String                @map("workflow_reference")
+  status            String
+  createdAt         DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  completedAt       DateTime?             @map("completed_at") @db.Timestamptz(6)
+  expiresAt         DateTime?             @map("expires_at") @db.Timestamptz(6)
+  account           Account               @relation(fields: [accountId], references: [id])
+  outcomes          VerificationOutcome[]
+
+  @@index([accountId, status])
+  @@map("verification_requests")
+}
+
+model VerificationOutcome {
+  id                    String              @id @default(uuid()) @db.Uuid
+  verificationRequestId String              @map("verification_request_id") @db.Uuid
+  level                 Int
+  status                String
+  decidedAt             DateTime?           @map("decided_at") @db.Timestamptz(6)
+  reasonCategory        String?             @map("reason_category")
+  expiresAt             DateTime?           @map("expires_at") @db.Timestamptz(6)
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime            @updatedAt @map("updated_at") @db.Timestamptz(6)
+  verificationRequest   VerificationRequest @relation(fields: [verificationRequestId], references: [id])
+
+  @@index([verificationRequestId])
+  @@map("verification_outcomes")
 }
