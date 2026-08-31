@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Define the verification lifecycle service above the validated verification repository boundary.
+CURRENT TASK: Define the smallest reusable verification-level access evaluator after validated authentication and verification lifecycles.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -99,10 +99,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - CI #460 and #461 completed successfully with typecheck, lint, tests and build green.
 - Provider evidence and provider SDK types remain outside the repository contract.
 
+## Verification lifecycle service — COMPLETE
+- Added VerificationService above the provider-neutral repository.
+- Centralized pending request initiation.
+- Reconstructed VerificationRecord and reused existing domain usability rules.
+- Added focused unit tests for usable and expired outcomes.
+- Registered service in Nest DI.
+- CI #464 and #465 passed typecheck, lint, tests and build.
+
+## Authentication and verification integration boundary — COMPLETE
+- Confirmed authentication establishes an account principal and remains independent from verification outcomes.
+- Defined protected capability checks as the integration seam for verification requirements.
+- Added AUTHENTICATION_VERIFICATION_INTEGRATION_BOUNDARY.md.
+- Explicitly deferred JWT/session, password credentials, provider callbacks and global capability policy engine decisions.
+
 ## Exact next action
-1. Add a focused Verification lifecycle service above the repository boundary.
-2. Centralize request initiation semantics and usable outcome evaluation there.
-3. Reconstruct/use existing VerificationRecord outcome rules rather than duplicating verification policy.
+1. Define a small provider-neutral evaluator for required verification level against an already usable VerificationRecord.
+2. Keep authentication transport and identity lookup outside the evaluator.
+3. Reuse VerificationRecord domain types rather than persistence records.
 4. Add focused unit tests and verify CI.
 5. Record the exact continuation checkpoint.
 
