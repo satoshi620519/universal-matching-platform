@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { classifyEmailDeliveryFailure } from './email-delivery-failure.js';
 import { EmailOutboxRepository } from './email-outbox.repository.js';
 import { EmailVerificationDeliveryService } from './email-verification-delivery.service.js';
 
@@ -28,10 +29,11 @@ export class EmailOutboxDispatchService {
       await this.outbox.markDelivered(message.id, new Date());
       return true;
     } catch (error) {
+      const failure = classifyEmailDeliveryFailure(error);
       const delayMs = Math.min(60_000 * 2 ** Math.min(message.attempts, 6), 60 * 60_000);
       await this.outbox.reschedule(message.id, {
         availableAt: new Date(Date.now() + delayMs),
-        error: error instanceof Error ? error.message : 'email delivery failed',
+        error: failure.kind + ': ' + failure.message,
       });
       return false;
     }
