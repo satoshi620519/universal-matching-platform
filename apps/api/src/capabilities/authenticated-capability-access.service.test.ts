@@ -20,33 +20,59 @@ describe('authenticated capability access service', () => {
     } as unknown as AuthenticatedAccountContextService;
   }
 
-  it('requires a persisted account context before evaluating access', async () => {
-    const service = new AuthenticatedCapabilityAccessService(
+  function service() {
+    return new AuthenticatedCapabilityAccessService(
       context(),
       new CapabilityAccessService(),
     );
+  }
 
-    await expect(service.evaluate(principal, {
+  it('requires a persisted account context before evaluating access', async () => {
+    await expect(service().evaluate(principal, {
       requiredVerificationLevel: 2,
     })).resolves.toEqual({ allowed: true, reason: 'allowed' });
+  });
+
+  it('denies access when verification level is insufficient', async () => {
+    await expect(service().evaluate(principal, {
+      requiredVerificationLevel: 3,
+    })).resolves.toEqual({
+      allowed: false,
+      reason: 'verification-required',
+    });
+  });
+
+  it('denies access when entitlement is inactive', async () => {
+    await expect(service().evaluate(principal, {
+      entitlementState: 'expired',
+    })).resolves.toEqual({
+      allowed: false,
+      reason: 'entitlement-required',
+    });
+  });
+
+  it('denies access before an entitlement becomes effective', async () => {
+    await expect(service().evaluate(principal, {
+      entitlementState: 'active',
+      entitlementEffectiveAt: '2026-09-01T00:00:00.000Z',
+      now: '2026-08-31T00:00:00.000Z',
+    })).resolves.toEqual({
+      allowed: false,
+      reason: 'not-yet-effective',
+    });
   });
 
   it('propagates a missing authenticated account failure', async () => {
     const missing = {
       resolve: async () => { throw new NotFoundException('Account not found'); },
     } as unknown as AuthenticatedAccountContextService;
-    const service = new AuthenticatedCapabilityAccessService(missing, new CapabilityAccessService());
+    const value = new AuthenticatedCapabilityAccessService(missing, new CapabilityAccessService());
 
-    await expect(service.evaluate(principal, {})).rejects.toBeInstanceOf(NotFoundException);
+    await expect(value.evaluate(principal, {})).rejects.toBeInstanceOf(NotFoundException);
   });
 
   it('rejects an invalid verification level as an authentication failure', async () => {
-    const service = new AuthenticatedCapabilityAccessService(
-      context(),
-      new CapabilityAccessService(),
-    );
-
-    await expect(service.evaluate({
+    await expect(service().evaluate({
       accountId: 'account-1',
       authenticationMethod: 'test',
       verificationLevel: 'invalid',
@@ -54,12 +80,7 @@ describe('authenticated capability access service', () => {
   });
 
   it('rejects a missing verification level', async () => {
-    const service = new AuthenticatedCapabilityAccessService(
-      context(),
-      new CapabilityAccessService(),
-    );
-
-    await expect(service.evaluate({
+    await expect(service().evaluate({
       accountId: 'account-1',
       authenticationMethod: 'test',
     }, {})).rejects.toBeInstanceOf(UnauthorizedException);
