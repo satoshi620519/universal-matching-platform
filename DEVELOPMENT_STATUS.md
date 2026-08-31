@@ -523,9 +523,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - No automatic application-startup migration was introduced.
 - Commit: 89d007aec20fb9c71ba23fe7589e3bec2134dc0d.
 
+
+## Full migration integration sequence correction — IMPLEMENTED, CI PENDING
+- Re-read the repository status and latest migration integration tests instead of assuming the prior checkpoint was complete.
+- Found a concrete coverage drift: the full filesystem-to-PostgreSQL test claimed repository migrations [1,2,3,4] but did not clean up or assert the 0004 safety_enforcements table.
+- Updated the integration fixture to include safety_enforcements in empty-database setup/cleanup and to assert the complete resulting table set.
+- This turns the test into a real regression guard for the full committed migration sequence rather than only schema_migrations version numbers.
+- Commit: 96c0ca4ff8341cc45e1cb9884856a795192836a8.
+
 ## Exact next action
-1. Verify CI for 89d007ae and the preceding migration integration commits.
-2. If CI is green, inspect the existing real PostgreSQL migration integration fixture before adding only the remaining empty-database coverage.
+1. Verify CI for 96c0ca4f and the preceding migration integration commits.
+2. If CI is green, mark the migration integration gate complete and resume investigation from the next Milestone 1 implementation gap rather than adding duplicate migration tests.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
