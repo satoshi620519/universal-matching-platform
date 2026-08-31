@@ -7,6 +7,7 @@ describe('AuthenticatedCapabilityDecisionService', () => {
     accountId: 'account-1',
     authenticationIdentityId: 'identity-1',
     verificationLevel: 2,
+    authenticationMethod: 'password',
   };
 
   it('uses authoritative account status when building the domain decision context', async () => {
