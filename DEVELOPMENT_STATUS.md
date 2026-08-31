@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the deployment installation contract CI, then continue with deployment readiness and buyer configuration requirements.
+CURRENT TASK: Validate the deployment readiness contract CI, then perform the Phase 1 requirements consistency review and transition preparation.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -44,8 +44,10 @@ STATUS: Milestone 1 in progress
 - Data Lifecycle Governance Contract implemented for REQ-DATA-006 through REQ-DATA-010: derived-data re-identification review, sensitive evidence protection, explainable deletion states, retention policy change traceability, and observable failure-aware lifecycle jobs.
 - Data Lifecycle Governance Contract CI #189 passed and progress record CI #190 also passed; Data Retention and Deletion requirements through REQ-DATA-010 are CI-validated and complete.
 - Deployment Installation Contract implemented for REQ-DEPLOY-001 through REQ-DEPLOY-005: documented prerequisites, externalized environment configuration, safe secret handling, quick-launch versus advanced customization guides, and documented integration requirements.
-- Deployment Installation Contract tests implemented.
-- Current immediate action: verify CI for deployment installation contract commits.
+- Deployment Installation Contract CI #193 passed and progress record CI #194 also passed; installation foundation is CI-validated.
+- Deployment Readiness Contract implemented for REQ-DEPLOY-006 through REQ-DEPLOY-010: readiness checklists, documented buyer configuration surfaces, upgrade/migration/rollback planning, production responsibility assignment, and extension boundaries that avoid unnecessary core forks.
+- Deployment Readiness Contract tests implemented.
+- Current immediate action: verify CI for deployment readiness contract commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -96,6 +98,7 @@ STATUS: Milestone 1 in progress
 - Data lifecycle retention contract and tests.
 - Data lifecycle governance contract and tests.
 - Deployment installation contract and tests.
+- Deployment readiness contract and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -130,12 +133,14 @@ STATUS: Milestone 1 in progress
 - Operational observability and recovery contract: CI validated (CI #181).
 - Data lifecycle retention contract: CI validated (CI #185).
 - Data lifecycle governance contract: CI validated (CI #189).
-- Deployment installation contract: tests added; latest CI pending.
+- Deployment installation contract: CI validated (CI #193).
+- Deployment readiness contract: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the deployment installation contract commits.
-2. If green: mark Deployment Installation Contract CI-validated.
-3. Then implement the next smallest deployment slice for REQ-DEPLOY-006 through REQ-DEPLOY-010 without recreating completed installation foundations.
-4. If red: inspect only the failing job and apply the smallest targeted fix.
-5. Update this file after every meaningful change.
+1. Check CI triggered by the deployment readiness contract commits.
+2. If green: mark Deployment Readiness Contract CI-validated and mark Buyer Installation and Deployment requirements through REQ-DEPLOY-010 complete.
+3. Then perform the Phase 1 requirements consistency review against PRODUCT_REQUIREMENTS.md, identify unresolved product decisions, and update DECISIONS.md only where required.
+4. Record the Phase 1 completion transition and exact Phase 2 architecture starting point without recreating completed requirement contracts.
+5. If CI is red: inspect only the failing job and apply the smallest targeted fix.
+6. Update this file after every meaningful change.
 
