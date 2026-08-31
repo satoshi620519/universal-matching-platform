@@ -554,9 +554,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Explicitly deferred destructive deletion, retention timers, legal holds, anonymization mappings and external-provider cleanup until privacy lifecycle policy is defined.
 - Commit: f12029c2338d33096effe3f85ca066a7ac128dc2.
 
+
+## Authenticated account deletion request — IMPLEMENTED, CI PENDING
+- Implemented the smallest safe production slice identified by ACCOUNT_DELETION_LIFECYCLE_BOUNDARY.md.
+- Added authenticated self-service transition to pending-deletion using the existing AccountState transition rules and AccountRepository boundary.
+- The HTTP boundary derives the target only from the authenticated principal; no arbitrary account identifier is accepted.
+- Added transition tests covering all eligible states and rejection of terminal/already-pending states.
+- Deliberately did not implement hard deletion, anonymization, retention timers, legal holds, or provider cleanup.
+- Commits: 3ce2f55a, 6fcbbda9, 19425c01, 7b1a636e, 313c0709.
+
 ## Exact next action
-1. Verify CI for f12029c2 and the preceding safety DI/migration commits where workflow evidence becomes available.
-2. If CI is green, mark the migration integration gate and safety DI wiring slice complete, then continue from the next Milestone 1 gap.
+1. Verify CI for 313c0709 and the preceding authenticated deletion-request commits where workflow evidence becomes available.
+2. Add authenticated service/controller integration regression coverage for the pending-deletion flow, then continue to the next Milestone 1 gap without implementing destructive privacy operations prematurely.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
