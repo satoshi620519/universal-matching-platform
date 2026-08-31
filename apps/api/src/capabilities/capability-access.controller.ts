@@ -1,9 +1,17 @@
-import { BadRequestException, Controller, Get, Query } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Headers, Query } from '@nestjs/common';
 import type { CapabilityContext, EntitlementState, VerificationLevel } from '@universal/domain';
+import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CapabilityAccessService } from './capability-access.service.js';
 
 interface CapabilityAccessQuery {
   readonly currentVerificationLevel: string;
+  readonly requiredVerificationLevel?: string;
+  readonly entitlementState?: string;
+  readonly entitlementEffectiveAt?: string;
+  readonly now?: string;
+}
+
+interface AuthenticatedCapabilityAccessQuery {
   readonly requiredVerificationLevel?: string;
   readonly entitlementState?: string;
   readonly entitlementEffectiveAt?: string;
@@ -26,29 +34,62 @@ function validateDate(value: string | undefined, field: string): void {
   }
 }
 
+function buildContext(
+  query: Omit<CapabilityAccessQuery, 'currentVerificationLevel'>,
+  currentVerificationLevel: VerificationLevel,
+): CapabilityContext {
+  if (query.entitlementState && !entitlementStates.has(query.entitlementState as EntitlementState)) {
+    throw new BadRequestException('entitlementState is invalid');
+  }
+
+  validateDate(query.entitlementEffectiveAt, 'entitlementEffectiveAt');
+  validateDate(query.now, 'now');
+
+  return {
+    currentVerificationLevel,
+    ...(query.requiredVerificationLevel !== undefined
+      ? { requiredVerificationLevel: parseVerificationLevel(query.requiredVerificationLevel, 'requiredVerificationLevel') }
+      : {}),
+    ...(query.entitlementState ? { entitlementState: query.entitlementState as EntitlementState } : {}),
+    ...(query.entitlementEffectiveAt ? { entitlementEffectiveAt: query.entitlementEffectiveAt } : {}),
+    ...(query.now ? { now: query.now } : {}),
+  };
+}
+
 @Controller('capabilities')
 export class CapabilityAccessController {
-  constructor(private readonly capabilityAccess: CapabilityAccessService) {}
+  constructor(
+    private readonly capabilityAccess: CapabilityAccessService,
+    private readonly principalResolver: RequestPrincipalResolver,
+  ) {}
 
   @Get('access')
   evaluate(@Query() query: CapabilityAccessQuery) {
-    if (query.entitlementState && !entitlementStates.has(query.entitlementState as EntitlementState)) {
-      throw new BadRequestException('entitlementState is invalid');
+    return this.capabilityAccess.evaluate(
+      buildContext(query, parseVerificationLevel(query.currentVerificationLevel, 'currentVerificationLevel')),
+    );
+  }
+
+  @Get('access/authenticated')
+  async evaluateAuthenticated(
+    @Query() query: AuthenticatedCapabilityAccessQuery,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-request-id') requestId?: string,
+  ) {
+    const principal = await this.principalResolver.requireAuthenticated({
+      authorization,
+      requestId: requestId ?? 'capability-access-authenticated',
+    });
+
+    if (principal.verificationLevel === undefined) {
+      throw new BadRequestException('authenticated principal verificationLevel is required');
     }
 
-    validateDate(query.entitlementEffectiveAt, 'entitlementEffectiveAt');
-    validateDate(query.now, 'now');
-
-    const context: CapabilityContext = {
-      currentVerificationLevel: parseVerificationLevel(query.currentVerificationLevel, 'currentVerificationLevel'),
-      ...(query.requiredVerificationLevel !== undefined
-        ? { requiredVerificationLevel: parseVerificationLevel(query.requiredVerificationLevel, 'requiredVerificationLevel') }
-        : {}),
-      ...(query.entitlementState ? { entitlementState: query.entitlementState as EntitlementState } : {}),
-      ...(query.entitlementEffectiveAt ? { entitlementEffectiveAt: query.entitlementEffectiveAt } : {}),
-      ...(query.now ? { now: query.now } : {}),
-    };
-
-    return this.capabilityAccess.evaluate(context);
+    return this.capabilityAccess.evaluate(
+      buildContext(
+        query,
+        parseVerificationLevel(principal.verificationLevel, 'principal.verificationLevel'),
+      ),
+    );
   }
 }
