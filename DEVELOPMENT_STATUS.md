@@ -596,8 +596,16 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This closes the immediate compile/test regression risk introduced by the trust-boundary correction.
 - Commit: 81b309137950682014bba7ee0bdd48ab46057daf.
 
+
+## Safety enforcement concrete provider registration — IMPLEMENTED, CI PENDING
+- Re-read the current AppModule rather than relying on the earlier DI checkpoint.
+- Found a second concrete DI defect: SafetyEnforcementRepository was bound with useExisting to PrismaSafetyEnforcementRepository, but the concrete PrismaSafetyEnforcementRepository class itself was absent from the providers array.
+- The abstraction binding alone is insufficient because Nest cannot alias a provider that was never registered.
+- Registered PrismaSafetyEnforcementRepository explicitly; the existing AppModule regression test now covers both requirements.
+- Commit: f9d68d2ddbf0741e95da7fd5dc239081ca0822a3.
+
 ## Exact next action
-1. Verify CI for 81b30913 together with 0a0f1f1c/b11a8a04 and the preceding pending-deletion commits where workflow evidence becomes available.
+1. Verify CI for f9d68d2d together with 81b30913/0a0f1f1c/b11a8a04 and the preceding pending-deletion commits where workflow evidence becomes available.
 2. Mark the pending-deletion slice complete once CI evidence is available, then inspect the next Milestone 1 requirement gap without expanding destructive privacy behavior.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
