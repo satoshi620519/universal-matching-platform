@@ -457,12 +457,34 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Test: RED, exact diagnostics capture added
 - Build: blocked by test
 
+## Baseline CI gate audit — Test GREEN, Build is the only remaining blocker
+- CI run #577 was audited before starting any new implementation work to avoid duplicating parallel-chat work.
+- Confirmed successful gates: PostgreSQL service, install, Typecheck, Lint, Test.
+- Build is the only failing gate.
+- Added build.log capture and always-run build-diagnostics artifact upload.
+- Commit: a2381d241631a7e6b777845c632b66d5ab001e7d.
+- No migration implementation was duplicated in this pass.
+
+## Coordination rule
+- Before each work pass, read current DEVELOPMENT_STATUS.md and inspect the latest repository/CI state.
+- Treat repository commits and status file as the source of truth; do not repeat a completed task merely because an older chat checkpoint says it is pending.
+- Record completed work, exact evidence, commit SHA, and next action after every pass.
+
+## Pipeline progression
+- PostgreSQL service: GREEN
+- Install: GREEN
+- Typecheck: GREEN
+- Lint: GREEN
+- Test: GREEN
+- Build: RED, diagnostics capture added
+- Baseline CI: waiting only on Build
+
 ## Exact next action
-1. Inspect CI run triggered by f1c3a72d.
-2. Download test-diagnostics if tests fail and fix only exact failing tests.
-3. Continue to build gate and capture build diagnostics if necessary.
-4. Do not claim baseline CI green until all gates pass.
-5. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
+1. Inspect CI run triggered by a2381d24.
+2. Download build-diagnostics if build fails and fix only exact reported build errors.
+3. Verify baseline CI fully green.
+4. Re-read DEVELOPMENT_STATUS.md and repository HEAD before beginning empty-database PostgreSQL integration, preventing duplicate parallel work.
+5. Add only the remaining integration coverage not already committed.
 6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
