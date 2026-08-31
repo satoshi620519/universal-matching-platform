@@ -4,6 +4,9 @@ import { RequestAuthenticationAdapter } from '../auth/authentication-adapter.js'
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CapabilityAccessController } from './capability-access.controller.js';
 import { CapabilityAccessService } from './capability-access.service.js';
+import { AuthenticatedCapabilityAccessService } from './authenticated-capability-access.service.js';
+import { AuthenticatedAccountContextService } from '../accounts/authenticated-account-context.service.js';
+import { AccountRepository } from '../accounts/account.repository.js';
 
 class StubAuthenticationAdapter extends RequestAuthenticationAdapter {
   constructor(private readonly principal: any) { super(); }
@@ -14,9 +17,16 @@ describe('capability access API boundary', () => {
   const service = new CapabilityAccessService();
 
   function controllerFor(principal: any = undefined) {
+    const accounts = {
+      findById: async (id: string) => principal && id === principal.accountId
+        ? { id, status: 'active', createdAt: new Date(), updatedAt: new Date() }
+        : null,
+    } as unknown as AccountRepository;
+    const context = new AuthenticatedAccountContextService(accounts);
     return new CapabilityAccessController(
       service,
       new RequestPrincipalResolver(new StubAuthenticationAdapter(principal)),
+      new AuthenticatedCapabilityAccessService(context, service),
     );
   }
 
