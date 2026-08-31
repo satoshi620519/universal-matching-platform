@@ -539,8 +539,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added SafetyEnforcementRepository → PrismaSafetyEnforcementRepository binding using useExisting.
 - Commit: 2ad6700852ddf9788471efcb072eb0d703a569be.
 
+
+## Safety DI regression guard — IMPLEMENTED, CI PENDING
+- Latest workflow lookup still returned no workflow runs, so CI remains explicitly unverified.
+- Added a focused AppModule metadata regression test for the newly corrected SafetyEnforcementRepository abstraction binding.
+- The test verifies both the concrete Prisma provider and the useExisting abstraction mapping, preventing a future silent removal of the runtime wiring.
+- Commit: 9a31e3c754f16a8e826f149170daea5d06534cc3.
+
 ## Exact next action
-1. Verify CI for 2ad67008, including the preceding migration integration commits.
+1. Verify CI for 9a31e3c7, including the preceding safety DI and migration integration commits.
 2. If CI is green, mark the migration integration gate and safety DI wiring slice complete, then continue from the next Milestone 1 gap.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
