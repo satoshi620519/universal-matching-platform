@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Validate and refine the composable capability decision domain boundary across verification, entitlement, account state and safety restriction inputs.
+CURRENT TASK: Validate the authenticated capability decision adapter using authoritative account state and explicit safety restriction input.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -134,11 +134,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Latest implementation commits: 4c1bc36c96e45d3011887767df2a5b0621a703d0, a4ef52ca8c570f4cdeec341f0a3d308c47c6ba06.
 - Awaiting CI before completion.
 
+## Capability decision domain boundary — COMPLETE
+- Added deterministic decideCapability() precedence using existing domain primitives.
+- CI #481 and #482 completed successfully with typecheck, lint, tests and build green.
+- Domain evaluation precedence is safety restriction, account state, verification, entitlement, then allow.
+
+## Authenticated capability decision adapter — IMPLEMENTED, CI PENDING
+- Investigation confirmed Account.status is an authoritative persisted AccountState source.
+- AuthenticatedAccountContextService already resolves that account for an authenticated principal.
+- Added AuthenticatedCapabilityDecisionService as a narrow adapter into decideCapability().
+- Account state is sourced authoritatively; safety restriction remains an explicit requirement input until an authoritative persistence source exists.
+- Added focused tests for active and restricted accounts.
+- Registered adapter through Nest DI.
+
 ## Exact next action
-1. Verify CI for deterministic capability decision semantics.
-2. If green, mark capability decision domain boundary complete.
-3. Inspect the narrowest concrete application integration point that can consume CapabilityDecision.
-4. Avoid introducing a global policy engine.
+1. Verify CI for the authenticated capability decision adapter.
+2. If green, mark the AccountState-backed integration complete.
+3. Investigate the narrowest authoritative SafetyRestriction source before persisting or defaulting restrictions.
+4. Keep safety restriction explicit until an authoritative source exists.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
