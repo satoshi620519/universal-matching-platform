@@ -7,6 +7,7 @@ class Repository extends AccountRepository {
   constructor(private readonly record: AccountRecord | null) { super(); }
   async create(_input: CreateAccountRecord): Promise<AccountRecord> { throw new Error('not used'); }
   async findById(_id: string): Promise<AccountRecord | null> { return this.record; }
+  async updateStatus(_id: string, _status: AccountRecord['status']): Promise<AccountRecord | null> { throw new Error('not used'); }
 }
 
 const principal = { accountId: 'account-1', authenticationMethod: 'test' } as const;
