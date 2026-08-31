@@ -91,12 +91,12 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 5. Record commit and exact continuation checkpoint.
 
 
-## Verification migration CI failure checkpoint — IN PROGRESS
-- CI #451 failed only in PostgreSQL migration integration; typecheck and lint passed.
-- Root cause: the Prisma migration executor uses one prepared statement per migration artifact, while the test fixture modeled version 3 with two SQL commands.
-- Production migration 0003 was not modified because applied migration artifacts are immutable by contract.
-- Test fixture is being corrected to model each executable DDL statement as its own atomic migration for the executor contract.
-- Latest corrective commit: 63b5a6fc50e52fca8db6405c7321fee316425a56.
+## Verification migration CI corrective checkpoint — IN PROGRESS
+- CI #452 passed typecheck and lint but failed PostgreSQL migration integration.
+- Root cause was a stale rollback test expectation after splitting verification fixture into versions 3 and 4: setup still applied only versions 1 and 2 while expecting 1..4.
+- Corrected rollback setup to apply all four successful migrations before version-5 failure probe.
+- Corrective commit: ea934a789b54fd2e946ef146c47a339296c69131.
+- Awaiting corrective CI before marking verification persistence complete.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
