@@ -1,11 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import {
-  assertValidMigrationPlan,
-  parseMigrationFilename,
-  type MigrationArtifact,
-} from './migrations.js';
+import { orderMigrationFilenames, parseMigrationFilename, type MigrationArtifact } from './migrations.js';
 import type { MigrationArtifactSource } from './migration-source.js';
 
 export class FilesystemMigrationArtifactSource
@@ -15,22 +11,23 @@ export class FilesystemMigrationArtifactSource
 
   async load(): Promise<readonly MigrationArtifact[]> {
     const entries = await readdir(this.directory, { withFileTypes: true });
-    const filenames = entries
-      .filter((entry) => entry.isFile() && entry.name.endsWith('.sql'))
-      .map((entry) => entry.name)
-      .sort((left, right) => left.localeCompare(right));
+    const filenames = orderMigrationFilenames(
+      entries
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.sql'))
+        .map((entry) => entry.name),
+    );
 
     const migrations = await Promise.all(
       filenames.map(async (filename) => {
-        const parsed = parseMigrationFilename(filename);
+        const version = parseMigrationFilename(filename);
         return {
-          version: parsed.version,
+          version,
           filename,
           sql: await readFile(join(this.directory, filename), 'utf8'),
         };
       }),
     );
 
-    return assertValidMigrationPlan(migrations);
+    return migrations;
   }
 }
