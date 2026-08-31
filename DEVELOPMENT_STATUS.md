@@ -2,8 +2,8 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Inspect the next identity workflow after CI-validating authenticated account lookup.
-STATUS: Authenticated account lookup slice is CI validated; next slice must remain grounded in existing contracts.
+CURRENT TASK: Advance from the CI-validated authenticated HTTP boundary review to the next grounded implementation slice.
+STATUS: Authenticated account lookup and remaining authenticated HTTP boundary review are CI validated; no concrete classification inconsistency was found, so no guard migration or focused test change was required.
 
 ## Continuation protocol — READ FIRST
 GitHub main is the persistent source of truth. Before every new work session:
@@ -17,8 +17,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
+### CI-validated authenticated HTTP boundary review
+- Reviewed remaining authenticated HTTP boundaries for classification of authentication/principal state versus malformed client input.
+- `401` remains the contract for absent or invalid authentication state; `403` remains the contract for valid authenticated principals denied by authorization; `400` remains the contract for malformed route/query/body input.
+- No concrete inconsistency requiring a guard migration or focused test was found.
+- No implementation files changed in this review slice.
+- Latest main CI run #378 for commit `1083415ccdc1ee71036a8bc5b8d4257b3f0d44d6` completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated HTTP authentication principal validation
-- HttpAuthenticationGuard now validates pre-attached and adapter-returned principals through the shared authenticated-principal contract before allowing the request.
+- HttpAuthenticationGuard validates pre-attached and adapter-returned principals through the shared authenticated-principal contract before allowing the request.
 - Invalid or incomplete principals fail with 401 instead of being treated as authenticated merely because a principal object exists.
 - Focused tests cover invalid adapter-returned principals and invalid pre-attached principals.
 - Implementation commits: 6b37cf24ebb8bffd7610cbbf8109a916a9ef7a73, e4dec00822393433a2b2c4788972069b4d1e34b7, df3b386caf4eb098fd8f26a8f07e3f730265c21e, 1aa787294031d220e495c1b219d3d6e224348bd5.
@@ -48,11 +55,10 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #358 for dd26cb00837f8c6a63e6ba220893f218e152d119 completed successfully (install, typecheck, lint, test, build).
 
 ## Exact next action
-1. Review remaining authenticated HTTP boundaries for inconsistent classification of malformed authentication/principal state versus malformed client input.
-2. Keep 401 for absent or invalid authentication state, 403 for valid authenticated principals denied by authorization, and 400 for malformed route/query/body input.
-3. Do not introduce a global guard migration unless an existing route composition gap requires it.
-4. Add focused tests only where a concrete inconsistency is found.
-5. Run full CI and record the checkpoint before advancing to another domain slice.
+1. Identify the next implementation slice that is explicitly grounded in existing repository contracts after the authenticated HTTP boundary review.
+2. Prefer an existing domain/application contract over inventing identity transport, token, JWT, session or provider persistence contracts.
+3. If no grounded implementation slice exists, document the blocking constraint rather than introducing speculative infrastructure.
+4. For any concrete implementation change, add focused tests, run full CI, and record the checkpoint before advancing.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
