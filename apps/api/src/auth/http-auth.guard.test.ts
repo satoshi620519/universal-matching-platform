@@ -33,6 +33,45 @@ describe('HTTP authentication guard', () => {
     });
   });
 
+  it('rejects an adapter principal missing authentication identity with 401', async () => {
+    class InvalidAdapter extends RequestAuthenticationAdapter {
+      async authenticate() {
+        return { accountId: '', authenticationMethod: 'bearer' };
+      }
+    }
+
+    const guard = new HttpAuthenticationGuard(new InvalidAdapter());
+
+    await expect(
+      guard.canActivate({
+        switchToHttp: () => ({
+          getRequest: () => ({ headers: {} }),
+        }),
+      } as never),
+    ).rejects.toMatchObject({ status: 401 });
+  });
+
+  it('rejects an invalid pre-attached principal with 401', async () => {
+    const guard = new HttpAuthenticationGuard(
+      new (class extends RequestAuthenticationAdapter {
+        async authenticate() {
+          throw new Error('adapter should not be called');
+        }
+      })(),
+    );
+
+    await expect(
+      guard.canActivate({
+        switchToHttp: () => ({
+          getRequest: () => ({
+            headers: {},
+            principal: { accountId: '', authenticationMethod: 'bearer' },
+          }),
+        }),
+      } as never),
+    ).rejects.toMatchObject({ status: 401 });
+  });
+
   it('rejects an unauthenticated request with 401', async () => {
     class EmptyAdapter extends RequestAuthenticationAdapter {
       async authenticate() {
