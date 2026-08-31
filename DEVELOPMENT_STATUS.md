@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the analytics deployment retention policy CI, then continue with the next requirements slice after Analytics.
+CURRENT TASK: Validate the accessibility control contract CI, then continue with the next accessibility requirement slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -10,7 +10,21 @@ STATUS: Milestone 1 in progress
 - Safety Metric is CI-validated and complete; progress-record CI #140 also passed.
 - Analytics Governance Access Policy implemented for role-controlled analytics operations (REQ-AN-019, foundations for REQ-AN-021/022/023).
 - Analytics Governance tests implemented.
-- Analytics report privacy controls implemented for REQ-AN-020 with deterministic suppression/aggregation behavior.\n- Analytics report privacy control tests implemented.\n- Analytics report privacy controls CI #147 passed: install, typecheck, lint, test and build all green; progress record CI #148 also passed.\n- Analytics report privacy controls are CI-validated and complete.\n- Auditable Analytics Actions implemented for export and dashboard configuration, mapped onto the existing Audit Record foundation.\n- Auditable Analytics Action tests implemented.\n- Auditable Analytics Actions CI passed: implementation CI #151 and progress record CI #152 both green.\n- Auditable Analytics Actions are CI-validated and complete.\n- Analytics Deployment Retention Policy implemented for REQ-AN-023 with explicit supported retention periods and deployment-level non-essential analytics disable control.\n- Analytics Deployment Retention Policy tests implemented.\n- Current immediate action: verify CI for analytics deployment retention policy commits.
+- Analytics report privacy controls implemented for REQ-AN-020 with deterministic suppression/aggregation behavior.
+- Analytics report privacy control tests implemented.
+- Analytics report privacy controls CI #147 passed: install, typecheck, lint, test and build all green; progress record CI #148 also passed.
+- Analytics report privacy controls are CI-validated and complete.
+- Auditable Analytics Actions implemented for export and dashboard configuration, mapped onto the existing Audit Record foundation.
+- Auditable Analytics Action tests implemented.
+- Auditable Analytics Actions CI passed: implementation CI #151 and progress record CI #152 both green.
+- Auditable Analytics Actions are CI-validated and complete.
+- Analytics Deployment Retention Policy implemented for REQ-AN-023 with explicit supported retention periods and deployment-level non-essential analytics disable control.
+- Analytics Deployment Retention Policy tests implemented.
+- Analytics Deployment Retention Policy CI #155 passed: install, typecheck, lint, test and build all green; progress record CI #156 also passed.
+- Analytics requirements slice is CI-validated and complete through REQ-AN-023.
+- Accessibility Control Contract implemented for REQ-A11Y-001 and REQ-A11Y-002 foundations: accessible name, role, state metadata and keyboard/platform-equivalent navigation.
+- Accessibility Control Contract tests implemented.
+- Current immediate action: verify CI for accessibility control contract commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -48,7 +62,11 @@ STATUS: Milestone 1 in progress
 - Metric report result model CI validation.
 - Privacy-preserving safety metric model and tests.
 - Privacy-preserving safety metric type fix and CI validation (CI #139).
-- Analytics governance access policy and tests.\n- Analytics report privacy suppression/aggregation controls and tests.\n- Auditable analytics export/dashboard actions and tests.\n- Analytics deployment retention/non-essential disable policy and tests.
+- Analytics governance access policy and tests.
+- Analytics report privacy suppression/aggregation controls and tests.
+- Auditable analytics export/dashboard actions and tests.
+- Analytics deployment retention/non-essential disable policy and tests.
+- Accessibility control contract and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -71,12 +89,16 @@ STATUS: Milestone 1 in progress
 - Metric definition model: CI validated.
 - Metric report result model: CI validated.
 - Privacy-preserving safety metric model: CI validated (CI #139).
-- Analytics governance access policy: CI validated (CI #143).\n- Analytics report privacy controls: CI validated (CI #147).\n- Auditable analytics actions: CI validated (CI #151).\n- Analytics deployment retention policy: tests added; latest CI pending.
+- Analytics governance access policy: CI validated (CI #143).
+- Analytics report privacy controls: CI validated (CI #147).
+- Auditable analytics actions: CI validated (CI #151).
+- Analytics deployment retention policy: CI validated (CI #155).
+- Accessibility control contract: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the analytics deployment retention policy commits.
-2. If green: mark Analytics Deployment Retention Policy CI-validated and mark the current Analytics requirements slice complete.
-3. Re-read PRODUCT_REQUIREMENTS.md from the next unimplemented requirement section and select the smallest domain/application slice without recreating completed work.
+1. Check CI triggered by the accessibility control contract commits.
+2. If green: mark Accessibility Control Contract CI-validated.
+3. Then implement the next smallest accessibility preference/communication slice (REQ-A11Y-003 through REQ-A11Y-006) without recreating the control contract.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
