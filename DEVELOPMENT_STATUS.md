@@ -761,9 +761,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Existing Prisma schema changes still require a generated/applied migration before deployment; connector execution environment cannot honestly claim migration or full CI success.
 - Commits: e1a13eaf01ce066188aeb865f13c2cab81d367e0, fc08a3be0d0caebe46cd35a11885122346f7abbd, 00ccd02a5c28543e84f7ea5bfc032d2bf2208d72, ca588f4a8bc596ceb1f29c56cf76630128c67245, bbc266d1b29c3047c8f2ae69f815ffe7e8fd8071, 16706095207c32e147a444aa0918f9a6f95a1e6a.
 
+
+## Authentication HTTP regression and session lifecycle hardening — IMPLEMENTED, migration/CI pending
+- Added controller-level regression coverage for sign-in success credential response, duplicate-safe rejected response, malformed transport input and privacy-preserving rate-limit key.
+- Added sign-out controller coverage for authenticated current-session revocation and stable request-id fallback.
+- Added SessionRevocationService timestamp regression coverage.
+- Corrected PrismaSessionRepository create contract to include credentialHash and changed revocation persistence to updateMany where revokedAt is null, preserving the original revocation timestamp and making repeated revocation idempotent.
+- Documented credential lifecycle decisions: independent concurrent sessions are supported; rotation is intentionally deferred until per-session/account-wide/session-family policy is chosen.
+- Commits: 53aab8e89f44ac829b027e678da6a25f1b794c99, 83e9e2a5061bfd598f772f29b5179830b78e479b, 15d53d7ed5e24e0472f08df7aee6ac6cf27400a9, 10614f764881f0157ad08dc759b2fe4732c67dab, 627e564120447a3846d5493456f43b2ea21af869.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Add controller-level integration/regression tests for sign-in/sign-out contracts, then inspect session repository idempotent revocation/error semantics and authentication credential rotation before expanding auth features.
+2. Generate and apply the outstanding Prisma migration in a runnable environment, then add database-backed integration coverage for registration/sign-in/session authentication and inspect email verification activation as the next account lifecycle gap.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
