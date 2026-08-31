@@ -13,6 +13,8 @@ import { AccountActivationController } from './accounts/account-activation.contr
 import { AccountActivationService } from './accounts/account-activation.service.js';
 import { PrismaAccountRepository } from './accounts/prisma-account.repository.js';
 import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.adapter.js';
+import { AuthenticationIdentityRepository } from './auth/authentication-identity.repository.js';
+import { PrismaAuthenticationIdentityRepository } from './auth/prisma-authentication-identity.repository.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
@@ -32,10 +34,15 @@ import { HealthStatusService } from './health/health-status.service.js';
     AccountLookupService,
     RequestPrincipalResolver,
     PrismaAccountRepository,
+    PrismaAuthenticationIdentityRepository,
     AnonymousAuthenticationAdapter,
     {
       provide: AccountRepository,
       useExisting: PrismaAccountRepository,
+    },
+    {
+      provide: AuthenticationIdentityRepository,
+      useExisting: PrismaAuthenticationIdentityRepository,
     },
     {
       provide: RequestAuthenticationAdapter,
