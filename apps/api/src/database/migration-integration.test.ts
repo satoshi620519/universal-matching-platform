@@ -149,7 +149,12 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
 
       await expect(
-        runMigrations(prisma, [accountMigration, authenticationIdentityMigration]),
+        runMigrations(prisma, [
+          accountMigration,
+          authenticationIdentityMigration,
+          verificationRequestsMigration,
+          verificationOutcomesMigration,
+        ]),
       ).resolves.toEqual([1, 2, 3, 4]);
       await expect(runMigrations(prisma, [failingMigration])).rejects.toThrow(
         'definitely_missing_function',
@@ -158,7 +163,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       const rows = await prisma.$queryRawUnsafe<Array<{ version: number }>>(
         'SELECT version FROM schema_migrations ORDER BY version',
       );
-      expect(rows.map(({ version }) => Number(version))).toEqual([1, 2]);
+      expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3, 4]);
     } finally {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
