@@ -37,6 +37,7 @@ import { EmailVerificationDeliveryService } from './auth/email-verification-deli
 import { EmailOutboxRepository } from './auth/email-outbox.repository.js';
 import { PrismaEmailOutboxRepository } from './auth/prisma-email-outbox.repository.js';
 import { EmailOutboxDispatchService } from './auth/email-outbox-dispatch.service.js';
+import { EmailOutboxWorker } from './auth/email-outbox-worker.js';
 import { OutboundEmailSender } from './auth/outbound-email-sender.js';
 import { LoggingOutboundEmailSender } from './auth/logging-outbound-email-sender.js';
 import { EmailVerificationUrlPolicy } from './auth/email-verification-url-policy.js';
@@ -89,6 +90,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     EmailVerificationService,
     EmailVerificationDeliveryService,
     EmailOutboxDispatchService,
+    EmailOutboxWorker,
     PrismaEmailOutboxRepository,
     LoggingOutboundEmailSender,
     EnvironmentEmailVerificationUrlPolicy,
