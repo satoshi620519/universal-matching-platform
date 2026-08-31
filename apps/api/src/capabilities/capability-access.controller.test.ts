@@ -113,6 +113,6 @@ describe('capability access API boundary', () => {
       accountId: 'account-1',
       authenticationMethod: 'test',
       verificationLevel: 'invalid',
-    }).evaluateAuthenticated({})).rejects.toBeInstanceOf(BadRequestException);
+    }).evaluateAuthenticated({})).rejects.toBeInstanceOf(UnauthorizedException);
   });
 });
