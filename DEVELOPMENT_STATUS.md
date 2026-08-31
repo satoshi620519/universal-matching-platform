@@ -147,7 +147,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added focused tests for active and restricted accounts.
 - Registered adapter through Nest DI.
 - Initial CI exposed a test fixture drift: RequestPrincipal requires authenticationMethod; fixed without changing production semantics.
-- Fix commit: 968b6ccc10cbe67c27aa2aab216508ab23fabb6d.
+- First fix commit: 968b6ccc10cbe67c27aa2aab216508ab23fabb6d.
+- Follow-up CI exposed verificationLevel fixture type drift (RequestPrincipal uses string); fixed to '2'.
+- Follow-up fix commit: 19bf4dc985056ff0539092d2c60471d8d3d972e9.
 
 ## Exact next action
 1. Verify CI for the authenticated capability decision adapter.
