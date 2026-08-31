@@ -349,12 +349,26 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Runtime filesystem assumptions remain intentionally absent until SQL asset packaging is guaranteed.
 - Commits: bfacbefc6ba35489a811a325f1f9af090f9473bf, de283f6bf79daa7f40255c5e3b190eb2dde420c4, 294c3f61ba26097034c99cc713257753f28af630, f4485e23f3d77b294eb89583eedcc8eebe780522, 6d2784d9c45ffd8c16d46518fcd5ad539d51dad1, 09460d9b921498970a658c1178595d3278eebb83.
 
+## Production SQL migration artifact packaging — IMPLEMENTED, CI PENDING
+- Added an explicit package build asset step that copies packages/database/migrations/*.sql into packages/database/dist/migrations.
+- Added FilesystemMigrationArtifactSource(directory), which requires an explicit directory and never guesses the application working directory.
+- Filesystem source parses filenames through the existing migration parser and validates the complete plan before returning artifacts.
+- Added isolated filesystem loading test with a temporary directory.
+- Database package metadata now declares packaged output assets.
+- Commits: 9789842d603eb099f9967f502492e24981f2bf19, 89d350c49b943765f81dbd486989fc47fff072f7, 832b14f29e94912fb835a1e4ab6e74013980a390, f924f419cb9887b4b7df9887846fe3624a2c9008, 91b6316ef17f092865a91c3e53efb1a9de3b56d0.
+
+## CI baseline typecheck remains red
+- Latest observed CI still fails at pnpm typecheck before tests/build.
+- Exact compiler diagnostics remain unavailable through the current GitHub connector log endpoint.
+- Do not mark new migration packaging work green until CI proves it.
+- New work was kept isolated and follows existing strict TypeScript/NodeNext conventions.
+
 ## Exact next action
-1. Verify CI for MigrationArtifactSource and explicit runner additions.
-2. Continue exact compiler-error diagnosis; do not claim runtime composition green while baseline typecheck is red.
-3. Inspect repository package/asset build configuration to determine how SQL migration artifacts can be packaged for production.
-4. Implement a filesystem artifact source only together with verified SQL asset copy/build behavior.
-5. Add empty-database PostgreSQL integration using StaticMigrationArtifactSource first, then packaged filesystem artifacts.
+1. Verify CI for SQL asset packaging and filesystem artifact source.
+2. If typecheck remains red, obtain diagnostics through an alternate repository-visible mechanism before modifying unrelated production code.
+3. Add an integration test that builds the database package and verifies dist/migrations contains every source SQL artifact.
+4. Add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource against the existing CI PostgreSQL 16 service.
+5. Keep migration execution explicit; do not auto-run at API startup.
 6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
