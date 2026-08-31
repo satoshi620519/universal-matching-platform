@@ -546,8 +546,16 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - The test verifies both the concrete Prisma provider and the useExisting abstraction mapping, preventing a future silent removal of the runtime wiring.
 - Commit: 9a31e3c754f16a8e826f149170daea5d06534cc3.
 
+
+## Account deletion lifecycle boundary — COMPLETE
+- Resumed from repository state after the safety DI regression guard instead of adding duplicate migration or DI work.
+- Traced REQ-AUTH-005 against the existing AccountState transition model and found the lifecycle states already exist but no deletion/privacy implementation boundary was recorded.
+- Added ACCOUNT_DELETION_LIFECYCLE_BOUNDARY.md defining pending-deletion as the safe first production transition and deleted-anonymized as an explicit later operation.
+- Explicitly deferred destructive deletion, retention timers, legal holds, anonymization mappings and external-provider cleanup until privacy lifecycle policy is defined.
+- Commit: f12029c2338d33096effe3f85ca066a7ac128dc2.
+
 ## Exact next action
-1. Verify CI for 9a31e3c7, including the preceding safety DI and migration integration commits.
+1. Verify CI for f12029c2 and the preceding safety DI/migration commits where workflow evidence becomes available.
 2. If CI is green, mark the migration integration gate and safety DI wiring slice complete, then continue from the next Milestone 1 gap.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
