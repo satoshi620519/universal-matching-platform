@@ -24,6 +24,8 @@ import { HealthController } from './health/health.controller.js';
 import { VerificationAccessController } from './verification/verification-access.controller.js';
 import { VerificationAccessService } from './verification/verification-access.service.js';
 import { VerificationRepository } from './verification/verification.repository.js';
+import { SafetyEnforcementRepository } from './safety/safety-enforcement.repository.js';
+import { PrismaSafetyEnforcementRepository } from './safety/prisma-safety-enforcement.repository.js';
 import { PrismaVerificationRepository } from './verification/prisma-verification.repository.js';
 import { VerificationService } from './verification/verification.service.js';
 import { VerificationLevelAccessService } from './verification/verification-level-access.service.js';
