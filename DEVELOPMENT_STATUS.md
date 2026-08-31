@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Select the next smallest grounded authentication behavior after validated identity lifecycle operations.
+CURRENT TASK: Define verification persistence independently before integrating verification outcomes with identity authentication.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -70,11 +70,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - CI #442 and CI #443 passed typecheck, lint, all tests and build.
 - No password verification, credential secret, token/session transport or provider protocol was introduced.
 
+## Authentication identity and verification boundary — COMPLETE
+- Inspected the existing outcome-only VerificationRecord domain and verification access boundary.
+- Confirmed verification lifecycle is independent from AuthenticationIdentity lifecycle.
+- Added AUTHENTICATION_IDENTITY_VERIFICATION_BOUNDARY.md.
+- Explicitly prevented verification evidence or level/status fields from being copied into authentication_identities.
+- Deferred association-key design until verification persistence ownership is explicitly implemented.
+
 ## Exact next action
-1. Inspect authentication lifecycle requirements and the existing verification boundary for the next grounded behavior slice.
-2. Prefer contact/identity verification lifecycle integration over password login because password credential security decisions remain unresolved.
-3. Keep verification evidence and provider mechanics behind existing verification abstractions.
-4. Add focused service/domain tests and verify CI.
+1. Define the smallest provider-neutral verification persistence model from the existing VerificationRecord domain.
+2. Keep raw provider evidence outside ordinary application records.
+3. Add a dedicated additive migration rather than modifying authentication_identities speculatively.
+4. Add focused domain/persistence tests and verify CI.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
