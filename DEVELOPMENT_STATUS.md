@@ -174,6 +174,7 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added focused repository query test.
 - Registered repository through Nest DI.
 - Persistence commits: 4f1d0ad0be72fbe6d0e122c5a2a01b93aec34f41, 22b172dba79967360a385ac7e3c248c3814d7170, 4663949881bb4f8f4b911f09ceeef5addb0ae8c9, 1a88b5318430b8b4e345041de5dfcd7c5559aa40, b3816daa01657f9e77b6fea7a250e2bf7bdfaf1b.
+- CI exposed a persistence-to-domain type boundary: Prisma strings are not domain SafetyRestriction unions; explicit reconstruction mapping added in 8e754c62ad24fb42836443b4e70320954370c1ac.
 
 ## Exact next action
 1. Verify CI for SafetyEnforcement persistence and repository boundary.
