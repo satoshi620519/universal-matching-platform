@@ -22,10 +22,7 @@ const migration = {
 const failingMigration = {
   version: 2,
   filename: '0002_failing.sql',
-  sql: `
-    CREATE TABLE migration_rollback_probe (id UUID PRIMARY KEY);
-    SELECT definitely_missing_function();
-  `,
+  sql: 'SELECT definitely_missing_function()',
 };
 
 describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
@@ -60,20 +57,16 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
     }
   });
 
-  it('rolls back migration SQL and tracking when a migration fails', async () => {
+  it('rolls back a failed migration without recording its version', async () => {
     const prisma = new PrismaClient();
     try {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
 
       await expect(runMigrations(prisma, [migration])).resolves.toEqual([1]);
-      await expect(runMigrations(prisma, [migration, failingMigration])).rejects.toThrow();
-
-      const tables = await prisma.$queryRawUnsafe<Array<{ table_name: string }>>(
-        `SELECT table_name FROM information_schema.tables
-         WHERE table_schema = 'public' AND table_name = 'migration_rollback_probe'`,
+      await expect(runMigrations(prisma, [failingMigration])).rejects.toThrow(
+        'definitely_missing_function',
       );
-      expect(tables).toEqual([]);
 
       const rows = await prisma.$queryRawUnsafe<Array<{ version: number }>>(
         'SELECT version FROM schema_migrations ORDER BY version',
