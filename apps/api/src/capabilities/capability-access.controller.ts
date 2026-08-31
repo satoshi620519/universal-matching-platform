@@ -20,6 +20,12 @@ function parseVerificationLevel(value: string, field: string): VerificationLevel
   return Number(value) as VerificationLevel;
 }
 
+function validateDate(value: string | undefined, field: string): void {
+  if (value !== undefined && Number.isNaN(new Date(value).getTime())) {
+    throw new BadRequestException(`${field} must be a valid ISO date`);
+  }
+}
+
 @Controller('capabilities')
 export class CapabilityAccessController {
   constructor(private readonly capabilityAccess: CapabilityAccessService) {}
@@ -29,6 +35,9 @@ export class CapabilityAccessController {
     if (query.entitlementState && !entitlementStates.has(query.entitlementState as EntitlementState)) {
       throw new BadRequestException('entitlementState is invalid');
     }
+
+    validateDate(query.entitlementEffectiveAt, 'entitlementEffectiveAt');
+    validateDate(query.now, 'now');
 
     const context: CapabilityContext = {
       currentVerificationLevel: parseVerificationLevel(query.currentVerificationLevel, 'currentVerificationLevel'),
