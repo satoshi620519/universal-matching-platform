@@ -2,83 +2,82 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Continue Milestone 1 runnable vertical slice using the validated Account, Authentication, Verification and Capability boundaries.
-STATUS: Milestone 1 core boundary slices are CI-validated; next slice is selected from existing contracts only.
+CURRENT TASK: Build the authenticated Principal → Capability workflow without breaking the existing anonymous capability evaluation path.
+STATUS: In progress. A request-principal resolver boundary has been added; the next step is to verify it in GitHub and design an explicit authenticated HTTP route before changing the legacy route.
+
+## Continuation protocol — READ FIRST
+GitHub main is the persistent source of truth. Before every new work session:
+1. Read this file.
+2. Verify the files and commits named in the latest checkpoint.
+3. Do not assume an unverified change passed CI.
+4. Resume from the exact next action below.
+5. After every coherent implementation slice, update this file with: files changed, commit SHA, test/CI state, and the exact next action.
+
+Never overwrite a working boundary based on an earlier conversational summary. Prefer repository state and CI evidence.
 
 ## Latest checkpoint — 2026-08-31
-- Account Lookup HTTP boundary is CI-validated, including the explicit 400/404/200 contract.
-- Account Activation HTTP/application boundary is CI-validated after removing the unused client-controlled currentState input.
-- Provider-neutral authenticated request context and shared request-principal propagation are CI-validated.
-- Authentication adapter and unauthorized 401 boundary are CI-validated.
-- Capability authorization HTTP boundary and 403 authorization boundary are CI-validated.
-- Verification Access HTTP/application boundary is CI-validated.
-- Capability Access HTTP/application boundary is CI-validated.
-- Capability Access runtime input validation is CI-validated.
-- Verification Access runtime input validation is CI-validated.
-- Capability Access cleanup removed a duplicate unused service/test implementation and retained the runtime-composed capabilities boundary.
-- Capability Access now rejects invalid entitlementEffectiveAt and now datetime inputs at the HTTP boundary.
-- Latest Capability Access validation test CI #309 passed: install, typecheck, lint, test and build all green.
-- Phase 1 requirement-contract foundation remains complete; do not recreate completed requirement or architecture artifacts.
+
+### Verified baseline
+- Account Lookup HTTP boundary: CI validated.
+- Account Activation HTTP/application boundary: CI validated.
+- Authentication/request-principal contracts: existing baseline CI validated.
+- Verification Access HTTP/application boundary: CI validated.
+- Capability Access HTTP/application boundary and runtime input validation: CI validated.
+- Capability validation CI #309 passed: install, typecheck, lint, test and build all green.
+
+### Latest implementation attempt — NOT YET VERIFIED
+The following slice was added immediately before this checkpoint and must be verified before building on it:
+- New file: apps/api/src/auth/request-principal-resolver.ts
+- New file: apps/api/src/auth/request-principal-resolver.test.ts
+- Modified: apps/api/src/app.module.ts
+- Intent: resolve an authenticated RequestPrincipal through RequestAuthenticationAdapter and return 401 when authentication is absent.
+- Important: GitHub code search had not yet indexed the new resolver when checked. Do not assume the change is absent or failed; inspect main directly.
+- CI status for this resolver slice: NOT YET VERIFIED.
+
+### Architecture constraint discovered
+- apps/api/src/auth/request-principal.ts defines RequestPrincipal with accountId, authenticationMethod and optional verificationLevel.
+- apps/api/src/auth/anonymous-authentication.adapter.ts currently returns undefined for every authentication attempt.
+- apps/api/src/capabilities/capability-access.controller.ts currently accepts currentVerificationLevel from the client query.
+- Therefore replacing the existing capability endpoint with mandatory principal authentication immediately would turn the currently usable anonymous endpoint into universal 401 responses.
+- The safe next vertical slice is an explicit authenticated capability route/context, introduced alongside the existing legacy route, followed by migration only when a real authentication adapter exists.
+
+## Current work item
+Authenticated Principal → Capability workflow
+
+Target sequence:
+1. Verify the request-principal resolver files and AppModule registration on main.
+2. Verify resolver unit tests and CI.
+3. Keep GET /capabilities/access backward-compatible for now.
+4. Introduce a separate explicit authenticated capability evaluation boundary only if an HTTP request-to-principal transport contract can be grounded in existing code.
+5. Use RequestPrincipal.verificationLevel as server-side input; never let the authenticated route accept currentVerificationLevel from the client.
+6. Return 401 for missing principal on the authenticated route.
+7. Do not invent a token format, JWT parser, session store, or identity provider.
+8. Run full CI and record the resulting run/commit before marking the slice complete.
 
 ## Completed — DO NOT RECREATE
-- Project foundation and continuity rules established.
-- GitHub is the persistent source of truth.
+- Project foundation and continuity rules.
+- GitHub as persistent source of truth.
 - Milestone 0 engineering foundation and CI baseline.
-- M1 canonical domain primitives and tests.
+- Canonical domain primitives and tests.
 - API application boundary.
 - Database configuration/migration boundary.
 - Capability gate and tests.
-- Account lifecycle and tests.
-- Account activation service and tests.
-- Capability access service and tests.
-- Domain package public entrypoint/workspace exports.
+- Account lifecycle, activation, lookup and tests.
 - Entitlement lifecycle and tests.
-- Verification domain lifecycle and tests.
-- Verification access application service and tests.
-- Safety restriction domain policy and tests.
-- Safety report lifecycle and tests.
-- Moderation case lifecycle and tests.
-- Moderation action policy and tests.
-- Audit record domain model and tests.
-- Analytics event taxonomy model and tests.
-- Metric definition model and tests.
-- Metric report result model and tests.
-- Privacy-preserving safety metric model and tests.
-- Analytics governance access policy and tests.
-- Analytics report privacy suppression/aggregation controls and tests.
-- Auditable analytics export/dashboard actions and tests.
-- Analytics deployment retention/non-essential disable policy and tests.
-- Accessibility control contract and tests.
-- Accessibility flow communication contract and tests.
-- Accessibility assurance contract and tests.
-- Operational performance target contract and tests.
-- Operational resilience contract and tests.
-- Operational observability and recovery contract and tests.
-- Data lifecycle retention contract and tests.
-- Data lifecycle governance contract and tests.
-- Deployment installation contract and tests.
-- Deployment readiness contract and tests.
-- Phase 1 requirement-contract foundation complete through operational, data lifecycle and buyer deployment requirements.
-
-## Test status
-- M0 CI validation: passed.
-- Domain primitives: CI validated.
-- API application boundary: CI validated.
-- Database boundary: CI validated.
-- Capability gate: CI validated.
-- Account lifecycle: CI validated.
-- Account activation service/boundary: CI validated.
-- Capability access service/boundary: CI validated.
-- Entitlement lifecycle: CI validated.
-- Verification lifecycle: CI validated.
-- Verification access service/boundary: CI validated.
-- Authentication/request-principal boundaries: CI validated.
-- Safety/moderation/audit domain foundations: CI validated.
-- Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations: CI validated.
+- Verification lifecycle and verification access boundary.
+- Capability access service/boundary and validation.
+- Safety, moderation and audit domain foundations.
+- Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Use the existing validated domain/application contracts to select the next runnable Milestone 1 workflow boundary.
-2. Prefer a small vertical slice with explicit input/output and tests; do not invent a new identity or persistence contract without an existing architectural basis.
-3. Run the full CI workflow after the coherent slice.
-4. Only after CI is green, update this status checkpoint and select the following slice.
-5. Keep each slice small and preserve established domain contracts.
+Fetch these exact files from main and verify their contents before editing anything:
+1. apps/api/src/auth/request-principal-resolver.ts
+2. apps/api/src/auth/request-principal-resolver.test.ts
+3. apps/api/src/app.module.ts
+4. apps/api/src/auth/request-principal.ts
+5. apps/api/src/auth/anonymous-authentication.adapter.ts
+
+Then:
+- If the resolver slice exists, verify its tests/CI and continue from step 3 of the Current work item.
+- If it does not exist, recreate only that small resolver slice and record the resulting commit.
+- Do not modify the legacy GET /capabilities/access route until the authenticated route contract is explicit and tested.
