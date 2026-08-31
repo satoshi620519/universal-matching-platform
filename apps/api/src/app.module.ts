@@ -27,6 +27,7 @@ import { PrismaPasswordCredentialRepository } from './auth/prisma-password-crede
 import { PasswordRegistrationRepository } from './auth/password-registration.repository.js';
 import { PrismaPasswordRegistrationRepository } from './auth/prisma-password-registration.repository.js';
 import { PasswordRegistrationService } from './auth/password-registration.service.js';
+import { PasswordRegistrationTransportService } from './auth/password-registration-transport.service.js';
 import { MinimumPasswordPolicy, PasswordPolicy } from './auth/password-policy.js';
 import { RequestRateLimiter } from './common/rate-limit/request-rate-limiter.js';
 import { InMemoryRequestRateLimiter } from './common/rate-limit/in-memory-request-rate-limiter.js';
@@ -61,6 +62,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     PrismaPasswordCredentialRepository,
     PrismaPasswordRegistrationRepository,
     PasswordRegistrationService,
+    PasswordRegistrationTransportService,
     MinimumPasswordPolicy,
     InMemoryRequestRateLimiter,
     NodeScryptPasswordHasher,
