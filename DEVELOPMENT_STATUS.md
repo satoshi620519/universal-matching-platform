@@ -121,20 +121,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Registered composition through Nest DI.
 - CI #472 and #473 completed successfully with typecheck, lint, tests and build green.
 
-## Capability decision contract — IN PROGRESS
-- CI #475 passed typecheck, lint, tests and build for the initial CapabilityDecision contract.
-- Repository inspection found existing capability, entitlement, account-state and safety-restriction domain primitives that should be composed rather than replaced.
-- Isolated CapabilityDecision and CapabilityDecisionContext into a dedicated domain module.
-- Context explicitly models account state, safety restriction, capability scope, verification level and optional entitlement timing.
-- Existing canUseCapability() remains unchanged pending focused composition semantics and tests.
-- Latest commits: da207cc3432a10432a745bab7a59a75cb50d51de, 8b5c822a299d01f5a67908aef78edf192f2f7451, fecd39d0226401f5a95c26912fea46cd8b247528.
+## Capability decision contract — IMPLEMENTED, CI PENDING
+- CI #475 passed the initial CapabilityDecision contract.
+- Reused existing blocksCapability(), AccountState, VerificationLevel and canUseCapability() primitives.
+- Added decideCapability() with deterministic denial precedence:
+  1. safety restriction
+  2. non-active account
+  3. insufficient verification
+  4. entitlement state/timing
+  5. allowed
+- Added focused precedence tests, including multiple simultaneous denials and entitlement timing.
+- Latest implementation commits: 4c1bc36c96e45d3011887767df2a5b0621a703d0, a4ef52ca8c570f4cdeec341f0a3d308c47c6ba06.
+- Awaiting CI before completion.
 
 ## Exact next action
-1. Add focused domain evaluation semantics for the composed CapabilityDecisionContext.
-2. Reuse existing account, safety, verification and entitlement primitives.
-3. Define deterministic denial precedence without a global policy engine.
-4. Add exhaustive focused tests.
-5. Verify CI and record the exact continuation checkpoint.
+1. Verify CI for deterministic capability decision semantics.
+2. If green, mark capability decision domain boundary complete.
+3. Inspect the narrowest concrete application integration point that can consume CapabilityDecision.
+4. Avoid introducing a global policy engine.
+5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
