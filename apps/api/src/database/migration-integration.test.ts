@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { runMigrations } from './migration-runner.js';
 import { PrismaClient } from '@prisma/client';
+
+import { runMigrations } from './migration-runner.js';
 
 const DATABASE_URL = process.env.DATABASE_URL;
 
@@ -15,6 +16,15 @@ const migration = {
       created_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
+  `,
+};
+
+const failingMigration = {
+  version: 2,
+  filename: '0002_failing.sql',
+  sql: `
+    CREATE TABLE migration_rollback_probe (id UUID PRIMARY KEY);
+    SELECT definitely_missing_function();
   `,
 };
 
@@ -45,6 +55,34 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
     } finally {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
+      await prisma.$disconnect();
+    }
+  });
+
+  it('rolls back migration SQL and tracking when a migration fails', async () => {
+    const prisma = new PrismaClient();
+    try {
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
+
+      await expect(runMigrations(prisma, [migration])).resolves.toEqual([1]);
+      await expect(runMigrations(prisma, [migration, failingMigration])).rejects.toThrow();
+
+      const tables = await prisma.$queryRawUnsafe<Array<{ table_name: string }>>(
+        `SELECT table_name FROM information_schema.tables
+         WHERE table_schema = 'public' AND table_name = 'migration_rollback_probe'`,
+      );
+      expect(tables).toEqual([]);
+
+      const rows = await prisma.$queryRawUnsafe<Array<{ version: number }>>(
+        'SELECT version FROM schema_migrations ORDER BY version',
+      );
+      expect(rows.map(({ version }) => Number(version))).toEqual([1]);
+    } finally {
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
       await prisma.$disconnect();
     }
   });
