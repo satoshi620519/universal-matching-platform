@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Implement and validate the additive provider-neutral authentication identity persistence slice.
+CURRENT TASK: Select the next smallest grounded identity behavior slice after validated authentication identity persistence.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -47,12 +47,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Account remains free of authentication secrets.
 - Password hashes, JWT/session state, provider payloads, verification evidence and recovery secrets remain explicitly out of this migration.
 
+## Authentication identity persistence — COMPLETE
+- Added packages/database/migrations/0002_create_authentication_identities.sql.
+- Added exact Prisma AuthenticationIdentity mapping and Account relation.
+- Added PostgreSQL migration integration coverage for versions 1 and 2, idempotent reruns and failed migration rollback boundaries.
+- CI #434 completed successfully: PostgreSQL service, typecheck, lint, all tests and build passed.
+- Persistence model contains identity linkage only; credential secrets and transport tokens remain excluded.
+
 ## Exact next action
-1. Add the versioned additive authentication_identities SQL migration.
-2. Add the exact matching Prisma AuthenticationIdentity model.
-3. Add focused migration/model-boundary tests.
-4. Run the existing migration integration gate and CI.
-5. Record commit, CI state and any unresolved credential-method decisions.
+1. Inspect the existing authentication lifecycle contract and account/identity services for the smallest grounded behavior gap.
+2. Prefer identity lifecycle operations (create, lookup, deactivate) before credential verification or HTTP login transport.
+3. Keep provider-specific verification and secret handling behind adapters.
+4. Add focused domain tests.
+5. Verify CI and record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
