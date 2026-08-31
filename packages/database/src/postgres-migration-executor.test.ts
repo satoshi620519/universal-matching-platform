@@ -17,7 +17,10 @@ describe('PostgresMigrationExecutor', () => {
 
   it('applies SQL and records the version through the transaction-scoped client', async () => {
     const events: string[] = [];
-    const rootQuery = vi.fn();
+    const rootQuery = vi.fn(
+      async <T = unknown>(_sql: string, _params?: readonly unknown[]): Promise<T> =>
+        undefined as T,
+    );
     const txQuery = vi.fn(
       async <T = unknown>(sql: string, _params?: readonly unknown[]): Promise<T> => {
         events.push(sql);
