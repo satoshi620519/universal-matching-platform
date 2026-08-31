@@ -36,3 +36,5 @@ export * from './audit-record.js';
 export * from './analytics-event.js';
 
 export * from './metric-definition.js';
+
+export * from './metric-report.js';
