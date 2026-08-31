@@ -54,7 +54,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - API bootstrap implementation CI #207 passed; progress checkpoint CI #208 remains the latest status-record run.
 - Database foundation CI #217 passed after the targeted Prisma Client generation fix; database baseline is CI-validated.
 - Account repository and structured API error boundary follow-up CI #229 reached API typecheck and exposed one remaining persistence/domain boundary mismatch: Prisma persisted status is string while AccountRecord requires AccountState.
-- Targeted boundary fix applied in PrismaAccountRepository: persistence records are explicitly mapped to AccountRecord at the repository boundary, preserving Prisma isolation. Follow-up CI pending.
+- Repository status mapping fix CI #230 passed and progress record CI #231 passed; repository/error boundary slice is CI-validated.
+- Provider-neutral authenticated request context implemented: RequestPrincipal contract, correlation-aware AuthenticatedRequestContext, and boundary tests. CI pending.
 - Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
@@ -148,9 +149,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the Account Repository and structured API error boundary commits.
-2. If green: mark the database/repository/error boundary slice CI-validated.
-3. Implement provider-neutral authenticated request context without coupling domain/application code to a specific identity provider.
-4. Add the smallest authentication boundary tests and an integration-ready request principal contract.
-5. Update this file after every coherent slice; do not recreate API, database, repository or error foundations.
+1. Check CI triggered by the provider-neutral authenticated request context commits.
+2. If green: mark the authentication context boundary CI-validated.
+3. Implement an authentication adapter boundary that can populate RequestPrincipal without coupling application code to a specific provider.
+4. Add the smallest unauthorized/forbidden HTTP boundary behavior and tests.
+5. Keep registration, recovery, session/device management and verification workflows as later requirement slices; do not implement provider-specific flows prematurely.
+6. Update this file after every coherent slice.
 
