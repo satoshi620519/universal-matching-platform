@@ -118,7 +118,7 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Runtime composition follow-up CI #261/#262 passed; request-principal propagation and composition-root wiring are CI-validated.
 - Authentication lifecycle CI #264 and progress record CI #265 passed; request-once authentication lifecycle invariant is CI-validated.
 - Account activation boundary CI #268/#269 failed at API test typecheck only: test repository stubs did not preserve the abstract repository method signatures and used an unverified literal AccountState.
-- Targeted test-only fix applied by implementing the exact repository signatures and typing fixture state through the domain AccountState contract. Follow-up CI pending.
+- Targeted test-only fix initially aligned repository signatures and AccountState typing, but CI #270 exposed an invalid fixture state: the domain transition map uses 'pending-onboarding', not 'pending'. Fixture corrected to the exact domain state. Follow-up CI pending.
 
 ## Test status
 - M0 CI validation: passed.
