@@ -588,8 +588,16 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added regression coverage proving a forged higher principal claim cannot override a lower persisted level, and that sufficient/missing persisted outcomes behave correctly.
 - Commits: 0a0f1f1cf17157198a668e6a797f7fd3880ccafe, b11a8a04fbe791b72edd501bde0ce7bb1218c97c.
 
+
+## Authenticated capability HTTP regression alignment — IMPLEMENTED, CI PENDING
+- Re-read the affected controller tests after changing AuthenticatedCapabilityAccessService to require the authoritative VerificationService source.
+- Found concrete fixture drift: the controller test still constructed the service with the old two-argument signature and asserted principal-claim semantics.
+- Updated the HTTP-boundary tests to inject a persisted verification source and verify authenticated access follows that server-side level rather than the principal claim.
+- This closes the immediate compile/test regression risk introduced by the trust-boundary correction.
+- Commit: 81b309137950682014bba7ee0bdd48ab46057daf.
+
 ## Exact next action
-1. Verify CI for 1291b4b5 and the preceding authenticated deletion-request commits where workflow evidence becomes available.
+1. Verify CI for 81b30913 together with 0a0f1f1c/b11a8a04 and the preceding pending-deletion commits where workflow evidence becomes available.
 2. Mark the pending-deletion slice complete once CI evidence is available, then inspect the next Milestone 1 requirement gap without expanding destructive privacy behavior.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
