@@ -4,16 +4,15 @@ import {
   type CapabilityDecision,
   type CapabilityDecisionContext,
   type EntitlementState,
-  type SafetyRestriction,
   type VerificationLevel,
 } from '@universal/domain';
 
 import type { RequestPrincipal } from '../auth/request-principal.js';
 import { AuthenticatedAccountContextService } from '../accounts/authenticated-account-context.service.js';
+import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
 
 export interface AuthenticatedCapabilityDecisionRequirements {
   readonly capabilityScope: 'general' | 'communication';
-  readonly safetyRestriction: SafetyRestriction;
   readonly requiredVerificationLevel?: VerificationLevel;
   readonly entitlementState?: EntitlementState;
   readonly entitlementEffectiveAt?: string;
@@ -24,6 +23,7 @@ export interface AuthenticatedCapabilityDecisionRequirements {
 export class AuthenticatedCapabilityDecisionService {
   constructor(
     private readonly accounts: AuthenticatedAccountContextService,
+    private readonly safetyRestrictions: EffectiveSafetyRestrictionService,
   ) {}
 
   async evaluate(
@@ -32,10 +32,17 @@ export class AuthenticatedCapabilityDecisionService {
   ): Promise<CapabilityDecision> {
     const { account } = await this.accounts.resolve(principal);
     const currentVerificationLevel = this.resolveVerificationLevel(principal);
+    const now = requirements.now ?? new Date().toISOString();
+    const safetyRestriction = await this.safetyRestrictions.resolveForAccount(
+      account.id,
+      requirements.capabilityScope,
+      new Date(now),
+    );
 
     const context: CapabilityDecisionContext = {
       accountState: account.status,
       currentVerificationLevel,
+      safetyRestriction,
       ...requirements,
     };
 
