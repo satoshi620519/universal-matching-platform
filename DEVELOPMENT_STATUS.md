@@ -674,9 +674,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Did not add a public HTTP endpoint or claim that rate limiting is implemented; the service remains internal until the remaining transport boundaries are concrete.
 - Commits: 3560273938653899a70bae9c7fb71a9d473eae95, b4ca231cdb67f7ed090b40b54c56a85ef77b035c, 38da10a67aa0958bc65983cfbde398db490dc13f.
 
+
+## Registration normalization and policy transport groundwork — IMPLEMENTED, CI PENDING
+- Inspected existing Fastify/Nest HTTP setup and found global API error filtering but no established throttling dependency or reusable request-rate-limit boundary.
+- Added conservative email provider-subject normalization: trim outer whitespace, preserve local-part case, lowercase domain, reject blank/malformed/whitespace-containing or oversized values; avoided provider-specific transformations.
+- Added focused normalization tests.
+- Registered the existing MinimumPasswordPolicy behind the PasswordPolicy abstraction in AppModule so transport code can depend on the policy contract.
+- Did not expose a registration controller yet because rate limiting remains an explicit REQ-SAFE-006 prerequisite and duplicate-response semantics must be chosen alongside the transport boundary.
+- Commits: 90ea68ca397dd4a98619b52aa396385e6ea76ef8, f2b0c406788a8b4a490891164cfad8b40935ceb1, 7a1b52d8eb9fdd70fd5827d04c39ab8ee918f2b0.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Inspect existing HTTP error/validation and request-throttling conventions; implement the remaining normalization, duplicate-safe transport contract and rate-limit boundary before adding a public registration controller.
+2. Define and implement a reusable request-rate-limit boundary compatible with the existing Fastify onRequest setup, then map duplicate/validation responses before exposing the registration controller.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
