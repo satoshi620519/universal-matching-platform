@@ -49,7 +49,7 @@ describe('HTTP application boundary', () => {
         },
       });
 
-      expect(response.statusCode).toBe(200);
+      expect(response.statusCode, response.body).toBe(200);
       expect(response.json()).toEqual({
         status: 'ok',
         database: 'configured',
@@ -69,7 +69,7 @@ describe('HTTP application boundary', () => {
         url: '/health',
       });
 
-      expect(response.statusCode).toBe(200);
+      expect(response.statusCode, response.body).toBe(200);
       expect(response.headers[CORRELATION_ID_HEADER]).toEqual(expect.any(String));
       expect(response.headers[CORRELATION_ID_HEADER]).not.toBe('');
     } finally {
