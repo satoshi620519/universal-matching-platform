@@ -44,3 +44,5 @@ export * from './safety-metric.js';
 export * from './analytics-governance.js';
 
 export * from './report-privacy-control.js';
+
+export * from './analytics-audit.js';
