@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Select the next smallest grounded identity behavior slice after validated authentication identity persistence.
+CURRENT TASK: Define the identity lifecycle service slice on top of the validated authentication identity repository.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -54,12 +54,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - CI #434 completed successfully: PostgreSQL service, typecheck, lint, all tests and build passed.
 - Persistence model contains identity linkage only; credential secrets and transport tokens remain excluded.
 
+## Authentication identity repository boundary — COMPLETE
+- Added provider-neutral AuthenticationIdentityRepository contract.
+- Added PrismaAuthenticationIdentityRepository implementation.
+- Added create, provider identity lookup and status update operations.
+- Registered the repository through Nest DI.
+- CI #439 completed successfully: PostgreSQL service, typecheck, lint, all tests and build passed.
+- No credential secret, token or provider protocol was introduced.
+
 ## Exact next action
-1. Inspect the existing authentication lifecycle contract and account/identity services for the smallest grounded behavior gap.
-2. Prefer identity lifecycle operations (create, lookup, deactivate) before credential verification or HTTP login transport.
-3. Keep provider-specific verification and secret handling behind adapters.
-4. Add focused domain tests.
-5. Verify CI and record the exact continuation checkpoint.
+1. Add a focused AuthenticationIdentity lifecycle service above the repository boundary.
+2. Centralize identity creation and lifecycle transition rules there rather than exposing repository semantics to future controllers/adapters.
+3. Preserve provider neutrality and avoid credential verification/transport.
+4. Add focused unit tests for create, lookup and deactivation behavior.
+5. Verify CI and update the continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
