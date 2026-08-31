@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the safety restriction domain policy CI, then continue with the next smallest moderation/safety vertical slice.
+CURRENT TASK: Validate the safety report lifecycle CI, then continue with the smallest moderation workflow slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Verification Access Service CI #101 passed: install, typecheck, lint, test and build all green.
-- Verification access service is now CI-validated and complete.
-- Safety restriction domain policy implemented as the next requirements-supported slice.
-- Safety restriction tests implemented.
-- Current immediate action: verify CI for the safety restriction changes.
+- Safety Restriction Domain Policy CI #102 passed: install, typecheck, lint, test and build all green.
+- Safety Restriction Domain Policy is CI-validated and complete.
+- Safety Report lifecycle implemented for user/content/message reporting.
+- Report lifecycle tests implemented.
+- Current immediate action: verify CI for safety report lifecycle commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -31,6 +31,8 @@ STATUS: Milestone 1 in progress
 - Verification access application service and tests.
 - Verification access service CI validation (CI #101).
 - Safety restriction domain policy and tests.
+- Safety restriction CI validation (CI #102).
+- Safety report lifecycle and tests.
 
 ## Current architecture baseline
 - Next.js + TypeScript: Web/Admin.
@@ -57,12 +59,13 @@ STATUS: Milestone 1 in progress
 - Entitlement lifecycle: CI validated.
 - Verification lifecycle: CI validated (CI #98).
 - Verification access service: CI validated (CI #101).
-- Safety restriction domain policy: tests added; latest CI pending.
+- Safety restriction domain policy: CI validated (CI #102).
+- Safety report lifecycle: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by safety restriction commits.
-2. If green: mark Safety Restriction Domain Policy CI-validated.
-3. Then continue with the smallest moderation/safety vertical slice supported by REQ-MOD-001 onward, without rebuilding existing account/capability/verification/entitlement work.
+1. Check CI triggered by `feat: add safety report lifecycle`, `test: cover safety report lifecycle`, and `feat: export safety report lifecycle`.
+2. If green: mark Safety Report Lifecycle CI-validated.
+3. Then implement the smallest moderator workflow/case lifecycle supported by REQ-SAFE-003 and REQ-ADMIN-003, without rebuilding report or safety restriction work.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
