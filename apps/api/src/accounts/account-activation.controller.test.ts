@@ -14,7 +14,7 @@ describe('account activation HTTP boundary', () => {
 
   function controllerFor(
     account: typeof pending | null = pending,
-    persisted: (typeof pending & { status: 'active' }) | null = {
+    persisted: (Omit<typeof pending, 'status'> & { status: 'active' }) | null = {
       ...pending,
       status: 'active' as const,
     },
