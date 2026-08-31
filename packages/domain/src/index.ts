@@ -23,6 +23,7 @@ export class DomainError extends Error {
 
 export * from './account.js';
 export * from './capability.js';
+export * from './capability-decision.js';
 export * from './entitlement.js';
 export * from './verification.js';
 export * from './safety-restriction.js';
