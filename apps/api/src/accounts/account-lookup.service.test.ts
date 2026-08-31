@@ -1,4 +1,3 @@
-import type { AccountState } from '@universal/domain';
 import { describe, expect, it } from 'vitest';
 import { AccountLookupService } from './account-lookup.service.js';
 import { AccountRepository, type AccountRecord, type CreateAccountRecord } from './account.repository.js';
