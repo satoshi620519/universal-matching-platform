@@ -14,7 +14,8 @@
     "build": "tsc -p tsconfig.json && node scripts/copy-migrations.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:migrations-build": "pnpm run build && node scripts/verify-migrations-build.mjs"
   },
   "devDependencies": {
     "typescript": "^5.7.2",
