@@ -5,24 +5,20 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import type { FastifyRequest } from 'fastify';
 import { RequestAuthenticationAdapter } from './authentication-adapter.js';
-import { resolveCorrelationId, CORRELATION_ID_HEADER } from '../observability/request-context.js';
+import {
+  getRequestPrincipal,
+  type AuthenticatedFastifyRequest,
+} from './authenticated-request.js';
 
 @Injectable()
 export class HttpAuthenticationGuard implements CanActivate {
   constructor(private readonly adapter: RequestAuthenticationAdapter) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<FastifyRequest>();
-    const correlationId = resolveCorrelationId(
-      request.headers[CORRELATION_ID_HEADER],
-    );
+    const request = context.switchToHttp().getRequest<AuthenticatedFastifyRequest>();
 
-    const principal = await this.adapter.authenticate({
-      authorization: request.headers.authorization,
-      requestId: correlationId,
-    });
+    const principal = getRequestPrincipal(request);
 
     if (!principal) {
       throw new HttpException('Authentication required', HttpStatus.UNAUTHORIZED);
