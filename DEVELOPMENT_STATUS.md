@@ -292,11 +292,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Regression assertion now explicitly proves apply() does not call the root query client.
 - Fix commit: 3cf9e86c231a3fbf7023407cc4faf3faae30a659.
 
+## Transaction-scoped executor test — SECOND TYPECHECK FAILURE FIXED
+- CI #537/#538 still failed in @universal/database:typecheck.
+- Exact remaining error: Vitest mock for txQuery returned Promise<void>, which is narrower than the generic query<T>() => Promise<T> contract.
+- Production executor and adapter remained type-correct; only the typed test double was invalid.
+- Replaced the mock implementation with a generic async query function returning Promise<T>.
+- Fix commit: 399fbe8bb99693fc8917d9d912cae90e06855d1f.
+
+## CI PostgreSQL topology discovered
+- Existing CI already provisions PostgreSQL 16 as a service container.
+- This is the correct topology to reuse for the first empty-database migration integration test after the current typecheck fix is green.
+- No second database topology should be invented.
+
 ## Exact next action
-1. Verify CI for the corrected transaction-scoped executor test.
-2. If green, verify the safe Prisma adapter commit chain is fully covered by CI.
-3. Add runtime composition only after the adapter and executor chain are green together.
-4. Reuse the CI PostgreSQL service configuration for the first empty-database integration test rather than inventing a second runtime topology.
+1. Verify CI for the generic query test-double correction.
+2. If green, inspect the CI environment variables and database URL wiring in ci.yml.
+3. Add runtime composition only if it can be tested against the existing PostgreSQL service.
+4. Add empty-database migration integration coverage using that exact CI PostgreSQL topology.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
