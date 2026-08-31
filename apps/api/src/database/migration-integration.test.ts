@@ -36,9 +36,9 @@ const authenticationIdentityMigration = {
   `,
 };
 
-const verificationMigration = {
+const verificationRequestsMigration = {
   version: 3,
-  filename: '0003_create_verification.sql',
+  filename: '0003_create_verification_requests.sql',
   sql: `
     CREATE TABLE IF NOT EXISTS verification_requests (
       id UUID PRIMARY KEY,
@@ -49,7 +49,14 @@ const verificationMigration = {
       created_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
       completed_at TIMESTAMPTZ(6),
       expires_at TIMESTAMPTZ(6)
-    );
+    )
+  `,
+};
+
+const verificationOutcomesMigration = {
+  version: 4,
+  filename: '0004_create_verification_outcomes.sql',
+  sql: `
     CREATE TABLE IF NOT EXISTS verification_outcomes (
       id UUID PRIMARY KEY,
       verification_request_id UUID NOT NULL REFERENCES verification_requests(id),
@@ -65,8 +72,8 @@ const verificationMigration = {
 };
 
 const failingMigration = {
-  version: 4,
-  filename: '0004_failing.sql',
+  version: 5,
+  filename: '0005_failing.sql',
   sql: 'SELECT definitely_missing_function()',
 };
 
@@ -80,9 +87,9 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
 
-      const migrations = [accountMigration, authenticationIdentityMigration, verificationMigration];
+      const migrations = [accountMigration, authenticationIdentityMigration, verificationRequestsMigration, verificationOutcomesMigration];
 
-      await expect(runMigrations(prisma, migrations)).resolves.toEqual([1, 2, 3]);
+      await expect(runMigrations(prisma, migrations)).resolves.toEqual([1, 2, 3, 4]);
       await expect(runMigrations(prisma, migrations)).resolves.toEqual([]);
 
       const tables = await prisma.$queryRawUnsafe<Array<{ table_name: string }>>(
@@ -119,7 +126,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       const rows = await prisma.$queryRawUnsafe<Array<{ version: number }>>(
         'SELECT version FROM schema_migrations ORDER BY version',
       );
-      expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3]);
+      expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3, 4]);
     } finally {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
@@ -143,7 +150,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
 
       await expect(
         runMigrations(prisma, [accountMigration, authenticationIdentityMigration]),
-      ).resolves.toEqual([1, 2, 3]);
+      ).resolves.toEqual([1, 2, 3, 4]);
       await expect(runMigrations(prisma, [failingMigration])).rejects.toThrow(
         'definitely_missing_function',
       );
