@@ -498,13 +498,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Repository state wins over older conversational checkpoints.
 - Record exact evidence, commits and the next action after each coherent slice.
 
+
+## Filesystem migration execution integration — IMPLEMENTED, CI PENDING
+- Re-read repository HEAD and existing migration tests before adding coverage to avoid duplicating the existing executor, runner and filesystem unit tests.
+- Added an integration-level test that composes FilesystemMigrationArtifactSource with runMigrations() across an empty migration history.
+- Coverage verifies filesystem ordering reaches execution in version order and verifies a fully applied history performs no duplicate execution.
+- This keeps migration execution explicit and does not introduce application-startup migration.
+- Commit: b194a9eb39974bd0a3c2f4cd523884f19cce58c5.
+
 ## Exact next action
-1. Verify CI for the migration artifact integrity hardening commits.
-2. Re-read repository HEAD/status after CI before adding integration work.
-3. Implement only missing empty-database PostgreSQL integration coverage, avoiding duplication of existing migration integration tests.
-4. Exercise the production-style FilesystemMigrationArtifactSource path where practical.
-5. Keep migration execution explicit; do not introduce automatic application-startup migration.
-6. Record the exact continuation checkpoint.
+1. Verify CI for b194a9eb and the preceding migration artifact integrity hardening commits.
+2. If CI is green, inspect the existing real PostgreSQL migration integration fixture before adding only the remaining empty-database coverage.
+3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
+4. Keep migration execution explicit; do not introduce automatic application-startup migration.
+5. Record the exact CI evidence and continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
