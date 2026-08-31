@@ -43,19 +43,31 @@ export function orderMigrationFilenames(filenames: readonly string[]): string[] 
     .map((migration) => migration.filename);
 }
 
-export function planMigrations(
+export function validateMigrationArtifacts(
   migrations: readonly MigrationArtifact[],
-  appliedVersions: ReadonlySet<number>,
-): MigrationPlan {
+): MigrationArtifact[] {
   const versions = new Set<number>();
   for (const migration of migrations) {
+    const filenameVersion = parseMigrationFilename(migration.filename);
+    if (filenameVersion !== migration.version) {
+      throw new Error(
+        `Migration version does not match filename: ${migration.filename}`,
+      );
+    }
     if (versions.has(migration.version)) {
       throw new Error(`Duplicate migration version: ${migration.version}`);
     }
     versions.add(migration.version);
   }
 
-  const ordered = [...migrations].sort((left, right) => left.version - right.version);
+  return [...migrations].sort((left, right) => left.version - right.version);
+}
+
+export function planMigrations(
+  migrations: readonly MigrationArtifact[],
+  appliedVersions: ReadonlySet<number>,
+): MigrationPlan {
+  const ordered = validateMigrationArtifacts(migrations);
 
   return {
     pending: ordered.filter((migration) => !appliedVersions.has(migration.version)),
