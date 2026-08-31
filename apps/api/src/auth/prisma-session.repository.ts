@@ -16,19 +16,22 @@ export class PrismaSessionRepository extends SessionRepository {
     readonly accountId: string;
     readonly authenticationMethod: string;
     readonly expiresAt: Date;
+    readonly credentialHash: string;
   }): Promise<AuthenticationSession> {
     return this.database.authenticationSession.create({ data: input });
   }
 
-  async findByCredentialHash(credentialHash: string): Promise<AuthenticationSession | null> {
+  async findByCredentialHash(
+    credentialHash: string,
+  ): Promise<AuthenticationSession | null> {
     return this.database.authenticationSession.findUnique({
       where: { credentialHash },
     });
   }
 
   async revoke(id: string, revokedAt: Date): Promise<void> {
-    await this.database.authenticationSession.update({
-      where: { id },
+    await this.database.authenticationSession.updateMany({
+      where: { id, revokedAt: null },
       data: { revokedAt },
     });
   }
