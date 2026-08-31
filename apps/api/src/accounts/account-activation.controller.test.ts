@@ -12,7 +12,7 @@ describe('account activation API boundary', () => {
   it('activates an existing account through the validated application service', async () => {
     class Repository extends AccountRepository {
       async create(input: CreateAccountRecord): Promise<AccountRecord> { return account(input.status); }
-      async findById(_id: string): Promise<AccountRecord | null> { return account('pending' as AccountState); }
+      async findById(_id: string): Promise<AccountRecord | null> { return account('pending-onboarding' as AccountState); }
     }
     const controller = new AccountActivationController(new Repository(), new AccountActivationService());
     await expect(controller.activate('account-1', {})).resolves.toEqual({ accountId: 'account-1', state: 'active' });
