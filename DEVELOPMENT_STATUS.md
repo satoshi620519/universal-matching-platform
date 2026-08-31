@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Define the smallest reusable verification-level access evaluator after validated authentication and verification lifecycles.
+CURRENT TASK: Define a provider-neutral capability decision boundary after validated verification capability access composition.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -113,11 +113,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added AUTHENTICATION_VERIFICATION_INTEGRATION_BOUNDARY.md.
 - Explicitly deferred JWT/session, password credentials, provider callbacks and global capability policy engine decisions.
 
+## Verification capability access — COMPLETE
+- Added VerificationLevelAccessService for provider-neutral required-level comparison.
+- Added VerificationCapabilityAccessService to compose account outcome lookup and level evaluation.
+- Kept authentication transport, persistence details and provider SDK types outside access decisions.
+- Added focused tests for sufficient verification and missing usable verification.
+- Registered composition through Nest DI.
+- CI #472 and #473 completed successfully with typecheck, lint, tests and build green.
+
 ## Exact next action
-1. Define a small provider-neutral evaluator for required verification level against an already usable VerificationRecord.
-2. Keep authentication transport and identity lookup outside the evaluator.
-3. Reuse VerificationRecord domain types rather than persistence records.
-4. Add focused unit tests and verify CI.
+1. Define a provider-neutral capability decision contract.
+2. Keep it generic enough for future entitlement, account-status and safety restrictions.
+3. Do not implement a global policy engine before concrete requirement sources are grounded.
+4. Add focused contract tests only.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
