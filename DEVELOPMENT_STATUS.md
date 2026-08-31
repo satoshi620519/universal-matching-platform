@@ -30,6 +30,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated unified authenticated account context boundaries
+- GET /accounts/authenticated now resolves its account exclusively through AuthenticatedAccountContextService.
+- Authenticated lookup, activation and capability access share the same persisted-account boundary.
+- RequestPrincipal remains the sole source of the authenticated account identity.
+- Focused HTTP tests cover principal-derived targeting, unauthenticated rejection and missing-account propagation.
+- Implementation commits: 565bdc049f6ff9aff17f1adee85c897bf9f28712, 56c41481b4faf53bbcc24d4a60e00510ccedca15.
+- GitHub Actions CI run #352 for 56c41481b4faf53bbcc24d4a60e00510ccedca15 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated authenticated capability access with account context
 - GET /capabilities/access/authenticated now resolves the persisted authenticated account before capability evaluation.
 - AuthenticatedCapabilityAccessService derives identity from RequestPrincipal and delegates capability semantics to the existing CapabilityAccessService.
@@ -118,9 +126,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect the existing account read/query boundaries for another authenticated self-service endpoint that can reuse AuthenticatedAccountContextService without accepting a client-supplied account identifier.
-2. Prefer wiring an existing application service to an authenticated HTTP boundary over creating new domain or persistence concepts.
-3. Preserve legacy routes and keep ownership derived from RequestPrincipal.accountId.
-4. Add focused tests for authenticated identity targeting, missing-account failures and compatibility with the legacy route.
+1. Inspect existing verification access and authentication contracts for an authenticated self-service slice that is not yet connected to AuthenticatedAccountContextService.
+2. Prefer reusing existing verification/capability domain services and current RequestPrincipal transport.
+3. Do not create a new persistence model unless an existing domain transition cannot be exposed safely otherwise.
+4. Add focused tests for principal-derived targeting and explicit authentication/account failures.
 5. Run full CI.
 6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
