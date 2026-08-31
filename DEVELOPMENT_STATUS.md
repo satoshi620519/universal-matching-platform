@@ -30,6 +30,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated durable legacy account activation
+- PATCH /accounts/:accountId/activation now persists the successful domain transition through AccountRepository.updateStatus.
+- Legacy and authenticated activation routes no longer differ in durability semantics.
+- The controller rejects both an initially missing account and an account that disappears before persistence completes.
+- Focused tests cover successful persistence and both missing-account boundaries.
+- Implementation commits: 76c1bcfb395824472222699f537ebda6eb76bb35, 3e87462560d281045dc812b40fd8ada72c934317, 8532b59382f22b9f5406e9ff3615d2c0a4034d61, 90035ddc81c36b8f65324e35a0e8ed87db213f7c, dd26cb00837f8c6a63e6ba220893f218e152d119.
+- GitHub Actions CI run #358 for dd26cb00837f8c6a63e6ba220893f218e152d119 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated unified authenticated account context boundaries
 - GET /accounts/authenticated now resolves its account exclusively through AuthenticatedAccountContextService.
 - Authenticated lookup, activation and capability access share the same persisted-account boundary.
@@ -126,9 +134,8 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect existing verification access and authentication contracts for an authenticated self-service slice that is not yet connected to AuthenticatedAccountContextService.
-2. Prefer reusing existing verification/capability domain services and current RequestPrincipal transport.
-3. Do not create a new persistence model unless an existing domain transition cannot be exposed safely otherwise.
-4. Add focused tests for principal-derived targeting and explicit authentication/account failures.
-5. Run full CI.
-6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
+1. Review AccountRepository implementations and account lifecycle callers for another route where a domain transition is computed but its persistence result is not used as the response source.
+2. Prefer correcting durability/consistency gaps in existing vertical slices over adding speculative endpoints.
+3. Keep authenticated ownership derived from RequestPrincipal and preserve legacy route compatibility.
+4. Add focused tests that distinguish transition calculation from successful persistence.
+5. Run full CI and record the resulting checkpoint here.
