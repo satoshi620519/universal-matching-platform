@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Reduce authoritative active safety enforcement records into a deterministic scope-specific SafetyRestriction.
+CURRENT TASK: Validate end-to-end authoritative SafetyEnforcement resolution into authenticated capability decisions.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -194,11 +194,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added focused tests for empty records, scope applicability and simultaneous restriction precedence.
 - Resolver intentionally consumes already-active records; lifecycle filtering remains the repository/domain lifecycle responsibility.
 
+## Safety enforcement authoritative source — APPLICATION INTEGRATION IMPLEMENTED, CI PENDING
+- Added EffectiveSafetyRestrictionService.
+- Loads authoritative active enforcement records through SafetyEnforcementRepository.
+- Reduces records using resolveEffectiveSafetyRestriction() and requested capability scope.
+- AuthenticatedCapabilityDecisionService now resolves safety restrictions authoritatively instead of accepting caller-supplied SafetyRestriction.
+- Existing domain decision precedence remains unchanged.
+- Added focused application service test and updated capability decision tests.
+- Registered effective resolver through Nest DI.
+
 ## Exact next action
-1. Verify CI #503/#504 and the resolver implementation CI.
-2. If persistence is green, mark authoritative safety source complete.
-3. Add a narrow application service that loads active records and resolves the effective restriction for a requested capability scope.
-4. Feed that resolved restriction into AuthenticatedCapabilityDecisionService without changing domain precedence.
+1. Verify CI for the end-to-end safety restriction application integration.
+2. If green, mark SafetyEnforcement authoritative source complete.
+3. Inspect migration workflow and ensure the Prisma schema addition has a migration-compatible path.
+4. Do not add controller/UI/admin mutation flows until persistence schema evolution is grounded.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
