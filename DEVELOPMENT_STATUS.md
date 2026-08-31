@@ -563,9 +563,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Deliberately did not implement hard deletion, anonymization, retention timers, legal holds, or provider cleanup.
 - Commits: 3ce2f55a, 6fcbbda9, 19425c01, 7b1a636e, 313c0709.
 
+
+## Authenticated pending-deletion integration regression coverage — IMPLEMENTED, CI PENDING
+- Added service-level coverage proving the deletion target comes exclusively from the authenticated principal context and persists pending-deletion through AccountRepository.
+- Added disappearance handling coverage for the persistence race returning null.
+- Added controller-level coverage proving the HTTP boundary derives identity from authentication and rejects unauthenticated deletion requests.
+- No destructive privacy operation was added.
+- Commits: 6d386cdbc3a88f90e5db211df7129f59ea23550a, 1291b4b5530dca85c43c30ef7c31723b2c2f30e7.
+
 ## Exact next action
-1. Verify CI for 313c0709 and the preceding authenticated deletion-request commits where workflow evidence becomes available.
-2. Add authenticated service/controller integration regression coverage for the pending-deletion flow, then continue to the next Milestone 1 gap without implementing destructive privacy operations prematurely.
+1. Verify CI for 1291b4b5 and the preceding authenticated deletion-request commits where workflow evidence becomes available.
+2. Mark the pending-deletion slice complete once CI evidence is available, then inspect the next Milestone 1 requirement gap without expanding destructive privacy behavior.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
