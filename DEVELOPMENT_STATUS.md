@@ -215,11 +215,28 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added 0001_create_safety_enforcements.sql with Account foreign key and repository query index.
 - The concrete migration runner and empty-database integration gate remain separate pending infrastructure implementation; no runner behavior was invented.
 
+## Safety enforcement authoritative source — IMPLEMENTATION COMPLETE, CI HISTORY GREEN
+- Application integration fixture fix passed CI #515.
+- SQL migration artifact passed CI #516.
+- Domain lifecycle and effective restriction resolver slices had already passed CI.
+- Safety restrictions are now loaded from an authoritative persistence boundary before authenticated capability decisions.
+
+## Migration workflow — INVESTIGATED AND CORRECTED
+- Repository contains a migration planning/execution abstraction in packages/database/src:
+  - filename parsing and duplicate-version rejection
+  - pending migration planning
+  - executor interface with atomic-apply contract
+- There is not yet a concrete PostgreSQL runner/driver adapter or empty-database integration gate.
+- During investigation, the initial safety artifact was found to duplicate existing version 0001.
+- This would be rejected by the repository migration contract before execution.
+- Removed the duplicate artifact and reissued it as 0004_create_safety_enforcements.sql.
+- Corrective commits: d878ea6b12030e59f83437e45b0d475b45fb8d23, 6c1cc7f5906a98d019cd92ebf2f56c3b2a21e022.
+
 ## Exact next action
-1. Verify CI for the constructor fixture fix and migration artifact addition.
-2. If green, mark SafetyEnforcement authoritative source implementation complete at application/schema artifact level.
-3. Investigate existing migration runner infrastructure before adding or changing execution behavior.
-4. Do not claim database deployment migration execution until a concrete runner is present and integration-tested.
+1. Verify CI for the migration-version correction.
+2. Add a focused regression test at the migration planning boundary covering the repository's real artifact version sequence.
+3. Investigate the selected PostgreSQL access technology before implementing a concrete MigrationExecutor adapter.
+4. Do not claim deployment-ready migration execution until a concrete adapter and empty-database integration test exist.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
