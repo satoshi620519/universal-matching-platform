@@ -622,9 +622,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Explicitly did not implement password hashing algorithms, sign-in tokens/sessions, reset tokens, email delivery or OAuth/OIDC.
 - Commits: 923fba9b, 61334e6d, 0307cc68, dc95c563, 7d67b07c, 1682a6f8.
 
+
+## Password credential persistence regression coverage — IMPLEMENTED, CI PENDING
+- Added focused PrismaPasswordCredentialRepository behavior coverage for default lifecycle state, absent lookups, identity-scoped hash replacement and no-match handling.
+- Strengthened the abstract repository contract guard to cover all persistence operations.
+- Added PASSWORD_CREDENTIAL_PERSISTENCE_VERIFICATION.md recording Prisma/migration alignment and the rule that PasswordCredentialRecord must not leak into account/profile projections.
+- Static coverage does not substitute for actual migration execution; CI/database evidence remains pending.
+- Commits: 10171f1c98d3ed198ac9fc5f155a824ecc9624a0, 1ff31d067f44401461a14166a4321abf1d6509ee, 809ab9c0063c92de31498c49cf9570933f33248b.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Add focused repository behavior and migration/model alignment tests for password_credentials before introducing hashing or sign-in semantics.
+2. Inspect existing crypto/package conventions and define a password-hashing abstraction before adding registration or sign-in transport semantics.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
