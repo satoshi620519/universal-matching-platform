@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { DatabaseService } from '../database/database.service.js';
+import { DuplicateAuthenticationIdentityError } from './duplicate-authentication-identity.error.js';
 import {
   PasswordRegistrationRepository,
   type CreatePasswordRegistrationInput,
@@ -16,7 +19,8 @@ export class PrismaPasswordRegistrationRepository extends PasswordRegistrationRe
   async create(
     input: CreatePasswordRegistrationInput,
   ): Promise<PasswordRegistrationRecord> {
-    return this.database.$transaction(async (tx) => {
+    try {
+      return await this.database.$transaction(async (tx) => {
       const account = await tx.account.create({
         data: { status: input.accountStatus },
       });
@@ -38,10 +42,16 @@ export class PrismaPasswordRegistrationRepository extends PasswordRegistrationRe
         },
       });
 
-      return {
-        account,
-        authenticationIdentity,
-      };
-    });
+        return {
+          account,
+          authenticationIdentity,
+        };
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new DuplicateAuthenticationIdentityError();
+      }
+      throw error;
+    }
   }
 }
