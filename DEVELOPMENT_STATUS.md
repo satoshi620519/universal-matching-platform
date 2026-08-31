@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the accessibility control contract CI, then continue with the next accessibility requirement slice.
+CURRENT TASK: Validate the accessibility flow communication contract CI, then continue with the remaining accessibility requirement slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -24,7 +24,10 @@ STATUS: Milestone 1 in progress
 - Analytics requirements slice is CI-validated and complete through REQ-AN-023.
 - Accessibility Control Contract implemented for REQ-A11Y-001 and REQ-A11Y-002 foundations: accessible name, role, state metadata and keyboard/platform-equivalent navigation.
 - Accessibility Control Contract tests implemented.
-- Current immediate action: verify CI for accessibility control contract commits.
+- Accessibility Control Contract CI #159 passed: install, typecheck, lint, test and build all green.
+- Accessibility Flow Communication Contract implemented for REQ-A11Y-003 through REQ-A11Y-006 foundations: non-sensory information channel, text scaling, predictable visible focus, and dynamic status mechanism.
+- Accessibility Flow Communication Contract tests implemented.
+- Current immediate action: verify CI for accessibility flow communication contract commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -67,6 +70,7 @@ STATUS: Milestone 1 in progress
 - Auditable analytics export/dashboard actions and tests.
 - Analytics deployment retention/non-essential disable policy and tests.
 - Accessibility control contract and tests.
+- Accessibility flow communication contract and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -93,12 +97,13 @@ STATUS: Milestone 1 in progress
 - Analytics report privacy controls: CI validated (CI #147).
 - Auditable analytics actions: CI validated (CI #151).
 - Analytics deployment retention policy: CI validated (CI #155).
-- Accessibility control contract: tests added; latest CI pending.
+- Accessibility control contract: CI validated (CI #159).
+- Accessibility flow communication contract: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the accessibility control contract commits.
-2. If green: mark Accessibility Control Contract CI-validated.
-3. Then implement the next smallest accessibility preference/communication slice (REQ-A11Y-003 through REQ-A11Y-006) without recreating the control contract.
+1. Check CI triggered by the accessibility flow communication contract commits.
+2. If green: mark Accessibility Flow Communication Contract CI-validated.
+3. Then implement the remaining smallest accessibility slice for REQ-A11Y-007 through REQ-A11Y-010, reusing completed accessibility contracts.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
