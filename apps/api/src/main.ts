@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { loadRuntimeConfig } from './config/runtime-config.js';
+import { ApiErrorFilter } from './common/errors/api-error.filter.js';
 import {
   CORRELATION_ID_HEADER,
   resolveCorrelationId,
@@ -13,6 +14,8 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+
+  app.useGlobalFilters(new ApiErrorFilter());
 
   app.getHttpAdapter().getInstance().addHook('onRequest', (request, reply, done) => {
     const correlationId = resolveCorrelationId(
