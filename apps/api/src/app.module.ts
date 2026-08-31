@@ -20,6 +20,8 @@ import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.
 import { AuthenticationIdentityRepository } from './auth/authentication-identity.repository.js';
 import { AuthenticationIdentityService } from './auth/authentication-identity.service.js';
 import { PrismaAuthenticationIdentityRepository } from './auth/prisma-authentication-identity.repository.js';
+import { PasswordCredentialRepository } from './auth/password-credential.repository.js';
+import { PrismaPasswordCredentialRepository } from './auth/prisma-password-credential.repository.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
@@ -48,6 +50,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     RequestPrincipalResolver,
     PrismaAccountRepository,
     PrismaAuthenticationIdentityRepository,
+    PrismaPasswordCredentialRepository,
     PrismaVerificationRepository,
     PrismaSafetyEnforcementRepository,
     VerificationService,
@@ -70,6 +73,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: PasswordCredentialRepository,
+      useExisting: PrismaPasswordCredentialRepository,
     },
     {
       provide: RequestAuthenticationAdapter,
