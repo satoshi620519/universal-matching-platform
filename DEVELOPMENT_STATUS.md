@@ -90,6 +90,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 4. Verify typecheck, lint, tests and build in CI.
 5. Record commit and exact continuation checkpoint.
 
+
+## Verification migration CI failure checkpoint — IN PROGRESS
+- CI #451 failed only in PostgreSQL migration integration; typecheck and lint passed.
+- Root cause: the Prisma migration executor uses one prepared statement per migration artifact, while the test fixture modeled version 3 with two SQL commands.
+- Production migration 0003 was not modified because applied migration artifacts are immutable by contract.
+- Test fixture is being corrected to model each executable DDL statement as its own atomic migration for the executor contract.
+- Latest corrective commit: 63b5a6fc50e52fca8db6405c7321fee316425a56.
+
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
 - AnonymousAuthenticationAdapter currently returns undefined.
