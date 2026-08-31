@@ -232,11 +232,22 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Removed the duplicate artifact and reissued it as 0004_create_safety_enforcements.sql.
 - Corrective commits: d878ea6b12030e59f83437e45b0d475b45fb8d23, 6c1cc7f5906a98d019cd92ebf2f56c3b2a21e022.
 
+## Migration version correction — CI GREEN
+- CI #519 passed after reissuing the safety enforcement artifact as version 0004.
+- This confirms repository CI accepts the corrected artifact naming and schema changes.
+
+## Migration sequence regression guard — IMPLEMENTED, CI PENDING
+- Added a focused migration planning test using the repository's committed logical artifact sequence:
+  0001 accounts → 0002 authentication identities → 0003 verification → 0004 safety enforcements.
+- The test asserts numeric ordering and uniqueness through the real migration planning primitive.
+- This guards against reintroducing duplicate versions while keeping filesystem discovery separate from pure planning logic.
+- Commit: 0770dd8a9c1ff85f9d9aec21e89390ce3e351ea2.
+
 ## Exact next action
-1. Verify CI for the migration-version correction.
-2. Add a focused regression test at the migration planning boundary covering the repository's real artifact version sequence.
-3. Investigate the selected PostgreSQL access technology before implementing a concrete MigrationExecutor adapter.
-4. Do not claim deployment-ready migration execution until a concrete adapter and empty-database integration test exist.
+1. Verify CI for the migration sequence regression guard.
+2. Inspect package and application database dependencies to identify the selected PostgreSQL access technology.
+3. If a supported driver boundary already exists, design the smallest concrete MigrationExecutor adapter around it.
+4. Add execution integration only after the adapter can be tested against an empty database.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
