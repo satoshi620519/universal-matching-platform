@@ -22,6 +22,7 @@ export class EmailOutboxDispatchService {
         await this.verificationDelivery.issueAndDeliver({
           accountId: message.accountId,
           emailAddress: message.emailAddress,
+          messageId: message.id,
         });
       }
       await this.outbox.markDelivered(message.id, new Date());
