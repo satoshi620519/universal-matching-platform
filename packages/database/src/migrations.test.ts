@@ -26,12 +26,14 @@ describe('repository migration sequence', () => {
         '0002_create_authentication_identities.sql',
         '0001_create_accounts.sql',
         '0003_create_verification.sql',
+        '0005_create_email_outbox_messages.sql',
       ]),
     ).toEqual([
       '0001_create_accounts.sql',
       '0002_create_authentication_identities.sql',
       '0003_create_verification.sql',
       '0004_create_safety_enforcements.sql',
+      '0005_create_email_outbox_messages.sql',
     ]);
   });
 });
