@@ -14,6 +14,7 @@ model Account {
   updatedAt                DateTime                 @updatedAt @db.Timestamptz(6)
   authenticationIdentities AuthenticationIdentity[]
   verificationRequests      VerificationRequest[]
+  safetyEnforcements        SafetyEnforcement[]
 
   @@map("accounts")
 }
@@ -63,4 +64,22 @@ model VerificationOutcome {
 
   @@index([verificationRequestId])
   @@map("verification_outcomes")
+}
+
+
+model SafetyEnforcement {
+  id             String   @id @default(uuid()) @db.Uuid
+  accountId      String   @map("account_id") @db.Uuid
+  restriction    String
+  reasonCategory String   @map("reason_category")
+  status         String
+  effectiveAt    DateTime @map("effective_at") @db.Timestamptz(6)
+  expiresAt      DateTime? @map("expires_at") @db.Timestamptz(6)
+  revokedAt      DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account        Account  @relation(fields: [accountId], references: [id])
+
+  @@index([accountId, status, effectiveAt])
+  @@map("safety_enforcements")
 }
