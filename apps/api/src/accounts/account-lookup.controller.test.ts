@@ -26,8 +26,8 @@ describe('account lookup HTTP boundary', () => {
     await expect(controller.findById('   ')).rejects.toMatchObject({ status: 400 });
   });
 
-  it('rejects an unknown account', async () => {
+  it('returns not found for an unknown account', async () => {
     const controller = new AccountLookupController({ findById: async () => null } as never);
-    await expect(controller.findById('missing')).rejects.toMatchObject({ status: 400 });
+    await expect(controller.findById('missing')).rejects.toMatchObject({ status: 404 });
   });
 });
