@@ -702,9 +702,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Public HTTP controller is still deferred; request-body DTO shape, privacy-conscious rate-limit key derivation and response status contract must be defined without leaking duplicate identity state.
 - Commits: ee6c9a5ede005bcf3f1d5c4b84ed67a63973fb3d, 2ef3e974b4b972ad6dfa154eeae42e16125fffee, 6ece751401b5a8b71871d8c5f2f5b35fa8ed83a6, b1a849271412133a42199f9bb47579c577e968a8, 4019d35910179a724a0dbd1dc0d3469888243a27, 115931dd7bda9b0ead580d321a569f94ec188abe.
 
+
+## Public password registration HTTP boundary — IMPLEMENTED, CI PENDING
+- Added POST /auth/register with 202 Accepted and no account identifier in the response.
+- Controller accepts only string email/password values and converts other shapes to generic invalid transport input.
+- Added privacy-conscious registration rate-limit key derivation by hashing Fastify's resolved request.ip; the raw address is not embedded in limiter keys and arbitrary forwarded headers are not parsed directly.
+- Added controller regression coverage and exposed the controller through AppModule.
+- Documented duplicate-safe response semantics, generic invalid input handling, rate-limit ordering and the process-local limiter production limitation in PUBLIC_PASSWORD_REGISTRATION_CONTRACT.md.
+- Commits: 06709755845102e0ec4eb495c1c473be9c6caf24, a1cdd48fb10e49bf1bf2ccc328fc7ca385c6ded1, 0c68cad25ed1a56fc535593e270bd7844cf2c7ee, f644b75b651bac9e9a3ab34242eaaad14d3d2e1d, 85461b4a83d2431fead6026b093e10f8b94e3f7b.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Define the public registration request/response contract and privacy-conscious rate-limit key derivation, then add the minimal HTTP controller on top of PasswordRegistrationTransportService.
+2. Run the API test/typecheck/format CI-equivalent commands, fix integration issues, and then inspect the next authentication lifecycle gap (sign-in/session issuance or verification activation).
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
