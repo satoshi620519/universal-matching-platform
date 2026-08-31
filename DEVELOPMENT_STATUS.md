@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Define a provider-neutral capability decision boundary after validated verification capability access composition.
+CURRENT TASK: Validate and refine the composable capability decision domain boundary across verification, entitlement, account state and safety restriction inputs.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -121,12 +121,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Registered composition through Nest DI.
 - CI #472 and #473 completed successfully with typecheck, lint, tests and build green.
 
+## Capability decision contract — IN PROGRESS
+- CI #475 passed typecheck, lint, tests and build for the initial CapabilityDecision contract.
+- Repository inspection found existing capability, entitlement, account-state and safety-restriction domain primitives that should be composed rather than replaced.
+- Isolated CapabilityDecision and CapabilityDecisionContext into a dedicated domain module.
+- Context explicitly models account state, safety restriction, capability scope, verification level and optional entitlement timing.
+- Existing canUseCapability() remains unchanged pending focused composition semantics and tests.
+- Latest commits: da207cc3432a10432a745bab7a59a75cb50d51de, 8b5c822a299d01f5a67908aef78edf192f2f7451, fecd39d0226401f5a95c26912fea46cd8b247528.
+
 ## Exact next action
-1. Define a provider-neutral capability decision contract.
-2. Keep it generic enough for future entitlement, account-status and safety restrictions.
-3. Do not implement a global policy engine before concrete requirement sources are grounded.
-4. Add focused contract tests only.
-5. Record the exact continuation checkpoint.
+1. Add focused domain evaluation semantics for the composed CapabilityDecisionContext.
+2. Reuse existing account, safety, verification and entitlement primitives.
+3. Define deterministic denial precedence without a global policy engine.
+4. Add exhaustive focused tests.
+5. Verify CI and record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
