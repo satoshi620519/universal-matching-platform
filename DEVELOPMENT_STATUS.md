@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the analytics governance access policy CI, then continue with suppression/aggregation and traceability controls.
+CURRENT TASK: Validate the analytics report privacy control CI, then continue with export/configuration traceability controls.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -10,7 +10,7 @@ STATUS: Milestone 1 in progress
 - Safety Metric is CI-validated and complete; progress-record CI #140 also passed.
 - Analytics Governance Access Policy implemented for role-controlled analytics operations (REQ-AN-019, foundations for REQ-AN-021/022/023).
 - Analytics Governance tests implemented.
-- Current immediate action: verify CI for analytics governance commits.
+- Analytics report privacy controls implemented for REQ-AN-020 with deterministic suppression/aggregation behavior.\n- Analytics report privacy control tests implemented.\n- Current immediate action: verify CI for report privacy control commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -48,7 +48,7 @@ STATUS: Milestone 1 in progress
 - Metric report result model CI validation.
 - Privacy-preserving safety metric model and tests.
 - Privacy-preserving safety metric type fix and CI validation (CI #139).
-- Analytics governance access policy and tests.
+- Analytics governance access policy and tests.\n- Analytics report privacy suppression/aggregation controls and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -71,7 +71,7 @@ STATUS: Milestone 1 in progress
 - Metric definition model: CI validated.
 - Metric report result model: CI validated.
 - Privacy-preserving safety metric model: CI validated (CI #139).
-- Analytics governance access policy: tests added; latest CI pending.
+- Analytics governance access policy: CI validated (CI #143).\n- Analytics report privacy controls: tests added; latest CI pending.
 
 ## Exact next action
 1. Check CI triggered by the analytics governance access policy commits.
