@@ -1,0 +1,40 @@
+export interface MigrationArtifact {
+  readonly version: number;
+  readonly filename: string;
+  readonly sql: string;
+}
+
+const MIGRATION_FILENAME = /^(\d{4})_[a-z0-9][a-z0-9_-]*\.sql$/;
+
+export function parseMigrationFilename(filename: string): number {
+  const match = MIGRATION_FILENAME.exec(filename);
+  if (!match) {
+    throw new Error(`Invalid migration filename: ${filename}`);
+  }
+
+  const version = Number(match[1]);
+  if (version <= 0) {
+    throw new Error(`Migration version must be positive: ${filename}`);
+  }
+
+  return version;
+}
+
+export function orderMigrationFilenames(filenames: readonly string[]): string[] {
+  const parsed = filenames.map((filename) => ({
+    filename,
+    version: parseMigrationFilename(filename),
+  }));
+
+  const versions = new Set<number>();
+  for (const migration of parsed) {
+    if (versions.has(migration.version)) {
+      throw new Error(`Duplicate migration version: ${migration.version}`);
+    }
+    versions.add(migration.version);
+  }
+
+  return parsed
+    .sort((left, right) => left.version - right.version)
+    .map((migration) => migration.filename);
+}
