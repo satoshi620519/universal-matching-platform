@@ -56,8 +56,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Account repository and structured API error boundary follow-up CI #229 reached API typecheck and exposed one remaining persistence/domain boundary mismatch: Prisma persisted status is string while AccountRecord requires AccountState.
 - Repository status mapping fix CI #230 passed and progress record CI #231 passed; repository/error boundary slice is CI-validated.
 - Provider-neutral authenticated request context CI #235 passed and progress record CI #236 passed; authentication context boundary is CI-validated.
-- Authentication adapter/unauthorized boundary CI #240/#241 failed at API test typecheck only: a test adapter override omitted the required input parameter and a matcher used an unsupported generic type argument.
-- Targeted test-only fixes applied; production authentication adapter and guard contracts were unchanged. Follow-up CI pending.
+- Authentication adapter/unauthorized boundary follow-up CI #243 and progress record CI #244 passed; authentication adapter and 401 boundary are CI-validated.
+- Capability authorization HTTP boundary implemented by reusing CapabilityAccessService; authenticated-but-ineligible requests receive 403 with a controlled capability reason. CI pending.
 - Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
@@ -151,10 +151,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the authentication adapter and HTTP guard commits.
-2. If green: mark the authentication adapter/unauthorized boundary CI-validated.
-3. Add an authorization boundary that distinguishes authenticated identity from permission/capability access and returns 403 for denied access.
-4. Reuse the existing Capability Gate and Capability Access Service contracts; do not recreate authorization domain logic.
-5. After authorization HTTP boundary is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
+1. Check CI triggered by the capability authorization guard commits.
+2. If green: mark the 403 authorization boundary CI-validated.
+3. Connect the authenticated principal to the request lifecycle through an adapter/middleware boundary so guards consume a single request principal source.
+4. Do not introduce a concrete identity provider yet.
+5. After request-principal propagation is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
 6. Update this file after every coherent slice.
 
