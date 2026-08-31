@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the metric report result model CI, then continue with the next smallest analytics vertical slice.
+CURRENT TASK: Validate the privacy-preserving safety metric model CI, then continue with analytics governance/access controls.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Metric Definition Model CI passed: install, typecheck, lint, test and build all green.
-- Metric Definition Model is CI-validated and complete.
-- Metric Report Result model implemented to support reporting periods/scopes and explicitly distinguish unavailable data from measured zero.
-- Metric Report Result tests implemented.
-- Current immediate action: verify CI for metric report result commits.
+- Metric Report Result Model CI passed: install, typecheck, lint, test and build all green.
+- Metric Report Result Model is CI-validated and complete.
+- Privacy-preserving Safety Metric model implemented for REQ-AN-015 through REQ-AN-018.
+- Safety Metric tests implemented.
+- Current immediate action: verify CI for safety metric commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -45,6 +45,8 @@ STATUS: Milestone 1 in progress
 - Metric definition model and tests.
 - Metric definition model CI validation.
 - Metric report result model and tests.
+- Metric report result model CI validation.
+- Privacy-preserving safety metric model and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -65,12 +67,13 @@ STATUS: Milestone 1 in progress
 - Audit record domain model: CI validated.
 - Analytics event taxonomy: CI validated.
 - Metric definition model: CI validated.
-- Metric report result model: tests added; latest CI pending.
+- Metric report result model: CI validated.
+- Privacy-preserving safety metric model: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by the metric report result model commits.
-2. If green: mark Metric Report Result Model CI-validated.
-3. Then continue with the next smallest analytics vertical slice, reusing Analytics Event Taxonomy, Metric Definition and Metric Report rather than recreating them.
+1. Check CI triggered by the privacy-preserving safety metric commits.
+2. If green: mark Privacy-preserving Safety Metric Model CI-validated.
+3. Then implement the smallest analytics governance/access-control slice for REQ-AN-019 through REQ-AN-023, reusing the completed analytics and audit foundations.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
