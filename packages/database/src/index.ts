@@ -20,3 +20,5 @@ export {
   StaticMigrationArtifactSource,
   type MigrationArtifactSource,
 } from './migration-source.js';
+
+export { runMigrations } from './migration-runner.js';
