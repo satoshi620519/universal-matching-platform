@@ -827,12 +827,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 78e84c0c51df4193bddc4ffccc5f0b692e6525bd, 523b325ffd91a16041cfb9887b30ed50615613b2, c99321fb38a05f9d8662a70b9d0c03bd8d3fa823, 7606b053c1740cca5c29302a918497440b99e9a0, 4293fee2b103623e534290d31ef24c6aea0ec0b0, 4b17c42d99381b2440fba7fda717bfa984c734c0.
 - CI state: workflow evidence for these commits and preceding outbox commits is not available through the current connector response; do not infer green.
 
+
+## Outbound email identity and failure observability — IMPLEMENTED, provider selection deferred
+- Resumed from the persistent exact-next-action checkpoint and did not recreate the existing outbox/process implementation.
+- Extended OutboundEmail with required stable messageId; the durable EmailOutboxMessage.id is propagated through dispatch and verification delivery unchanged across retries.
+- Added a provider-neutral failure classification boundary: transient, permanent and unknown, with explicit handling for 429 and 5xx responses.
+- Dispatcher records classification-prefixed, bounded failure information without persisting provider response bodies, credentials or raw verification tokens.
+- Added focused regression coverage for message identity propagation and failure classification.
+- Added OUTBOUND_EMAIL_IDENTITY_OBSERVABILITY.md defining the correlation/idempotency contract and explicitly deferring provider-specific behavior until a provider is selected.
+- Commits: 2b35ce79af8228317eeaf51d8c0529bfc273feda, 8e1fe791fd97c02251a62dd1298510ccf22bc331, 157601dba5b88b5656ddf342ae35b03d9da2269d, fc13ccda8344330e2040eee97d69fb534aa532b3, 29d76a3a444e0e0c6da1f7511a07a296d733277f, 60fdad8e33756c0338fe3cf6a4df7d5ab534839e, eefc849d02dfe0493299e9792ea46d4abb9d1196, 9b1508463841c2468a94abeeffd431608bc561d2.
+- CI state remains unverified through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for all recent outbox/process-adapter commits; if workflow runs remain unavailable, preserve that fact rather than claiming validation.
-2. Design the OutboundEmailSender provider message identity/idempotency contract before introducing automated frequent scheduling or a real provider adapter.
-3. Add delivery observability semantics (stable message ID, attempt correlation, safe error classification) without storing raw verification tokens or unnecessary credential data.
-4. Keep the standalone process explicit; do not add an AppModule timer unless deployment topology is intentionally decided.
-5. Keep migration execution explicit and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for all recent outbox/process/identity commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Select a real outbound email provider only after inspecting repository/environment configuration and operational constraints; do not invent credentials or silently enable network delivery.
+3. Evolve retry policy so permanent failures are not blindly retried forever, including an explicit terminal/dead-letter state and migration only if the persistence contract changes.
+4. Keep stable messageId correlation across retries and preserve the prohibition on raw verification tokens in durable outbox records.
+5. Keep the standalone process explicit and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
