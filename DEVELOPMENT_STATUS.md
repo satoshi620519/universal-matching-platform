@@ -56,7 +56,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Account repository and structured API error boundary follow-up CI #229 reached API typecheck and exposed one remaining persistence/domain boundary mismatch: Prisma persisted status is string while AccountRecord requires AccountState.
 - Repository status mapping fix CI #230 passed and progress record CI #231 passed; repository/error boundary slice is CI-validated.
 - Provider-neutral authenticated request context CI #235 passed and progress record CI #236 passed; authentication context boundary is CI-validated.
-- Provider-neutral authentication adapter contract and unauthorized HTTP guard boundary implemented; CI pending.
+- Authentication adapter/unauthorized boundary CI #240/#241 failed at API test typecheck only: a test adapter override omitted the required input parameter and a matcher used an unsupported generic type argument.
+- Targeted test-only fixes applied; production authentication adapter and guard contracts were unchanged. Follow-up CI pending.
 - Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
