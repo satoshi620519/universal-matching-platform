@@ -3,7 +3,7 @@ import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { RequestAuthenticationAdapter } from '../auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { AuthenticatedAccountLookupController } from './authenticated-account-lookup.controller.js';
-import { AccountLookupService } from './account-lookup.service.js';
+import { AuthenticatedAccountContextService } from './authenticated-account-context.service.js';
 
 class StubAuthenticationAdapter extends RequestAuthenticationAdapter {
   constructor(private readonly principal: any) { super(); }
@@ -17,16 +17,16 @@ describe('authenticated account lookup HTTP boundary', () => {
     createdAt: new Date('2026-01-01T00:00:00.000Z'),
     updatedAt: new Date('2026-01-01T00:00:00.000Z'),
   }) {
-    class Lookup extends AccountLookupService {
-      constructor() { super({} as never); }
-      override async findById(id: string) {
-        expect(id).toBe(principal?.accountId);
-        return account;
-      }
-    }
+    const context = {
+      resolve: async (value: any) => {
+        expect(value.accountId).toBe(principal?.accountId);
+        if (!account) throw new NotFoundException('Account not found');
+        return { principal: value, account };
+      },
+    } as unknown as AuthenticatedAccountContextService;
 
     return new AuthenticatedAccountLookupController(
-      new Lookup(),
+      context,
       new RequestPrincipalResolver(new StubAuthenticationAdapter(principal)),
     );
   }
@@ -45,7 +45,7 @@ describe('authenticated account lookup HTTP boundary', () => {
     await expect(controllerFor().findAuthenticatedAccount()).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
-  it('returns not found when the authenticated account does not exist', async () => {
+  it('propagates not found when the authenticated account does not exist', async () => {
     await expect(controllerFor({
       accountId: 'missing',
       authenticationMethod: 'test',
