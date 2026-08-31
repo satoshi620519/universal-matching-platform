@@ -37,8 +37,8 @@ export class AuthenticatedCapabilityAccessService {
     }
 
     return this.capabilities.evaluate({
-      currentVerificationLevel: value as VerificationLevel,
       ...requirements,
+      currentVerificationLevel: value as VerificationLevel,
     });
   }
 }
