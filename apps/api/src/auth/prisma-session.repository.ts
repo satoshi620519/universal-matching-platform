@@ -20,6 +20,12 @@ export class PrismaSessionRepository extends SessionRepository {
     return this.database.authenticationSession.create({ data: input });
   }
 
+  async findByCredentialHash(credentialHash: string): Promise<AuthenticationSession | null> {
+    return this.database.authenticationSession.findUnique({
+      where: { credentialHash },
+    });
+  }
+
   async revoke(id: string, revokedAt: Date): Promise<void> {
     await this.database.authenticationSession.update({
       where: { id },
