@@ -40,3 +40,5 @@ export * from './metric-definition.js';
 export * from './metric-report.js';
 
 export * from './safety-metric.js';
+
+export * from './analytics-governance.js';
