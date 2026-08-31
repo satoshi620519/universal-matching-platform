@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Define the provider-neutral credential persistence contract before implementing authentication credentials.
+CURRENT TASK: Implement and validate the additive provider-neutral authentication identity persistence slice.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -41,13 +41,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added IDENTITY_AUTHENTICATION_BOUNDARY.md to prevent credentials from being mixed into Account or API transport prematurely.
 - No production behavior changed in this planning slice.
 
-## Exact next action
-1. Inspect the logical data model and existing migration conventions for credential-related ownership boundaries.
-2. Define the smallest provider-neutral physical credential model before writing a migration.
-3. Keep password material outside Account and out of ordinary account projections.
-4. Do not select JWT/session formats, password algorithms or external identity providers implicitly.
-5. Add focused tests and verify CI before advancing to registration/sign-in behavior.
+## Authentication identity persistence planning — COMPLETE
+- Traced DATA_MODEL_DRAFT.md AuthenticationIdentity ownership into the existing physical Account schema and migration conventions.
+- Defined AUTHENTICATION_CREDENTIAL_PERSISTENCE_PLAN.md with the smallest additive authentication_identities model.
+- Account remains free of authentication secrets.
+- Password hashes, JWT/session state, provider payloads, verification evidence and recovery secrets remain explicitly out of this migration.
 
+## Exact next action
+1. Add the versioned additive authentication_identities SQL migration.
+2. Add the exact matching Prisma AuthenticationIdentity model.
+3. Add focused migration/model-boundary tests.
+4. Run the existing migration integration gate and CI.
+5. Record commit, CI state and any unresolved credential-method decisions.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
