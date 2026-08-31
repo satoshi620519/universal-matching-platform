@@ -15,3 +15,8 @@ export {
   type SqlMigrationClient,
   type SqlMigrationQueryClient,
 } from './postgres-migration-executor.js';
+
+export {
+  StaticMigrationArtifactSource,
+  type MigrationArtifactSource,
+} from './migration-source.js';
