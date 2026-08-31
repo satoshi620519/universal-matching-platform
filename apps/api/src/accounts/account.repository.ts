@@ -15,7 +15,5 @@ export interface CreateAccountRecord {
 export abstract class AccountRepository {
   abstract create(input: CreateAccountRecord): Promise<AccountRecord>;
   abstract findById(id: string): Promise<AccountRecord | null>;
-  async updateStatus(_id: string, _status: AccountState): Promise<AccountRecord | null> {
-    throw new Error('Account status updates are not implemented');
-  }
+  abstract updateStatus(id: string, status: AccountState): Promise<AccountRecord | null>;
 }
