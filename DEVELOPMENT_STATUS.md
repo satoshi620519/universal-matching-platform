@@ -50,6 +50,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 consistency review confirmed the requirement contracts align with the existing bounded-context, data, API and event architecture; no new irreversible product decision is required before implementation.
 - Architecture baseline is already established in DOMAIN_MODEL.md, DATA_MODEL_DRAFT.md, API_ARCHITECTURE.md, EVENT_AND_ASYNC_ARCHITECTURE.md, IMPLEMENTATION_MILESTONES.md and TECHNOLOGY_STACK_DECISION.md.
 - Current immediate action: begin Milestone 1 runnable vertical slice without recreating completed requirement contracts or architecture artifacts.
+- Milestone 1 API foundation slice implemented: typed runtime configuration, health/readiness service, database configuration awareness, and correlation ID propagation. CI pending.
+- Next implementation slice after CI: database driver/repository boundary and migration baseline, then structured API error boundary.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -143,8 +145,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 ## Exact next action
 1. Start Milestone 1 — Core API, database and identity from the existing architecture baseline.
 2. Inspect the current apps/api and infrastructure boundaries before modifying files.
-3. Implement the smallest runnable vertical slice: API bootstrap/health, configuration boundary, database connectivity/migration baseline, request correlation and structured error boundary.
+3. API bootstrap, typed configuration boundary, health/readiness state and request correlation are implemented; database connectivity/migration baseline and structured error boundary remain.
 4. Add authenticated request context only after the API boundary is runnable; keep authentication provider-neutral.
 5. Reuse existing domain Account, Capability, Audit and lifecycle models; do not recreate completed requirement contracts.
-6. Run CI after each coherent slice and record the exact checkpoint.
+6. Run CI for the API foundation slice and record the exact checkpoint.
 
