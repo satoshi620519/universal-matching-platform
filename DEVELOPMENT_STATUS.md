@@ -443,11 +443,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Test: next gate
 - Build: pending
 
+## Lint gate — GREEN, test diagnostics pipeline added
+- CI run #574 confirmed Typecheck GREEN and Lint GREEN after the generic mock contract fix.
+- The next real gate is pnpm test, which now fails while build remains blocked.
+- Added test.log capture and always-run test-diagnostics artifact upload to expose exact failing test output.
+- Commit: f1c3a72d3f4281e432aec71272a38fbd8ffce7f1.
+
+## Pipeline progression
+- PostgreSQL service: GREEN
+- Install: GREEN
+- Typecheck: GREEN
+- Lint: GREEN
+- Test: RED, exact diagnostics capture added
+- Build: blocked by test
+
 ## Exact next action
-1. Verify CI triggered by 6c8c3ebb.
-2. If lint is green, inspect the exact test failure next.
-3. Preserve test diagnostics if required and fix only exact failing tests.
-4. Continue to build gate until baseline CI is green.
+1. Inspect CI run triggered by f1c3a72d.
+2. Download test-diagnostics if tests fail and fix only exact failing tests.
+3. Continue to build gate and capture build diagnostics if necessary.
+4. Do not claim baseline CI green until all gates pass.
 5. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
 6. Record the exact continuation checkpoint.
 
