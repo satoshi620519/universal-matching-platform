@@ -4,6 +4,7 @@ import {
   orderMigrationFilenames,
   parseMigrationFilename,
   planMigrations,
+  validateMigrationArtifacts,
 } from './migrations.js';
 
 describe('parseMigrationFilename', () => {
@@ -89,5 +90,16 @@ describe('planMigrations', () => {
         new Set(),
       ),
     ).toThrow('Duplicate migration version: 1');
+  });
+});
+
+
+describe('validateMigrationArtifacts', () => {
+  it('rejects artifacts whose declared version does not match the filename', () => {
+    expect(() =>
+      validateMigrationArtifacts([
+        { version: 2, filename: '0001_create_accounts.sql', sql: 'CREATE TABLE accounts ()' },
+      ]),
+    ).toThrow('Migration version does not match filename');
   });
 });
