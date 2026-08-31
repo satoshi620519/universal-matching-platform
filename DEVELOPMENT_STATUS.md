@@ -30,6 +30,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated durable authenticated account activation
+- AuthenticatedAccountActivationService performs the existing domain transition and persists the resulting state through AccountRepository.updateStatus.
+- PrismaAccountRepository implements updateStatus without introducing a separate persistence API.
+- The authenticated target remains exclusively derived from RequestPrincipal.accountId.
+- A missing account at the persistence boundary is rejected explicitly with NotFoundException.
+- Focused tests cover principal-derived targeting, durable status update and disappearance before persistence.
+- Implementation commits: bc645b8, 5c7da83, efbe6f6, 256de333a9d8502a4849de2ff073d3fd97c6c94f, f94497e6a3f9aa3315c3985eedf87b20ea609d9d.
+- GitHub Actions CI run #340 for f94497e6a3f9aa3315c3985eedf87b20ea609d9d completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated authenticated account activation endpoint
 - PATCH /accounts/authenticated/activation derives the target exclusively from the authenticated RequestPrincipal.
 - RequestPrincipalResolver remains the HTTP authentication boundary.
@@ -100,9 +109,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect existing account state persistence and lifecycle contracts to identify the next vertical slice that can make authenticated activation durable without inventing a new persistence API.
-2. Prefer extending an existing repository contract only if the domain and persistence layers already expose a compatible state transition pattern.
-3. Preserve legacy routes and current activation semantics.
-4. Add focused tests around persistence boundaries before exposing any additional mutation.
+1. Inspect existing entitlement lifecycle and repository contracts for the next account-scoped vertical slice that can reuse the authenticated account context without inventing identity transport.
+2. Prefer a read boundary or an existing domain transition before adding new persistence semantics.
+3. Keep authenticated targeting derived from RequestPrincipal.accountId and preserve legacy routes.
+4. Add focused tests for ownership/identity boundaries and explicit missing-resource failures.
 5. Run full CI.
 6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
