@@ -2,6 +2,7 @@ import { BadRequestException, Controller, Get, Headers, Query } from '@nestjs/co
 import type { CapabilityContext, EntitlementState, VerificationLevel } from '@universal/domain';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CapabilityAccessService } from './capability-access.service.js';
+import { AuthenticatedCapabilityAccessService } from './authenticated-capability-access.service.js';
 
 interface CapabilityAccessQuery {
   readonly currentVerificationLevel: string;
@@ -61,6 +62,7 @@ export class CapabilityAccessController {
   constructor(
     private readonly capabilityAccess: CapabilityAccessService,
     private readonly principalResolver: RequestPrincipalResolver,
+    private readonly authenticatedCapabilityAccess: AuthenticatedCapabilityAccessService,
   ) {}
 
   @Get('access')
@@ -81,15 +83,6 @@ export class CapabilityAccessController {
       requestId: requestId ?? 'capability-access-authenticated',
     });
 
-    if (principal.verificationLevel === undefined) {
-      throw new BadRequestException('authenticated principal verificationLevel is required');
-    }
-
-    return this.capabilityAccess.evaluate(
-      buildContext(
-        query,
-        parseVerificationLevel(principal.verificationLevel, 'principal.verificationLevel'),
-      ),
-    );
+    return this.authenticatedCapabilityAccess.evaluate(principal, buildContext(query, 0));
   }
 }
