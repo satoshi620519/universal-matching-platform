@@ -770,9 +770,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Documented credential lifecycle decisions: independent concurrent sessions are supported; rotation is intentionally deferred until per-session/account-wide/session-family policy is chosen.
 - Commits: 53aab8e89f44ac829b027e678da6a25f1b794c99, 83e9e2a5061bfd598f772f29b5179830b78e479b, 15d53d7ed5e24e0472f08df7aee6ac6cf27400a9, 10614f764881f0157ad08dc759b2fe4732c67dab, 627e564120447a3846d5493456f43b2ea21af869.
 
+
+## Email verification lifecycle boundary — IMPLEMENTED, delivery integration deferred
+- Added EmailVerificationToken persistence model with hashed opaque token, expiry and one-time consumption timestamp.
+- Added token generation/hash primitives and a 30-minute EmailVerificationService issuance contract.
+- Added atomic consume-if-usable persistence semantics to prevent replay of used or expired tokens.
+- Added verification flow that activates pending accounts only after successful token consumption and returns a non-enumerating rejected result for unusable tokens.
+- Added POST /auth/email-verification returning only verified true/false and regression tests for issuance, activation and rejection behavior.
+- Intentionally did not expose raw verification tokens from registration or claim email delivery exists: no outbound mail adapter or trusted verification-link policy is currently present.
+- Schema changes require generated/applied Prisma migration before deployment.
+- Commits: 2cfc284ee174ed8b1493d52a85165adaa3c2b899, 1f1e8dba3926d1efe2b0864bc7146ce14e840ca6, 50ef49f75b1f287c6539da802497031a13c575a6, ddb1795afebab9173169535837af59379bd6d4c0, e630d082b572016b382178ba03051495abe65b37, 8cd84c4150f32e73832f90d895cb75c9f5ce9ea9, 37dab6335d26a4e0f9c5acfe9b3f8b423a3e9143, 9582c6237dd05c8112eb7b890f9e54d749b62c3d, 07f181cba0c0c4a530a710496189af782c34b8cc.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Generate and apply the outstanding Prisma migration in a runnable environment, then add database-backed integration coverage for registration/sign-in/session authentication and inspect email verification activation as the next account lifecycle gap.
+2. Design an outbound email delivery abstraction and verification-link construction policy, then connect registration to verification-token issuance without exposing raw tokens through the public registration response; keep migration generation/application as a deployment prerequisite.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
