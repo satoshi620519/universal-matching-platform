@@ -5,6 +5,9 @@ import { AuthenticatedAccountLookupController } from './accounts/authenticated-a
 import { AuthenticatedAccountContextService } from './accounts/authenticated-account-context.service.js';
 import { AuthenticatedAccountActivationService } from './accounts/authenticated-account-activation.service.js';
 import { AuthenticatedAccountActivationController } from './accounts/authenticated-account-activation.controller.js';
+import { AuthenticatedAccountDeletionRequestController } from './accounts/authenticated-account-deletion-request.controller.js';
+import { AuthenticatedAccountDeletionRequestService } from './accounts/authenticated-account-deletion-request.service.js';
+import { AccountDeletionRequestService } from './accounts/account-deletion-request.service.js';
 import { AuthenticatedCapabilityAccessService } from './capabilities/authenticated-capability-access.service.js';
 import { AuthenticatedCapabilityDecisionService } from './capabilities/authenticated-capability-decision.service.js';
 import { AccountLookupService } from './accounts/account-lookup.service.js';
@@ -35,8 +38,8 @@ import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController],
-  providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountContextService,
+  controllers: [HealthController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
+  providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
