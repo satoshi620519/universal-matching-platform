@@ -28,6 +28,7 @@ export * from './entitlement.js';
 export * from './verification.js';
 export * from './safety-restriction.js';
 export * from './safety-enforcement.js';
+export * from './effective-safety-restriction.js';
 export * from './report.js';
 export * from './moderation-case.js';
 
