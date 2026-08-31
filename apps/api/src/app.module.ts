@@ -56,6 +56,10 @@ import { HealthStatusService } from './health/health-status.service.js';
       useExisting: PrismaAccountRepository,
     },
     {
+      provide: SafetyEnforcementRepository,
+      useExisting: PrismaSafetyEnforcementRepository,
+    },
+    {
       provide: VerificationRepository,
       useExisting: PrismaVerificationRepository,
     },
