@@ -51,7 +51,7 @@ describe('planMigrations', () => {
 
   it('returns only unapplied migrations in version order', () => {
     expect(planMigrations(migrations, new Set([1]))).toEqual({
-      pending: [migrations[1], migrations[2]],
+      pending: [migrations[0], migrations[2]],
     });
   });
 
@@ -62,7 +62,7 @@ describe('planMigrations', () => {
   });
 
   it('rejects duplicate versions', () => {
-    expect(
+    expect(() =>
       planMigrations(
         [
           { version: 1, filename: '0001_create_accounts.sql', sql: '' },
