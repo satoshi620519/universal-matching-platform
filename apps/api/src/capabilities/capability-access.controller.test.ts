@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 import { RequestAuthenticationAdapter } from '../auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CapabilityAccessController } from './capability-access.controller.js';
