@@ -27,6 +27,19 @@ export class PrismaAccountRepository implements AccountRepository {
     return record ? this.toAccountRecord(record) : null;
   }
 
+  async updateStatus(id: string, status: AccountState): Promise<AccountRecord | null> {
+    const result = await this.database.account.updateMany({
+      where: { id },
+      data: { status },
+    });
+
+    if (result.count === 0) {
+      return null;
+    }
+
+    return this.findById(id);
+  }
+
   private toAccountRecord(record: {
     id: string;
     status: string;
