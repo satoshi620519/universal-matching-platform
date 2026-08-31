@@ -2,17 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the privacy-preserving safety metric model CI, then continue with analytics governance/access controls.
+CURRENT TASK: Validate the analytics governance access policy CI, then continue with suppression/aggregation and traceability controls.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Metric Report Result Model CI passed: install, typecheck, lint, test and build all green.
-- Metric Report Result Model is CI-validated and complete.
-- Privacy-preserving Safety Metric model implemented for REQ-AN-015 through REQ-AN-018.
-- Safety Metric tests implemented.
-- Initial export CI exposed a type-level contradiction: an input restricted to literal false could not represent the identity-bearing invalid case tested at runtime.
-- Fixed by accepting boolean input and retaining the domain validation rule that only false is valid.
-- Current immediate action: verify CI for the targeted safety metric type fix.
+- Privacy-preserving Safety Metric type fix CI #139 passed: install, typecheck, lint, test and build all green.
+- Safety Metric is CI-validated and complete; progress-record CI #140 also passed.
+- Analytics Governance Access Policy implemented for role-controlled analytics operations (REQ-AN-019, foundations for REQ-AN-021/022/023).
+- Analytics Governance tests implemented.
+- Current immediate action: verify CI for analytics governance commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -49,6 +47,8 @@ STATUS: Milestone 1 in progress
 - Metric report result model and tests.
 - Metric report result model CI validation.
 - Privacy-preserving safety metric model and tests.
+- Privacy-preserving safety metric type fix and CI validation (CI #139).
+- Analytics governance access policy and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -70,14 +70,16 @@ STATUS: Milestone 1 in progress
 - Analytics event taxonomy: CI validated.
 - Metric definition model: CI validated.
 - Metric report result model: CI validated.
-- Privacy-preserving safety metric model: initial CI failed at typecheck; targeted type fix committed; replacement CI pending.
+- Privacy-preserving safety metric model: CI validated (CI #139).
+- Analytics governance access policy: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by `fix: allow validation of identity-bearing safety metric input`.
-2. If green: mark Privacy-preserving Safety Metric Model CI-validated.
-3. Then implement the smallest analytics governance/access-control slice for REQ-AN-019 through REQ-AN-023, reusing the completed analytics and audit foundations.
-4. If red: inspect only the failing job and apply the smallest targeted fix.
-5. Update this file after every meaningful change.
+1. Check CI triggered by the analytics governance access policy commits.
+2. If green: mark Analytics Governance Access Policy CI-validated.
+3. Then implement the smallest suppression/aggregation control for sensitive or small-cohort reports (REQ-AN-020), reusing Metric Report and Analytics Governance rather than recreating them.
+4. Follow with auditable export/configuration traceability using the existing Audit Record foundation.
+5. If red: inspect only the failing job and apply the smallest targeted fix.
+6. Update this file after every meaningful change.
 
 ## Continuity rule
 GitHub is the source of truth. Read this file before changing code after any interruption. Never recreate completed work unless repository inspection or CI proves it missing or broken.
