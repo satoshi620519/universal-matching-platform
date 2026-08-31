@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the accessibility flow communication contract CI, then continue with the remaining accessibility requirement slice.
+CURRENT TASK: Validate the accessibility assurance contract CI, then continue with the next unimplemented operational quality slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
@@ -29,7 +29,10 @@ STATUS: Milestone 1 in progress
 - Accessibility Flow Communication Contract tests implemented.
 - Initial CI failed at typecheck because the test fixture widened informationChannels to string[].
 - Fixed by preserving literal channel types with a readonly tuple; no domain rule was changed.
-- Current immediate action: verify CI for the targeted accessibility flow test type fix.
+- Replacement CI #165 passed and progress record CI #166 also passed; Accessibility Flow Communication Contract is CI-validated.
+- Accessibility Assurance Contract implemented for REQ-A11Y-007 through REQ-A11Y-010: time-limit alternatives, important visual text alternatives, supported platform preference respect, and major user-flow accessibility acceptance.
+- Accessibility Assurance Contract tests implemented.
+- Current immediate action: verify CI for accessibility assurance contract commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -73,6 +76,7 @@ STATUS: Milestone 1 in progress
 - Analytics deployment retention/non-essential disable policy and tests.
 - Accessibility control contract and tests.
 - Accessibility flow communication contract and tests.
+- Accessibility assurance contract and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -100,12 +104,13 @@ STATUS: Milestone 1 in progress
 - Auditable analytics actions: CI validated (CI #151).
 - Analytics deployment retention policy: CI validated (CI #155).
 - Accessibility control contract: CI validated (CI #159).
-- Accessibility flow communication contract: initial CI failed at typecheck; targeted test typing fix committed; replacement CI pending.
+- Accessibility flow communication contract: CI validated after targeted test typing fix (CI #165).
+- Accessibility assurance contract: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by `fix: preserve accessibility channel literals in tests`.
-2. If green: mark Accessibility Flow Communication Contract CI-validated.
-3. Then implement the remaining smallest accessibility slice for REQ-A11Y-007 through REQ-A11Y-010, reusing completed accessibility contracts.
+1. Check CI triggered by the accessibility assurance contract commits.
+2. If green: mark Accessibility Assurance Contract CI-validated and mark the Accessibility requirements slice complete.
+3. Re-read PRODUCT_REQUIREMENTS.md from the next unimplemented operational quality section and select the smallest domain/application slice without recreating completed work.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
