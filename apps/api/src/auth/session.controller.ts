@@ -1,16 +1,26 @@
-import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Controller, Headers, HttpCode, HttpStatus, Post } from '@nestjs/common';
 
-import { CurrentPrincipal } from './current-principal.decorator.js';
+import { RequestPrincipalResolver } from './request-principal-resolver.js';
 import { SessionRevocationService } from './session-revocation.service.js';
-import type { RequestPrincipal } from './request-principal.js';
 
 @Controller('auth')
 export class SessionController {
-  constructor(private readonly revocation: SessionRevocationService) {}
+  constructor(
+    private readonly principalResolver: RequestPrincipalResolver,
+    private readonly revocation: SessionRevocationService,
+  ) {}
 
   @Post('sign-out')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async signOut(@CurrentPrincipal() principal: RequestPrincipal): Promise<void> {
+  async signOut(
+    @Headers('authorization') authorization?: string,
+    @Headers('x-request-id') requestId?: string,
+  ): Promise<void> {
+    const principal = await this.principalResolver.requireAuthenticated({
+      authorization,
+      requestId: requestId ?? 'auth-sign-out',
+    });
+
     if (principal.sessionId) {
       await this.revocation.revoke(principal.sessionId);
     }
