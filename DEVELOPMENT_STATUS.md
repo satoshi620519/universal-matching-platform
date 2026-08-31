@@ -571,6 +571,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - No destructive privacy operation was added.
 - Commits: 6d386cdbc3a88f90e5db211df7129f59ea23550a, 1291b4b5530dca85c43c30ef7c31723b2c2f30e7.
 
+
+## Pending-deletion production slice — IMPLEMENTATION COMPLETE, CI EVIDENCE PENDING
+- Re-read the repository status and requirements after completing service/controller regression coverage.
+- Confirmed the safe deletion slice is now coherent: authenticated principal → account context → domain transition → AccountRepository persistence.
+- Added ACCOUNT_DELETION_LIFECYCLE_IMPLEMENTATION.md as a durable completion boundary so future work does not confuse pending-deletion with destructive erasure.
+- Explicitly preserves the block on hard deletion, anonymization, retention scheduling, legal holds and provider cleanup pending policy.
+- Completion record commit: 54339486d07ab2228aaf2775f08ffbe4242e19cf.
+
 ## Exact next action
 1. Verify CI for 1291b4b5 and the preceding authenticated deletion-request commits where workflow evidence becomes available.
 2. Mark the pending-deletion slice complete once CI evidence is available, then inspect the next Milestone 1 requirement gap without expanding destructive privacy behavior.
