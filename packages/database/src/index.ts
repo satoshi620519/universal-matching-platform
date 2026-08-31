@@ -1,4 +1,8 @@
 export {
+  executePendingMigrations,
+  type MigrationExecutor,
+} from './executor.js';
+export {
   orderMigrationFilenames,
   parseMigrationFilename,
   planMigrations,
