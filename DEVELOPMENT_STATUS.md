@@ -656,9 +656,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Registered concrete and abstract repository providers in AppModule.
 - Commits: 72e921cf1b9e96ee4ca137f007ad9142fb03efb0, 93cbea6e76b4203746eeaf3948e6897c30c4645c, 2292a4177fdfb48422429c6474986e9b30a43bb7, b1cf721a1ab28c82430c1d0b9e6c317bb020f0a6.
 
+
+## Password registration application service — IMPLEMENTED, CI PENDING
+- Added PasswordRegistrationService on top of the atomic registration repository.
+- The service hashes plaintext through PasswordHasher before persistence and creates pending Account + active email-password AuthenticationIdentity + active PasswordCredential through the single transaction boundary.
+- Added regression coverage for plaintext-to-hash ordering, hashing failure with zero persistence calls, and transaction failure propagation without fallback writes.
+- Registered PasswordRegistrationService in AppModule and documented PASSWORD_REGISTRATION_APPLICATION_FLOW.md.
+- Intentionally did not expose an HTTP endpoint before defining transport validation, duplicate identity semantics, email normalization, password policy and rate limiting.
+- Commits: 40f430296bf92aa79ea910e955eb70748b46c272, ab874d10e4b832ebc70f3c440d450ebffd60f4ef, 90af49876e6c5023d3ec30bbf7b2f73daac0f280, b5a0ee89e3fa8cc2e658e58f141a753b61b604d3.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Implement a PasswordRegistrationService that hashes plaintext through PasswordHasher before calling the atomic repository, with duplicate/provider identity behavior explicitly mapped.
+2. Define registration transport semantics (email normalization, duplicate identity handling, password policy and rate limiting) before exposing PasswordRegistrationService through HTTP.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
