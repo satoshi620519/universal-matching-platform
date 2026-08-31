@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CapabilityAccessService } from '../capabilities/capability-access.service.js';
 import {
@@ -29,13 +30,18 @@ export class CapabilityAuthorizationGuard implements CanActivate {
       .getRequest<AuthenticatedFastifyRequest>();
 
     const principal = getRequestPrincipal(request);
-    const currentVerificationLevel = Number(
-      principal?.verificationLevel ?? 0,
-    ) as 0 | 1 | 2 | 3;
+    if (!principal) {
+      throw new UnauthorizedException('Authentication required');
+    }
+
+    const currentVerificationLevel = Number(principal.verificationLevel);
+    if (!Number.isInteger(currentVerificationLevel) || currentVerificationLevel < 0 || currentVerificationLevel > 3) {
+      throw new UnauthorizedException('Authenticated principal verificationLevel is invalid');
+    }
 
     const decision = this.capabilityAccess.evaluate({
-      currentVerificationLevel,
       ...this.requirement,
+      currentVerificationLevel: currentVerificationLevel as 0 | 1 | 2 | 3,
     });
 
     if (!decision.allowed) {
