@@ -531,9 +531,17 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This turns the test into a real regression guard for the full committed migration sequence rather than only schema_migrations version numbers.
 - Commit: 96c0ca4ff8341cc45e1cb9884856a795192836a8.
 
+
+## Safety restriction DI integration correction — IMPLEMENTED, CI PENDING
+- Re-read the actual AppModule after completing migration coverage and resumed from the next Milestone 1 integration gap.
+- Found a concrete Nest DI wiring defect: EffectiveSafetyRestrictionService depends on the abstract SafetyEnforcementRepository, but AppModule registered PrismaSafetyEnforcementRepository without binding the abstraction token.
+- This could leave the authenticated capability decision path unable to instantiate in a real application context despite focused unit tests passing.
+- Added SafetyEnforcementRepository → PrismaSafetyEnforcementRepository binding using useExisting.
+- Commit: 2ad6700852ddf9788471efcb072eb0d703a569be.
+
 ## Exact next action
-1. Verify CI for 96c0ca4f and the preceding migration integration commits.
-2. If CI is green, mark the migration integration gate complete and resume investigation from the next Milestone 1 implementation gap rather than adding duplicate migration tests.
+1. Verify CI for 2ad67008, including the preceding migration integration commits.
+2. If CI is green, mark the migration integration gate and safety DI wiring slice complete, then continue from the next Milestone 1 gap.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
