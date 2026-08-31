@@ -8,7 +8,7 @@ import {
 
 describe('accessibility flow contract', () => {
   const accessibleFlow = {
-    informationChannels: ['text', 'color'],
+    informationChannels: ['text', 'color'] as const,
     supportsTextScaling: true,
     focusOrder: ['search', 'results', 'details'],
     focusVisible: true,
