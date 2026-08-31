@@ -51,7 +51,9 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Architecture baseline is already established in DOMAIN_MODEL.md, DATA_MODEL_DRAFT.md, API_ARCHITECTURE.md, EVENT_AND_ASYNC_ARCHITECTURE.md, IMPLEMENTATION_MILESTONES.md and TECHNOLOGY_STACK_DECISION.md.
 - Current immediate action: begin Milestone 1 runnable vertical slice without recreating completed requirement contracts or architecture artifacts.
 - Milestone 1 API foundation slice implemented: typed runtime configuration, health/readiness service, database configuration awareness, and correlation ID propagation. CI pending.
-- Next implementation slice after CI: database driver/repository boundary and migration baseline, then structured API error boundary.
+- API bootstrap implementation CI #207 passed; progress checkpoint CI #208 remains the latest status-record run.
+- Database foundation slice implemented: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle. CI pending.
+- Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -143,10 +145,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Start Milestone 1 — Core API, database and identity from the existing architecture baseline.
-2. Inspect the current apps/api and infrastructure boundaries before modifying files.
-3. API bootstrap, typed configuration boundary, health/readiness state and request correlation are implemented; database connectivity/migration baseline and structured error boundary remain.
-4. Add authenticated request context only after the API boundary is runnable; keep authentication provider-neutral.
-5. Reuse existing domain Account, Capability, Audit and lifecycle models; do not recreate completed requirement contracts.
-6. Run CI for the API foundation slice and record the exact checkpoint.
+1. Check CI triggered by the database foundation commits.
+2. If green: record API foundation and database baseline as CI-validated.
+3. Implement the smallest repository boundary around Account persistence without leaking Prisma models into domain/application contracts.
+4. Add the structured API error boundary with correlation ID support.
+5. Only then add provider-neutral authenticated request context.
+6. Update this file after every coherent slice; do not recreate existing API/configuration/correlation foundations.
 
