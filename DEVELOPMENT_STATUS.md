@@ -30,6 +30,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated authenticated account context slice
+- AuthenticatedAccountContextService resolves AccountRepository data exclusively from RequestPrincipal.accountId.
+- Context combines authenticated principal identity with persisted account state for reuse by future account-scoped workflows.
+- Missing persisted account is rejected with NotFoundException.
+- Focused service tests cover successful context construction and missing-account rejection.
+- Registered in AppModule.
+- Implementation commits: 214f5c162e773d82b87dd67523093ddc4b60a47d, 44653aa420ecfcce1552846267ec2dfd31204cb0, f087a844541802165f337d91a8a5c58d6c9fc349.
+- GitHub Actions CI run #326 for f087a844541802165f337d91a8a5c58d6c9fc349 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated authenticated account lookup slice
 - GET /accounts/authenticated resolves the account from RequestPrincipal.accountId.
 - No client-supplied accountId is accepted by the authenticated route.
@@ -72,9 +81,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect existing verification and account application services for the next authenticated workflow that can reuse RequestPrincipal.accountId without inventing a token/session contract.
-2. Prefer a read-only or narrowly scoped workflow before adding mutation semantics.
-3. Keep legacy routes unchanged and preserve existing repository contracts.
-4. Add focused tests for principal-derived identity and failure boundaries.
+1. Inspect account lifecycle boundaries for a narrowly scoped authenticated mutation that can reuse AuthenticatedAccountContextService.
+2. Do not expose a client-supplied accountId on any new authenticated mutation.
+3. Reuse AccountActivationService and existing domain transition rules rather than duplicating lifecycle logic.
+4. Add focused tests proving the target account is derived from RequestPrincipal.accountId and that missing authentication/account failures remain explicit.
 5. Run full CI.
 6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
