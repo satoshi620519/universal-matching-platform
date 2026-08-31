@@ -114,6 +114,9 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Deployment readiness contract and tests.
 - Phase 1 requirement-contract foundation complete through operational, data lifecycle and buyer deployment requirements.
 
+- Shared request-principal lifecycle CI #253 and progress record CI #254 passed; principal propagation boundary is CI-validated.
+- Runtime composition root wiring implemented with a safe AnonymousAuthenticationAdapter placeholder; request lifecycle resolves principal once during Fastify onRequest and guards consume the shared source. CI pending.
+
 ## Test status
 - M0 CI validation: passed.
 - Domain primitives: CI validated.
@@ -152,10 +155,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the shared request-principal lifecycle commits.
-2. If green: mark request-principal propagation CI-validated.
-3. Register a concrete composition root binding for RequestAuthenticationAdapter without selecting an external identity provider; use a safe placeholder adapter only for runtime wiring.
-4. Verify middleware/guard lifecycle ordering so authentication resolution happens once and guards only consume the principal.
-5. After runtime wiring is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
+1. Check CI triggered by the runtime authentication composition commits.
+2. If green: mark request-principal propagation and composition-root wiring CI-validated.
+3. Add a lifecycle integration test proving authentication resolution executes once per request before guards consume the principal.
+4. Keep the anonymous placeholder adapter until a concrete identity-provider requirement slice is selected.
+5. After lifecycle integration is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
 6. Update this file after every coherent slice.
 
