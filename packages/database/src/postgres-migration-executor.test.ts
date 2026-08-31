@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { SqlMigrationClient, SqlMigrationQueryClient } from './postgres-migration-executor.js';
 import { PostgresMigrationExecutor } from './postgres-migration-executor.js';
+import type { SqlMigrationQueryClient } from './postgres-migration-executor.js';
 
 describe('PostgresMigrationExecutor', () => {
   it('initializes tracking and returns ordered applied versions', async () => {
@@ -17,7 +18,7 @@ describe('PostgresMigrationExecutor', () => {
 
   it('applies SQL and records the version through the transaction-scoped client', async () => {
     const events: string[] = [];
-    const rootQuery = vi.fn(
+    const rootQuery: SqlMigrationQueryClient['query'] = vi.fn(
       async <T = unknown>(_sql: string, _params?: readonly unknown[]): Promise<T> =>
         undefined as T,
     );
