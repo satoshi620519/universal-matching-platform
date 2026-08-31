@@ -53,8 +53,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Milestone 1 API foundation slice implemented: typed runtime configuration, health/readiness service, database configuration awareness, and correlation ID propagation. CI pending.
 - API bootstrap implementation CI #207 passed; progress checkpoint CI #208 remains the latest status-record run.
 - Database foundation CI #217 passed after the targeted Prisma Client generation fix; database baseline is CI-validated.
-- Account repository boundary implemented with a provider-neutral contract and Prisma persistence adapter; CI pending.
-- Structured API error boundary implemented with correlation ID propagation; CI pending.
+- Account repository and structured API error boundary CI #226 failed at typecheck only: incorrect workspace package name and missing explicit Fastify type dependency.
+- Targeted fixes applied: import corrected to @universal/domain and Fastify added as an explicit API dependency. Follow-up CI pending.
 - Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
