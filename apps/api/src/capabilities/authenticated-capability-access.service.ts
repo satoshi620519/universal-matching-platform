@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import type { EntitlementState, VerificationLevel } from '@universal/domain';
 import type { RequestPrincipal } from '../auth/request-principal.js';
 import { AuthenticatedAccountContextService } from '../accounts/authenticated-account-context.service.js';
+import { VerificationService } from '../verification/verification.service.js';
 import {
   CapabilityAccessService,
   type CapabilityAccessResult,
@@ -18,6 +19,7 @@ export interface AuthenticatedCapabilityRequirements {
 export class AuthenticatedCapabilityAccessService {
   constructor(
     private readonly context: AuthenticatedAccountContextService,
+    private readonly verification: VerificationService,
     private readonly capabilities: CapabilityAccessService,
   ) {}
 
@@ -25,20 +27,17 @@ export class AuthenticatedCapabilityAccessService {
     principal: RequestPrincipal,
     requirements: AuthenticatedCapabilityRequirements,
   ): Promise<CapabilityAccessResult> {
-    await this.context.resolve(principal);
-
-    if (principal.verificationLevel === undefined) {
-      throw new UnauthorizedException('authenticated principal verificationLevel is required');
-    }
-
-    const value = Number(principal.verificationLevel);
-    if (!Number.isInteger(value) || value < 0 || value > 3) {
-      throw new UnauthorizedException('authenticated principal verificationLevel must be an integer from 0 to 3');
-    }
+    const { account } = await this.context.resolve(principal);
+    const now = requirements.now ?? new Date().toISOString();
+    const usableRecord = await this.verification.findUsableRecordForAccount(
+      account.id,
+      now,
+    );
 
     return this.capabilities.evaluate({
       ...requirements,
-      currentVerificationLevel: value as VerificationLevel,
+      now,
+      currentVerificationLevel: (usableRecord?.level ?? 0) as VerificationLevel,
     });
   }
 }
