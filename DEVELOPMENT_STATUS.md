@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Select the next grounded M1 implementation slice after the validated HTTP application boundary.
+CURRENT TASK: Define the provider-neutral credential persistence contract before implementing authentication credentials.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -35,12 +35,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Final rollback-test commit: `32f519d7419855802b73320ba52161b04d74e64a`.
 - CI #413 completed successfully.
 
+## Authentication/identity boundary planning — COMPLETE
+- Traced the next M1 gap to PRODUCT_REQUIREMENTS.md, ARCHITECTURE.md and the technology baseline in DECISIONS.md.
+- Confirmed email/password, verification and reset are required initial capabilities, while provider protocol, password algorithm and session/token transport remain unresolved.
+- Added IDENTITY_AUTHENTICATION_BOUNDARY.md to prevent credentials from being mixed into Account or API transport prematurely.
+- No production behavior changed in this planning slice.
+
 ## Exact next action
-1. Inspect the M1 authentication/identity boundary for the smallest grounded implementation gap.
-2. Preserve provider neutrality and do not invent JWT/session/token transport contracts.
-3. The technology baseline permits email/password, verification and reset capabilities, but persistence and security contracts must be grounded before implementation.
-4. Prefer a small tested slice (for example, identity credential domain/persistence planning) over a speculative end-to-end login flow.
-5. Run/verify CI and update this file with commit, CI state, unresolved constraints and exact next action.
+1. Inspect the logical data model and existing migration conventions for credential-related ownership boundaries.
+2. Define the smallest provider-neutral physical credential model before writing a migration.
+3. Keep password material outside Account and out of ordinary account projections.
+4. Do not select JWT/session formats, password algorithms or external identity providers implicitly.
+5. Add focused tests and verify CI before advancing to registration/sign-in behavior.
+
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
