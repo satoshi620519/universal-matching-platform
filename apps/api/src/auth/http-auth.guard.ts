@@ -1,12 +1,12 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestAuthenticationAdapter } from './authentication-adapter.js';
+import { isAuthenticatedPrincipal } from './request-principal.js';
 import {
   getRequestPrincipal,
   setRequestPrincipal,
@@ -21,7 +21,12 @@ export class HttpAuthenticationGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<AuthenticatedFastifyRequest>();
 
     const existingPrincipal = getRequestPrincipal(request);
-    if (existingPrincipal) return true;
+    if (existingPrincipal) {
+      if (!isAuthenticatedPrincipal(existingPrincipal)) {
+        throw new UnauthorizedException('Authentication required');
+      }
+      return true;
+    }
 
     const requestId =
       typeof request.id === 'string' && request.id.length > 0
@@ -35,8 +40,8 @@ export class HttpAuthenticationGuard implements CanActivate {
       requestId,
     });
 
-    if (!principal) {
-      throw new HttpException('Authentication required', HttpStatus.UNAUTHORIZED);
+    if (!isAuthenticatedPrincipal(principal)) {
+      throw new UnauthorizedException('Authentication required');
     }
 
     setRequestPrincipal(request, principal);
