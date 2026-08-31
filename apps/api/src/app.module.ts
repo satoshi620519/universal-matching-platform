@@ -26,6 +26,7 @@ import { VerificationAccessService } from './verification/verification-access.se
 import { VerificationRepository } from './verification/verification.repository.js';
 import { SafetyEnforcementRepository } from './safety/safety-enforcement.repository.js';
 import { PrismaSafetyEnforcementRepository } from './safety/prisma-safety-enforcement.repository.js';
+import { EffectiveSafetyRestrictionService } from './safety/effective-safety-restriction.service.js';
 import { PrismaVerificationRepository } from './verification/prisma-verification.repository.js';
 import { VerificationService } from './verification/verification.service.js';
 import { VerificationLevelAccessService } from './verification/verification-level-access.service.js';
@@ -35,7 +36,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 @Module({
   imports: [DatabaseModule],
   controllers: [HealthController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController],
-  providers: [AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountContextService,
+  providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountContextService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
