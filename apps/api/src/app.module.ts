@@ -22,6 +22,8 @@ import { DatabaseModule } from './database/database.module.js';
 import { HealthController } from './health/health.controller.js';
 import { VerificationAccessController } from './verification/verification-access.controller.js';
 import { VerificationAccessService } from './verification/verification-access.service.js';
+import { VerificationRepository } from './verification/verification.repository.js';
+import { PrismaVerificationRepository } from './verification/prisma-verification.repository.js';
 import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
@@ -36,11 +38,16 @@ import { HealthStatusService } from './health/health-status.service.js';
     RequestPrincipalResolver,
     PrismaAccountRepository,
     PrismaAuthenticationIdentityRepository,
+    PrismaVerificationRepository,
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     {
       provide: AccountRepository,
       useExisting: PrismaAccountRepository,
+    },
+    {
+      provide: VerificationRepository,
+      useExisting: PrismaVerificationRepository,
     },
     {
       provide: AuthenticationIdentityRepository,
