@@ -271,13 +271,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This is a contract-design issue, not a Prisma capability issue.
 - Next change must evolve the SqlMigrationClient transaction port so the transaction callback receives a transaction-scoped SqlMigrationClient/query boundary, then update PostgresMigrationExecutor and tests accordingly.
 
+## Migration transaction boundary — REFACTORED, CI PENDING
+- Refactored SqlMigrationClient so transaction() supplies a transaction-scoped query client.
+- PostgresMigrationExecutor.apply() now performs migration SQL and schema_migrations version recording exclusively through tx.
+- Added focused regression coverage around transaction-scoped query execution.
+
+## Safe Prisma migration adapter — IMPLEMENTED, CI PENDING
+- DatabaseService's PrismaClient interactive transaction is now adapted without leaking root-client queries into the transaction.
+- PrismaSqlMigrationClient wraps the interactive tx client in a transaction-scoped SqlMigrationQueryClient.
+- Migration SQL and tracking writes use the transaction-scoped adapter.
+- Root client query use is explicitly regression-tested as absent during transaction work.
+- Raw SQL is restricted to repository-owned migration artifacts and fixed executor SQL; migration inputs are not caller-provided.
+- Adapter commits: 7997934e4a83a34b8490ffdb1cb452ae2a55e87a, d3a87d6cef6b62e5eb522c122d65354796ebe357, 4333b17994a6d3496158e3dc2e14a38027671bf0, 9bf846ec5abeb5a752d58c293355909c46e62f26.
+
 ## Exact next action
-1. Verify CI after removal of the rejected unsafe prototype.
-2. Refactor the migration SQL port to model transaction-scoped query execution explicitly.
-3. Update PostgresMigrationExecutor to execute both migration SQL and schema_migrations recording through the transaction-scoped client.
-4. Add focused atomicity regression tests proving root-client queries are not required inside apply().
-5. Only then implement a concrete Prisma adapter and proceed to empty-database integration testing.
-6. Record the exact continuation checkpoint.
+1. Verify CI for transaction-port refactor and safe Prisma adapter.
+2. If green, add runtime composition for DatabaseService → PrismaSqlMigrationClient → PostgresMigrationExecutor.
+3. Add a migration command/service only after composition is tested.
+4. Add empty-database integration coverage using the repository's actual PostgreSQL runtime configuration.
+5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
