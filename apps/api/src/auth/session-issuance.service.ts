@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
+import { createSessionCredential } from './session-credential.js';
 import { SessionRepository, type AuthenticationSession } from './session.repository.js';
 
 export interface IssueSessionInput {
   readonly accountId: string;
   readonly authenticationMethod: string;
+}
+
+export interface IssuedSession {
+  readonly session: AuthenticationSession;
+  readonly credential: string;
 }
 
 @Injectable()
@@ -13,11 +19,15 @@ export class SessionIssuanceService {
 
   constructor(private readonly sessions: SessionRepository) {}
 
-  async issue(input: IssueSessionInput): Promise<AuthenticationSession> {
-    return this.sessions.create({
+  async issue(input: IssueSessionInput): Promise<IssuedSession> {
+    const credential = createSessionCredential();
+    const session = await this.sessions.create({
       accountId: input.accountId,
       authenticationMethod: input.authenticationMethod,
       expiresAt: new Date(Date.now() + SessionIssuanceService.SESSION_TTL_MS),
+      credentialHash: credential.hash,
     });
+
+    return { session, credential: credential.raw };
   }
 }
