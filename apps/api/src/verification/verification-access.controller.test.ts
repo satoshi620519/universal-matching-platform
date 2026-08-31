@@ -7,6 +7,18 @@ describe('verification access API boundary', () => {
     new VerificationAccessService(),
   );
 
+  it('rejects an invalid verification level at the HTTP boundary', () => {
+    expect(() => controller.evaluate({ level: '9', status: 'verified' })).toThrow();
+  });
+
+  it('rejects an invalid verification status at the HTTP boundary', () => {
+    expect(() => controller.evaluate({ level: '1', status: 'unknown' })).toThrow();
+  });
+
+  it('rejects an invalid date-time at the HTTP boundary', () => {
+    expect(() => controller.evaluate({ level: '1', status: 'verified', expiresAt: 'not-a-date' })).toThrow();
+  });
+
   it('returns a usable decision through the existing service', () => {
     expect(
       controller.evaluate({
