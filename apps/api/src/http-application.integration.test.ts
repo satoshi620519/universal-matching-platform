@@ -3,7 +3,7 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import { describe, expect, it } from 'vitest';
 
 import { AppModule } from './app.module.js';
-import { configureHttpApplication } from './main.js';
+import { configureHttpApplication } from './http-application.js';
 import { CORRELATION_ID_HEADER } from './observability/request-context.js';
 
 describe('HTTP application boundary', () => {
