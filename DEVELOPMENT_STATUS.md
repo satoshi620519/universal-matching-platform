@@ -387,11 +387,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Source-to-dist SQL migration verification is complete in repository code.
 - Pipeline remains blocked by baseline typecheck, so CI success has not yet been claimed.
 
+## CI diagnostics pipeline correction — IMPLEMENTED, AWAITING VALID RUN
+- Investigation found the previous diagnostics workflow edit had accidentally written literal "\\n" characters into .github/workflows/ci.yml.
+- That malformed YAML explains the immediate workflow failures with empty job/artifact lists: the workflow could not be parsed/executed normally.
+- Restored valid YAML with separate Typecheck and always-run Upload typecheck diagnostics steps.
+- Commit: fcee643dad32cd16a9b868f1ecccd088029b2629.
+- This is a CI workflow syntax correction, not a TypeScript source-code diagnosis.
+
 ## Exact next action
-1. Wait for CI triggered by 05cc19a and inspect its typecheck-diagnostics artifact if typecheck fails.
-2. Fix only exact compiler-reported errors.
-3. Re-run/verify CI until baseline pipeline is green.
-4. Then execute empty-database PostgreSQL integration using the existing PostgreSQL 16 CI service and FilesystemMigrationArtifactSource.
+1. Verify the CI run triggered by fcee643.
+2. If typecheck fails, download and inspect the generated typecheck-diagnostics artifact.
+3. Fix only exact compiler-reported errors.
+4. Once baseline CI is green, add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
