@@ -60,3 +60,5 @@ export * from './operation-performance-contract.js';
 export * from './operation-resilience-contract.js';
 
 export * from './operation-observability-contract.js';
+
+export * from './data-lifecycle-contract.js';
