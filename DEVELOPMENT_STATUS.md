@@ -30,6 +30,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated principal-derived account activation slice
+- AuthenticatedAccountActivationService derives the target exclusively from RequestPrincipal.accountId.
+- AuthenticatedAccountContextService resolves the persisted account before lifecycle logic runs.
+- Existing AccountActivationService and domain transition rules remain the single source of activation semantics.
+- No client-supplied accountId is introduced for the authenticated workflow.
+- Focused tests prove principal-derived targeting.
+- Implementation commits: d0614a00a95f9be90d630ea63871cd1403485843, e4b00e5b5485168d723edb6ff4387915ad82d0ea, 6e9f5b8faf3f71f6830a861205048048c5d346e7.
+- GitHub Actions CI run #330 for 6e9f5b8faf3f71f6830a861205048048c5d346e7 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated authenticated account context slice
 - AuthenticatedAccountContextService resolves AccountRepository data exclusively from RequestPrincipal.accountId.
 - Context combines authenticated principal identity with persisted account state for reuse by future account-scoped workflows.
@@ -81,9 +90,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect account lifecycle boundaries for a narrowly scoped authenticated mutation that can reuse AuthenticatedAccountContextService.
-2. Do not expose a client-supplied accountId on any new authenticated mutation.
-3. Reuse AccountActivationService and existing domain transition rules rather than duplicating lifecycle logic.
-4. Add focused tests proving the target account is derived from RequestPrincipal.accountId and that missing authentication/account failures remain explicit.
+1. Inspect the existing account HTTP lifecycle boundary and determine whether the principal-derived activation service can be exposed as a narrowly scoped authenticated endpoint without duplicating or weakening existing activation semantics.
+2. Reuse RequestPrincipalResolver and AuthenticatedAccountActivationService; never accept accountId from the client for the authenticated route.
+3. Preserve the legacy account activation route unchanged.
+4. Add focused HTTP-boundary tests for principal-derived targeting and authentication failures.
 5. Run full CI.
 6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
