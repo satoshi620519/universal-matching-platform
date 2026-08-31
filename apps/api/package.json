@@ -8,7 +8,8 @@
     "typecheck": "pnpm prisma:generate && tsc --noEmit -p tsconfig.json",
     "lint": "eslint src --max-warnings=0",
     "test": "vitest run",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "email-outbox:run": "tsx src/email-outbox-worker.main.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@nestjs/testing": "^11.0.1",
     "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "vitest": "^2.1.8",
