@@ -31,6 +31,10 @@ import { PasswordRegistrationService } from './auth/password-registration.servic
 import { PasswordRegistrationTransportService } from './auth/password-registration-transport.service.js';
 import { PasswordRegistrationController } from './auth/password-registration.controller.js';
 import { PasswordSignInService } from './auth/password-sign-in.service.js';
+import { EmailVerificationController } from './auth/email-verification.controller.js';
+import { EmailVerificationService } from './auth/email-verification.service.js';
+import { EmailVerificationTokenRepository } from './auth/email-verification-token.repository.js';
+import { PrismaEmailVerificationTokenRepository } from './auth/prisma-email-verification-token.repository.js';
 import { PasswordSignInTransportService } from './auth/password-sign-in-transport.service.js';
 import { PasswordSignInController } from './auth/password-sign-in.controller.js';
 import { SessionController } from './auth/session.controller.js';
@@ -59,7 +63,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController, PasswordRegistrationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
+  controllers: [HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
   providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
@@ -74,6 +78,8 @@ import { HealthStatusService } from './health/health-status.service.js';
     PasswordRegistrationService,
     PasswordRegistrationTransportService,
     PasswordSignInService,
+    EmailVerificationService,
+    PrismaEmailVerificationTokenRepository,
     PasswordSignInTransportService,
     SessionIssuanceService,
     SessionRevocationService,
@@ -104,6 +110,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: EmailVerificationTokenRepository,
+      useExisting: PrismaEmailVerificationTokenRepository,
     },
     {
       provide: SessionRepository,
