@@ -25,6 +25,7 @@ import { VerificationAccessService } from './verification/verification-access.se
 import { VerificationRepository } from './verification/verification.repository.js';
 import { PrismaVerificationRepository } from './verification/prisma-verification.repository.js';
 import { VerificationService } from './verification/verification.service.js';
+import { VerificationLevelAccessService } from './verification/verification-level-access.service.js';
 import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
@@ -41,6 +42,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     PrismaAuthenticationIdentityRepository,
     PrismaVerificationRepository,
     VerificationService,
+    VerificationLevelAccessService,
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     {
