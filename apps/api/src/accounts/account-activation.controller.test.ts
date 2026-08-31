@@ -15,7 +15,7 @@ describe('account activation API boundary', () => {
       async findById(_id: string): Promise<AccountRecord | null> { return account('pending-onboarding' as AccountState); }
     }
     const controller = new AccountActivationController(new Repository(), new AccountActivationService());
-    await expect(controller.activate('account-1', {})).resolves.toEqual({ accountId: 'account-1', state: 'active' });
+    await expect(controller.activate('account-1')).resolves.toEqual({ accountId: 'account-1', state: 'active' });
   });
 
   it('returns not found before attempting activation for an unknown account', async () => {
@@ -24,6 +24,6 @@ describe('account activation API boundary', () => {
       async findById(_id: string): Promise<AccountRecord | null> { return null; }
     }
     const controller = new AccountActivationController(new Repository(), new AccountActivationService());
-    await expect(controller.activate('missing', {})).rejects.toMatchObject({ status: 404 });
+    await expect(controller.activate('missing')).rejects.toMatchObject({ status: 404 });
   });
 });
