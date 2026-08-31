@@ -115,7 +115,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation complete through operational, data lifecycle and buyer deployment requirements.
 
 - Shared request-principal lifecycle CI #253 and progress record CI #254 passed; principal propagation boundary is CI-validated.
-- Runtime composition root wiring implemented with a safe AnonymousAuthenticationAdapter placeholder; request lifecycle resolves principal once during Fastify onRequest and guards consume the shared source. CI pending.
+- Runtime composition CI #258/#259 failed at API typecheck only: placeholder adapter signature omitted the required input parameter, and an unpinned Fastify dependency produced two incompatible Fastify type versions.
+- Targeted fixes applied: placeholder adapter now preserves the contract signature and Fastify is pinned to the Nest adapter's resolved compatible version. Follow-up CI pending.
 
 ## Test status
 - M0 CI validation: passed.
