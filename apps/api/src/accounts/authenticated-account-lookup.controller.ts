@@ -1,11 +1,11 @@
-import { Controller, Get, NotFoundException, Headers } from '@nestjs/common';
+import { Controller, Get, Headers } from '@nestjs/common';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
-import { AccountLookupService } from './account-lookup.service.js';
+import { AuthenticatedAccountContextService } from './authenticated-account-context.service.js';
 
 @Controller('accounts')
 export class AuthenticatedAccountLookupController {
   constructor(
-    private readonly accountLookup: AccountLookupService,
+    private readonly accountContext: AuthenticatedAccountContextService,
     private readonly principalResolver: RequestPrincipalResolver,
   ) {}
 
@@ -19,11 +19,7 @@ export class AuthenticatedAccountLookupController {
       requestId: requestId ?? 'account-lookup-authenticated',
     });
 
-    const account = await this.accountLookup.findById(principal.accountId);
-    if (!account) {
-      throw new NotFoundException('Account not found');
-    }
-
+    const { account } = await this.accountContext.resolve(principal);
     return account;
   }
 }
