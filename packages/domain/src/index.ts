@@ -66,3 +66,5 @@ export * from './data-lifecycle-contract.js';
 export * from './data-lifecycle-governance-contract.js';
 
 export * from './deployment-installation-contract.js';
+
+export * from './deployment-readiness-contract.js';
