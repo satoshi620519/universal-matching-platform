@@ -163,12 +163,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added focused lifecycle tests.
 - Added design checkpoint documenting why authorization must not default restrictions to 'none'.
 - Persistence and capability adapter integration remain pending CI validation of the domain slice.
+- Persistence implementation started with SafetyEnforcement Prisma model and active-record repository boundary.
+
+## Safety restriction authoritative source — PERSISTENCE IMPLEMENTED, CI PENDING
+- Added SafetyEnforcement Prisma model related to Account.
+- Added indexed active/effective record query boundary.
+- Added SafetyEnforcementRepository abstraction and Prisma implementation.
+- Query excludes non-active, future-effective and expired records.
+- Domain lifecycle check remains a defensive second evaluation after persistence reconstruction.
+- Added focused repository query test.
+- Registered repository through Nest DI.
+- Persistence commits: 4f1d0ad0be72fbe6d0e122c5a2a01b93aec34f41, 22b172dba79967360a385ac7e3c248c3814d7170, 4663949881bb4f8f4b911f09ceeef5addb0ae8c9, 1a88b5318430b8b4e345041de5dfcd7c5559aa40, b3816daa01657f9e77b6fea7a250e2bf7bdfaf1b.
 
 ## Exact next action
-1. Verify CI for the SafetyEnforcement domain primitive.
-2. If green, define the narrow persistence repository boundary.
-3. Add the smallest Prisma model and migration-compatible repository implementation.
-4. Evaluate active enforcement records into SafetyRestriction without bypassing scope semantics.
+1. Verify CI for SafetyEnforcement persistence and repository boundary.
+2. If green, add the narrow evaluation service that reduces active records to the effective SafetyRestriction for a capability scope.
+3. Define deterministic precedence when multiple active enforcement records exist.
+4. Add focused scope/lifecycle composition tests.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
