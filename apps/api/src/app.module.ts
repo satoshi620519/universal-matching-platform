@@ -28,6 +28,8 @@ import { PasswordRegistrationRepository } from './auth/password-registration.rep
 import { PrismaPasswordRegistrationRepository } from './auth/prisma-password-registration.repository.js';
 import { PasswordRegistrationService } from './auth/password-registration.service.js';
 import { MinimumPasswordPolicy, PasswordPolicy } from './auth/password-policy.js';
+import { RequestRateLimiter } from './common/rate-limit/request-rate-limiter.js';
+import { InMemoryRequestRateLimiter } from './common/rate-limit/in-memory-request-rate-limiter.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
@@ -60,6 +62,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     PrismaPasswordRegistrationRepository,
     PasswordRegistrationService,
     MinimumPasswordPolicy,
+    InMemoryRequestRateLimiter,
     NodeScryptPasswordHasher,
     PrismaVerificationRepository,
     PrismaSafetyEnforcementRepository,
@@ -83,6 +86,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: RequestRateLimiter,
+      useExisting: InMemoryRequestRateLimiter,
     },
     {
       provide: PasswordPolicy,
