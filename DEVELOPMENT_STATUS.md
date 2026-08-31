@@ -683,9 +683,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Did not expose a registration controller yet because rate limiting remains an explicit REQ-SAFE-006 prerequisite and duplicate-response semantics must be chosen alongside the transport boundary.
 - Commits: 90ea68ca397dd4a98619b52aa396385e6ea76ef8, f2b0c406788a8b4a490891164cfad8b40935ceb1, 7a1b52d8eb9fdd70fd5827d04c39ab8ee918f2b0.
 
+
+## Reusable request rate-limit boundary — IMPLEMENTED (local/single-process), CI PENDING
+- Added RequestRateLimiter abstraction returning allow/remaining/retry-after decisions without coupling the limiter to HTTP or authentication.
+- Added InMemoryRequestRateLimiter and regression coverage for exhaustion, expiry and key isolation.
+- Registered the limiter behind its abstraction in AppModule.
+- Added REQUEST_RATE_LIMIT_BOUNDARY.md explicitly documenting that the in-memory adapter is local/single-process only and must be replaced by shared storage for distributed production abuse prevention.
+- Registration transport can now enforce a limiter before password hashing or database writes, but public exposure still requires duplicate-safe response mapping and controller-level integration.
+- Commits: f704415e2d951f3fa5e76eac76091b8c2e14ccb6, 93d2dc05ed73d7879ae24249591ba31d7c2165e6, 27b1313e013a6aec718518acecf6459f8e033113, 9fe55cb90035885f5dcf14691a1bef356769dbed, 3c7a03a65449fb9b22dbe0e44d3329448dbe969e.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Define and implement a reusable request-rate-limit boundary compatible with the existing Fastify onRequest setup, then map duplicate/validation responses before exposing the registration controller.
+2. Inspect database uniqueness/error conventions and implement duplicate-safe registration response mapping plus controller-level validation and rate-limit integration.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
