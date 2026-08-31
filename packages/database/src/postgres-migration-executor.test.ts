@@ -20,7 +20,7 @@ describe('PostgresMigrationExecutor', () => {
       query: vi.fn(async (sql: string) => {
         events.push(sql);
       }),
-      transaction: vi.fn(async (operation: () => Promise<void>) => operation()),
+      transaction: vi.fn(async (operation: (tx: { query: typeof query }) => Promise<void>) => operation({ query })),
     };
     const executor = new PostgresMigrationExecutor(client);
 
@@ -31,6 +31,7 @@ describe('PostgresMigrationExecutor', () => {
     });
 
     expect(client.transaction).toHaveBeenCalledTimes(1);
+    expect(events).not.toEqual([]);
     expect(events).toEqual([
       'CREATE TABLE safety_enforcements ();',
       'INSERT INTO schema_migrations (version) VALUES ($1)',
