@@ -6,6 +6,7 @@ import { AuthenticatedAccountContextService } from './accounts/authenticated-acc
 import { AuthenticatedAccountActivationService } from './accounts/authenticated-account-activation.service.js';
 import { AuthenticatedAccountActivationController } from './accounts/authenticated-account-activation.controller.js';
 import { AuthenticatedCapabilityAccessService } from './capabilities/authenticated-capability-access.service.js';
+import { AuthenticatedCapabilityDecisionService } from './capabilities/authenticated-capability-decision.service.js';
 import { AccountLookupService } from './accounts/account-lookup.service.js';
 import { CapabilityAccessController } from './capabilities/capability-access.controller.js';
 import { CapabilityAccessService } from './capabilities/capability-access.service.js';
@@ -32,7 +33,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 @Module({
   imports: [DatabaseModule],
   controllers: [HealthController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController],
-  providers: [AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountContextService,
+  providers: [AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountContextService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
