@@ -363,12 +363,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Do not mark new migration packaging work green until CI proves it.
 - New work was kept isolated and follows existing strict TypeScript/NodeNext conventions.
 
+## Compiled migration asset verification — IMPLEMENTED, CI PENDING
+- Added a real build-output verifier that compares source migration filenames with dist/migrations filenames after package build.
+- Verification fails if any SQL migration is omitted or an unexpected SQL artifact appears in the compiled package.
+- Added package script verify:migrations-build to build and verify the exact production artifact set.
+- Commits: 1397ddd98b707d56382af5e756d7c8e330f10e4c, 98e959021045b8185ff989347f6f9c6c5d154cc5, 4cf86504505baf9ec4e2a998fc31743527f3f9b7.
+
+## CI typecheck diagnosis — INFRASTRUCTURE HISTORY CONFIRMED
+- CI continues to fail before test/build at pnpm typecheck.
+- Job metadata confirms no DB service failure and no test execution has occurred.
+- Repository history shows prior monorepo-wide typecheck failures were fixed by correcting per-app tsconfig include inputs.
+- Current tsconfigs already include src/**/*.ts across applications and packages, so that historical fix is present.
+- Exact current compiler diagnostics are still unavailable through the connector's log endpoint; no unrelated tsconfig edits were made without evidence.
+
 ## Exact next action
-1. Verify CI for SQL asset packaging and filesystem artifact source.
-2. If typecheck remains red, obtain diagnostics through an alternate repository-visible mechanism before modifying unrelated production code.
-3. Add an integration test that builds the database package and verifies dist/migrations contains every source SQL artifact.
-4. Add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource against the existing CI PostgreSQL 16 service.
-5. Keep migration execution explicit; do not auto-run at API startup.
+1. Verify CI for compiled migration asset verification.
+2. Add a targeted CI step or repository-visible diagnostic artifact only if necessary to expose the exact typecheck failure text.
+3. Once typecheck diagnostics are available, fix the exact reported error and unblock the entire pipeline.
+4. After baseline CI is green, add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
+5. Keep migration execution explicit and outside automatic API startup.
 6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
