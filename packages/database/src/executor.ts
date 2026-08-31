@@ -1,0 +1,23 @@
+import type { MigrationArtifact } from './migrations.js';
+import { planMigrations } from './migrations.js';
+
+export interface MigrationExecutor {
+  readonly listAppliedVersions: () => Promise<readonly number[]>;
+  readonly apply: (migration: MigrationArtifact) => Promise<void>;
+}
+
+export async function executePendingMigrations(
+  migrations: readonly MigrationArtifact[],
+  executor: MigrationExecutor,
+): Promise<readonly number[]> {
+  const appliedVersions = await executor.listAppliedVersions();
+  const pending = planMigrations(migrations, appliedVersions);
+
+  const applied: number[] = [];
+  for (const migration of pending) {
+    await executor.apply(migration);
+    applied.push(migration.version);
+  }
+
+  return applied;
+}
