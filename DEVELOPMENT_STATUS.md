@@ -17,18 +17,12 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
-### CI-validated authenticated capability slice
-- RequestPrincipalResolver exists and resolves an authenticated RequestPrincipal through RequestAuthenticationAdapter.
-- Missing authentication is rejected with UnauthorizedException.
-- GET /capabilities/access/authenticated exists alongside the legacy route.
-- Legacy GET /capabilities/access remains backward-compatible.
-- Authenticated capability evaluation uses RequestPrincipal.verificationLevel as the server-side verification input.
-- The authenticated query contract does not contain currentVerificationLevel.
-- Controller tests cover principal-derived authorization, unauthenticated rejection and malformed principal verification levels.
-- Test commit: 6dde068d02f5184689d45bd283cb9bf9f3c07523.
-- Checkpoint commit: fa79dd6dcb6a4aeddd4b706c023536185aca3d4b.
-- GitHub Actions CI run #317 for fa79dd6d completed successfully.
-- The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
+### CI-validated HTTP authentication principal validation
+- HttpAuthenticationGuard now validates pre-attached and adapter-returned principals through the shared authenticated-principal contract before allowing the request.
+- Invalid or incomplete principals fail with 401 instead of being treated as authenticated merely because a principal object exists.
+- Focused tests cover invalid adapter-returned principals and invalid pre-attached principals.
+- Implementation commits: 6b37cf24ebb8bffd7610cbbf8109a916a9ef7a73, e4dec00822393433a2b2c4788972069b4d1e34b7, df3b386caf4eb098fd8f26a8f07e3f730265c21e, 1aa787294031d220e495c1b219d3d6e224348bd5.
+- GitHub Actions CI run #373 for 1aa787294031d220e495c1b219d3d6e224348bd5 completed successfully (install, typecheck, lint, test, build).
 
 ### CI-validated authenticated capability authentication semantics
 - Malformed or missing verificationLevel claims on an authenticated principal are classified as authentication failures (401), not client request validation failures (400).
@@ -53,79 +47,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Implementation commits: 76c1bcfb395824472222699f537ebda6eb76bb35, 3e87462560d281045dc812b40fd8ada72c934317, 8532b59382f22b9f5406e9ff3615d2c0a4034d61, 90035ddc81c36b8f65324e35a0e8ed87db213f7c, dd26cb00837f8c6a63e6ba220893f218e152d119.
 - GitHub Actions CI run #358 for dd26cb00837f8c6a63e6ba220893f218e152d119 completed successfully (install, typecheck, lint, test, build).
 
-### CI-validated unified authenticated account context boundaries
-- GET /accounts/authenticated now resolves its account exclusively through AuthenticatedAccountContextService.
-- Authenticated lookup, activation and capability access share the same persisted-account boundary.
-- RequestPrincipal remains the sole source of the authenticated account identity.
-- Focused HTTP tests cover principal-derived targeting, unauthenticated rejection and missing-account propagation.
-- Implementation commits: 565bdc049f6ff9aff17f1adee85c897bf9f28712, 56c41481b4faf53bbcc24d4a60e00510ccedca15.
-- GitHub Actions CI run #352 for 56c41481b4faf53bbcc24d4a60e00510ccedca15 completed successfully (install, typecheck, lint, test, build).
+## Exact next action
+1. Review remaining authenticated HTTP boundaries for inconsistent classification of malformed authentication/principal state versus malformed client input.
+2. Keep 401 for absent or invalid authentication state, 403 for valid authenticated principals denied by authorization, and 400 for malformed route/query/body input.
+3. Do not introduce a global guard migration unless an existing route composition gap requires it.
+4. Add focused tests only where a concrete inconsistency is found.
+5. Run full CI and record the checkpoint before advancing to another domain slice.
 
-### CI-validated authenticated capability access with account context
-- GET /capabilities/access/authenticated now resolves the persisted authenticated account before capability evaluation.
-- AuthenticatedCapabilityAccessService derives identity from RequestPrincipal and delegates capability semantics to the existing CapabilityAccessService.
-- The authenticated principal verificationLevel is authoritative and cannot be overridden by request requirements.
-- Missing authenticated accounts fail before capability evaluation.
-- Focused tests cover account-context enforcement, missing-account propagation and missing verification-level rejection.
-- Implementation commits: 6df5cb749536aa91ca3d7f07214ea2b6bf438d7d, b63846d10894575e1b883b617c0b39fbdc13b75d, fb4ca8ceee969822086e4d1e577c2939c20e7e1f, 4b7d921, 1fe23ed, 8f4cd6a, d0aa6677264357da33fb74108c211f5fb858167c, d640f39acb982f5e8552ab0efa79cb55f26d82c4.
-- GitHub Actions CI run #349 for d640f39acb982f5e8552ab0efa79cb55f26d82c4 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated durable authenticated account activation
-- AuthenticatedAccountActivationService performs the existing domain transition and persists the resulting state through AccountRepository.updateStatus.
-- PrismaAccountRepository implements updateStatus without introducing a separate persistence API.
-- The authenticated target remains exclusively derived from RequestPrincipal.accountId.
-- A missing account at the persistence boundary is rejected explicitly with NotFoundException.
-- Focused tests cover principal-derived targeting, durable status update and disappearance before persistence.
-- Implementation commits: bc645b8, 5c7da83, efbe6f6, 256de333a9d8502a4849de2ff073d3fd97c6c94f, f94497e6a3f9aa3315c3985eedf87b20ea609d9d.
-- GitHub Actions CI run #340 for f94497e6a3f9aa3315c3985eedf87b20ea609d9d completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated authenticated account activation endpoint
-- PATCH /accounts/authenticated/activation derives the target exclusively from the authenticated RequestPrincipal.
-- RequestPrincipalResolver remains the HTTP authentication boundary.
-- AuthenticatedAccountActivationService reuses the authenticated context and existing AccountActivationService semantics.
-- No client-supplied accountId is accepted by the authenticated route.
-- Legacy PATCH /accounts/:accountId/activation remains unchanged.
-- Focused HTTP-boundary tests cover principal-derived activation and unauthenticated rejection.
-- Implementation commits: 1ac6aa3ff0cd68326e66bbe5c1ba171cf2a1d5b1, dcb5550818b5f891612c350eef6c3322da227472, b29f90e26986bd5bb854267161f2c449b3d46450.
-- GitHub Actions CI run #334 for b29f90e26986bd5bb854267161f2c449b3d46450 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated principal-derived account activation slice
-- AuthenticatedAccountActivationService derives the target exclusively from RequestPrincipal.accountId.
-- AuthenticatedAccountContextService resolves the persisted account before lifecycle logic runs.
-- Existing AccountActivationService and domain transition rules remain the single source of activation semantics.
-- No client-supplied accountId is introduced for the authenticated workflow.
-- Focused tests prove principal-derived targeting.
-- Implementation commits: d0614a00a95f9be90d630ea63871cd1403485843, e4b00e5b5485168d723edb6ff4387915ad82d0ea, 6e9f5b8faf3f71f6830a861205048048c5d346e7.
-- GitHub Actions CI run #330 for 6e9f5b8faf3f71f6830a861205048048c5d346e7 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated authenticated account context slice
-- AuthenticatedAccountContextService resolves AccountRepository data exclusively from RequestPrincipal.accountId.
-- Context combines authenticated principal identity with persisted account state for reuse by future account-scoped workflows.
-- Missing persisted account is rejected with NotFoundException.
-- Focused service tests cover successful context construction and missing-account rejection.
-- Registered in AppModule.
-- Implementation commits: 214f5c162e773d82b87dd67523093ddc4b60a47d, 44653aa420ecfcce1552846267ec2dfd31204cb0, f087a844541802165f337d91a8a5c58d6c9fc349.
-- GitHub Actions CI run #326 for f087a844541802165f337d91a8a5c58d6c9fc349 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated authenticated account lookup slice
-- GET /accounts/authenticated resolves the account from RequestPrincipal.accountId.
-- No client-supplied accountId is accepted by the authenticated route.
-- Missing authentication is rejected with UnauthorizedException.
-- Missing authenticated account is rejected with NotFoundException.
-- Legacy GET /accounts/:accountId remains unchanged.
-- Focused controller tests cover principal-derived lookup, unauthenticated rejection and missing account handling.
-- Implementation commits: ff18c005446c327cb9c31d1368fe8042652d649e and 8c840dc4e3c4d56c60e05c1b0b3718c62f640673.
-- GitHub Actions CI run #322 for 8c840dc4e3c4d56c60e05c1b0b3718c62f640673 completed successfully (install, typecheck, lint, test, build).
-
-### Verified baseline
-- Account Lookup HTTP boundary: CI validated.
-- Account Activation HTTP/application boundary: CI validated.
-- Authentication/request-principal contracts: CI validated.
-- Verification Access HTTP/application boundary: CI validated.
-- Capability Access HTTP/application boundary and runtime input validation: CI validated.
-- Capability validation CI #309 passed: install, typecheck, lint, test and build all green.
-
-### Architecture constraints
+## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
 - AnonymousAuthenticationAdapter currently returns undefined.
 - No token format, JWT parser, session store or external identity-provider contract is currently grounded in the repository.
@@ -147,10 +76,3 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Authenticated capability access boundary.
 - Safety, moderation and audit domain foundations.
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
-
-## Exact next action
-1. Review remaining authenticated HTTP boundaries for inconsistent classification of malformed authentication/principal state versus malformed client input.
-2. Keep 401 for absent or invalid authentication state, 403 for valid authenticated principals denied by authorization, and 400 for malformed route/query/body input.
-3. Do not introduce a global guard migration unless an existing route composition gap requires it.
-4. Add focused tests only where a concrete inconsistency is found.
-5. Run full CI and record the checkpoint before advancing to another domain slice.
