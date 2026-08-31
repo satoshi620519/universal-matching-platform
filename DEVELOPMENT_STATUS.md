@@ -30,6 +30,16 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - GitHub Actions CI run #317 for fa79dd6d completed successfully.
 - The latest follow-up CI run #318 is for documentation commit ff371c17310c6a99a6e565f6553fc51cf70f4b15 and was in progress at last observation; it is not required to establish the code slice because #317 already succeeded.
 
+### CI-validated authenticated account activation endpoint
+- PATCH /accounts/authenticated/activation derives the target exclusively from the authenticated RequestPrincipal.
+- RequestPrincipalResolver remains the HTTP authentication boundary.
+- AuthenticatedAccountActivationService reuses the authenticated context and existing AccountActivationService semantics.
+- No client-supplied accountId is accepted by the authenticated route.
+- Legacy PATCH /accounts/:accountId/activation remains unchanged.
+- Focused HTTP-boundary tests cover principal-derived activation and unauthenticated rejection.
+- Implementation commits: 1ac6aa3ff0cd68326e66bbe5c1ba171cf2a1d5b1, dcb5550818b5f891612c350eef6c3322da227472, b29f90e26986bd5bb854267161f2c449b3d46450.
+- GitHub Actions CI run #334 for b29f90e26986bd5bb854267161f2c449b3d46450 completed successfully (install, typecheck, lint, test, build).
+
 ### CI-validated principal-derived account activation slice
 - AuthenticatedAccountActivationService derives the target exclusively from RequestPrincipal.accountId.
 - AuthenticatedAccountContextService resolves the persisted account before lifecycle logic runs.
@@ -90,9 +100,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
-1. Inspect the existing account HTTP lifecycle boundary and determine whether the principal-derived activation service can be exposed as a narrowly scoped authenticated endpoint without duplicating or weakening existing activation semantics.
-2. Reuse RequestPrincipalResolver and AuthenticatedAccountActivationService; never accept accountId from the client for the authenticated route.
-3. Preserve the legacy account activation route unchanged.
-4. Add focused HTTP-boundary tests for principal-derived targeting and authentication failures.
+1. Inspect existing account state persistence and lifecycle contracts to identify the next vertical slice that can make authenticated activation durable without inventing a new persistence API.
+2. Prefer extending an existing repository contract only if the domain and persistence layers already expose a compatible state transition pattern.
+3. Preserve legacy routes and current activation semantics.
+4. Add focused tests around persistence boundaries before exposing any additional mutation.
 5. Run full CI.
 6. Record commit SHA, CI run number/conclusion and the following exact action here before moving on.
