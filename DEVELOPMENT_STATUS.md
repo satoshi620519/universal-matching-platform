@@ -118,7 +118,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Runtime composition follow-up CI #261/#262 passed; request-principal propagation and composition-root wiring are CI-validated.
 - Authentication lifecycle CI #264 and progress record CI #265 passed; request-once authentication lifecycle invariant is CI-validated.
 - Account activation boundary CI #268/#269 failed at API test typecheck only: test repository stubs did not preserve the abstract repository method signatures and used an unverified literal AccountState.
-- Targeted test-only fix initially aligned repository signatures and AccountState typing, but CI #270 exposed an invalid fixture state: the domain transition map uses 'pending-onboarding', not 'pending'. Fixture corrected to the exact domain state. Follow-up CI pending.
+- Account activation follow-up CI #272/#273 passed; Account Activation HTTP/application boundary is CI-validated.
+- Verification access API boundary implemented by reusing VerificationAccessService and domain VerificationRecord rules; no verification usability logic was recreated. CI pending.
 
 ## Test status
 - M0 CI validation: passed.
@@ -158,10 +159,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the account activation API boundary commits.
-2. If green: mark the account activation HTTP/application boundary CI-validated.
-3. Do not add account state persistence mutation until the repository contract supports an explicit guarded transition; current activation boundary intentionally exposes validated decision flow without bypassing lifecycle invariants.
-4. Select the next existing requirement slice from verification access or another account/auth workflow that has validated domain/application logic but no HTTP boundary.
-5. Implement only one coherent boundary slice at a time and avoid recreating validated logic.
+1. Check CI triggered by the verification access API boundary commits.
+2. If green: mark the verification access HTTP/application boundary CI-validated.
+3. Review whether verification access should remain a pure decision endpoint or be connected to persisted verification records; do not invent a repository until an existing persistence contract is identified.
+4. Select the next runnable account/auth workflow boundary from existing validated domain/application logic.
+5. Keep each slice small and preserve established domain contracts.
 6. Update this file after every coherent slice.
 
