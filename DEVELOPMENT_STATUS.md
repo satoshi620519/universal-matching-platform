@@ -115,8 +115,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation complete through operational, data lifecycle and buyer deployment requirements.
 
 - Shared request-principal lifecycle CI #253 and progress record CI #254 passed; principal propagation boundary is CI-validated.
-- Runtime composition CI #258/#259 failed at API typecheck only: placeholder adapter signature omitted the required input parameter, and an unpinned Fastify dependency produced two incompatible Fastify type versions.
-- Targeted fixes applied: placeholder adapter now preserves the contract signature and Fastify is pinned to the Nest adapter's resolved compatible version. Follow-up CI pending.
+- Runtime composition follow-up CI #261/#262 passed; request-principal propagation and composition-root wiring are CI-validated.
+- Authentication lifecycle contract and integration-style lifecycle tests added to prove adapter resolution occurs once per request and guards/readers consume the stored request principal without re-authentication. CI pending.
 
 ## Test status
 - M0 CI validation: passed.
@@ -156,10 +156,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the runtime authentication composition commits.
-2. If green: mark request-principal propagation and composition-root wiring CI-validated.
-3. Add a lifecycle integration test proving authentication resolution executes once per request before guards consume the principal.
-4. Keep the anonymous placeholder adapter until a concrete identity-provider requirement slice is selected.
-5. After lifecycle integration is validated, select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation.
+1. Check CI triggered by the authentication lifecycle contract/tests.
+2. If green: mark the request-once authentication lifecycle invariant CI-validated.
+3. Keep the anonymous placeholder adapter until a concrete identity-provider requirement slice is selected.
+4. Select the next runnable account/auth requirement slice from registration, recovery, session/device management or activation, preferring an existing domain contract that has not yet crossed the API boundary.
+5. Implement only one coherent API slice at a time and avoid recreating already validated domain logic.
 6. Update this file after every coherent slice.
 
