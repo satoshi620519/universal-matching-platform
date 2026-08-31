@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { loadRuntimeConfig } from './config/runtime-config.js';
 import { ApiErrorFilter } from './common/errors/api-error.filter.js';
+import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
+import { createRequestPrincipalResolver } from './auth/request-principal.middleware.js';
 import {
   CORRELATION_ID_HEADER,
   resolveCorrelationId,
@@ -17,12 +19,15 @@ async function bootstrap() {
 
   app.useGlobalFilters(new ApiErrorFilter());
 
-  app.getHttpAdapter().getInstance().addHook('onRequest', (request, reply, done) => {
+  const adapter = app.get(RequestAuthenticationAdapter);
+  const resolvePrincipal = createRequestPrincipalResolver(adapter);
+
+  app.getHttpAdapter().getInstance().addHook('onRequest', async (request, reply) => {
     const correlationId = resolveCorrelationId(
       request.headers[CORRELATION_ID_HEADER],
     );
     reply.header(CORRELATION_ID_HEADER, correlationId);
-    done();
+    await resolvePrincipal(request);
   });
 
   await app.listen({ port: config.port, host: config.host });
