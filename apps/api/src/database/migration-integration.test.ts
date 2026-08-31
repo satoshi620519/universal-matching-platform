@@ -36,9 +36,37 @@ const authenticationIdentityMigration = {
   `,
 };
 
-const failingMigration = {
+const verificationMigration = {
   version: 3,
-  filename: '0003_failing.sql',
+  filename: '0003_create_verification.sql',
+  sql: `
+    CREATE TABLE IF NOT EXISTS verification_requests (
+      id UUID PRIMARY KEY,
+      account_id UUID NOT NULL REFERENCES accounts(id),
+      requested_level INTEGER NOT NULL,
+      workflow_reference TEXT NOT NULL,
+      status TEXT NOT NULL,
+      created_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      completed_at TIMESTAMPTZ(6),
+      expires_at TIMESTAMPTZ(6)
+    );
+    CREATE TABLE IF NOT EXISTS verification_outcomes (
+      id UUID PRIMARY KEY,
+      verification_request_id UUID NOT NULL REFERENCES verification_requests(id),
+      level INTEGER NOT NULL,
+      status TEXT NOT NULL,
+      decided_at TIMESTAMPTZ(6),
+      reason_category TEXT,
+      expires_at TIMESTAMPTZ(6),
+      created_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+};
+
+const failingMigration = {
+  version: 4,
+  filename: '0004_failing.sql',
   sql: 'SELECT definitely_missing_function()',
 };
 
@@ -46,25 +74,29 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
   it('applies identity migrations and makes a second run a no-op', async () => {
     const prisma = new PrismaClient();
     try {
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
 
-      const migrations = [accountMigration, authenticationIdentityMigration];
+      const migrations = [accountMigration, authenticationIdentityMigration, verificationMigration];
 
-      await expect(runMigrations(prisma, migrations)).resolves.toEqual([1, 2]);
+      await expect(runMigrations(prisma, migrations)).resolves.toEqual([1, 2, 3]);
       await expect(runMigrations(prisma, migrations)).resolves.toEqual([]);
 
       const tables = await prisma.$queryRawUnsafe<Array<{ table_name: string }>>(
         `SELECT table_name FROM information_schema.tables
          WHERE table_schema = 'public'
-           AND table_name IN ('accounts', 'authentication_identities', 'schema_migrations')
+           AND table_name IN ('accounts', 'authentication_identities', 'verification_requests', 'verification_outcomes', 'schema_migrations')
          ORDER BY table_name`,
       );
       expect(tables.map(({ table_name }) => table_name)).toEqual([
         'accounts',
         'authentication_identities',
         'schema_migrations',
+        'verification_outcomes',
+        'verification_requests',
       ]);
 
       const identityColumns = await prisma.$queryRawUnsafe<
@@ -87,8 +119,10 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       const rows = await prisma.$queryRawUnsafe<Array<{ version: number }>>(
         'SELECT version FROM schema_migrations ORDER BY version',
       );
-      expect(rows.map(({ version }) => Number(version))).toEqual([1, 2]);
+      expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3]);
     } finally {
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
@@ -100,6 +134,8 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
   it('rolls back a failed migration without recording its version', async () => {
     const prisma = new PrismaClient();
     try {
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
@@ -107,7 +143,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
 
       await expect(
         runMigrations(prisma, [accountMigration, authenticationIdentityMigration]),
-      ).resolves.toEqual([1, 2]);
+      ).resolves.toEqual([1, 2, 3]);
       await expect(runMigrations(prisma, [failingMigration])).rejects.toThrow(
         'definitely_missing_function',
       );
@@ -117,6 +153,8 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       );
       expect(rows.map(({ version }) => Number(version))).toEqual([1, 2]);
     } finally {
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
