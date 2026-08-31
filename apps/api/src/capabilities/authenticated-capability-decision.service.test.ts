@@ -35,7 +35,8 @@ describe('AuthenticatedCapabilityDecisionService', () => {
         account: { id: 'account-1', status: 'restricted' },
       }),
     } as any;
-    const service = new AuthenticatedCapabilityDecisionService(accounts);
+    const safetyRestrictions = { resolveForAccount: vi.fn().mockResolvedValue('none') } as any;
+    const service = new AuthenticatedCapabilityDecisionService(accounts, safetyRestrictions);
 
     await expect(
       service.evaluate(principal, {
