@@ -34,6 +34,19 @@ The following slice was added immediately before this checkpoint and must be ver
 - Important: GitHub code search had not yet indexed the new resolver when checked. Do not assume the change is absent or failed; inspect main directly.
 - CI status for this resolver slice: NOT YET VERIFIED.
 
+
+### Authenticated capability slice — IN PROGRESS
+- Verified on main: RequestPrincipalResolver and its unit test exist and AppModule registers the resolver.
+- Added authenticated route: GET /capabilities/access/authenticated.
+- Legacy GET /capabilities/access remains unchanged for backward compatibility.
+- Authenticated route obtains verificationLevel only from RequestPrincipal and does not expose currentVerificationLevel as an authenticated query field.
+- Missing principal maps to UnauthorizedException (401 boundary).
+- Malformed or missing principal verificationLevel maps to BadRequestException.
+- Updated capability controller tests to cover principal-derived authorization and unauthenticated rejection.
+- Latest test commit: 6dde068d02f5184689d45bd283cb9bf9f3c07523.
+- CI status: NOT YET VERIFIED.
+- NOTE: controller implementation was already present on main before the test update; inspect its exact commit history before attributing ownership or CI status.
+
 ### Architecture constraint discovered
 - apps/api/src/auth/request-principal.ts defines RequestPrincipal with accountId, authenticationMethod and optional verificationLevel.
 - apps/api/src/auth/anonymous-authentication.adapter.ts currently returns undefined for every authentication attempt.
@@ -70,6 +83,14 @@ Target sequence:
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 
 ## Exact next action
+1. Fetch the current authenticated capability controller and tests from main.
+2. Verify the controller/test constructor contracts compile together with RequestPrincipalResolver.
+3. Inspect the commit/workflow status for the authenticated capability slice, including test commit 6dde068d02f5184689d45bd283cb9bf9f3c07523.
+4. Do not mark the slice complete until CI is green.
+5. If CI fails, fix only the reported boundary mismatch, then update this checkpoint with the new commit.
+6. If CI passes, record the run and select the next slice.
+
+## Previous continuation instruction (superseded by latest checkpoint)
 Fetch these exact files from main and verify their contents before editing anything:
 1. apps/api/src/auth/request-principal-resolver.ts
 2. apps/api/src/auth/request-principal-resolver.test.ts
