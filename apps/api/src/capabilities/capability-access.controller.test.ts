@@ -7,6 +7,14 @@ describe('capability access API boundary', () => {
     new CapabilityAccessService(),
   );
 
+  it('rejects an invalid verification level at the HTTP boundary', () => {
+    expect(() => controller.evaluate({ currentVerificationLevel: '4' })).toThrow();
+  });
+
+  it('rejects an invalid entitlement state at the HTTP boundary', () => {
+    expect(() => controller.evaluate({ currentVerificationLevel: '1', entitlementState: 'unknown' })).toThrow();
+  });
+
   it('allows a capability when all domain requirements are satisfied', () => {
     expect(
       controller.evaluate({
