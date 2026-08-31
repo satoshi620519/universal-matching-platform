@@ -10,7 +10,7 @@ export interface SafetyMetricDefinition {
   readonly kind: SafetyMetricKind;
   readonly version: number;
   readonly aggregationLevel: 'global' | 'region' | 'category';
-  readonly includesIdentities: false;
+  readonly includesIdentities: boolean;
 }
 
 export function isValidSafetyMetricDefinition(
