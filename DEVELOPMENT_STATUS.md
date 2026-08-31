@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the audit record domain model CI, then continue with the next smallest requirements-supported slice.
+CURRENT TASK: Validate the analytics event taxonomy CI, then continue with the next smallest analytics/reporting slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Moderation Action Policy CI #118 passed: install, typecheck, lint, test and build all green.
-- Moderation Action Policy is CI-validated and complete.
-- Audit Record domain model implemented for safety-sensitive and administrative actions.
-- Audit Record tests implemented.
-- Current immediate action: verify CI for audit record commits.
+- Audit Record Domain Model CI passed: install, typecheck, lint, test and build all green.
+- Audit Record Domain Model is CI-validated and complete.
+- Analytics Event Taxonomy model implemented as the next requirements-supported slice (REQ-AN-001 through REQ-AN-004).
+- Analytics Event Taxonomy tests implemented.
+- Current immediate action: verify CI for analytics event taxonomy commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -39,6 +39,8 @@ STATUS: Milestone 1 in progress
 - Moderation action policy and tests.
 - Moderation action policy CI validation (CI #118).
 - Audit record domain model and tests.
+- Audit record domain model CI validation.
+- Analytics event taxonomy model and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -49,20 +51,20 @@ STATUS: Milestone 1 in progress
 - Account lifecycle: CI validated.
 - Account activation service: CI validated.
 - Capability access service: CI validated.
-- Domain package workspace entrypoint: CI validated.
 - Entitlement lifecycle: CI validated.
 - Verification lifecycle: CI validated.
 - Verification access service: CI validated.
 - Safety restriction policy: CI validated.
 - Safety report lifecycle: CI validated.
 - Moderation case lifecycle: CI validated.
-- Moderation action policy: CI validated (CI #118).
-- Audit record domain model: tests added; latest CI pending.
+- Moderation action policy: CI validated.
+- Audit record domain model: CI validated.
+- Analytics event taxonomy model: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by `feat: add audit record domain model`, `test: cover audit record domain model`, and `feat: export audit record domain model`.
-2. If green: mark Audit Record Domain Model CI-validated.
-3. Then continue with the next smallest requirements-supported vertical slice, reusing the completed audit/safety/moderation foundations rather than recreating them.
+1. Check CI triggered by `feat: add analytics event taxonomy model`, `test: cover analytics event taxonomy model`, and `feat: export analytics event taxonomy model`.
+2. If green: mark Analytics Event Taxonomy CI-validated.
+3. Then implement the smallest aggregation/metric-definition slice supported by REQ-AN-005 through REQ-AN-010, without recreating the event taxonomy.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
