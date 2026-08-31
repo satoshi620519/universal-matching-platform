@@ -20,6 +20,32 @@ describe('capability authorization guard', () => {
     ).toBe(true);
   });
 
+  it('rejects a request without an authenticated principal with 401', () => {
+    const guard = new CapabilityAuthorizationGuard(new CapabilityAccessService());
+
+    expect(() =>
+      guard.canActivate({
+        switchToHttp: () => ({
+          getRequest: () => ({}),
+        }),
+      } as never),
+    ).toThrow(expect.objectContaining({ status: 401 }));
+  });
+
+  it('rejects an authenticated request with an invalid verification level with 401', () => {
+    const guard = new CapabilityAuthorizationGuard(new CapabilityAccessService());
+
+    expect(() =>
+      guard.canActivate({
+        switchToHttp: () => ({
+          getRequest: () => ({
+            principal: { verificationLevel: 'invalid' },
+          }),
+        }),
+      } as never),
+    ).toThrow(expect.objectContaining({ status: 401 }));
+  });
+
   it('rejects an authenticated request lacking capability requirements with 403', () => {
     const guard = new CapabilityAuthorizationGuard(
       new CapabilityAccessService(),
