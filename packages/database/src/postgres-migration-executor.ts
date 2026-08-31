@@ -1,9 +1,12 @@
 import type { MigrationExecutor } from './executor.js';
 import type { MigrationArtifact } from './migrations.js';
 
-export interface SqlMigrationClient {
+export interface SqlMigrationQueryClient {
   query<T = unknown>(sql: string, params?: readonly unknown[]): Promise<T>;
-  transaction<T>(operation: () => Promise<T>): Promise<T>;
+}
+
+export interface SqlMigrationClient extends SqlMigrationQueryClient {
+  transaction<T>(operation: (tx: SqlMigrationQueryClient) => Promise<T>): Promise<T>;
 }
 
 export class PostgresMigrationExecutor implements MigrationExecutor {
@@ -25,9 +28,9 @@ export class PostgresMigrationExecutor implements MigrationExecutor {
   }
 
   async apply(migration: MigrationArtifact): Promise<void> {
-    await this.client.transaction(async () => {
-      await this.client.query(migration.sql);
-      await this.client.query(
+    await this.client.transaction(async (tx) => {
+      await tx.query(migration.sql);
+      await tx.query(
         'INSERT INTO schema_migrations (version) VALUES ($1)',
         [migration.version],
       );
