@@ -376,13 +376,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Current tsconfigs already include src/**/*.ts across applications and packages, so that historical fix is present.
 - Exact current compiler diagnostics are still unavailable through the connector's log endpoint; no unrelated tsconfig edits were made without evidence.
 
+## Typecheck diagnostics pipeline — IMPLEMENTED, AWAITING FIRST ARTIFACT
+- CI previously ran pnpm typecheck without preserving compiler output as a downloadable artifact.
+- Added named Typecheck step that tees stdout/stderr into typecheck.log.
+- Added always-run upload-artifact step named typecheck-diagnostics so failure diagnostics survive even when later CI steps are blocked.
+- Commit: 05cc19a096c9c7061010f65a64e4b134d232f8ee.
+- Next failed run can be diagnosed from the exact compiler output artifact instead of speculative source changes.
+
+## Compiled migration verification remains implemented
+- Source-to-dist SQL migration verification is complete in repository code.
+- Pipeline remains blocked by baseline typecheck, so CI success has not yet been claimed.
+
 ## Exact next action
-1. Verify CI for compiled migration asset verification.
-2. Add a targeted CI step or repository-visible diagnostic artifact only if necessary to expose the exact typecheck failure text.
-3. Once typecheck diagnostics are available, fix the exact reported error and unblock the entire pipeline.
-4. After baseline CI is green, add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
-5. Keep migration execution explicit and outside automatic API startup.
-6. Record the exact continuation checkpoint.
+1. Wait for CI triggered by 05cc19a and inspect its typecheck-diagnostics artifact if typecheck fails.
+2. Fix only exact compiler-reported errors.
+3. Re-run/verify CI until baseline pipeline is green.
+4. Then execute empty-database PostgreSQL integration using the existing PostgreSQL 16 CI service and FilesystemMigrationArtifactSource.
+5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
