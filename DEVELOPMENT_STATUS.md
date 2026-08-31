@@ -2,8 +2,8 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Validate the first grounded Account persistence migration against the repository database boundary and CI.
-STATUS: Authenticated HTTP boundary is CI validated; the first Account SQL migration has now been added from the existing Prisma physical schema, but migration execution against an empty database is not yet CI validated.
+CURRENT TASK: Advance from the validated Account persistence migration boundary to the next grounded M1 implementation slice.
+STATUS: The first Account migration is now validated against a real PostgreSQL service in CI, including apply, idempotent rerun, and failed-migration rollback semantics. CI #413 is green.
 
 ## Continuation protocol — READ FIRST
 GitHub main is the persistent source of truth. Before every new work session:
@@ -17,55 +17,30 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
-### Initial Account migration artifact — pending CI/database validation
-- Confirmed `apps/api/prisma/schema.prisma` is the physical persistence contract consumed by `PrismaAccountRepository` and `DatabaseService`.
-- Added `packages/database/migrations/0001_create_accounts.sql` with the grounded `accounts` table definition: UUID primary key, required status, `created_at` and `updated_at` as `TIMESTAMPTZ(6)` with current-time defaults.
-- Implementation commit: `f74a00033b135d46d56d5f13be0f36c8ebf06e21`.
-- No migration execution has been claimed yet; current CI does not provision PostgreSQL or execute migration artifacts.
-- The migration is intentionally limited to the currently grounded Prisma Account schema and does not add logical-model fields that are not present in the physical schema.
+### Account migration execution gate — COMPLETE
+- `packages/database/migrations/0001_create_accounts.sql` remains grounded exclusively in the physical Prisma Account schema.
+- Added migration planning/execution boundaries and tests in `packages/database/src/migrations.ts`, `packages/database/src/executor.ts`, and their tests.
+- Added the API migration runner and Prisma transaction adapter.
+- Added PostgreSQL integration coverage for migration apply + idempotent rerun and failed-migration rollback.
+- CI provisions PostgreSQL 16 and passes `DATABASE_URL` through Turbo test tasks.
+- Rollback coverage uses a deterministic single-statement PostgreSQL failure (`SELECT definitely_missing_function()`), avoiding a false-positive failure caused by multiple commands in one prepared statement.
+- Final rollback-test commit: `32f519d7419855802b73320ba52161b04d74e64a`.
+- GitHub Actions CI run #413 completed successfully: PostgreSQL service healthy, typecheck, lint, all tests, integration tests, and build passed.
+- Integration result in CI: `apps/api/src/database/migration-integration.test.ts` — 2 tests passed, not skipped.
+- Migration gate is therefore complete and must not be reimplemented.
 
-### CI-validated authenticated HTTP boundary review
-- Reviewed remaining authenticated HTTP boundaries for classification of authentication/principal state versus malformed client input.
-- `401` remains the contract for absent or invalid authentication state; `403` remains the contract for valid authenticated principals denied by authorization; `400` remains the contract for malformed route/query/body input.
-- No concrete inconsistency requiring a guard migration or focused test was found.
-- No implementation files changed in this review slice.
-- Latest prior main CI run #378 for commit `1083415ccdc1ee71036a8bc5b8d4257b3f0d44d6` completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated HTTP authentication principal validation
-- HttpAuthenticationGuard validates pre-attached and adapter-returned principals through the shared authenticated-principal contract before allowing the request.
-- Invalid or incomplete principals fail with 401 instead of being treated as authenticated merely because a principal object exists.
-- Focused tests cover invalid adapter-returned principals and invalid pre-attached principals.
-- Implementation commits: 6b37cf24ebb8bffd7610cbbf8109a916a9ef7a73, e4dec00822393433a2b2c4788972069b4d1e34b7, df3b386caf4eb098fd8f26a8f07e3f730265c21e, 1aa787294031d220e495c1b219d3d6e224348bd5.
-- GitHub Actions CI run #373 for 1aa787294031d220e495c1b219d3d6e224348bd5 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated authenticated capability authentication semantics
-- Malformed or missing verificationLevel claims on an authenticated principal are classified as authentication failures (401), not client request validation failures (400).
-- Capability requirement failures for a valid authenticated principal remain authorization failures (403).
-- Service and HTTP-boundary tests now share the same 401 classification for malformed principal claims.
-- Implementation commits: 916c11a41f170d1fafc8a5ee9ad227ae8b58f4df, 0d805114bd3c231107e7fa213a7369292b313b9e, dd369ae49ee1d8a6aa52ffa8bf84600e579d6e55, 230f72e39490f7a9f908dce990a7b85c5616b3ea, c7bd723eb16fa18e88fbdc79cf32c0de940b7fe7, 401e2116a728e42425d8c30010d92c434de0ddc6.
-- GitHub Actions CI run #368 for 401e2116a728e42425d8c30010d92c434de0ddc6 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated capability authorization authentication boundary
-- CapabilityAuthorizationGuard now requires an authenticated RequestPrincipal instead of treating an absent principal as verification level 0.
-- Missing principals and invalid principal verification levels fail with 401 before capability evaluation.
-- Authenticated principals that fail capability requirements continue to receive 403.
-- Focused tests cover allow, missing-principal rejection, invalid-verification rejection and capability denial.
-- Implementation commits: 359c970facddbed121e7154669f3e3be19449116, 0ad0a87d2197cf147e386a0c95222119e1fabc52.
-- GitHub Actions CI run #361 for 0ad0a87d2197cf147e386a0c95222119e1fabc52 completed successfully (install, typecheck, lint, test, build).
-
-### CI-validated durable legacy account activation
-- PATCH /accounts/:accountId/activation now persists the successful domain transition through AccountRepository.updateStatus.
-- Legacy and authenticated activation routes no longer differ in durability semantics.
-- The controller rejects both an initially missing account and an account that disappears before persistence completes.
-- Focused tests cover successful persistence and both missing-account boundaries.
-- Implementation commits: 76c1bcfb395824472222699f537ebda6eb76bb35, 3e87462560d281045dc812b40fd8ada72c934317, 8532b59382f22b9f5406e9ff3615d2c0a4034d61, 90035ddc81c36b8f65324e35a0e8ed87db213f7c, dd26cb00837f8c6a63e6ba220893f218e152d119.
-- GitHub Actions CI run #358 for dd26cb00837f8c6a63e6ba220893f218e152d119 completed successfully (install, typecheck, lint, test, build).
+### CI/test fixes completed during this slice
+- Adapted database executor to the `MigrationPlan.pending` contract and `ReadonlySet` applied-version input.
+- Aligned planner tests with current synchronous duplicate-version validation and pending-plan semantics.
+- Corrected Prisma adapter test doubles to mock `$executeRawUnsafe` / `$queryRawUnsafe`.
+- Passed `DATABASE_URL` explicitly to Turbo test tasks so PostgreSQL integration tests execute in CI.
 
 ## Exact next action
-1. Verify CI for the migration commit and confirm that baseline CI remains green.
-2. Add a focused empty-database migration test only if an existing repository-supported database test path can be grounded without inventing infrastructure.
-3. If CI has no PostgreSQL/migration execution path, implement the smallest repository-consistent migration execution/test boundary before claiming the M1 migration gate complete.
-4. Do not introduce token, JWT, session or identity-provider persistence contracts while they remain ungrounded.
+1. Inspect the current Milestone 1 repository state for the next grounded Core API/database/identity implementation gap.
+2. Select the smallest repository-consistent implementation slice; do not invent authentication-provider, JWT, session, payment-provider, or identity-provider contracts that remain unresolved.
+3. Add focused tests before or with the implementation.
+4. Run/verify CI and record the exact commit and CI result here.
+5. Keep this migration gate fixed as completed; do not recreate it.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
@@ -74,16 +49,15 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Do not replace the legacy capability route with mandatory authentication until a real authentication adapter exists.
 - Do not invent identity transport or persistence contracts.
 - `packages/database/migrations` is the repository-defined migration artifact boundary.
-- The current Account migration is derived only from the physical Prisma schema; logical-model fields not present in Prisma are not silently added.
+- The Account migration is derived only from the physical Prisma schema; logical-model fields not present in Prisma are not silently added.
+- PostgreSQL is the authoritative relational database and Prisma is the typed database access layer.
 
 ## Completed — DO NOT RECREATE
 - Project foundation and continuity rules.
-- GitHub as persistent source of truth.
 - Milestone 0 engineering foundation and CI baseline.
 - Canonical domain primitives and tests.
 - API application boundary.
 - Database configuration/migration boundary.
-- Capability gate and tests.
 - Account lifecycle, activation, lookup and tests.
 - Entitlement lifecycle and tests.
 - Verification lifecycle and verification access boundary.
@@ -91,3 +65,4 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Authenticated capability access boundary.
 - Safety, moderation and audit domain foundations.
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
+- Account persistence migration execution gate, including real PostgreSQL CI validation.
