@@ -7,6 +7,7 @@ import { CapabilityAccessService } from './capability-access.service.js';
 import { AuthenticatedCapabilityAccessService } from './authenticated-capability-access.service.js';
 import { AuthenticatedAccountContextService } from '../accounts/authenticated-account-context.service.js';
 import { AccountRepository } from '../accounts/account.repository.js';
+import { VerificationService } from '../verification/verification.service.js';
 
 class StubAuthenticationAdapter extends RequestAuthenticationAdapter {
   constructor(private readonly principal: any) { super(); }
@@ -16,17 +17,22 @@ class StubAuthenticationAdapter extends RequestAuthenticationAdapter {
 describe('capability access API boundary', () => {
   const service = new CapabilityAccessService();
 
-  function controllerFor(principal: any = undefined) {
+  function controllerFor(principal: any = undefined, persistedVerificationLevel: 0 | 1 | 2 | 3 | null = null) {
     const accounts = {
       findById: async (id: string) => principal && id === principal.accountId
         ? { id, status: 'active', createdAt: new Date(), updatedAt: new Date() }
         : null,
     } as unknown as AccountRepository;
     const context = new AuthenticatedAccountContextService(accounts);
+    const verification = {
+      findUsableRecordForAccount: async () => persistedVerificationLevel === null
+        ? null
+        : { level: persistedVerificationLevel, status: 'verified' },
+    } as unknown as VerificationService;
     return new CapabilityAccessController(
       service,
       new RequestPrincipalResolver(new StubAuthenticationAdapter(principal)),
-      new AuthenticatedCapabilityAccessService(context, service),
+      new AuthenticatedCapabilityAccessService(context, verification, service),
     );
   }
 
@@ -82,12 +88,12 @@ describe('capability access API boundary', () => {
     ).toEqual({ allowed: false, reason: 'not-yet-effective' });
   });
 
-  it('uses the authenticated principal verification level', async () => {
+  it('uses the persisted usable verification level for authenticated access', async () => {
     await expect(controllerFor({
       accountId: 'account-1',
       authenticationMethod: 'test',
       verificationLevel: '3',
-    }).evaluateAuthenticated({
+    }, 3).evaluateAuthenticated({
       requiredVerificationLevel: '3',
     })).resolves.toEqual({ allowed: true, reason: 'allowed' });
   });
@@ -97,7 +103,7 @@ describe('capability access API boundary', () => {
       accountId: 'account-1',
       authenticationMethod: 'test',
       verificationLevel: '1',
-    }).evaluateAuthenticated({
+    }, 1).evaluateAuthenticated({
       requiredVerificationLevel: '2',
     })).resolves.toEqual({ allowed: false, reason: 'verification-required' });
   });
@@ -113,6 +119,6 @@ describe('capability access API boundary', () => {
       accountId: 'account-1',
       authenticationMethod: 'test',
       verificationLevel: 'invalid',
-    }).evaluateAuthenticated({})).rejects.toBeInstanceOf(UnauthorizedException);
+    }, 3).evaluateAuthenticated({})).rejects.toBeInstanceOf(UnauthorizedException);
   });
 });
