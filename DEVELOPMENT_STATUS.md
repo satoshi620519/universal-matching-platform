@@ -284,11 +284,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Raw SQL is restricted to repository-owned migration artifacts and fixed executor SQL; migration inputs are not caller-provided.
 - Adapter commits: 7997934e4a83a34b8490ffdb1cb452ae2a55e87a, d3a87d6cef6b62e5eb522c122d65354796ebe357, 4333b17994a6d3496158e3dc2e14a38027671bf0, 9bf846ec5abeb5a752d58c293355909c46e62f26.
 
+## Safe Prisma migration adapter — CI TYPECHECK FAILURE IDENTIFIED AND FIXED
+- CI #535/#536 failed in @universal/database typecheck, before lint/test/build.
+- Root cause: the transaction-scoped executor test referenced a query symbol outside its lexical scope and constrained the generic transaction callback to Promise<void>.
+- Production transaction port and Prisma adapter were not implicated.
+- Rewrote the focused test with explicit SqlMigrationClient / SqlMigrationQueryClient types and a generic transaction implementation.
+- Regression assertion now explicitly proves apply() does not call the root query client.
+- Fix commit: 3cf9e86c231a3fbf7023407cc4faf3faae30a659.
+
 ## Exact next action
-1. Verify CI for transaction-port refactor and safe Prisma adapter.
-2. If green, add runtime composition for DatabaseService → PrismaSqlMigrationClient → PostgresMigrationExecutor.
-3. Add a migration command/service only after composition is tested.
-4. Add empty-database integration coverage using the repository's actual PostgreSQL runtime configuration.
+1. Verify CI for the corrected transaction-scoped executor test.
+2. If green, verify the safe Prisma adapter commit chain is fully covered by CI.
+3. Add runtime composition only after the adapter and executor chain are green together.
+4. Reuse the CI PostgreSQL service configuration for the first empty-database integration test rather than inventing a second runtime topology.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
