@@ -12,10 +12,13 @@ describe('account activation HTTP boundary', () => {
     updatedAt: new Date(),
   };
 
-  function controllerFor(account: typeof pending | null = pending, persisted = {
-    ...pending,
-    status: 'active' as const,
-  }) {
+  function controllerFor(
+    account: typeof pending | null = pending,
+    persisted: { ...typeof pending; status: 'active' } | null = {
+      ...pending,
+      status: 'active' as const,
+    },
+  ) {
     const repository = {
       findById: async () => account,
       updateStatus: async (id: string, status: string) => {
