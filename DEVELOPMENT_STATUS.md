@@ -612,9 +612,19 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Defined the smallest safe next slice as a dedicated credential model linked to AuthenticationIdentity, explicitly keeping password hashes out of Account and deferring JWT/session/reset-token/provider choices.
 - Boundary commit: 595066ccb96c82f1fe623fb878c3eb34a1087a7a.
 
+
+## Dedicated password credential persistence — IMPLEMENTED, CI PENDING
+- Continued from EMAIL_PASSWORD_AUTHENTICATION_IMPLEMENTATION_BOUNDARY.md and inspected the actual AuthenticationIdentity schema/repository conventions.
+- Added PasswordCredentialRepository with create, lookup, password-hash replacement and credential status operations.
+- Added PrismaPasswordCredentialRepository; password material is scoped to AuthenticationIdentity rather than Account.
+- Added additive Prisma model and immutable migration 0005_create_password_credentials.sql.
+- Registered the concrete provider and abstract repository token in AppModule.
+- Explicitly did not implement password hashing algorithms, sign-in tokens/sessions, reset tokens, email delivery or OAuth/OIDC.
+- Commits: 923fba9b, 61334e6d, 0307cc68, dc95c563, 7d67b07c, 1682a6f8.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Inspect the physical database conventions and define the smallest additive password-credential persistence contract linked to AuthenticationIdentity.
+2. Add focused repository behavior and migration/model alignment tests for password_credentials before introducing hashing or sign-in semantics.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
