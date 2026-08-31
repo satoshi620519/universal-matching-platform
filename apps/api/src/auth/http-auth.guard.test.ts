@@ -54,7 +54,10 @@ describe('HTTP authentication guard', () => {
   it('rejects an invalid pre-attached principal with 401', async () => {
     const guard = new HttpAuthenticationGuard(
       new (class extends RequestAuthenticationAdapter {
-        async authenticate() {
+        async authenticate(_input: {
+          readonly authorization?: string;
+          readonly requestId: string;
+        }) {
           throw new Error('adapter should not be called');
         }
       })(),
