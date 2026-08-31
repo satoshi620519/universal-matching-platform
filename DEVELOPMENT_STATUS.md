@@ -1,9 +1,9 @@
 # Development Status
 
 CURRENT PHASE: Phase 3 — Implementation
-CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the deployment readiness contract CI, then perform the Phase 1 requirements consistency review and transition preparation.
-STATUS: Milestone 1 in progress
+CURRENT MILESTONE: Milestone 1 — Core API, database and identity
+CURRENT TASK: Phase 1 requirement-contract foundation is complete; begin Milestone 1 implementation by turning the existing architecture into the first runnable API/database/authenticated-request vertical slice.
+STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical slice in progress
 
 ## Latest checkpoint — 2026-08-31
 - Privacy-preserving Safety Metric type fix CI #139 passed: install, typecheck, lint, test and build all green.
@@ -46,8 +46,10 @@ STATUS: Milestone 1 in progress
 - Deployment Installation Contract implemented for REQ-DEPLOY-001 through REQ-DEPLOY-005: documented prerequisites, externalized environment configuration, safe secret handling, quick-launch versus advanced customization guides, and documented integration requirements.
 - Deployment Installation Contract CI #193 passed and progress record CI #194 also passed; installation foundation is CI-validated.
 - Deployment Readiness Contract implemented for REQ-DEPLOY-006 through REQ-DEPLOY-010: readiness checklists, documented buyer configuration surfaces, upgrade/migration/rollback planning, production responsibility assignment, and extension boundaries that avoid unnecessary core forks.
-- Deployment Readiness Contract tests implemented.
-- Current immediate action: verify CI for deployment readiness contract commits.
+- Deployment Readiness Contract CI #197 passed and progress record CI #198 also passed; Buyer Installation and Deployment requirements through REQ-DEPLOY-010 are CI-validated and complete.
+- Phase 1 consistency review confirmed the requirement contracts align with the existing bounded-context, data, API and event architecture; no new irreversible product decision is required before implementation.
+- Architecture baseline is already established in DOMAIN_MODEL.md, DATA_MODEL_DRAFT.md, API_ARCHITECTURE.md, EVENT_AND_ASYNC_ARCHITECTURE.md, IMPLEMENTATION_MILESTONES.md and TECHNOLOGY_STACK_DECISION.md.
+- Current immediate action: begin Milestone 1 runnable vertical slice without recreating completed requirement contracts or architecture artifacts.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -99,6 +101,7 @@ STATUS: Milestone 1 in progress
 - Data lifecycle governance contract and tests.
 - Deployment installation contract and tests.
 - Deployment readiness contract and tests.
+- Phase 1 requirement-contract foundation complete through operational, data lifecycle and buyer deployment requirements.
 
 ## Test status
 - M0 CI validation: passed.
@@ -134,13 +137,14 @@ STATUS: Milestone 1 in progress
 - Data lifecycle retention contract: CI validated (CI #185).
 - Data lifecycle governance contract: CI validated (CI #189).
 - Deployment installation contract: CI validated (CI #193).
-- Deployment readiness contract: tests added; latest CI pending.
+- Deployment readiness contract: CI validated (CI #197).
+- Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the deployment readiness contract commits.
-2. If green: mark Deployment Readiness Contract CI-validated and mark Buyer Installation and Deployment requirements through REQ-DEPLOY-010 complete.
-3. Then perform the Phase 1 requirements consistency review against PRODUCT_REQUIREMENTS.md, identify unresolved product decisions, and update DECISIONS.md only where required.
-4. Record the Phase 1 completion transition and exact Phase 2 architecture starting point without recreating completed requirement contracts.
-5. If CI is red: inspect only the failing job and apply the smallest targeted fix.
-6. Update this file after every meaningful change.
+1. Start Milestone 1 — Core API, database and identity from the existing architecture baseline.
+2. Inspect the current apps/api and infrastructure boundaries before modifying files.
+3. Implement the smallest runnable vertical slice: API bootstrap/health, configuration boundary, database connectivity/migration baseline, request correlation and structured error boundary.
+4. Add authenticated request context only after the API boundary is runnable; keep authentication provider-neutral.
+5. Reuse existing domain Account, Capability, Audit and lifecycle models; do not recreate completed requirement contracts.
+6. Run CI after each coherent slice and record the exact checkpoint.
 
