@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Validate end-to-end authoritative SafetyEnforcement resolution into authenticated capability decisions.
+CURRENT TASK: Validate the corrected application integration and align the new safety enforcement schema with the repository-owned SQL migration contract.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -203,11 +203,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added focused application service test and updated capability decision tests.
 - Registered effective resolver through Nest DI.
 
+## Safety enforcement application integration — FIXED, CI PENDING
+- CI #513 exposed one stale test constructor after AuthenticatedCapabilityDecisionService gained EffectiveSafetyRestrictionService dependency.
+- Root cause was a missed fixture update in the restricted-account test; production code was not implicated.
+- Fixed all test construction paths to inject the authoritative resolver.
+- Fix commit: 32572a03597aacb390e0e69cd0c277680d824624.
+
+## Migration compatibility — IMPLEMENTED AT ARTIFACT LEVEL
+- Repository investigation found migrations are owned by packages/database/migrations, not Prisma's default app-local migrations directory.
+- Existing contract requires ordered immutable SQL artifacts and schema_migrations tracking.
+- Added 0001_create_safety_enforcements.sql with Account foreign key and repository query index.
+- The concrete migration runner and empty-database integration gate remain separate pending infrastructure implementation; no runner behavior was invented.
+
 ## Exact next action
-1. Verify CI for the end-to-end safety restriction application integration.
-2. If green, mark SafetyEnforcement authoritative source complete.
-3. Inspect migration workflow and ensure the Prisma schema addition has a migration-compatible path.
-4. Do not add controller/UI/admin mutation flows until persistence schema evolution is grounded.
+1. Verify CI for the constructor fixture fix and migration artifact addition.
+2. If green, mark SafetyEnforcement authoritative source implementation complete at application/schema artifact level.
+3. Investigate existing migration runner infrastructure before adding or changing execution behavior.
+4. Do not claim database deployment migration execution until a concrete runner is present and integration-tested.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
