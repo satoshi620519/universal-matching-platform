@@ -17,6 +17,24 @@ describe('parseMigrationFilename', () => {
   });
 });
 
+describe('repository migration sequence', () => {
+  it('keeps the committed artifact sequence uniquely ordered', () => {
+    expect(
+      orderMigrationFilenames([
+        '0004_create_safety_enforcements.sql',
+        '0002_create_authentication_identities.sql',
+        '0001_create_accounts.sql',
+        '0003_create_verification.sql',
+      ]),
+    ).toEqual([
+      '0001_create_accounts.sql',
+      '0002_create_authentication_identities.sql',
+      '0003_create_verification.sql',
+      '0004_create_safety_enforcements.sql',
+    ]);
+  });
+});
+
 describe('orderMigrationFilenames', () => {
   it('orders migrations by numeric version', () => {
     expect(
