@@ -4,6 +4,10 @@ export interface MigrationArtifact {
   readonly sql: string;
 }
 
+export interface MigrationPlan {
+  readonly pending: readonly MigrationArtifact[];
+}
+
 const MIGRATION_FILENAME = /^(\d{4})_[a-z0-9][a-z0-9_-]*\.sql$/;
 
 export function parseMigrationFilename(filename: string): number {
@@ -37,4 +41,23 @@ export function orderMigrationFilenames(filenames: readonly string[]): string[] 
   return parsed
     .sort((left, right) => left.version - right.version)
     .map((migration) => migration.filename);
+}
+
+export function planMigrations(
+  migrations: readonly MigrationArtifact[],
+  appliedVersions: ReadonlySet<number>,
+): MigrationPlan {
+  const versions = new Set<number>();
+  for (const migration of migrations) {
+    if (versions.has(migration.version)) {
+      throw new Error(`Duplicate migration version: ${migration.version}`);
+    }
+    versions.add(migration.version);
+  }
+
+  const ordered = [...migrations].sort((left, right) => left.version - right.version);
+
+  return {
+    pending: ordered.filter((migration) => !appliedVersions.has(migration.version)),
+  };
 }
