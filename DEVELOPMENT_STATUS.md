@@ -27,7 +27,9 @@ STATUS: Milestone 1 in progress
 - Accessibility Control Contract CI #159 passed: install, typecheck, lint, test and build all green.
 - Accessibility Flow Communication Contract implemented for REQ-A11Y-003 through REQ-A11Y-006 foundations: non-sensory information channel, text scaling, predictable visible focus, and dynamic status mechanism.
 - Accessibility Flow Communication Contract tests implemented.
-- Current immediate action: verify CI for accessibility flow communication contract commits.
+- Initial CI failed at typecheck because the test fixture widened informationChannels to string[].
+- Fixed by preserving literal channel types with a readonly tuple; no domain rule was changed.
+- Current immediate action: verify CI for the targeted accessibility flow test type fix.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -98,10 +100,10 @@ STATUS: Milestone 1 in progress
 - Auditable analytics actions: CI validated (CI #151).
 - Analytics deployment retention policy: CI validated (CI #155).
 - Accessibility control contract: CI validated (CI #159).
-- Accessibility flow communication contract: tests added; latest CI pending.
+- Accessibility flow communication contract: initial CI failed at typecheck; targeted test typing fix committed; replacement CI pending.
 
 ## Exact next action
-1. Check CI triggered by the accessibility flow communication contract commits.
+1. Check CI triggered by `fix: preserve accessibility channel literals in tests`.
 2. If green: mark Accessibility Flow Communication Contract CI-validated.
 3. Then implement the remaining smallest accessibility slice for REQ-A11Y-007 through REQ-A11Y-010, reusing completed accessibility contracts.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
