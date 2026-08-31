@@ -52,3 +52,5 @@ export * from './analytics-deployment-policy.js';
 export * from './accessibility-contract.js';
 
 export * from './accessibility-flow.js';
+
+export * from './accessibility-assurance.js';
