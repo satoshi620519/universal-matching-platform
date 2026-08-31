@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AccountRepository } from './accounts/account.repository.js';
+import { CapabilityAccessController } from './capabilities/capability-access.controller.js';
+import { CapabilityAccessService } from './capabilities/capability-access.service.js';
 import { AccountActivationController } from './accounts/account-activation.controller.js';
 import { AccountActivationService } from './accounts/account-activation.service.js';
 import { PrismaAccountRepository } from './accounts/prisma-account.repository.js';
@@ -13,9 +15,10 @@ import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController, AccountActivationController, VerificationAccessController],
+  controllers: [HealthController, AccountActivationController, VerificationAccessController, CapabilityAccessController],
   providers: [
     HealthStatusService,
+    CapabilityAccessService,
     AccountActivationService,
     VerificationAccessService,
     PrismaAccountRepository,
