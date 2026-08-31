@@ -64,3 +64,5 @@ export * from './operation-observability-contract.js';
 export * from './data-lifecycle-contract.js';
 
 export * from './data-lifecycle-governance-contract.js';
+
+export * from './deployment-installation-contract.js';
