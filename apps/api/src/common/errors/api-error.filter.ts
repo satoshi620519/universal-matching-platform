@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { CORRELATION_ID_HEADER, resolveCorrelationId } from '../../observability/request-context.js';
@@ -17,6 +18,8 @@ interface ErrorResponse {
 
 @Catch()
 export class ApiErrorFilter implements ExceptionFilter {
+  private readonly logger = new Logger(ApiErrorFilter.name);
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const request = context.getRequest<FastifyRequest>();
@@ -25,6 +28,12 @@ export class ApiErrorFilter implements ExceptionFilter {
     const correlationId = resolveCorrelationId(
       request.headers[CORRELATION_ID_HEADER],
     );
+
+    if (!(exception instanceof HttpException)) {
+      this.logger.error(
+        exception instanceof Error ? exception.stack : String(exception),
+      );
+    }
 
     const status =
       exception instanceof HttpException
