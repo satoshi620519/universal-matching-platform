@@ -243,11 +243,27 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This guards against reintroducing duplicate versions while keeping filesystem discovery separate from pure planning logic.
 - Commit: 0770dd8a9c1ff85f9d9aec21e89390ce3e351ea2.
 
+## Migration sequence regression guard — CI GREEN
+- CI #521 passed for the focused repository migration sequence guard.
+- Existing pure migration planning logic now has an explicit regression test covering the committed logical sequence.
+
+## PostgreSQL migration executor adapter — IMPLEMENTED, CI PENDING
+- Database dependency investigation found no concrete SQL driver dependency inside @universal/database.
+- API uses Prisma, but packages/database intentionally remains driver-neutral.
+- Added a narrow SqlMigrationClient port instead of coupling the migration package directly to Prisma internals.
+- Added PostgresMigrationExecutor implementing the existing MigrationExecutor contract:
+  - creates schema_migrations tracking table if needed
+  - lists applied versions in order
+  - applies migration SQL and version recording inside one transaction boundary
+- Added focused contract tests using a fake SQL client.
+- This is an adapter contract implementation, not yet an application-wired production database client.
+- Commits: 66ff98cd30b91e38631da89630981f979cd2f9b1, 482e2dd8c1e8b4599dedfec26f38787e0a31e9ea, 69bebb8b37b53f98136f3d35c68b31c06200640a.
+
 ## Exact next action
-1. Verify CI for the migration sequence regression guard.
-2. Inspect package and application database dependencies to identify the selected PostgreSQL access technology.
-3. If a supported driver boundary already exists, design the smallest concrete MigrationExecutor adapter around it.
-4. Add execution integration only after the adapter can be tested against an empty database.
+1. Verify CI for the PostgreSQL migration executor adapter.
+2. Inspect Prisma's concrete DatabaseService capabilities before deciding whether a Prisma-backed SqlMigrationClient adapter is safe and supported.
+3. Add an application composition adapter only if transaction/query semantics can be mapped without weakening atomic migration guarantees.
+4. Add empty-database integration testing after a concrete runtime client exists.
 5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
