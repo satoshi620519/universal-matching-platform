@@ -721,9 +721,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Registered PasswordSignInService in AppModule. Session issuance remains deliberately separate from credential verification.
 - Commits: 04fb711363a6ae4a9b4615c999bc5f95b70eb9d3, c9110cb9e12c92f31042a34788a80cafe05593b7, 13935d8e14165e25eed0f8095efe12e9638fe153, 65f674462982b5fda21bb4b806745c2c7897d0e7.
 
+
+## Session issuance application boundary — IMPLEMENTED, persistence deferred
+- Inspected existing RequestAuthenticationAdapter and RequestPrincipal contracts and confirmed the application currently has only AnonymousAuthenticationAdapter; no session persistence or token representation exists.
+- Added SessionRepository contract and SessionIssuanceService with a bounded seven-day expiry.
+- Added regression coverage for deterministic expiry calculation.
+- Documented strict separation between password credential verification and session issuance in SESSION_ISSUANCE_BOUNDARY.md.
+- Intentionally did not invent a JWT/cookie/bearer format or claim request authentication is implemented; session persistence, revocation semantics and resolver adapter must be designed together.
+- Commits: 31e49508fa0b33327a6221c3b00fcc567c81d73a, 65f539a37325ee14326abd82b424e604b94a0160, 8b131ac864b7e4d444c17742b17042720849ec48, f363656f8664999e78900011035b36f6683810de.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Inspect existing session/token/authentication adapter contracts and implement session issuance after successful PasswordSignInService verification, preserving the separation between credential verification and request authentication.
+2. Design session persistence and revocation semantics against the existing RequestAuthenticationAdapter/RequestPrincipal contract, then add a persistent session repository before exposing sign-in HTTP.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
