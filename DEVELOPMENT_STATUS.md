@@ -428,12 +428,28 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Test: blocked by lint
 - Build: blocked by lint
 
+## Lint diagnostics — EXACT ERROR CAPTURED AND FIXED
+- CI run #572/#573 path confirmed Typecheck GREEN and Lint reached execution.
+- lint-diagnostics artifact was successfully downloaded and inspected.
+- Exact remaining lint/type contract errors were both in packages/database/src/postgres-migration-executor.test.ts:
+  - Vitest Mock inference erased the generic query<T> signature and exposed Promise<unknown>.
+- Applied minimal fix by explicitly typing rootQuery as SqlMigrationQueryClient['query'], preserving the production generic contract.
+- Commit: 6c8c3ebb9ebff5d35af0a038c41eea1fb75697a4.
+
+## Pipeline progression
+- Install: GREEN
+- Typecheck: GREEN
+- Lint: exact two errors fixed, CI verification pending
+- Test: next gate
+- Build: pending
+
 ## Exact next action
-1. Inspect CI run triggered by 10cf8696.
-2. Download lint-diagnostics if lint fails and fix only exact reported lint errors.
-3. Continue sequentially through test and build until baseline CI is green.
-4. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
-5. Record the exact continuation checkpoint.
+1. Verify CI triggered by 6c8c3ebb.
+2. If lint is green, inspect the exact test failure next.
+3. Preserve test diagnostics if required and fix only exact failing tests.
+4. Continue to build gate until baseline CI is green.
+5. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
+6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
