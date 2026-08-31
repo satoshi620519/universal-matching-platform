@@ -28,3 +28,5 @@ export * from './verification.js';
 export * from './safety-restriction.js';
 export * from './report.js';
 export * from './moderation-case.js';
+
+export * from './moderation-action.js';
