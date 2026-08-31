@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AccountRepository } from './accounts/account.repository.js';
+import { AccountActivationController } from './accounts/account-activation.controller.js';
+import { AccountActivationService } from './accounts/account-activation.service.js';
 import { PrismaAccountRepository } from './accounts/prisma-account.repository.js';
 import { AnonymousAuthenticationAdapter } from './auth/anonymous-authentication.adapter.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
@@ -9,9 +11,10 @@ import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController],
+  controllers: [HealthController, AccountActivationController],
   providers: [
     HealthStatusService,
+    AccountActivationService,
     PrismaAccountRepository,
     AnonymousAuthenticationAdapter,
     {
