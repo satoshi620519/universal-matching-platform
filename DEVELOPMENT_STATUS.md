@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the moderation action policy CI, then continue with the smallest auditability slice.
+CURRENT TASK: Validate the audit record domain model CI, then continue with the next smallest requirements-supported slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Moderation Case Lifecycle CI passed: install, typecheck, lint, test and build all green.
-- Moderation Case Lifecycle is CI-validated and complete.
-- Moderation Action Policy implemented using existing Safety Restriction semantics rather than duplicating restriction logic.
-- Moderation Action Policy tests implemented.
-- Current immediate action: verify CI for moderation action commits.
+- Moderation Action Policy CI #118 passed: install, typecheck, lint, test and build all green.
+- Moderation Action Policy is CI-validated and complete.
+- Audit Record domain model implemented for safety-sensitive and administrative actions.
+- Audit Record tests implemented.
+- Current immediate action: verify CI for audit record commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -37,6 +37,8 @@ STATUS: Milestone 1 in progress
 - Moderation case lifecycle and tests.
 - Moderation case lifecycle CI validation.
 - Moderation action policy and tests.
+- Moderation action policy CI validation (CI #118).
+- Audit record domain model and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -54,12 +56,13 @@ STATUS: Milestone 1 in progress
 - Safety restriction policy: CI validated.
 - Safety report lifecycle: CI validated.
 - Moderation case lifecycle: CI validated.
-- Moderation action policy: tests added; latest CI pending.
+- Moderation action policy: CI validated (CI #118).
+- Audit record domain model: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by moderation action policy commits.
-2. If green: mark Moderation Action Policy CI-validated.
-3. Then implement the smallest auditable safety-sensitive action record required by REQ-SAFE-005 / REQ-ADMIN-004 / REQ-SEC-003, without recreating moderation action or safety restriction logic.
+1. Check CI triggered by `feat: add audit record domain model`, `test: cover audit record domain model`, and `feat: export audit record domain model`.
+2. If green: mark Audit Record Domain Model CI-validated.
+3. Then continue with the next smallest requirements-supported vertical slice, reusing the completed audit/safety/moderation foundations rather than recreating them.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
