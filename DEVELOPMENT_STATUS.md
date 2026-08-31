@@ -630,9 +630,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Static coverage does not substitute for actual migration execution; CI/database evidence remains pending.
 - Commits: 10171f1c98d3ed198ac9fc5f155a824ecc9624a0, 1ff31d067f44401461a14166a4321abf1d6509ee, 809ab9c0063c92de31498c49cf9570933f33248b.
 
+
+## Password hashing abstraction — IMPLEMENTED, CI PENDING
+- Inspected existing package dependencies and found no established password-hashing dependency, so introduced an explicit application abstraction rather than coupling registration/sign-in code directly to a library.
+- Added PasswordHasher and NodeScryptPasswordHasher with opaque versioned hashes, random salts, verification and malformed-format rejection.
+- Registered the concrete hasher plus abstract DI token in AppModule.
+- Added regression coverage for correct verification, wrong-password rejection, malformed hashes and distinct salts.
+- Explicitly kept plaintext out of repositories and deferred registration transport, sign-in/session issuance, reset delivery and credential policy.
+- Commits: 65f8ef6174e6d7d64f2f8b9d304797571800d358, d7d562042893a0b74331e5cd906f90c3ff6fb79c, db05c4b40a93999c2c5f46a199dd34eb76a82f31, 5761a050b32fd1ce3e66517be8b760873f9168a0, b8a568008af7d4970d1e4bc07d467b975063f56f.
+
 ## Exact next action
 1. Verify CI for f9d68d2d and the preceding recent integration commits where workflow evidence becomes available; do not infer green from missing workflow results.
-2. Inspect existing crypto/package conventions and define a password-hashing abstraction before adding registration or sign-in transport semantics.
+2. Define the smallest registration use-case boundary that creates Account, AuthenticationIdentity and PasswordCredential without exposing plaintext beyond PasswordHasher.
 3. Prefer the production-style FilesystemMigrationArtifactSource path; do not duplicate existing mocked runner/executor tests.
 4. Keep migration execution explicit; do not introduce automatic application-startup migration.
 5. Record the exact CI evidence and continuation checkpoint.
