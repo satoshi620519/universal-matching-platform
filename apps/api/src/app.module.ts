@@ -26,6 +26,7 @@ import { NodeScryptPasswordHasher } from './auth/node-scrypt-password-hasher.js'
 import { PrismaPasswordCredentialRepository } from './auth/prisma-password-credential.repository.js';
 import { PasswordRegistrationRepository } from './auth/password-registration.repository.js';
 import { PrismaPasswordRegistrationRepository } from './auth/prisma-password-registration.repository.js';
+import { PasswordRegistrationService } from './auth/password-registration.service.js';
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
@@ -56,6 +57,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     PrismaAuthenticationIdentityRepository,
     PrismaPasswordCredentialRepository,
     PrismaPasswordRegistrationRepository,
+    PasswordRegistrationService,
     NodeScryptPasswordHasher,
     PrismaVerificationRepository,
     PrismaSafetyEnforcementRepository,
