@@ -479,12 +479,31 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Build: RED, diagnostics capture added
 - Baseline CI: waiting only on Build
 
+## Baseline CI — FULLY GREEN
+- CI run #578 completed successfully with PostgreSQL service, install, Typecheck, Lint, Test and Build all green.
+- The previous build-only blocker no longer exists; no build fix was required after the diagnostics workflow change.
+- This is the first fully green baseline after migration packaging work.
+
+## Migration artifact integrity hardening — IMPLEMENTED, CI PENDING
+- Before starting new integration work, repository HEAD and status were re-read to avoid duplicating parallel work.
+- Identified a real consistency gap: filesystem loading parsed filename versions, but arbitrary MigrationArtifact objects could declare a version inconsistent with their filename.
+- Added validateMigrationArtifacts() to verify filename/version agreement, duplicate versions and numeric ordering.
+- planMigrations() now uses the shared validation primitive.
+- FilesystemMigrationArtifactSource also uses the same primitive after loading SQL.
+- Added regression coverage for filename/version mismatch.
+- Commits: a94154f90496e85f1825da9df30592063bac7d55, 791cf62abf313e15a50aa4da937645a75f0324a0, 8e3a79e98bda5cb9c0feb6269594f466034d92ef, 25332235a45b3f4135edb2b142ecdb0075053af7.
+
+## Coordination rule
+- Before each work pass, read current DEVELOPMENT_STATUS.md and inspect repository HEAD plus latest CI.
+- Repository state wins over older conversational checkpoints.
+- Record exact evidence, commits and the next action after each coherent slice.
+
 ## Exact next action
-1. Inspect CI run triggered by a2381d24.
-2. Download build-diagnostics if build fails and fix only exact reported build errors.
-3. Verify baseline CI fully green.
-4. Re-read DEVELOPMENT_STATUS.md and repository HEAD before beginning empty-database PostgreSQL integration, preventing duplicate parallel work.
-5. Add only the remaining integration coverage not already committed.
+1. Verify CI for the migration artifact integrity hardening commits.
+2. Re-read repository HEAD/status after CI before adding integration work.
+3. Implement only missing empty-database PostgreSQL integration coverage, avoiding duplication of existing migration integration tests.
+4. Exercise the production-style FilesystemMigrationArtifactSource path where practical.
+5. Keep migration execution explicit; do not introduce automatic application-startup migration.
 6. Record the exact continuation checkpoint.
 
 ## Architecture constraints
