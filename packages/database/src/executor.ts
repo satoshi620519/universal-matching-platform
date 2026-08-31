@@ -12,10 +12,10 @@ export async function executePendingMigrations(
   executor: MigrationExecutor,
 ): Promise<readonly number[]> {
   const appliedVersions = await executor.listAppliedVersions();
-  const pending = planMigrations(migrations, appliedVersions);
+  const plan = planMigrations(migrations, new Set(appliedVersions));
 
   const applied: number[] = [];
-  for (const migration of pending) {
+  for (const migration of plan.pending) {
     await executor.apply(migration);
     applied.push(migration.version);
   }
