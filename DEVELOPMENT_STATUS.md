@@ -119,7 +119,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Authentication lifecycle CI #264 and progress record CI #265 passed; request-once authentication lifecycle invariant is CI-validated.
 - Account activation boundary CI #268/#269 failed at API test typecheck only: test repository stubs did not preserve the abstract repository method signatures and used an unverified literal AccountState.
 - Account activation follow-up CI #272/#273 passed; Account Activation HTTP/application boundary is CI-validated.
-- Verification access API boundary implemented by reusing VerificationAccessService and domain VerificationRecord rules; no verification usability logic was recreated. CI pending.
+- Verification access CI #276/#277 passed; Verification Access HTTP/application boundary is CI-validated.
+- Capability access API boundary implemented by reusing CapabilityAccessService and domain CapabilityContext rules; no authorization decision logic was recreated. CI pending.
 
 ## Test status
 - M0 CI validation: passed.
@@ -159,10 +160,10 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Phase 1 requirement-contract foundation: complete; progress record CI validated (CI #198).
 
 ## Exact next action
-1. Check CI triggered by the verification access API boundary commits.
-2. If green: mark the verification access HTTP/application boundary CI-validated.
-3. Review whether verification access should remain a pure decision endpoint or be connected to persisted verification records; do not invent a repository until an existing persistence contract is identified.
-4. Select the next runnable account/auth workflow boundary from existing validated domain/application logic.
+1. Check CI triggered by the capability access API boundary commits.
+2. If green: mark the capability access HTTP/application boundary CI-validated.
+3. Review API input validation for verification levels and entitlement states before exposing these decision endpoints as public contracts; do not let TypeScript casts become runtime validation.
+4. Select the next runnable workflow boundary from existing validated domain/application logic.
 5. Keep each slice small and preserve established domain contracts.
 6. Update this file after every coherent slice.
 
