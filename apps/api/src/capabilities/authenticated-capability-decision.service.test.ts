@@ -6,7 +6,7 @@ describe('AuthenticatedCapabilityDecisionService', () => {
   const principal = {
     accountId: 'account-1',
     authenticationIdentityId: 'identity-1',
-    verificationLevel: 2,
+    verificationLevel: '2',
     authenticationMethod: 'password',
   };
 
