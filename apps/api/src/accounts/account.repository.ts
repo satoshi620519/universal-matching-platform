@@ -1,4 +1,4 @@
-import type { AccountState } from '@universal-matching/domain';
+import type { AccountState } from '@universal/domain';
 
 export interface AccountRecord {
   readonly id: string;
