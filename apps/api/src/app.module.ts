@@ -31,6 +31,9 @@ import { PasswordRegistrationService } from './auth/password-registration.servic
 import { PasswordRegistrationTransportService } from './auth/password-registration-transport.service.js';
 import { PasswordRegistrationController } from './auth/password-registration.controller.js';
 import { PasswordSignInService } from './auth/password-sign-in.service.js';
+import { PasswordSignInTransportService } from './auth/password-sign-in-transport.service.js';
+import { PasswordSignInController } from './auth/password-sign-in.controller.js';
+import { SessionController } from './auth/session.controller.js';
 import { SessionRepository } from './auth/session.repository.js';
 import { PrismaSessionRepository } from './auth/prisma-session.repository.js';
 import { SessionIssuanceService } from './auth/session-issuance.service.js';
@@ -56,7 +59,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController, PasswordRegistrationController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
+  controllers: [HealthController, PasswordRegistrationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
   providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
@@ -71,6 +74,7 @@ import { HealthStatusService } from './health/health-status.service.js';
     PasswordRegistrationService,
     PasswordRegistrationTransportService,
     PasswordSignInService,
+    PasswordSignInTransportService,
     SessionIssuanceService,
     SessionRevocationService,
     PrismaSessionRepository,
