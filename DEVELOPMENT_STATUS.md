@@ -2,15 +2,15 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Product/domain foundation
-CURRENT TASK: Validate the analytics event taxonomy CI, then continue with the next smallest analytics/reporting slice.
+CURRENT TASK: Validate the metric definition model CI, then continue with the next smallest aggregation/reporting slice.
 STATUS: Milestone 1 in progress
 
 ## Latest checkpoint — 2026-08-31
-- Audit Record Domain Model CI passed: install, typecheck, lint, test and build all green.
-- Audit Record Domain Model is CI-validated and complete.
-- Analytics Event Taxonomy model implemented as the next requirements-supported slice (REQ-AN-001 through REQ-AN-004).
-- Analytics Event Taxonomy tests implemented.
-- Current immediate action: verify CI for analytics event taxonomy commits.
+- Analytics Event Taxonomy CI #124 passed: install, typecheck, lint, test and build all green.
+- Analytics Event Taxonomy is CI-validated and complete.
+- Metric Definition model implemented for documented, version-aware calculations and supported reporting periods.
+- Metric Definition tests implemented.
+- Current immediate action: verify CI for metric definition commits.
 - Do not recreate any completed item below.
 
 ## Completed — DO NOT RECREATE
@@ -41,6 +41,8 @@ STATUS: Milestone 1 in progress
 - Audit record domain model and tests.
 - Audit record domain model CI validation.
 - Analytics event taxonomy model and tests.
+- Analytics event taxonomy CI validation (CI #124).
+- Metric definition model and tests.
 
 ## Test status
 - M0 CI validation: passed.
@@ -59,12 +61,13 @@ STATUS: Milestone 1 in progress
 - Moderation case lifecycle: CI validated.
 - Moderation action policy: CI validated.
 - Audit record domain model: CI validated.
-- Analytics event taxonomy model: tests added; latest CI pending.
+- Analytics event taxonomy: CI validated (CI #124).
+- Metric definition model: tests added; latest CI pending.
 
 ## Exact next action
-1. Check CI triggered by `feat: add analytics event taxonomy model`, `test: cover analytics event taxonomy model`, and `feat: export analytics event taxonomy model`.
-2. If green: mark Analytics Event Taxonomy CI-validated.
-3. Then implement the smallest aggregation/metric-definition slice supported by REQ-AN-005 through REQ-AN-010, without recreating the event taxonomy.
+1. Check CI triggered by the metric definition model commits.
+2. If green: mark Metric Definition Model CI-validated.
+3. Then implement the smallest aggregation/reporting result slice required by REQ-AN-005 through REQ-AN-010, without recreating event taxonomy or metric definitions.
 4. If red: inspect only the failing job and apply the smallest targeted fix.
 5. Update this file after every meaningful change.
 
