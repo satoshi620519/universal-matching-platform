@@ -1,7 +1,12 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { orderMigrationFilenames, parseMigrationFilename, type MigrationArtifact } from './migrations.js';
+import {
+  orderMigrationFilenames,
+  parseMigrationFilename,
+  validateMigrationArtifacts,
+  type MigrationArtifact,
+} from './migrations.js';
 import type { MigrationArtifactSource } from './migration-source.js';
 
 export class FilesystemMigrationArtifactSource
@@ -28,6 +33,6 @@ export class FilesystemMigrationArtifactSource
       }),
     );
 
-    return migrations;
+    return validateMigrationArtifacts(migrations);
   }
 }
