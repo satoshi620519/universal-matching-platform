@@ -2,7 +2,7 @@
 
 CURRENT PHASE: Phase 3 — Implementation
 CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Implement the additive provider-neutral verification persistence model and validate it.
+CURRENT TASK: Define the verification repository boundary on top of the validated verification persistence model.
 STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
 
 ## Continuation protocol — READ FIRST
@@ -83,13 +83,20 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Preserved separation from AuthenticationIdentity.
 - Explicitly excluded raw provider responses, documents, biometrics and secrets from ordinary persistence.
 
-## Exact next action
-1. Add additive migration 0003 for verification_requests and verification_outcomes.
-2. Add exact Prisma mappings.
-3. Extend PostgreSQL migration integration coverage through version 3.
-4. Verify typecheck, lint, tests and build in CI.
-5. Record commit and exact continuation checkpoint.
+## Verification persistence — COMPLETE
+- Added migration 0003 for verification_requests and verification_outcomes.
+- Added exact Prisma mappings and Account ownership relation.
+- Extended PostgreSQL migration integration coverage.
+- Corrected atomic migration fixture assumptions and rollback setup expectations.
+- CI #454 passed typecheck, lint, all tests and build.
+- Raw provider evidence, documents, biometrics and secrets remain outside ordinary persistence.
 
+## Exact next action
+1. Add a provider-neutral VerificationRepository contract.
+2. Implement Prisma persistence operations for request creation and outcome lookup.
+3. Keep domain outcome reconstruction separate from raw provider evidence.
+4. Add focused tests and verify CI.
+5. Record the exact continuation checkpoint.
 
 ## Verification migration CI corrective checkpoint — IN PROGRESS
 - CI #452 passed typecheck and lint but failed PostgreSQL migration integration.
