@@ -28,6 +28,7 @@ import { PasswordRegistrationRepository } from './auth/password-registration.rep
 import { PrismaPasswordRegistrationRepository } from './auth/prisma-password-registration.repository.js';
 import { PasswordRegistrationService } from './auth/password-registration.service.js';
 import { PasswordRegistrationTransportService } from './auth/password-registration-transport.service.js';
+import { PasswordRegistrationController } from './auth/password-registration.controller.js';
 import { MinimumPasswordPolicy, PasswordPolicy } from './auth/password-policy.js';
 import { RequestRateLimiter } from './common/rate-limit/request-rate-limiter.js';
 import { InMemoryRequestRateLimiter } from './common/rate-limit/in-memory-request-rate-limiter.js';
@@ -49,7 +50,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [HealthController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
+  controllers: [HealthController, PasswordRegistrationController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
   providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
