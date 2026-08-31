@@ -52,7 +52,8 @@ STATUS: Requirement-contract foundation complete; Milestone 1 runnable vertical 
 - Current immediate action: begin Milestone 1 runnable vertical slice without recreating completed requirement contracts or architecture artifacts.
 - Milestone 1 API foundation slice implemented: typed runtime configuration, health/readiness service, database configuration awareness, and correlation ID propagation. CI pending.
 - API bootstrap implementation CI #207 passed; progress checkpoint CI #208 remains the latest status-record run.
-- Database foundation slice implemented: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle. CI pending.
+- Database foundation CI initially failed at typecheck because Prisma Client generation was not part of the CI lifecycle; targeted fix added to generate the client before API typecheck. Follow-up CI pending.
+- Database foundation remains: Prisma/PostgreSQL schema baseline, explicit database configuration guard, and NestJS database service lifecycle.
 - Next implementation slice after database CI: repository boundary and structured API error boundary, then authenticated request context.
 - Do not recreate any completed item below.
 
