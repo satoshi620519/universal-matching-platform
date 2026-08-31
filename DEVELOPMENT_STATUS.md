@@ -414,13 +414,26 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Test/build were skipped in run #568 because lint failed.
 - Need to verify the new fixes before claiming typecheck or baseline CI green.
 
+## Typecheck gate — GREEN
+- CI run #571 confirmed Typecheck success after the exact three compiler fixes.
+- PostgreSQL service setup and dependency installation also remain green.
+- The pipeline now fails at the next real gate: pnpm lint.
+- Added lint.log capture and always-run lint-diagnostics artifact upload to expose exact lint output on the next run.
+- Commit: 10cf8696cf8bac0a3a5dae74d83141a45b143ea7.
+
+## Pipeline progression
+- Install: GREEN
+- Typecheck: GREEN
+- Lint: RED, exact diagnostics capture added
+- Test: blocked by lint
+- Build: blocked by lint
+
 ## Exact next action
-1. Verify CI triggered by 27574508/e2ea949.
-2. If typecheck passes, inspect lint failure diagnostics as the next exact pipeline gate.
-3. Fix only the exact lint-reported issues.
-4. Continue through test and build gates sequentially until baseline CI is green.
-5. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
-6. Record the exact continuation checkpoint.
+1. Inspect CI run triggered by 10cf8696.
+2. Download lint-diagnostics if lint fails and fix only exact reported lint errors.
+3. Continue sequentially through test and build until baseline CI is green.
+4. Then add empty-database PostgreSQL integration using FilesystemMigrationArtifactSource.
+5. Record the exact continuation checkpoint.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
