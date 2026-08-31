@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   isSafetyEnforcementActive,
   type SafetyEnforcement,
+  type SafetyRestriction,
 } from '@universal/domain';
 
 import { DatabaseService } from '../database/database.service.js';
@@ -30,6 +31,8 @@ export class PrismaSafetyEnforcementRepository extends SafetyEnforcementReposito
     return records
       .map((record) => ({
         ...record,
+        restriction: record.restriction as SafetyRestriction,
+        status: record.status as SafetyEnforcement['status'],
         effectiveAt: record.effectiveAt.toISOString(),
         expiresAt: record.expiresAt?.toISOString(),
         revokedAt: record.revokedAt?.toISOString(),
