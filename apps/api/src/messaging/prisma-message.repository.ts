@@ -33,13 +33,37 @@ export class PrismaMessageRepository {
       });
       if (!participant) return null;
 
-      return tx.message.create({
+      const message = await tx.message.create({
         data: {
           conversationId: input.conversationId,
           senderAccountId: input.senderAccountId,
           body,
         },
       });
+
+      const recipients = await tx.conversationParticipant.findMany({
+        where: {
+          conversationId: input.conversationId,
+          accountId: { not: input.senderAccountId },
+        },
+        select: { accountId: true },
+      });
+
+      if (recipients.length > 0) {
+        await tx.notification.createMany({
+          data: recipients.map(({ accountId }) => ({
+            accountId,
+            kind: 'message.created',
+            payload: {
+              conversationId: message.conversationId,
+              messageId: message.id,
+              senderAccountId: message.senderAccountId,
+            },
+          })),
+        });
+      }
+
+      return message;
     });
   }
 
