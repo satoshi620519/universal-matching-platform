@@ -16,7 +16,7 @@ describe('AdministrativeFailedEmailOutboxController', () => {
     expect(requireAuthenticated).toHaveBeenCalledWith({
       authorization: 'Bearer opaque', requestId: 'request-1',
     });
-    expect(list).toHaveBeenCalledWith('moderator-1', 10);
+    expect(list).toHaveBeenCalledWith('moderator-1', 10, 'request-1');
   });
 
   it('rejects invalid bounded limits before outbox access', async () => {
@@ -39,6 +39,6 @@ describe('AdministrativeFailedEmailOutboxController', () => {
     );
 
     await expect(controller.requeue('outbox-1', 'Bearer opaque', 'request-2')).resolves.toEqual({ requeued: true });
-    expect(requeue).toHaveBeenCalledWith('moderator-1', 'outbox-1');
+    expect(requeue).toHaveBeenCalledWith('moderator-1', 'outbox-1', 'request-2');
   });
 });
