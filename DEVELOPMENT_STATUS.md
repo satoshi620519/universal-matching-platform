@@ -1634,3 +1634,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Safety, moderation and audit domain foundations.
 - Analytics, accessibility, operational quality, data lifecycle and deployment requirement foundations.
 - Account persistence migration execution gate, including real PostgreSQL CI validation.
+
+
+## Milestone 5 messaging — conversation foundation IMPLEMENTED, VALIDATION PENDING
+- CI #1105 for the verified matching-concurrency status checkpoint completed successfully.
+- Began the next dependency-ordered roadmap phase without recreating completed M4 work.
+- Added the smallest messaging persistence boundary first: conversations and conversation_participants.
+- Conversation participation is explicit, composite-keyed per conversation/account, and cascades only from existing conversation/account identities.
+- Added domain primitives with focused tests and Prisma mappings aligned to the repository's shared SQL migration boundary.
+- Deliberately deferred message payloads, read state, typing, realtime transport and notification fan-out until conversation access/persistence is validated.
+- Commits: f3fc1f56e13b77913552832ca55da7cc77621fd5, 8e15de9c057835c3dfa326c38a06f9a51e68f615, 022db61816cc93f8e757e4405cd751971f85083b, 3620fd042f15d5f86014baa1a37c955b956b6709, d491c0c0f2bdb968819b5ab0b4c526501084dbfd.
+- Next exact task: add a narrow conversation repository/access boundary and validate it before adding message delivery concerns.
