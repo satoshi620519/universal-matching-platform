@@ -1,3 +1,10 @@
+## Milestone 4 execution evidence check — EXACT TRIGGER COMMIT INSPECTION
+- Inspected workflow runs specifically for commit 91ed49df466f13f0ff1523e7e860112f2226b696, the matching-source commit that should satisfy the dedicated workflow path trigger, rather than checking only status/documentation commits.
+- The available GitHub workflow-run query returned an empty run list. This is concrete evidence of unavailable execution visibility/no associated run through the accessible integration, not a passing result.
+- No production or concurrency implementation was changed after this check because there is no concrete failure signal; repeating test rewrites or speculative locking changes would be redundant.
+- Next exact task: when workflow execution visibility or an isolated PostgreSQL runner is available, execute test:matching:concurrency and capture the result/log artifact. Until then, M4 execution evidence remains explicitly pending.
+- CI state: exact trigger commit queried; workflow_runs=[] from the available integration; no green status inferred.
+
 ## Milestone 4 semantic evidence hardening — EXACT RECIPROCAL OUTCOME
 - Reviewed remaining integration assertions rather than repeating CI polling or changing concurrency infrastructure without evidence.
 - Tightened reciprocal PostgreSQL scenario naming and assertions to verify exact result semantics: matched result must be mutual=true and pending result must be mutual=false, in addition to the existing one-of-each state and two persisted interactions.
