@@ -1865,3 +1865,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: API contract inspection complete; runtime workspace build/browser execution remains pending an executable environment.
 - Remaining work: inspect exact conversation/message/notification controller contracts and connect the authenticated product state to the existing messaging journey rather than creating placeholder data.
 - Exact next action: inspect MessagingController plus conversation/message response shapes and participant authorization behavior; define the smallest real authenticated conversation list → message read → message send UI/API flow, then implement only those grounded screens.
+
+
+## Phase A authenticated messaging — GROUNDED CONVERSATION READ/SEND FLOW IMPLEMENTED
+- Resumed from the recorded Exact next action and inspected MessagingController plus PrismaConversationRepository/PrismaMessageRepository instead of inventing messaging endpoints.
+- Verified exposed contracts: POST /conversations with {participantAccountIds}; GET /conversations/:conversationId/messages returns {messages}; POST /conversations/:conversationId/messages with {body} creates a participant-authorized message. Authorization is resolved through the existing Bearer principal boundary.
+- Verified participant authorization is enforced server-side for reads and writes; unauthorized/missing conversations resolve through the existing not-found response behavior.
+- Added shared API client contracts for conversation creation, participant-scoped message reads and message sends; reused the existing centralized Bearer credential handling rather than duplicating authentication logic.
+- Added authenticated browser messaging UI: create/open a conversation using the currently exposed account-ID contract, load its real message history, send messages, and append grounded API responses to the active thread.
+- No fake conversation list, fabricated contacts, seeded messages or speculative discovery API was added because the current backend does not expose a conversation-list/discovery surface for that data.
+- Commits: 51a651c5672cce5a439d1f2bd3a2017a80ab7cf2, 6a435e0fd604ea5942e01f5cfd81303a39feb516, cf1225147d5d6d448396e72bbca6e4b812687071.
+- Validation status: exact backend contract inspection complete; runtime browser/build evidence remains pending an executable workspace environment.
+- Remaining work: inspect notification and SSE realtime contracts, then add grounded unread/read acknowledgement and realtime message reconciliation without inventing polling or event formats.
+- Exact next action: inspect RealtimeEventsController and MessageRealtimePublicationService plus notification response shape; implement the smallest authenticated notification + realtime reconciliation layer using the exact exposed SSE event contract, and record evidence/next action.
