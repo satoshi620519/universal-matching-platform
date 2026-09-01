@@ -11,6 +11,14 @@ describe('MessagingController', () => {
     expect(create).toHaveBeenCalledWith(['a2', 'a1']);
   });
 
+  it('creates mutual-match conversations through the idempotent direct-pair path', async () => {
+    const createOrFindDirect = vi.fn().mockResolvedValue({ id:'c1' });
+    const matches = { isMutualMatch: vi.fn().mockResolvedValue(true) };
+    const controller = new MessagingController(principalResolver as never, { createOrFindDirect } as never, {} as never, {} as never, { publishRecipients: vi.fn() } as never, matches as never);
+    await controller.createConversationFromMutualMatch({ targetAccountId:'a2' });
+    expect(createOrFindDirect).toHaveBeenCalledWith('a1','a2');
+  });
+
   it('uses the authenticated account for message writes', async () => {
     const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
     const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never);
