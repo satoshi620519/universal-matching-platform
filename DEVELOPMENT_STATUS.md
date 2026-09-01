@@ -1,3 +1,13 @@
+## Milestone 3 start — PROFILE, CATEGORY AND GEOGRAPHY DOMAIN BASELINE
+- Milestone 2 remains implementation-complete with unavailable CI evidence; avoided further low-value validation loops and started the dependency-ordered next milestone under the documented evidence limitation.
+- Added minimal domain-owned Category identity with normalized non-empty id/key/display name.
+- Added explicit GeographicScope union (global/country/region) with ISO alpha-2 country validation and non-empty region boundary.
+- Added reusable Profile baseline linking account, category, primitive configurable fields and geographic scope; structured field payloads are rejected at the domain boundary.
+- Added focused domain tests and package exports.
+- Commits: 0a3e98216adbc42ced6bed7e79406dea09ffdfd6, 30a63a80a0cbc3af4ab98aa7c36f44f0bd877650, 34e25d79d8294508c7aa1413e33d277e7332921b, 0661ab144e8e6060bc5e7373b7345bb7c4d716a3, 6b2a93ce184a6655705a96754589b2ea54596c30.
+- Next exact task: inspect existing persistence/API conventions and add only the minimum authoritative profile/category/geography persistence slice; privacy-aware projections and category-specific schema validation remain explicit Milestone 3 gates, not yet complete.
+- CI state: new implementation committed; no green status inferred.
+
 ## Milestone 2 validation evidence check — NO WORKFLOW STATUS PUBLISHED
 - Queried GitHub commit combined status and workflow-run associations for the latest implementation commit (ea44f224f3c9a4a4466ebeac30e25cb5279cc150) and latest checkpoint commit (2e79078c351954a72c7118e2a0860bebd528f2ee).
 - Both commits returned empty status arrays and empty workflow-run associations.
