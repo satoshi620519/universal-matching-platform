@@ -997,11 +997,22 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 1e7b3f72aeea91f2e7cbcf3082952bad03fc2bd5, cd31007b6c7bc9be0810c9e97a8bf8b3374d123b.
 - CI state: implementation committed; workflow validation for this latest slice is pending and must not be inferred from earlier green runs.
 
+
+## Initial administrator provisioning command — IMPLEMENTED, CI PENDING
+- Resumed from the exact checkpoint and inspected executable process conventions instead of inventing a public bootstrap transport.
+- Found the grounded repository pattern in email-outbox-worker.main.ts: explicit Nest application context entrypoint, no HTTP listener, deterministic argument/config validation and guaranteed context shutdown.
+- Added initial-administrator-provisioning.main.ts following that pattern and registered pnpm command administrator:provision.
+- Command accepts exactly one explicit non-empty account ID and invokes InitialAdministratorProvisioningService; repeated invocation reports the service's idempotent no-change result.
+- Added focused command argument tests and documentation in INITIAL_ADMINISTRATOR_PROVISIONING_COMMAND.md.
+- No unauthenticated HTTP route, self-registration path or caller-controlled privilege claim was introduced.
+- Commits: 38be38b728a6cac5bd0762dd55596ff601d9d0ba, a7d3a884126591d5d70fe59950a1e624ae8ef762, 87cee55b8ad3bdadafcb547fa4f440f454e87fc6, 9fcf52d6d4d86687b44d04850cc3ea1126f3b436, 9b04222b8855359818d68a9ee1bc0c4453e6fd5c.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the latest administrative role-management HTTP integration commits and preceding transport commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Inspect repository conventions for explicit deployment/operator command entrypoints to make InitialAdministratorProvisioningService operational without introducing any unauthenticated HTTP bootstrap route.
-3. If no grounded command convention exists, document the service invocation contract and keep bootstrap transport deferred rather than inventing a runtime mechanism.
-4. Review administrative audit correlation propagation so future privileged transport operations can carry x-request-id into audit records without coupling audit persistence to HTTP.
+1. Verify CI/workflow evidence for the latest initial-administrator provisioning command and preceding administrative transport/integration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Review administrative audit correlation propagation end-to-end and identify the smallest application-level correlation input that can flow from privileged transports into audit records without coupling audit persistence to HTTP.
+3. Add correlation only where it preserves the existing append-only/data-minimized audit contract; do not copy request bodies, headers, credentials or email content.
+4. Add focused tests for correlation propagation and absence on non-HTTP/operator flows before widening audit metadata.
 5. Keep controllers thin and avoid duplicating authorization, mutation, lifecycle or audit logic across transport tests.
 6. Update this checkpoint after the next coherent slice.
 
