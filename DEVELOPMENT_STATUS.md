@@ -948,11 +948,22 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: b36bee213ba5fa10b2d3d0c24362e61d12cc925f, 0ac1c076839cca7646d7b048cbac5c8ea5551214, 4e33a3b1a9eb98546c9682f2a4152cd4a17ec29e, 7a02f4cc1d22d4df6487445d2d7c29643f22db33.
 - CI state: this composition slice remains unverified by CI evidence available through the current connector; do not infer green.
 
+
+## Administrative failed-email outbox HTTP transport — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and traced the existing authenticated-controller convention instead of inventing guards or a parallel authentication mechanism.
+- Reused RequestPrincipalResolver.requireAuthenticated with Authorization and x-request-id headers, matching existing authenticated account/capability controllers.
+- Added the smallest transport surface: GET /administration/failed-email-outbox with a 1..100 bounded limit, and POST /administration/failed-email-outbox/:id/requeue.
+- Controller passes only principal.accountId and validated transport input into PrivilegedFailedEmailOutboxService; it does not access repositories, perform role checks or write audit records.
+- Added focused controller tests for principal resolution before privileged access, invalid limit rejection before outbox access, and minimal identity/target forwarding for requeue.
+- Registered the controller and documented ADMINISTRATIVE_FAILED_EMAIL_OUTBOX_TRANSPORT.md.
+- Commits: 73bdfcbf6cdbd053390ec0d3f8ead406837fba6c, 0a60394ad43fe4e22094fce0d95006de6fe12e1b, a1bcfa20d15b2458cf2a91cccc88648a7bda338b, 47ee3efa08cdc5e67760a89c8f066adfaf626488.
+- CI state: this transport slice remains unverified by CI evidence available through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the privileged failed-email boundary and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Trace the existing authenticated controller conventions and request-principal resolver to identify the smallest grounded administrative HTTP transport for the completed privileged operations.
-3. Do not expose direct repository access from transport; controllers must compose request principal → application boundary only.
-4. Add transport tests for unauthenticated/unauthorized behavior, bounded list input and requeue correlation without logging sensitive email content.
+1. Verify CI/workflow evidence for the administrative transport slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Review the completed administrative role-management application boundary against the same authenticated-controller convention and add transport only if it can be grounded without inventing bootstrap/first-admin behavior.
+3. Before exposing role mutation HTTP routes, resolve and document the initial administrator provisioning/bootstrap path so the system cannot ship with an unreachable or self-escalating role-management surface.
+4. Keep all transport controllers thin: request principal → validated input → authorized application boundary.
 5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
