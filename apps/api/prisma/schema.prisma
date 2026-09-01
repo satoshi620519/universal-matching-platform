@@ -20,6 +20,7 @@ model Account {
   emailOutboxMessages       EmailOutboxMessage[]
   roleAssignments           RoleAssignment[]
   assignedRoleAssignments   RoleAssignment[] @relation("RoleAssignmentAssigner")
+  auditRecords              AuditRecord[]
 
   @@map("accounts")
 }
@@ -180,4 +181,20 @@ model RoleAssignment {
   @@index([accountId, effectiveAt])
   @@index([roleId, effectiveAt])
   @@map("role_assignments")
+}
+
+
+model AuditRecord {
+  id            String   @id @default(uuid()) @map("audit_record_id") @db.Uuid
+  actorId       String   @map("actor_account_id") @db.Uuid
+  area          String
+  action        String
+  targetId      String?  @map("target_id")
+  correlationId String?  @map("correlation_id")
+  occurredAt    DateTime @map("occurred_at") @db.Timestamptz(6)
+  actor         Account  @relation(fields: [actorId], references: [id])
+
+  @@index([actorId, occurredAt])
+  @@index([action, occurredAt])
+  @@map("audit_records")
 }
