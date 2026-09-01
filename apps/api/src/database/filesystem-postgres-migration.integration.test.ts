@@ -36,6 +36,7 @@ describe.skipIf(!DATABASE_URL)(
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS safety_enforcements');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
+        await database.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
