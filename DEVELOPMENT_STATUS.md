@@ -1951,3 +1951,17 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static contract and persistence inspection complete; runtime/integration execution remains pending executable workspace environment. A concurrency-safe duplicate-conversation policy is not yet implemented because current conversation schema has no canonical participant-pair uniqueness model.
 - Remaining work: add focused authorization tests for from-mutual-match; decide and implement an idempotent two-party conversation uniqueness policy (requires schema/index design); then add notification UI using the already-exposed GET /conversations/notifications and POST read endpoint.
 - Exact next action: inspect existing notification repository response shape and controller tests, add focused notification transport tests, then wire an authenticated notification inbox with mark-read behavior. Do not invent notification types not present in persistence.
+
+
+## Phase B notification inbox — API-BACKED ACTIVITY UI IMPLEMENTED
+- Resumed from the Exact next action and inspected the actual notification persistence model and existing controller tests before UI work.
+- Verified persisted notification shape is intentionally generic: id/accountId/kind/payload/createdAt/readAt. No fake notification taxonomy was introduced.
+- Strengthened transport tests around authenticated account scoping for notification listing and acknowledgement.
+- Added web API client for GET /conversations/notifications and POST /conversations/notifications/:notificationId/read.
+- Implemented authenticated Activity inbox: loads only server-scoped notifications, shows persisted kind/timestamp, visually distinguishes unread state, and marks an item read through the existing server endpoint.
+- Empty state is honest (You're all caught up); no sample notifications are seeded.
+- Added responsive international-first visual treatment consistent with the existing premium neutral UI.
+- Commits: f355bca5872a561ab8d144b057947b6c7ee9d142, 5e792b161ca88a20bc34df01c228dba3a5a84965, 64c7794ad360be5167a046002154b6b0f91b7482, 9a6a9532be0a3b258d77e85401c436e7a6ec93cd.
+- Validation status: static repository/controller contract inspection complete; full runtime build/browser integration remains pending executable workspace environment.
+- Remaining work: notification creation semantics need broader product-event coverage (only persisted generic kinds should be added through actual domain events); profile lifecycle still needs authenticated hydration/update; conversation pair uniqueness/idempotency needs schema design; API route/controller ordering should be integration-tested because parameterized conversation routes coexist with notification routes.
+- Exact next action: inspect account/profile lifecycle and existing profile repository contracts, then implement authenticated GET /profiles/me hydration and PATCH/PUT update semantics using existing ProfileService validation rather than duplicating field validation in the browser. Add focused ownership/update tests before UI hydration.
