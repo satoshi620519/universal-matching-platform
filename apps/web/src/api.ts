@@ -51,7 +51,8 @@ export type RealtimeEvent = { eventId:string; eventType:string; schemaVersion:nu
 export function realtimeEventsUrl() { const credential=sessionStorage.getItem('connect.credential'); if(!credential) return null; return API_BASE_URL + '/realtime/events'; }
 export function realtimeCredential() { return sessionStorage.getItem('connect.credential'); }
 
-export type ProfileCategory = { id:string; name?:string; key?:string };
+export type ProfileFieldRule = { kind:'string'|'number'|'boolean'; required?:boolean; minLength?:number; maxLength?:number; minimum?:number; maximum?:number };
+export type ProfileCategory = { id:string; displayName?:string; key?:string; fieldSchema?:Record<string,ProfileFieldRule> };
 export type DiscoveryProfile = { accountId:string; fields:Record<string, unknown>; categoryId:string };
 export function listProfileCategories(){return apiRequest<{categories:ProfileCategory[]}>('/profile-categories');}
 export function createMyProfile(input:{categoryId:string;fields:Record<string,string|number|boolean|null>;geographicScope?:{kind:string;countryCode?:string;regionCode?:string}}){return apiRequest('/profiles/me',{method:'POST',body:JSON.stringify(input)});}
