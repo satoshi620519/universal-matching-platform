@@ -1695,3 +1695,10 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added the minimum provider-neutral RealtimePublisher boundary and a Noop fallback, preserving durable HTTP/database state as authoritative and avoiding premature transport selection.
 - Commits: 46eb651b5d82575b1bb408a1cab99d92f629dcbf, 303560e4a40c43c8f5860bdc3b9e3179a4a41d80, b46c629811d3d4b63da31129009ea959b9d25161, d4f25a10bdfd6df054898d381033afd1a005326e.
 - Next exact task: validate the realtime abstraction in CI, then add a committed-event publication seam from messaging without making WebSocket delivery an alternate mutation path.
+
+- CI #1142 and CI #1143 completed successfully, validating the provider-neutral realtime abstraction and checkpoint.
+- Added MessageRealtimePublicationService as a one-way publication seam from committed durable state toward RealtimePublisher; it is intentionally not an alternate mutation path.
+- Event envelopes are account-scoped and carry only message/conversation/sender identifiers needed for reconciliation against authoritative HTTP/database state.
+- Current publisher remains Noop until a transport is selected and validated; no speculative WebSocket/SSE stack was introduced.
+- Commits: 7df03de93ab828f41230e3009cd4a7703a57000c, 4808abf6e38bcaba05597b0ceefb0157f642fb81, ccc2b090bcd5e260e99e952d7f3088be0656d855.
+- Next exact task: validate the publication seam in CI, then add a post-commit invocation path that cannot publish rolled-back transactions before transport selection.
