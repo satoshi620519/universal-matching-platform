@@ -8,16 +8,16 @@ export class AdministrativeFailedEmailOutboxController {
   constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly outbox: PrivilegedFailedEmailOutboxService) {}
 
   @Get()
-  async list(@Query('limit') limit: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
-    const correlationId = requestId?.trim() || undefined;
+  async list(@Query('limit') limit: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
+    const correlationId = correlationHeader?.trim() || undefined;
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: correlationId ?? 'administration-failed-email-outbox-list' });
     return this.outbox.list(principal.accountId, parseLimit(limit), correlationId);
   }
 
   @Post(':id/requeue')
-  async requeue(@Param('id') id: string, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async requeue(@Param('id') id: string, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
     if (!id.trim()) throw new BadRequestException('id is required');
-    const correlationId = requestId?.trim() || undefined;
+    const correlationId = correlationHeader?.trim() || undefined;
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: correlationId ?? 'administration-failed-email-outbox-requeue' });
     return { requeued: await this.outbox.requeue(principal.accountId, id, correlationId) };
   }
