@@ -80,3 +80,7 @@ export * from './configuration-setting-definition.js';
 export * from './category.js';
 export * from './geographic-scope.js';
 export * from './profile.js';
+
+export * from './category-repository.js';
+
+export * from './profile-repository.js';
