@@ -1008,13 +1008,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 38be38b728a6cac5bd0762dd55596ff601d9d0ba, a7d3a884126591d5d70fe59950a1e624ae8ef762, 87cee55b8ad3bdadafcb547fa4f440f454e87fc6, 9fcf52d6d4d86687b44d04850cc3ea1126f3b436, 9b04222b8855359818d68a9ee1bc0c4453e6fd5c.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Administrative audit correlation propagation — IMPLEMENTED, CI PENDING
+- Resumed from the exact checkpoint and traced the existing optional AuditRecord correlationId rather than widening audit storage.
+- Added a single optional correlationId through privileged application/mutation inputs for administrative role mutation and failed-email review/requeue.
+- HTTP controllers forward only a trimmed request correlation value; application services and audit persistence remain HTTP-independent.
+- Correlation is attached only at existing successful-operation audit points; authorization failures and no-op mutations do not create correlation-only audit records.
+- Operator/non-HTTP invocation remains correlation-free by default and does not synthesize request metadata.
+- Explicitly excluded request bodies, credentials, authorization headers, email content, provider payloads and arbitrary headers.
+- Added focused tests for successful propagation and absence on non-HTTP invocation.
+- Added ADMINISTRATIVE_AUDIT_CORRELATION.md.
+- Commits: 1b81e269b601c1fb876221098d0c1558f64e660d, 32e587240d6aa3b1de8702851ab2ee81556ce38c, 857f499accf91adbe925da832b4ed47df599971a, 4efd9193548163da31f2bdd5c6694645ac7702e2, ffc49c07a49df099f04fc958650fbe821b083fed, 0bb4a2b748b88064c7c9ee72e59a91728df638e6, e59c771368448b90f5d0ecef098059ce4b8b0282.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the latest initial-administrator provisioning command and preceding administrative transport/integration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Review administrative audit correlation propagation end-to-end and identify the smallest application-level correlation input that can flow from privileged transports into audit records without coupling audit persistence to HTTP.
-3. Add correlation only where it preserves the existing append-only/data-minimized audit contract; do not copy request bodies, headers, credentials or email content.
-4. Add focused tests for correlation propagation and absence on non-HTTP/operator flows before widening audit metadata.
-5. Keep controllers thin and avoid duplicating authorization, mutation, lifecycle or audit logic across transport tests.
-6. Update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the administrative audit correlation commits and the preceding administrative command/transport slices; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Reconcile the repository-wide HTTP correlation header convention (x-request-id vs observability x-correlation-id) at the shared HTTP boundary before changing individual privileged controllers again.
+3. If a single canonical header can be grounded from configureHttpApplication()/ApiErrorFilter conventions, normalize there and add regression coverage; otherwise document the boundary mismatch and avoid speculative transport churn.
+4. Continue only with the next Milestone 1 requirement gap after correlation convention is settled.
+5. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
