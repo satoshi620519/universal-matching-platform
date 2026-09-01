@@ -1,3 +1,12 @@
+## Milestone 4 decision slice — INITIAL MATCH STRATEGY CONTRACT
+- Continued from explicit discovery exclusions and did not create match persistence before decision semantics were defined.
+- Added domain MatchStrategy port with named strategy key and explicit MatchDecision union (eligible/no_match).
+- Added MatchStrategyContext carrying subject and candidate profiles, keeping strategy selection independent from discovery and persistence adapters.
+- Added decision constructor validation and regression tests for strategy identity, decision semantics and interchangeable implementations.
+- Commits: 24a875fcdc2970d6cd3b3382c1b2828800885737, e1c257d1c46a3366a6d838b4bb5f4759c1f7538c, 02198b2ea9133636ea4cbb6f5622d22a10d4ea86.
+- Next exact task: define mutual interaction/match state contract and idempotency key semantics before Prisma persistence; concurrency handling must be designed around duplicate concurrent transitions, not added afterward.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 safety slice — EXPLICIT DISCOVERY EXCLUSIONS
 - Continued from discovery application composition without moving matching persistence ahead of exclusion semantics.
 - Added explicit DiscoveryExclusionPolicy port and default allow-all adapter as an intentional integration seam.
