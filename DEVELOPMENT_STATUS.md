@@ -1,3 +1,11 @@
+## Milestone 4 execution evidence check — FINAL WORKFLOW COMMITS INSPECTED
+- Queried workflow-run and combined-status visibility for both the corrected workflow commit 025e682ebde6d20b85448428d709eaad78f4908d and its checkpoint c4ebec5d7995adfd9ba62b840000fb0b75db152a.
+- Both commits returned workflow_runs=[] and statuses=[] through the available GitHub integration; this is recorded as unavailable execution visibility, not success.
+- Re-inspected the final runner and integration suite for concrete gaps: the isolated runner requires an explicit PostgreSQL URL, applies migrations before tests, and propagates command failures; the suite covers identical retries, conflicting idempotency targets, directed-pair uniqueness, and reciprocal likes.
+- No additional speculative implementation or workflow edits were made because no concrete defect was found in this review.
+- Next exact task: inspect a real workflow run when one becomes available, including conclusion, named concurrency-step outcome, explicit summary/log attestation, and commit-addressable artifact.
+- CI state: latest corrected workflow commits inspected; no observable execution result and no green status inferred.
+
 ## Milestone 4 CI syntax integrity — DUPLICATE YAML KEY REMOVED
 - Reviewed the latest workflow after the artifact hardening change instead of repeating execution polling.
 - Found a concrete workflow hygiene defect: the artifact upload block contained duplicate if-no-files-found keys, introduced by the prior edit.
