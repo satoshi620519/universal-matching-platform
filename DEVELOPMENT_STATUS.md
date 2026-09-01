@@ -1938,3 +1938,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static API/domain contract inspection complete; browser build/integration execution remains pending executable workspace environment.
 - Remaining work: profile lifecycle needs GET /profiles/me-aware UI hydration and update support, category-specific field schemas need configuration-driven transport instead of the current minimal default schema, and mutual-match conversation creation should become an explicit backend orchestration endpoint rather than relying on the browser to initiate the next conversation step.
 - Exact next action: inspect conversation creation authorization and match persistence relationships, then add a server-owned 'start conversation from mutual match' orchestration path if existing data permits; otherwise add precise API boundary tests and expose only the minimum linkage required. Do not let the browser bypass mutual-match authorization.
+
+
+## Phase B mutual match → conversation authorization — SERVER-OWNED GATE IMPLEMENTED
+- Resumed from the recorded Exact next action by inspecting MessagingController, conversation persistence constraints, MatchTransition repository, and exact MatchTransitionResult semantics.
+- Identified that generic POST /conversations permits any authenticated account to create a conversation with supplied participants; this is retained as a generic capability and is not used as the authorization proof for matching.
+- Added isMutualMatch(accountA, accountB) to the existing match repository. It checks both directed interaction records and requires both decisions to be like.
+- Added POST /conversations/from-mutual-match. The authenticated principal is derived server-side, the target is checked against reciprocal like state, and conversation creation occurs only after authorization succeeds.
+- The endpoint intentionally does not trust a client-side mutual flag. Unauthorized/non-mutual targets return the existing not-found style response to avoid exposing relationship state.
+- Updated web mutual-match flow to call the server-authorized endpoint before entering the conversation workflow.
+- Commits: 7a9f82a8bd95da3054660add67cbc4b32c3ecb96, 9b2fe8be0e326601d497cd6e23495ed7645589aa, 8633a2310d5b721ce93db65b9d6527b5b1c8b9c4, d473cfcb349974d9344d5564e3d4ff89ad605612.
+- Validation status: static contract and persistence inspection complete; runtime/integration execution remains pending executable workspace environment. A concurrency-safe duplicate-conversation policy is not yet implemented because current conversation schema has no canonical participant-pair uniqueness model.
+- Remaining work: add focused authorization tests for from-mutual-match; decide and implement an idempotent two-party conversation uniqueness policy (requires schema/index design); then add notification UI using the already-exposed GET /conversations/notifications and POST read endpoint.
+- Exact next action: inspect existing notification repository response shape and controller tests, add focused notification transport tests, then wire an authenticated notification inbox with mark-read behavior. Do not invent notification types not present in persistence.
