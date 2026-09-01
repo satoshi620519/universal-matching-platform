@@ -1,3 +1,14 @@
+## Milestone 3 completion gate progress — CATEGORY-SPECIFIC PROFILE VALIDATION
+- Continued from the category administration checkpoint without reopening completed CRUD or persistence work.
+- Added domain-owned ProfileFieldSchema rules supporting allowed-field checks, required fields, primitive type checks, string length limits and numeric bounds.
+- Added focused domain regression tests for valid data, undeclared fields, missing required values, type mismatches and boundaries.
+- Integrated schema validation into ProfileService create/update before persistence; invalid profile data cannot reach the repository when a category field schema is supplied.
+- Added application-level regression coverage proving invalid category-specific fields are rejected before save.
+- Commits: 21c16aea480f29ee3245022f5bbabe199e57245f, 21ba31b3517b23c4c2bce38b7fb7a8bfa016fd2f, a35b550d6c5c262d1d04c3fd713a95860fe3246d, 02558219f9530d7324e897b36f01753d83c67af5, 21da1e2d61611d7f00460a3dc9a6dc9576332669.
+- Remaining Milestone 3 completion gates: privacy-aware profile projection and unauthorized field exposure test; geographic scope validation is covered at domain/persistence boundaries.
+- Next exact task: define explicit profile projection policy (public/self/privileged) and implement exposure tests without adding discovery/matching scope early.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 application continuation — CATEGORY ADMINISTRATION BOUNDARY
 - Continued from the exact ProfileService checkpoint without reopening completed profile persistence or create/update guards.
 - Added CategoryService create/update/list use cases around the existing CategoryRepository port.
