@@ -1852,3 +1852,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commits: e028d4e2bb0f16bc1e7a93a970952a71c84d65ce, 4bf36f2b861c650eb572f1598111fc9fcce2880a.
 - Remaining work: centralize authenticated API requests so stored opaque credentials are consistently attached as Bearer credentials, then bootstrap the authenticated account view from the existing authenticated account endpoint.
 - Exact next action: inspect AuthenticatedAccountLookupController and its exact response shape; add a small centralized API request helper with Bearer credential handling, then implement the first authenticated account/dashboard state without duplicating authentication logic.
+
+
+## Phase A authenticated product state — API CLIENT AND ACCOUNT DASHBOARD IMPLEMENTED
+- Resumed from the recorded Exact next action; did not repeat completed authentication or verification work.
+- Inspected AuthenticatedAccountLookupController and AuthenticatedAccountContextService to ground the exact account response: GET /accounts/authenticated returns {id,status,createdAt,updatedAt} after authenticated principal resolution.
+- Added a centralized frontend API boundary (apps/web/src/api.ts). Authenticated requests consistently attach Authorization: Bearer <credential> from the current browser session and clear the local credential on 401/403 responses.
+- Migrated registration, sign-in and verification calls through the shared API boundary to avoid duplicated request/credential logic.
+- Added the first authenticated dashboard state: successful sign-in transitions to GET /accounts/authenticated, displays account status/member date/account identifier, and provides session-local sign-out.
+- Dashboard copy and presentation remain English/international-first for the initial overseas product market.
+- Commits: 7f0cfcaf42b20e5d1734d571d9fbb391bd96c116, 95591d91b4a857ce3975ce2416b35f9651a7c1c0.
+- Validation status: API contract inspection complete; runtime workspace build/browser execution remains pending an executable environment.
+- Remaining work: inspect exact conversation/message/notification controller contracts and connect the authenticated product state to the existing messaging journey rather than creating placeholder data.
+- Exact next action: inspect MessagingController plus conversation/message response shapes and participant authorization behavior; define the smallest real authenticated conversation list → message read → message send UI/API flow, then implement only those grounded screens.
