@@ -46,7 +46,10 @@ jobs:
       - name: Run isolated PostgreSQL concurrency evidence
         env:
           MATCHING_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/universal_matching
-        run: pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
       - name: Attest gate success
         if: success()
         run: |
