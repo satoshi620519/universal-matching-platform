@@ -22,6 +22,26 @@ describe('FilesystemMigrationArtifactSource', () => {
     ]);
   });
 
+  it('returns an empty artifact set for an empty migration directory', async () => {
+    const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
+    await mkdir(directory);
+
+    const source = new FilesystemMigrationArtifactSource(directory);
+
+    await expect(source.load()).resolves.toEqual([]);
+  });
+
+  it('rejects a duplicate migration version before reading migration SQL', async () => {
+    const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
+    await mkdir(directory);
+    await writeFile(join(directory, '0001_first.sql'), 'SELECT 1;');
+    await writeFile(join(directory, '0001_second.sql'), 'SELECT 2;');
+
+    const source = new FilesystemMigrationArtifactSource(directory);
+
+    await expect(source.load()).rejects.toThrow('Duplicate migration version: 1');
+  });
+
   it('ignores nested directories while loading regular migration files', async () => {
     const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
     await mkdir(directory);
