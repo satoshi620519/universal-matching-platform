@@ -6,6 +6,7 @@ if (!process.env.MATCHING_TEST_DATABASE_URL) {
 }
 
 execSync('pnpm prisma generate', { stdio: 'inherit' });
+execSync('pnpm prisma migrate deploy', { stdio: 'inherit', env: { ...process.env, DATABASE_URL: process.env.MATCHING_TEST_DATABASE_URL } });
 execSync('pnpm vitest run src/matching/prisma-match-transition.repository.integration.test.ts', {
   stdio: 'inherit',
   env: { ...process.env, DATABASE_URL: process.env.MATCHING_TEST_DATABASE_URL },
