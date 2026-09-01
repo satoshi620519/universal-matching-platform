@@ -1045,11 +1045,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 3683f748d67d963d87054c66eaab15c12fd87838, cec701aed9be2d90db0ad4fe27a7b78e0d4e647d, 72cfe378b9e86f9089740119de580cb911794d57, b8cfe9e34241514ef0d12a12fbfc92beb662e1d7.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Configuration version persistence — IMPLEMENTED, CI PENDING
+- Resumed from the Milestone 2 checkpoint and inspected the repository-owned ordered SQL migration convention plus Prisma physical schema.
+- Added migrations 0009 configuration_versions and 0010 configuration_values after existing version 0008 audit_records.
+- Version lifecycle is database constrained: draft, published and superseded with unambiguous publication/supersession timestamps.
+- Enforced one current published version per scope with a partial unique index while retaining historical superseded versions.
+- Configuration values use typed primitive columns (boolean/integer/decimal/text) with exactly-one-value CHECK constraints; no untyped JSON blob is the primary persistence contract.
+- Added exact Prisma mappings for both tables and their relation.
+- Runtime precedence remains exclusively in the domain resolver; SQL persistence does not duplicate scope precedence.
+- Added CONFIGURATION_VERSION_PERSISTENCE.md and deliberately deferred editing transitions, immutable publication application service, audit integration and rollback/reversion.
+- Commits: 3e26b7f46c0d9f9822e4bcd2a332b0b4d6ea5555, 2e0111c12b6e65118223ba66caabdca0d77fe164, f5abc905fb6d3ffea9305ff2a06560881f3aa676, 613eb7fac993998e31fa9b3b6ecefd93aa0fd855.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the configuration resolution baseline and preserve any failure details before expanding Milestone 2.
-2. Inspect existing database migration and persistence conventions, then design the smallest configuration version persistence model supporting drafts and immutable published versions without introducing untyped configuration blobs as the primary contract.
-3. Keep runtime precedence in the centralized domain resolver; persistence must supply values, not reimplement precedence.
-4. Add rollback/reversion only after immutable publication semantics are established and tested.
+1. Verify CI/workflow evidence for migrations 0009/0010 and Prisma mappings; preserve exact failure details if validation exposes schema or migration drift.
+2. Add a narrow ConfigurationVersionRepository boundary for draft creation/loading and published-version lookup without embedding runtime precedence.
+3. Define immutable publication as an application transaction only after repository primitives exist; publication must atomically supersede the prior published version and publish the selected draft.
+4. Do not add rollback/reversion before publication history and transaction semantics are tested.
 5. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
