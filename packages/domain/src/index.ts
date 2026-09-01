@@ -33,70 +33,42 @@ export * from './report.js';
 export * from './moderation-case.js';
 
 export * from './moderation-action.js';
-
 export * from './audit-record.js';
 export * from './administrative-role.js';
-
 export * from './analytics-event.js';
-
 export * from './metric-definition.js';
-
 export * from './metric-report.js';
-
 export * from './safety-metric.js';
-
 export * from './analytics-governance.js';
-
 export * from './report-privacy-control.js';
-
 export * from './analytics-audit.js';
-
 export * from './analytics-deployment-policy.js';
-
 export * from './accessibility-contract.js';
-
 export * from './accessibility-flow.js';
-
 export * from './accessibility-assurance.js';
-
 export * from './operation-performance-contract.js';
-
 export * from './operation-resilience-contract.js';
-
 export * from './operation-observability-contract.js';
-
 export * from './data-lifecycle-contract.js';
-
 export * from './data-lifecycle-governance-contract.js';
-
 export * from './deployment-installation-contract.js';
-
 export * from './deployment-readiness-contract.js';
-
 export * from './configuration-resolution.js';
-
-export * from './configuration-setting-definition.js';
-
+export {
+  ConfigurationSettingDefinition as DraftConfigurationSettingDefinition,
+  DraftConfigurationValue,
+  validateDraftConfigurationValue,
+} from './configuration-setting-definition.js';
 export * from './category.js';
 export * from './geographic-scope.js';
 export * from './profile.js';
-
 export * from './category-repository.js';
-
 export * from './profile-repository.js';
-
 export * from './profile-field-schema.js';
-
 export * from './profile-projection.js';
-
 export * from './discovery-query.js';
-
 export * from './discovery-eligibility.js';
-
 export * from './match-strategy.js';
-
 export * from './match-transition.js';
-
 export * from './match-transition-state.js';
-
 export * from './conversation.js';
