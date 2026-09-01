@@ -1,3 +1,13 @@
+## Milestone 4 verification slice — EXECUTABLE MATCH TRANSITION SCENARIOS
+- Replaced source-string-only adapter evidence with executable mocked repository scenarios.
+- Added replay test proving an existing idempotency key returns replayed result without a second create.
+- Added unique-conflict race test proving P2002 is recovered through replay lookup.
+- Added reciprocal-like visibility scenario resolving to matched and one-sided-like scenario remaining pending.
+- Commit: eb74921d46cf956a7d0993a7aac23c5c31a1243b.
+- Important remaining M4 verification: a real PostgreSQL concurrency integration test is still required to prove simultaneous reciprocal transactions under actual isolation semantics; current executable tests validate repository control flow, not database scheduler behavior.
+- Next exact task: add database-backed concurrent reciprocal-like integration coverage and adjust transaction isolation/retry only if that test exposes a lost-mutual-state race.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 persistence slice — TRANSACTIONAL MATCH TRANSITIONS
 - Continued from the idempotent transition contract and implemented persistence rather than reopening discovery work.
 - Added MatchInteraction Prisma model and checked-in migration with directed uniqueness, per-actor idempotency uniqueness, reciprocal lookup index and DB-level self-interaction check.
