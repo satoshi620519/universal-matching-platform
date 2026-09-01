@@ -1082,12 +1082,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 798ee13c359acb79306967ffd6869927bbf34817, 6c5520227c6b3407c820a8f36be94ed2bbc1d5a3, de6ca8ca34ff21de9439c2851908058cf5193dd6, 2b014bdb72001b9141712c175f766246a602401a.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Configuration draft validation boundary — IMPLEMENTED, CI PENDING
+- Resumed from immutable publication and added the missing product-level validation primitive before allowing further draft editing/persistence expansion.
+- Added ConfigurationSettingDefinition with authoritative key, primitive type and allowed scopes.
+- Added DraftConfigurationValue validation that rejects setting-key mismatch, declared type mismatch, disallowed scope and runtime values incompatible with the primitive type.
+- Kept physical storage constraints and product-level validation complementary: database protects typed columns; domain definitions protect setting meaning.
+- Added focused tests for accepted matching values and all principal rejection paths.
+- Added CONFIGURATION_DRAFT_VALIDATION.md and explicitly deferred the authoritative application-specific setting registry instead of hard-coding a speculative catalog.
+- Exported the new domain contract.
+- Commits: 07730bd85a307815f476aef91ea104d4532801f9, b4caef8403029865a941fecffb48dad1792d1729, 35ff9f7cb39ef814053d75ab06e8e09585806a58, 42972c8daf6f9b42816099f1b4eb5a3eb00a7fbd.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for immutable configuration publication and preceding Milestone 2 persistence slices; preserve exact validation failures rather than inferring green.
-2. Inspect setting-definition ownership and add a narrow draft value editing/validation boundary so publication cannot publish arbitrary unvalidated typed rows.
-3. Keep editing separate from publication: drafts may change, published/superseded versions remain immutable.
-4. After draft validation exists, add publication audit integration using the existing minimal AuditRecord contract and canonical optional correlation propagation where a privileged transport eventually supplies it.
-5. Do not add rollback/reversion transport until a tested immutable history and validated publication path exist.
+1. Verify CI/workflow evidence for the draft validation boundary and preceding configuration publication/persistence slices; preserve exact validation failures rather than inferring green.
+2. Inspect existing domain/application registry conventions and introduce the smallest authoritative setting-definition provider required to validate real draft edits without hard-coded controller policy.
+3. Add a narrow draft value editing repository/application boundary that accepts only validated typed values and refuses edits to published/superseded versions.
+4. Keep publication immutable and transactional; editing must not contain lifecycle transition logic.
+5. After validated draft editing exists, integrate successful publication with the existing minimal audit contract.
 6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
