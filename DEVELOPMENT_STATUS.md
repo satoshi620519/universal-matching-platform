@@ -1878,3 +1878,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: exact backend contract inspection complete; runtime browser/build evidence remains pending an executable workspace environment.
 - Remaining work: inspect notification and SSE realtime contracts, then add grounded unread/read acknowledgement and realtime message reconciliation without inventing polling or event formats.
 - Exact next action: inspect RealtimeEventsController and MessageRealtimePublicationService plus notification response shape; implement the smallest authenticated notification + realtime reconciliation layer using the exact exposed SSE event contract, and record evidence/next action.
+
+
+## Phase A realtime messaging — GROUNDED SSE RECONCILIATION IMPLEMENTED
+- Resumed from the latest Exact next action and located the actual realtime implementation through repository inventory after the initially named controller paths were not present; no speculative endpoint was introduced.
+- Verified SSE endpoint: GET /realtime/events authenticated through the existing Bearer principal resolver.
+- Verified published message event contract from MessageRealtimePublicationService: eventType message.created, schemaVersion 1, occurredAt, message resource identity, and payload containing conversationId/messageId/senderAccountId.
+- Implemented authenticated browser SSE stream consumption for the active conversation using the exact event contract. On message.created for the active conversation, the UI reconciles by re-reading the participant-authorized message history instead of fabricating event payload message bodies.
+- Added visible connecting/connected/offline realtime state. Current implementation uses fetch streaming because native EventSource cannot attach the required Authorization header without a credential-leaking URL workaround.
+- Notification repository semantics were inspected (account-scoped list/read records exist), but no public notification HTTP controller was found in the current repository inventory; therefore a fake notification API/UI was deliberately not created.
+- Commits: 8c74977e07310af91bc982671150e785216d65bb, e817f49672edea445ec4c63ffff065819dfd7375.
+- Validation status: exact backend event contract inspection complete; runtime browser/build evidence remains pending an executable workspace environment.
+- Remaining work: inspect existing profile/discovery/matching modules to determine the next user-visible product journey; messaging can create conversations only by account ID with currently exposed APIs, so a grounded discovery/connection flow is required for consumer usability.
+- Exact next action: inventory profile, discovery and matching controllers/routes and identify the first complete exposed journey for finding/connecting accounts. Implement only an API-backed flow; do not seed fake profiles or duplicate unavailable backend functionality.
