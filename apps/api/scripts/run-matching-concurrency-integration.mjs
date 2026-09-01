@@ -43,6 +43,9 @@ const sqlClient = {
 };
 
 try {
+  await prisma.$executeRawUnsafe('DROP SCHEMA IF EXISTS public CASCADE');
+  await prisma.$executeRawUnsafe('CREATE SCHEMA public');
+
   const source = new FilesystemMigrationArtifactSource(
     resolve(process.cwd(), '../../packages/database/migrations'),
   );
