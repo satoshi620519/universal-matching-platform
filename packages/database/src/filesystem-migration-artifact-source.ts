@@ -17,19 +17,10 @@ export class FilesystemMigrationArtifactSource
   async load(): Promise<readonly MigrationArtifact[]> {
     const entries = await readdir(this.directory, { withFileTypes: true });
     const filenames = entries
-      .filter((entry) => entry.isFile())
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.sql'))
       .map((entry) => entry.name);
 
-    const invalidFilename = filenames.find(
-      (filename) => filename !== '.gitkeep' && !filename.endsWith('.sql'),
-    );
-    if (invalidFilename !== undefined) {
-      throw new Error(`Invalid migration filename: ${invalidFilename}`);
-    }
-
-    const orderedFilenames = orderMigrationFilenames(
-      filenames.filter((filename) => filename !== '.gitkeep'),
-    );
+    const orderedFilenames = orderMigrationFilenames(filenames);
     const migrations = await Promise.all(
       orderedFilenames.map(async (filename) => {
         const version = parseMigrationFilename(filename);
