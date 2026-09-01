@@ -92,3 +92,5 @@ export * from './profile-projection.js';
 export * from './discovery-query.js';
 
 export * from './discovery-eligibility.js';
+
+export * from './match-strategy.js';
