@@ -18,6 +18,8 @@ model Account {
   authenticationSessions    AuthenticationSession[]
   emailVerificationTokens   EmailVerificationToken[]
   emailOutboxMessages       EmailOutboxMessage[]
+  roleAssignments           RoleAssignment[]
+  assignedRoleAssignments   RoleAssignment[] @relation("RoleAssignmentAssigner")
 
   @@map("accounts")
 }
@@ -150,4 +152,32 @@ model EmailOutboxMessage {
   @@index([status, failedAt])
   @@index([accountId, createdAt])
   @@map("email_outbox_messages")
+}
+
+
+model Role {
+  id          String           @id @default(uuid()) @map("role_id") @db.Uuid
+  key         String           @unique @map("role_key")
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  assignments RoleAssignment[]
+
+  @@map("roles")
+}
+
+model RoleAssignment {
+  id                  String   @id @default(uuid()) @map("role_assignment_id") @db.Uuid
+  accountId           String   @map("account_id") @db.Uuid
+  roleId              String   @map("role_id") @db.Uuid
+  effectiveAt         DateTime @map("effective_at") @db.Timestamptz(6)
+  expiresAt           DateTime? @map("expires_at") @db.Timestamptz(6)
+  revokedAt           DateTime? @map("revoked_at") @db.Timestamptz(6)
+  assignedByAccountId String?  @map("assigned_by_account_id") @db.Uuid
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  account             Account  @relation(fields: [accountId], references: [id])
+  role                Role     @relation(fields: [roleId], references: [id])
+  assignedBy          Account? @relation("RoleAssignmentAssigner", fields: [assignedByAccountId], references: [id])
+
+  @@index([accountId, effectiveAt])
+  @@index([roleId, effectiveAt])
+  @@map("role_assignments")
 }
