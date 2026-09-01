@@ -42,7 +42,7 @@ export class PrismaPasswordRegistrationRepository extends PasswordRegistrationRe
         });
 
         return {
-          account,
+          account: { ...account, status: input.accountStatus },
           authenticationIdentity,
         };
       });
