@@ -52,11 +52,6 @@ try {
     `Applied database migrations: ${appliedVersions.length > 0 ? appliedVersions.join(', ') : 'none'}`,
   );
 
-  execSync('pnpm prisma migrate deploy', {
-    stdio: 'inherit',
-    env: { ...process.env, DATABASE_URL: databaseUrl },
-  });
-
   execSync('pnpm vitest run src/matching/prisma-match-transition.repository.integration.test.ts', {
     stdio: 'inherit',
     env: { ...process.env, DATABASE_URL: databaseUrl },
