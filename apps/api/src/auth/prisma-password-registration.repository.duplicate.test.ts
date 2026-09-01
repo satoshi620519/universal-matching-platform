@@ -17,7 +17,7 @@ describe('PrismaPasswordRegistrationRepository duplicate mapping', () => {
     const repository = new PrismaPasswordRegistrationRepository(database);
 
     await expect(repository.create({
-      accountStatus: 'pending',
+      accountStatus: 'pending-onboarding',
       providerType: 'email-password',
       providerSubject: 'user@example.test',
       passwordHash: 'opaque-hash',
