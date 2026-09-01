@@ -20,6 +20,19 @@ on:
       - 'packages/domain/**'
       - 'apps/api/scripts/run-matching-concurrency-integration.mjs'
       - '.github/workflows/matching-concurrency.yml'
+  pull_request:
+    paths:
+      - 'apps/api/src/matching/**'
+      - 'apps/api/prisma/**'
+      - 'packages/database/migrations/**'
+      - 'apps/api/package.json'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - 'packages/database/package.json'
+      - 'packages/database/**'
+      - 'packages/domain/**'
+      - 'apps/api/scripts/run-matching-concurrency-integration.mjs'
+      - '.github/workflows/matching-concurrency.yml'
 
 concurrency:
   group: matching-concurrency-gate-${{ github.ref }}
