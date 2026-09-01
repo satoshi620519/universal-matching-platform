@@ -1,3 +1,11 @@
+## Milestone 4 semantic evidence hardening — EXACT RECIPROCAL OUTCOME
+- Reviewed remaining integration assertions rather than repeating CI polling or changing concurrency infrastructure without evidence.
+- Tightened reciprocal PostgreSQL scenario naming and assertions to verify exact result semantics: matched result must be mutual=true and pending result must be mutual=false, in addition to the existing one-of-each state and two persisted interactions.
+- This closes a semantic blind spot where state counts alone could pass despite incorrect mutual flags.
+- Commit: 91ed49df466f13f0ff1523e7e860112f2226b696.
+- Next exact task: obtain actual isolated PostgreSQL execution evidence; all further M4 implementation changes should be failure-driven.
+- CI state: execution evidence still pending and no green status is inferred.
+
 ## Milestone 4 evidence hardening — NO-SILENT-FAILURE CONCURRENCY ASSERTIONS
 - Reviewed the actual PostgreSQL integration scenarios instead of repeating unavailable CI polling.
 - Found a weak duplicate-concurrency assertion: Promise.allSettled results were previously ignored, allowing a test to pass if both transitions failed while the row count happened to be one or zero only by setup behavior.
