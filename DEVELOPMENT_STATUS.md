@@ -863,12 +863,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 5fa7da9113cf021b475913e138b667056b7011a3, a5328aa5cad49f2af06ff90dff0d2dbed82db6bd, 07f9f77de333d13baf45eb28877bcfb2f69de9f9, 11932057acea4f80a030ae01dc8e747b4d28997c, 26a5e6ddbfe5493c31fdbd1ecb0fce76589bd75e, 5cc65193b6eb47ba677a7cba63a8fe0f2b4fba13.
 - CI state: recent outbox/process/identity/terminal/review commits remain unverified through the current connector; do not infer green.
 
+
+## Outbound provider and administrative integration investigation — COMPLETE, provider/admin implementation intentionally deferred
+- Resumed from the persistent exact-next-action checkpoint and verified the current application binding still uses LoggingOutboundEmailSender with no external delivery.
+- Inspected API dependencies: no email provider SDK is committed and no email-provider credential environment convention exists.
+- Inspected architecture and decisions: external messaging providers are explicitly replaceable and production provider selection remains a deployment adapter decision.
+- Added OUTBOUND_EMAIL_PROVIDER_SELECTION.md defining grounded selection criteria and an integration sequence; no provider, credentials or network delivery were invented.
+- Inspected existing authenticated operations and confirmed RequestPrincipalResolver/opaque sessions exist, but no persisted administrator role model, operator authorization service or audit persistence boundary exists.
+- Added ADMINISTRATIVE_FAILED_OUTBOX_INTEGRATION_BOUNDARY.md documenting why failed-message review/requeue must remain an application boundary until authentication + authorization + audit foundations can be reused.
+- Commits: 708ac14023c9a96d39fcb9ac225b6f181a3c0fcc, 2b051d253d7d049dfe1419fc47d2462321bab12e.
+- CI state: recent outbox/process/identity/terminal/review/provider-boundary commits remain unverified through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for recent outbox/process/identity/terminal/review commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Inspect repository configuration, deployment documentation and environment conventions for a grounded real outbound email provider choice; do not invent credentials or silently enable network delivery.
-3. Before exposing failed-message operations externally, trace existing administrative authentication/authorization/audit boundaries and reuse them rather than inventing an operator API.
-4. Keep stable messageId correlation across retries, terminal transitions and manual requeue; preserve the prohibition on raw verification tokens in durable outbox records.
-5. Keep migration execution and the standalone worker process explicit, and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for recent outbox/process/identity/terminal/review/provider-boundary commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Continue the repository's broader administration foundation rather than exposing failed-email operations: trace the next grounded role/permission and audit persistence milestones and implement only the smallest dependency-ordered slice.
+3. Keep real outbound email provider selection deferred until deployment requirements explicitly select a vendor; LoggingOutboundEmailSender remains the non-network default.
+4. Preserve stable messageId correlation across retries, terminal transitions and manual requeue, and keep raw verification tokens out of durable outbox records.
+5. Keep migration execution and standalone worker topology explicit, then update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
