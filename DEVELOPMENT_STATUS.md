@@ -1926,3 +1926,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static test convention alignment complete; full runtime test execution remains pending executable workspace environment.
 - Remaining work: implement web onboarding/profile creation and API-backed discovery cards, then like/pass interactions. Do not fabricate match results; conversation transition must use the exact match response semantics after inspecting the transition result.
 - Exact next action: inspect the exact MatchTransitionResult response shape and category response model, then implement the smallest international-first onboarding → profile → discovery UI using only these APIs and server projections.
+
+
+## Phase B consumer discovery journey — API-BACKED WEB FLOW IMPLEMENTED
+- Resumed from Exact next action by inspecting exact MatchTransitionResult ({state, mutual, replayed}) and Category model ({id,key,displayName}) before UI work.
+- Implemented international-first authenticated web journey: load real categories → create public profile → call server-authorized discovery → render only server-projected profile fields → Like/Pass using idempotent commands.
+- Mutual match is determined solely from the backend response; UI does not infer mutuality locally. When mutual=true, the matched account is carried into the existing real conversation workflow.
+- Discovery cards contain no seeded/fake profiles. Empty discovery is represented honestly as no available profiles.
+- Added responsive international visual treatment for onboarding, discovery cards and decisions while preserving the existing neutral premium visual system.
+- Commits: 723e67047e4de6d48f44ca637e4ef1ea3544175c, b3ad097d987c618fb86f9015bdc84b69b9cc3656.
+- Validation status: static API/domain contract inspection complete; browser build/integration execution remains pending executable workspace environment.
+- Remaining work: profile lifecycle needs GET /profiles/me-aware UI hydration and update support, category-specific field schemas need configuration-driven transport instead of the current minimal default schema, and mutual-match conversation creation should become an explicit backend orchestration endpoint rather than relying on the browser to initiate the next conversation step.
+- Exact next action: inspect conversation creation authorization and match persistence relationships, then add a server-owned 'start conversation from mutual match' orchestration path if existing data permits; otherwise add precise API boundary tests and expose only the minimum linkage required. Do not let the browser bypass mutual-match authorization.
