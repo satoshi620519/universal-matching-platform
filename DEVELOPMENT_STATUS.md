@@ -1683,3 +1683,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - This reuses the notification table and avoids duplicating the existing email outbox worker.
 - Commits: 0363e5777086e57f25790eb8ea0a895884cced04 and 331dbae2f07b069c2950548971de22dec05434e6.
 - Next exact task: validate transactional message-notification integration in CI, then expose account-scoped notification reads/acknowledgement through the authenticated HTTP boundary before realtime fan-out.
+
+- CI #1133 completed successfully for transactional recipient notifications; the status checkpoint CI #1134 remains a documentation-only verification run.
+- Added authenticated notification list and acknowledgement HTTP operations, reusing the existing account-scoped repository boundary.
+- Notification ownership is derived exclusively from RequestPrincipalResolver; acknowledgement cannot target another account's notification.
+- Commits: 8445dbdb28a59d85afab91bd3f74d552af72a74b, efde9b22b450b69c27d6808da365cb780ddbda07, 81e998481d45a7aab2536e3484c105909439d035.
+- Next exact task: validate notification HTTP wiring in CI, then inspect existing websocket/SSE infrastructure before adding the minimum realtime fan-out path; do not introduce a parallel realtime transport if one already exists.
