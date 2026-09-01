@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
 
+export type CreatedMessage = { message: MessageRecord; recipientAccountIds: string[]; };
+
 export type MessageRecord = {
   id: string;
   conversationId: string;
@@ -17,7 +19,7 @@ export class PrismaMessageRepository {
     conversationId: string;
     senderAccountId: string;
     body: string;
-  }): Promise<MessageRecord | null> {
+  }): Promise<CreatedMessage | null> {
     const body = input.body.trim();
     if (!body) throw new Error('Message body must not be empty');
 
@@ -63,7 +65,7 @@ export class PrismaMessageRepository {
         });
       }
 
-      return message;
+      return { message, recipientAccountIds: recipients.map(({ accountId }) => accountId) };
     });
   }
 
