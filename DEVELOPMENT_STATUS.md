@@ -1,3 +1,12 @@
+## Milestone 3 persistence preparation — DOMAIN PORTS ESTABLISHED
+- Inspected repository package conventions before adding persistence implementation and found no existing generic profile/category repository to duplicate.
+- Added domain-owned ProfileRepository port with find/save/delete identity operations.
+- Added CategoryRepository port with stable id/key lookup, list and save operations.
+- Added compile-time contract tests and package exports.
+- Commits: d98cbde242d07a77ae8d82d235ca4d9a76230409, 28fceebc150339747ebd1e5a801b79136a430c9c, ccc506b6ec0064f520b5657c403600fbae30d2e5, 449d0c5e038c9d54559312bf7f875ef0114df8df.
+- Next exact task: inspect authoritative application persistence technology/schema location and implement adapters only after locating that boundary; do not invent a second persistence stack.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 start — PROFILE, CATEGORY AND GEOGRAPHY DOMAIN BASELINE
 - Milestone 2 remains implementation-complete with unavailable CI evidence; avoided further low-value validation loops and started the dependency-ordered next milestone under the documented evidence limitation.
 - Added minimal domain-owned Category identity with normalized non-empty id/key/display name.
