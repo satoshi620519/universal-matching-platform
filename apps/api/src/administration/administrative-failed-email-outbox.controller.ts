@@ -9,9 +9,10 @@ export class AdministrativeFailedEmailOutboxController {
 
   @Get()
   async list(@Query('limit') limit: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
+    const parsedLimit = parseLimit(limit);
     const correlationId = correlationHeader?.trim() || undefined;
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: correlationId ?? 'administration-failed-email-outbox-list' });
-    return this.outbox.list(principal.accountId, parseLimit(limit), correlationId);
+    return this.outbox.list(principal.accountId, parsedLimit, correlationId);
   }
 
   @Post(':id/requeue')
