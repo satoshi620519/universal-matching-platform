@@ -1,3 +1,11 @@
+## Milestone 4 evidence readiness — COMMIT-IDENTIFIABLE EXECUTION ATTESTATION
+- Checked both the latest implementation commit (fea38c3d23e83d9330c380d21d7929d62a01931d) and its status checkpoint (463f5a9714df2d2d00923e86c09a89820b2a444a) through workflow-run and combined-status APIs.
+- Both checks returned empty workflow/status lists; this confirms lack of observable execution evidence through the accessible GitHub integration, not a passing result.
+- Avoided repeating code/test changes. Improved the dedicated workflow's evidence payload so any future run records PostgreSQL engine version, exact tested commit SHA, gate pass marker, and optional manual evidence label in the GitHub step summary.
+- Commit: 2022e3c6daf6c305a0742ba233c4b7e9bc60cf5a.
+- Next exact task: obtain an actual run/artifact for this commit via workflow execution visibility; once available, inspect jobs/logs/artifact and record pass/fail as the final M4 execution evidence.
+- CI state: latest implementation and checkpoint queried; workflow_runs=[] and statuses=[] through available integration; no green status inferred.
+
 ## Milestone 4 transaction correctness — NO-QUERY-AFTER-UNIQUE-FAILURE
 - Reviewed the expanded concurrency implementation for PostgreSQL transaction semantics rather than repeating unavailable workflow polling.
 - Identified a concrete PostgreSQL flaw in the legacy P2002 recovery path: after a unique-constraint violation, PostgreSQL marks the transaction aborted, so attempting a replay lookup inside the same interactive transaction is invalid and can mask the original failure.
