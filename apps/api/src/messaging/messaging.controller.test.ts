@@ -1,0 +1,20 @@
+import { describe, expect, it, vi } from 'vitest';
+import { MessagingController } from './messaging.controller.js';
+
+describe('MessagingController', () => {
+  const principalResolver = { requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'a1' }) };
+
+  it('always adds the authenticated account when creating a conversation', async () => {
+    const create = vi.fn().mockResolvedValue({ id: 'c1' });
+    const controller = new MessagingController(principalResolver as never, { create } as never, {} as never);
+    await controller.createConversation({ participantAccountIds: ['a2'] });
+    expect(create).toHaveBeenCalledWith(['a2', 'a1']);
+  });
+
+  it('uses the authenticated account for message writes', async () => {
+    const createForParticipant = vi.fn().mockResolvedValue({ id: 'm1' });
+    const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never);
+    await controller.createMessage('c1', { body: 'hello' });
+    expect(createForParticipant).toHaveBeenCalledWith({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
+  });
+});
