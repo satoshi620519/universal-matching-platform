@@ -18,6 +18,34 @@ describe('PostgresMigrationExecutor', () => {
     await expect(executor.listAppliedVersions()).resolves.toEqual([1, 4]);
   });
 
+  it('propagates tracking initialization failures without attempting the history query', async () => {
+    const query = vi.fn().mockRejectedValueOnce(new Error('tracking unavailable'));
+    const client: SqlMigrationClient = { query, transaction: vi.fn() };
+    const executor = new PostgresMigrationExecutor(client);
+
+    await expect(executor.listAppliedVersions()).rejects.toThrow('tracking unavailable');
+    expect(query).toHaveBeenCalledTimes(1);
+  });
+
+  it('propagates migration SQL failures and does not record the version', async () => {
+    const rootQuery: SqlMigrationQueryClient['query'] = vi.fn();
+    const txQuery = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('migration SQL failed'));
+    const client: SqlMigrationClient = {
+      query: rootQuery,
+      transaction: async <T>(operation: (tx: SqlMigrationQueryClient) => Promise<T>) =>
+        operation({ query: txQuery }),
+    };
+    const executor = new PostgresMigrationExecutor(client);
+
+    await expect(
+      executor.apply({ version: 5, filename: '0005_failed.sql', sql: 'BROKEN SQL' }),
+    ).rejects.toThrow('migration SQL failed');
+    expect(txQuery).toHaveBeenCalledTimes(1);
+    expect(rootQuery).not.toHaveBeenCalled();
+  });
+
   it('applies SQL and records the version through the transaction-scoped client', async () => {
     const events: string[] = [];
     const rootQuery: SqlMigrationQueryClient['query'] = vi.fn(
