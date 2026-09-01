@@ -1915,3 +1915,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static contract/module inspection complete; runtime Nest build and integration tests remain pending an executable workspace environment. Transport-level authorization/projection tests are still required before production release.
 - Remaining work: add controller tests for authenticated principal ownership, discovery projection/exclusion and match idempotency/error mapping; then wire Web onboarding → profile → discovery → like/pass → mutual-match conversation creation using these APIs.
 - Exact next action: inspect existing API test conventions and add focused transport tests for ProfileDiscoveryController without duplicating domain tests. After those tests are recorded, wire the web discovery journey to the new API surface.
+
+
+## Phase B transport tests — OWNERSHIP/PROJECTION/MATCH ACTOR COVERAGE ADDED
+- Resumed from Exact next action by inspecting existing controller test conventions rather than duplicating domain tests.
+- Added focused ProfileDiscoveryController transport tests covering authenticated profile ownership, authenticated discovery subject, server-owned public projection policy, and authenticated match actor identity.
+- Tests intentionally assert transport boundaries rather than re-testing DiscoveryService or match domain transitions already covered at lower layers.
+- Added frontend API client contracts for the newly exposed category/profile/discovery/match endpoints; UI wiring remains next so API contract and browser transport can be reviewed independently.
+- Commits: 9d22a5457266b8490a1ae09000def2ba27207515, 237f83fb3da9c6f18c84a6b1a7d6eb1c66b2282a.
+- Validation status: static test convention alignment complete; full runtime test execution remains pending executable workspace environment.
+- Remaining work: implement web onboarding/profile creation and API-backed discovery cards, then like/pass interactions. Do not fabricate match results; conversation transition must use the exact match response semantics after inspecting the transition result.
+- Exact next action: inspect the exact MatchTransitionResult response shape and category response model, then implement the smallest international-first onboarding → profile → discovery UI using only these APIs and server projections.
