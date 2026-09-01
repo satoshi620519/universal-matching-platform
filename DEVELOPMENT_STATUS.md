@@ -1965,3 +1965,17 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static repository/controller contract inspection complete; full runtime build/browser integration remains pending executable workspace environment.
 - Remaining work: notification creation semantics need broader product-event coverage (only persisted generic kinds should be added through actual domain events); profile lifecycle still needs authenticated hydration/update; conversation pair uniqueness/idempotency needs schema design; API route/controller ordering should be integration-tested because parameterized conversation routes coexist with notification routes.
 - Exact next action: inspect account/profile lifecycle and existing profile repository contracts, then implement authenticated GET /profiles/me hydration and PATCH/PUT update semantics using existing ProfileService validation rather than duplicating field validation in the browser. Add focused ownership/update tests before UI hydration.
+
+
+## Phase B profile lifecycle — AUTHENTICATED HYDRATION + UPDATE IMPLEMENTED
+- Resumed from Exact next action by inspecting ProfileService, PrismaProfileRepository, profile domain invariants and existing controller tests.
+- Found and corrected a transport identity mismatch: repository findById addresses profile.id, while /profiles/me needs accountId. Added explicit findByAccountId rather than overloading semantics.
+- GET /profiles/me now resolves the authenticated principal's profile by accountId.
+- Added PATCH /profiles/me. The browser never supplies a profile id; the server resolves the principal → profile and calls existing ProfileService.update, preserving domain validation and category existence checks.
+- Added focused ownership/hydration transport coverage asserting authenticated account lookup and update of the resolved profile id.
+- Added web API client contracts and profile form hydration: returning users load their existing profile, can edit it, and save through PATCH instead of creating a new profile every session.
+- Discovery remains available after hydration; the UI no longer forces profile recreation for returning users.
+- Commits: c3af17fc20dad090830cf1c1384abcb873d83795, a84c12ea2c2da48f77bac92622a8d3a9ad2c81b8, 18d8fdb39cb6408e006694693f800e4d7e0ebc85, 57c73343b22a3ebdfe8d3627f1a06bae24925aaf, 7346d2329f0f75d868eb318e9c7d8964b3fb8d23.
+- Validation status: static contract and ownership-path inspection complete; full runtime TypeScript/build/browser integration remains pending executable workspace environment.
+- Remaining work: category-specific profile field schemas are still represented by a minimal transport default and must become configuration-driven; profile deletion/privacy controls are not yet exposed; profile account uniqueness should be enforced/verified at schema level before production; web discovery pagination and loading/error states need completion.
+- Exact next action: inspect database profile schema/migrations for accountId uniqueness and category field configuration sources. Add a unique account-profile invariant migration only if absent, then expose configuration-driven category field schemas without hardcoding category UI forms.
