@@ -6,13 +6,15 @@ describe('PasswordRegistrationService', () => {
   it('hashes plaintext before invoking atomic registration persistence', async () => {
     const hash = vi.fn().mockResolvedValue('opaque-hash');
     const create = vi.fn().mockResolvedValue({
-      account: { id: 'account-1', status: 'pending' },
-      authenticationIdentity: { id: 'identity-1', accountId: 'account-1' },
+      account: { id: 'account-1', status: 'pending-onboarding', createdAt: new Date(), updatedAt: new Date() },
+      authenticationIdentity: { id: 'identity-1', accountId: 'account-1', providerType: 'email-password', providerSubject: 'user@example.test', status: 'active', createdAt: new Date(), updatedAt: new Date() },
     });
+    const enqueue = vi.fn().mockResolvedValue(undefined);
 
     const service = new PasswordRegistrationService(
       { hash } as any,
       { create } as any,
+      { enqueue } as any,
     );
 
     await service.register({
@@ -22,10 +24,15 @@ describe('PasswordRegistrationService', () => {
 
     expect(hash).toHaveBeenCalledWith('plaintext-secret');
     expect(create).toHaveBeenCalledWith({
-      accountStatus: 'pending',
+      accountStatus: 'pending-onboarding',
       providerType: 'email-password',
       providerSubject: 'user@example.test',
       passwordHash: 'opaque-hash',
+    });
+    expect(enqueue).toHaveBeenCalledWith({
+      accountId: 'account-1',
+      emailAddress: 'user@example.test',
+      kind: 'email-verification',
     });
   });
 
@@ -33,9 +40,11 @@ describe('PasswordRegistrationService', () => {
     const failure = new Error('hashing failed');
     const hash = vi.fn().mockRejectedValue(failure);
     const create = vi.fn();
+    const enqueue = vi.fn();
     const service = new PasswordRegistrationService(
       { hash } as any,
       { create } as any,
+      { enqueue } as any,
     );
 
     await expect(service.register({
@@ -44,15 +53,18 @@ describe('PasswordRegistrationService', () => {
     })).rejects.toBe(failure);
 
     expect(create).not.toHaveBeenCalled();
+    expect(enqueue).not.toHaveBeenCalled();
   });
 
   it('propagates atomic persistence failures without retrying outside the boundary', async () => {
     const failure = new Error('transaction failed');
     const hash = vi.fn().mockResolvedValue('opaque-hash');
     const create = vi.fn().mockRejectedValue(failure);
+    const enqueue = vi.fn();
     const service = new PasswordRegistrationService(
       { hash } as any,
       { create } as any,
+      { enqueue } as any,
     );
 
     await expect(service.register({
@@ -61,5 +73,6 @@ describe('PasswordRegistrationService', () => {
     })).rejects.toBe(failure);
 
     expect(create).toHaveBeenCalledTimes(1);
+    expect(enqueue).not.toHaveBeenCalled();
   });
 });
