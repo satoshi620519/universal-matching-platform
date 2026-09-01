@@ -20,12 +20,16 @@ export class FilesystemMigrationArtifactSource
       .filter((entry) => entry.isFile())
       .map((entry) => entry.name);
 
-    const invalidFilename = filenames.find((filename) => !filename.endsWith('.sql'));
+    const invalidFilename = filenames.find(
+      (filename) => filename !== '.gitkeep' && !filename.endsWith('.sql'),
+    );
     if (invalidFilename !== undefined) {
       throw new Error(`Invalid migration filename: ${invalidFilename}`);
     }
 
-    const orderedFilenames = orderMigrationFilenames(filenames);
+    const orderedFilenames = orderMigrationFilenames(
+      filenames.filter((filename) => filename !== '.gitkeep'),
+    );
     const migrations = await Promise.all(
       orderedFilenames.map(async (filename) => {
         const version = parseMigrationFilename(filename);
