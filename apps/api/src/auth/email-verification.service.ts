@@ -42,7 +42,7 @@ export class EmailVerificationService {
     }
 
     const account = await this.accounts.findById(token.accountId);
-    if (!account || account.status !== 'pending') {
+    if (!account || account.status !== 'pending-onboarding') {
       return { kind: 'rejected' };
     }
 
