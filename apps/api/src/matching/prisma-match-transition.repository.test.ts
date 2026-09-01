@@ -53,13 +53,11 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
     });
   });
 
-  it('recovers a unique idempotency race as a replay', async () => {
+  it('propagates a unique constraint failure instead of querying an aborted transaction', async () => {
     const uniqueError = Object.assign(new Error('unique'), { code: 'P2002' });
-    const database = databaseFor({ create: uniqueError, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
-    database.tx.matchInteraction.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ decision: 'like' }).mockResolvedValueOnce(null);
-    const result = await new PrismaMatchTransitionRepository(database as never).transition(command);
-    expect(result.replayed).toBe(true);
-    expect(database.tx.matchInteraction.create).toHaveBeenCalledTimes(1);
+    const database = databaseFor({ create: uniqueError, reciprocal: null });
+    await expect(new PrismaMatchTransitionRepository(database as never).transition(command)).rejects.toMatchObject({ code: 'P2002' });
+    expect(database.tx.matchInteraction.findUnique).toHaveBeenCalledTimes(1);
   });
 
   it('resolves reciprocal concurrent-like visibility to matched', async () => {
