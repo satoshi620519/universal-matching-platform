@@ -850,11 +850,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 0fc2bce7a88c47c02b8c6f2077be9c0ee92143fa, 3cc7defdce792d80703b68c0784b2b160b248be1, d0b328a4012189e24a010e2883b7f15cc923009d, 62cc644abb1080dd61f6a424d7cde33b0158edc7, 9d0f7ffe341b9df43f3872d4bad6a23eeb9985b7, bc37d75c70dbed1704d1157559e4d26a6594ff34, 53f70e36b83b710db9d296138c29cbca5e45004d, 0ac443f1086fbfa7cf1f5d5e0342eaee7ee88215.
 - CI state: recent outbox/process/identity/terminal-failure workflow evidence remains unavailable through the current connector; do not infer green.
 
+
+## Failed email outbox review and manual requeue — IMPLEMENTED, CI evidence pending
+- Resumed from the persistent exact-next-action checkpoint and did not recreate completed outbox, retry, worker, identity or terminal-failure work.
+- Added a dedicated FailedEmailOutboxRepository review boundary rather than expanding the delivery repository with operator concerns.
+- Added Prisma implementation for bounded failed-message listing and status-qualified requeue transitions.
+- Requeue succeeds only when the row is still status='failed', preventing a stale operator action from overwriting a concurrent state transition.
+- Requeue preserves the durable message ID for provider correlation while clearing terminal failure metadata and making the message immediately claimable.
+- Added FailedEmailOutboxReviewService with bounded list limits (1..100) and explicit manual requeue operation.
+- Added focused review-service tests and registered the new boundary through Nest DI.
+- Added FAILED_EMAIL_OUTBOX_REVIEW_REQUEUE.md documenting why no public administrative HTTP endpoint was invented without grounded operator authorization/audit requirements.
+- Commits: 5fa7da9113cf021b475913e138b667056b7011a3, a5328aa5cad49f2af06ff90dff0d2dbed82db6bd, 07f9f77de333d13baf45eb28877bcfb2f69de9f9, 11932057acea4f80a030ae01dc8e747b4d28997c, 26a5e6ddbfe5493c31fdbd1ecb0fce76589bd75e, 5cc65193b6eb47ba677a7cba63a8fe0f2b4fba13.
+- CI state: recent outbox/process/identity/terminal/review commits remain unverified through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for recent outbox/process/identity/terminal-failure commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Inspect repository configuration and deployment constraints for a grounded real outbound email provider choice; do not invent credentials or silently enable network delivery.
-3. Define operational handling for terminal failed messages (review/query boundary and safe manual requeue semantics) before automated recovery is introduced.
-4. Keep stable messageId correlation across retries and terminal transitions; preserve the prohibition on raw verification tokens in durable outbox records.
+1. Verify CI/workflow evidence for recent outbox/process/identity/terminal/review commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Inspect repository configuration, deployment documentation and environment conventions for a grounded real outbound email provider choice; do not invent credentials or silently enable network delivery.
+3. Before exposing failed-message operations externally, trace existing administrative authentication/authorization/audit boundaries and reuse them rather than inventing an operator API.
+4. Keep stable messageId correlation across retries, terminal transitions and manual requeue; preserve the prohibition on raw verification tokens in durable outbox records.
 5. Keep migration execution and the standalone worker process explicit, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
