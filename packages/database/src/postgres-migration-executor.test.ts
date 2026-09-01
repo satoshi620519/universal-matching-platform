@@ -29,7 +29,7 @@ describe('PostgresMigrationExecutor', () => {
 
   it('propagates migration SQL failures and does not record the version', async () => {
     const rootQuery: SqlMigrationQueryClient['query'] = vi.fn();
-    const txQuery = vi
+    const txQuery: SqlMigrationQueryClient['query'] = vi
       .fn()
       .mockRejectedValueOnce(new Error('migration SQL failed'));
     const client: SqlMigrationClient = {
@@ -52,7 +52,7 @@ describe('PostgresMigrationExecutor', () => {
       async <T = unknown>(_sql: string, _params?: readonly unknown[]): Promise<T> =>
         undefined as T,
     );
-    const txQuery = vi.fn(
+    const txQuery: SqlMigrationQueryClient['query'] = vi.fn(
       async <T = unknown>(sql: string, _params?: readonly unknown[]): Promise<T> => {
         events.push(sql);
         return undefined as T;
