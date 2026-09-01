@@ -7,8 +7,8 @@ const integration = url ? describe : describe.skip;
 const prisma = url ? new PrismaClient({ datasources: { db: { url } } }) : undefined;
 
 integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
-  const accountA = accountA;
-  const accountB = accountB;
+  const accountA = '11111111-1111-4111-8111-111111111111';
+  const accountB = '22222222-2222-4222-8222-222222222222';
 
   beforeEach(async () => {
     await prisma!.$executeRawUnsafe('TRUNCATE TABLE "match_interactions" CASCADE');
