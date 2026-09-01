@@ -1649,3 +1649,11 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Continued M5 with a narrow participant-scoped conversation repository and focused repository tests (commits 35c96eb1793c939d3e78fb272397b7706d8dd9f0 and 09ef7e58a474496e49223d3daf2fcefd3121f96f).
 - Access is resolved through the conversation_participants composite identity rather than exposing direct conversation lookup by arbitrary account.
 - Next exact task: validate the repository boundary in CI, then add message persistence only after participant access is confirmed.
+
+- CI #1113 and CI #1114 completed successfully, validating the conversation access boundary and its checkpoint.
+- Began the next dependency-ordered slice: message persistence.
+- Added shared migration 0015_create_messages.sql, Prisma Message mapping, and participant-authorized transactional writes.
+- Message creation checks conversation membership inside the same database transaction before inserting; non-participants receive no write.
+- Focused tests cover unauthorized writes and empty-body rejection.
+- Commits: 16062935195c79a147bfc8372bb7bbfa302867e1, 9fa4d91d668f8a9b37a2a1fc051c6213c44cc6b6, e4bf4e33e402243015dc94754b9724926b242a02, a29adac0cd752f07d366f5462e59c6b6fedb7daf.
+- Next exact task: validate message persistence in CI, then add participant-scoped message reads before exposing HTTP APIs.
