@@ -1829,3 +1829,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Evidence: repository-wide payment/billing/subscription filename inventory returned no existing implementation boundary to reuse.
 - Remaining work: complete Phase A runnable product and Phase B operator UI before implementing provider configuration; then define the neutral payment contract before choosing adapter-specific SDK details.
 - Exact next action: return to the previously recorded Phase A dependency order (inspect exact password registration/sign-in request/response/session contracts and wire the real Access UI). Do not start payment adapters prematurely or invent provider credentials/contracts.
+
+
+## Phase A access integration — GROUNDED REGISTER/SIGN-IN API WIRING IMPLEMENTED
+- Resumed from the latest Exact next action and inspected the actual password registration/sign-in controllers and transport services rather than inventing frontend contracts.
+- Verified grounded contracts: POST /auth/register accepts {email,password} and returns 202 with no body; POST /auth/sign-in accepts {email,password}, returns 200 with {credential} on accepted credentials and {} for rejected credentials; both can return rate-limit errors.
+- Implemented a configurable VITE_API_BASE_URL client boundary with localhost fallback, real POST requests, loading states, success/error feedback, and no fabricated authentication success.
+- Sign-in stores only the opaque credential returned by the existing backend in sessionStorage for the current browser session; subsequent authenticated API wiring must explicitly attach it using the backend's required Authorization format after inspecting the authentication adapter.
+- Registration success remains intentionally generic because the backend transport is enumeration-resistant and returns 202 even for duplicate identities; UI directs the user to the existing email-verification journey rather than exposing account existence.
+- Commits: 2c72dfe39c38b2f22f0a859c9e138c342747f18b, 4b420f87221dc91485d786cd3fd53d285495da14.
+- Validation status: contract inspection complete; runtime build/execution evidence remains pending an executable workspace environment.
+- Remaining work: inspect opaque session Authorization header semantics and existing email verification endpoint, then wire the verification state and authenticated session bootstrap without guessing token transport.
+- Exact next action: inspect OpaqueSessionAuthenticationAdapter/request principal resolution and EmailVerificationController contracts; implement the smallest grounded post-registration verification/session flow and record exact validation evidence.
