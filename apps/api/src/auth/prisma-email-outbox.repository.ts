@@ -46,6 +46,21 @@ export class PrismaEmailOutboxRepository extends EmailOutboxRepository {
     });
   }
 
+  async markFailed(
+    id: string,
+    input: { readonly failedAt: Date; readonly error: string },
+  ): Promise<void> {
+    await this.database.emailOutboxMessage.update({
+      where: { id },
+      data: {
+        status: 'failed',
+        failedAt: input.failedAt,
+        lockedAt: null,
+        lastError: input.error.slice(0, 500),
+      },
+    });
+  }
+
   async reschedule(
     id: string,
     input: { readonly availableAt: Date; readonly error: string },
