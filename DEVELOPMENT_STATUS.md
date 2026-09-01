@@ -1,3 +1,12 @@
+## Milestone 4 transaction correctness — NO-QUERY-AFTER-UNIQUE-FAILURE
+- Reviewed the expanded concurrency implementation for PostgreSQL transaction semantics rather than repeating unavailable workflow polling.
+- Identified a concrete PostgreSQL flaw in the legacy P2002 recovery path: after a unique-constraint violation, PostgreSQL marks the transaction aborted, so attempting a replay lookup inside the same interactive transaction is invalid and can mask the original failure.
+- Removed the unsafe in-transaction P2002 recovery path. Advisory serialization now prevents the intended idempotency race before insertion; unrelated directed-interaction uniqueness conflicts propagate normally.
+- Added a unit regression asserting no second query occurs after a unique failure and a PostgreSQL integration scenario for same directed pair with a different idempotency key, confirming one persisted interaction and explicit uniqueness rejection.
+- Commits: 5f5a8c11445a960f4e1e6e691d6f051d10e1440c, d8eaa257ab57ce0fe47ef760a07e25b0d7cbfa85, fea38c3d23e83d9330c380d21d7929d62a01931d.
+- Next exact task: execute the full expanded isolated PostgreSQL concurrency matrix and capture actual evidence; further changes should be driven by concrete execution results.
+- CI state: execution evidence remains pending; no green status inferred.
+
 ## Milestone 4 correctness hardening — IDEMPOTENCY SCOPE SERIALIZATION
 - Continued from the evidence-pending checkpoint without repeating unavailable workflow polling.
 - Identified a concrete gap: pair-level locking serializes reciprocal transitions but does not serialize the database's actor+idempotency-key uniqueness when the same key races with different targets.
