@@ -32,7 +32,7 @@ jobs:
           node-version: 22
       - run: pnpm install --no-frozen-lockfile
       - name: Typecheck
-        run: pnpm typecheck 2>&1 | tee typecheck.log
+        run: set -o pipefail; pnpm typecheck 2>&1 | tee typecheck.log
       - name: Upload typecheck diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -41,7 +41,7 @@ jobs:
           path: typecheck.log
           if-no-files-found: warn
       - name: Lint
-        run: pnpm lint 2>&1 | tee lint.log
+        run: set -o pipefail; pnpm lint 2>&1 | tee lint.log
       - name: Upload lint diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -50,11 +50,11 @@ jobs:
           path: lint.log
           if-no-files-found: warn
       - name: Test
-        run: pnpm test 2>&1 | tee test.log
+        run: set -o pipefail; pnpm test 2>&1 | tee test.log
       - name: Matching concurrency integration
         env:
           MATCHING_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/universal_matching
-        run: pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
+        run: set -o pipefail; pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
       - name: Verify concurrency gate result
         if: success()
         run: |
@@ -75,7 +75,7 @@ jobs:
           path: test.log
           if-no-files-found: warn
       - name: Build
-        run: pnpm build 2>&1 | tee build.log
+        run: set -o pipefail; pnpm build 2>&1 | tee build.log
       - name: Upload build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
