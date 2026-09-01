@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   resolveConfigurationValue,
-  type ConfigurationSettingDefinition,
+  type ConfigurationSettingDefinition as ResolutionConfigurationSettingDefinition,
 } from '@universal/domain';
 import { ConfigurationEffectiveValueRepository } from './configuration-effective-value.repository.js';
 
@@ -10,14 +10,15 @@ export class ConfigurationEffectiveValueService {
   constructor(private readonly values: ConfigurationEffectiveValueRepository) {}
 
   async resolve(
-    definition: ConfigurationSettingDefinition,
-  ): Promise<boolean | bigint | number | string> {
+  async resolve<T>(
+    definition: ResolutionConfigurationSettingDefinition<T>,
+  ): Promise<T> {
     const published = await this.values.findPublishedValues(definition.key);
     return resolveConfigurationValue(
       definition,
       published.map((value) => ({
         scope: value.scope,
-        value: value.value as boolean | bigint | number | string,
+        value: value.value as T,
       })),
     );
   }
