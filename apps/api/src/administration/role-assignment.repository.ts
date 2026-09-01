@@ -1,14 +1,11 @@
-import type {
-  AdministrativeRoleAssignment,
-  AdministrativeRoleKey,
-} from '@universal/domain';
+import type { AdministrativeRoleAssignment, AdministrativeRoleKey } from '@universal/domain';
 
 export interface AssignAdministrativeRoleInput {
   readonly accountId: string;
   readonly role: AdministrativeRoleKey;
   readonly effectiveAt: Date;
   readonly expiresAt?: Date;
-  readonly assignedByAccountId: string;
+  readonly assignedByAccountId?: string;
 }
 
 export abstract class RoleAssignmentRepository {
