@@ -1,3 +1,12 @@
+## Milestone 4 evidence hardening — NO-SILENT-FAILURE CONCURRENCY ASSERTIONS
+- Reviewed the actual PostgreSQL integration scenarios instead of repeating unavailable CI polling.
+- Found a weak duplicate-concurrency assertion: Promise.allSettled results were previously ignored, allowing a test to pass if both transitions failed while the row count happened to be one or zero only by setup behavior.
+- Strengthened the test to require both concurrent calls to fulfill, exactly one non-replayed transition, exactly one replayed transition, and exactly one persisted directed interaction.
+- Strengthened reciprocal assertions to require neither independent reciprocal command is reported as a replay.
+- Commit: 9a7e363a1a6bf41ae966472c3900eb86b9b0f782.
+- Next exact task: obtain actual isolated PostgreSQL workflow execution evidence; implementation/test hardening is complete enough that further changes should be driven only by concrete execution failures.
+- CI state: execution visibility remains unavailable through the current integration; no green status inferred.
+
 ## Milestone 4 test hardening — LOCK-AWARE SCENARIOS
 - Continued without repeating unavailable workflow polling; inspected the post-lock test surface for regressions introduced by concurrency hardening.
 - Found that executable repository mocks needed the new transaction $executeRaw capability; added it and an explicit advisory-lock invocation assertion so unit scenarios remain aligned with production transaction behavior.
