@@ -1,4 +1,4 @@
-import { BadRequestException, TooManyRequestsException } from '@nestjs/common';
+import { BadRequestException, HttpStatus } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DuplicateAuthenticationIdentityError } from './duplicate-authentication-identity.error.js';
@@ -32,7 +32,7 @@ describe('PasswordRegistrationTransportService', () => {
 
     await expect(service.register({
       email: 'user@example.test', password: '123456789012', rateLimitKey: 'key',
-    })).rejects.toBeInstanceOf(TooManyRequestsException);
+    })).rejects.toMatchObject({ status: HttpStatus.TOO_MANY_REQUESTS });
 
     expect(policy.validate).not.toHaveBeenCalled();
     expect(registration.register).not.toHaveBeenCalled();
