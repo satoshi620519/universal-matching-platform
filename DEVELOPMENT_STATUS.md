@@ -1783,3 +1783,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commit: pending this checkpoint update.
 - Remaining Phase A work: establish the runnable web application foundation without inventing backend contracts.
 - Exact next action: inspect the existing apps/web workspace and shared frontend dependencies, then implement the smallest runnable development server/application shell that can host the grounded Access and Messaging journeys. Record framework choice, commands, files changed, validation command and next action here.
+
+
+## Phase A web foundation — INTERNATIONAL-FIRST PRODUCT SHELL IMPLEMENTED
+- Resumed from the recorded Exact next action: inspected apps/web rather than re-inventorying backend routes.
+- Found apps/web was only a TypeScript/Vitest placeholder with no runnable development server or browser entrypoint.
+- Added the smallest runnable React + Vite application shell with dev, build and preview commands.
+- Product presentation direction is now explicitly international-first for initial overseas sales: English default copy, restrained editorial typography, neutral premium palette, responsive layout, and globally understandable navigation rather than Japan-specific visual conventions.
+- Implemented the first browser-visible landing shell (brand/hero/value proposition/trust/features/footer). This is intentionally a product shell, not fabricated business functionality; grounded Access and Messaging journeys remain the next application layer.
+- Files added/updated: apps/web/package.json, index.html, src/main.tsx, src/styles.css, vite.config.ts, tsconfig.json.
+- Implementation commits: 653e5adb2e5f2f70fc30fcbbeb97170d87e35e9c, d1a3effae6897bfdd5c08dc47edf5ef6b08ce5ca, 52f6852a7dbe15254e97f84163c526c2257a40dc, 8270f6d02b3e8e478a2145096317531544fd1b6a, 11f141f47302423575c3d99b593f50d0c941735d, 113807d2a95497bec437c99e8f5d12fe066b8bae.
+- Remaining work: install/resolve workspace dependencies and validate typecheck/build, then connect the shell to the first grounded authentication journey.
+- Exact next action: validate the new apps/web package configuration against the workspace dependency model and TypeScript/Vite build requirements; fix only concrete validation failures, then record the exact runnable command and begin the Access journey (register/sign-in) UI.
