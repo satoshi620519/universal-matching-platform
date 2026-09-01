@@ -40,7 +40,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     secondAccountId: string,
   ): Promise<void> {
     const pair = [firstAccountId, secondAccountId].sort().join(':');
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${pair}))`;
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${pair}, 0))`;
   }
 
   private async lockIdempotency(
@@ -48,7 +48,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     actorAccountId: string,
     idempotencyKey: string,
   ): Promise<void> {
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${actorAccountId}:${idempotencyKey}`}))`;
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${actorAccountId}:${idempotencyKey}`}, 0))`;
   }
 
   private async resultFor(
