@@ -7,7 +7,7 @@ const API_BASE_URL = (import.meta as { env?: Record<string, string | undefined> 
 type AccessStatus = 'idle' | 'loading' | 'success' | 'error';
 
 type Feature = { icon: string; title: string; text: string };
-type Screen = 'home' | 'signin' | 'register';
+type Screen = 'home' | 'signin' | 'register' | 'verify';
 
 const features: Feature[] = [
   { icon: '✦', title: 'Meaningful connections', text: 'A thoughtful space designed around real conversations.' },
@@ -49,10 +49,28 @@ function AccessForm({ screen, onBack }: { screen: 'signin' | 'register'; onBack:
         {screen === 'register' && <label className="check"><input type="checkbox" required /> <span>I agree to the Terms and Privacy Policy.</span></label>}
         <button className="primary wide" type="submit" disabled={status === 'loading'}>{status === 'loading' ? 'Please wait…' : screen === 'signin' ? 'Sign in →' : 'Create account →'}</button>
         {status !== 'idle' && <div className={'accessMessage ' + status} role="status">{message}</div>}
+        {screen === 'register' && status === 'success' && <button className="textButton verifyLink" type="button" onClick={() => { window.location.hash='verify'; window.dispatchEvent(new HashChangeEvent('hashchange')); }}>Already have a token? Verify email →</button>}
       </form>
       <div className="accessHint">Secure access requests are sent to the configured platform API.</div>
     </section>
   </main>;
+}
+
+function VerifyEmail({ onBack }: { onBack: () => void }) {
+  const [token, setToken] = useState(''); const [status, setStatus] = useState<AccessStatus>('idle'); const [message, setMessage] = useState('');
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setStatus('loading'); setMessage('');
+    try {
+      const response = await fetch(API_BASE_URL + '/auth/email-verification', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({token}) });
+      if (!response.ok) throw new Error('Verification failed');
+      const body = await response.json() as { verified?: boolean };
+      if (!body.verified) throw new Error('This verification link is invalid or has expired.');
+      setStatus('success'); setMessage('Email verified successfully. You can now sign in.');
+    } catch (error) { setStatus('error'); setMessage(error instanceof Error ? error.message : 'Verification failed.'); }
+  }
+  return <main className="accessPage"><nav><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</button><button className="textButton" onClick={onBack}>← Back</button></nav>
+    <section className="accessCard"><div className="eyebrow">VERIFY YOUR EMAIL</div><h1>One last step.</h1><p>Paste the verification token from your email to activate your account.</p>
+    <form onSubmit={submit}><label>Verification token<input value={token} onChange={(e)=>setToken(e.target.value)} placeholder="Paste your secure token" required /></label><button className="primary wide" disabled={status==='loading'} type="submit">{status==='loading'?'Verifying…':'Verify email →'}</button>{status!=='idle'&&<div className={'accessMessage '+status} role="status">{message}</div>}</form></section></main>;
 }
 
 function Home({ setScreen }: { setScreen: (screen: Screen) => void }) {
@@ -75,7 +93,10 @@ function Home({ setScreen }: { setScreen: (screen: Screen) => void }) {
 }
 
 function App() {
- const [screen, setScreen] = useState<Screen>('home');
- return screen === 'home' ? <Home setScreen={setScreen} /> : <AccessForm screen={screen} onBack={() => setScreen('home')} />;
+ const [screen, setScreen] = useState<Screen>(() => window.location.hash === '#verify' ? 'verify' : 'home');
+ React.useEffect(() => { const sync=()=>setScreen(window.location.hash === '#verify' ? 'verify' : 'home'); window.addEventListener('hashchange',sync); return()=>window.removeEventListener('hashchange',sync); }, []);
+ if (screen === 'home') return <Home setScreen={setScreen} />;
+ if (screen === 'verify') return <VerifyEmail onBack={() => setScreen('home')} />;
+ return <AccessForm screen={screen} onBack={() => setScreen('home')} />;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
