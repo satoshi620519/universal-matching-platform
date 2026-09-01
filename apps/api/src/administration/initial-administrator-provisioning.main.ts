@@ -5,7 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module.js';
 import { InitialAdministratorProvisioningService } from './initial-administrator-provisioning.service.js';
 
-function parseAccountId(argv: readonly string[]): string {
+export function parseAccountId(argv: readonly string[]): string {
   const accountId = argv[2]?.trim();
   if (!accountId) {
     throw new Error('usage: pnpm --filter @universal/api administrator:provision <accountId>');
