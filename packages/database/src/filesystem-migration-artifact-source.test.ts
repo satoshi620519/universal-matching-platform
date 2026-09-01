@@ -22,6 +22,20 @@ describe('FilesystemMigrationArtifactSource', () => {
     ]);
   });
 
+  it('ignores nested directories while loading regular migration files', async () => {
+    const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
+    await mkdir(directory);
+    await mkdir(join(directory, 'archive'));
+    await writeFile(join(directory, '0001_first.sql'), 'SELECT 1;');
+    await writeFile(join(directory, 'archive', 'notes.txt'), 'not a migration');
+
+    const source = new FilesystemMigrationArtifactSource(directory);
+
+    await expect(source.load()).resolves.toEqual([
+      { version: 1, filename: '0001_first.sql', sql: 'SELECT 1;' },
+    ]);
+  });
+
   it('rejects regular files that violate the migration filename contract', async () => {
     const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
     await mkdir(directory);
