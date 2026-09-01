@@ -15,11 +15,12 @@ export class AdministrativeRoleManagementController {
   @Post('accounts/:accountId/assign')
   async assign(@Param('accountId') accountId: string, @Body() body: { role?: unknown; effectiveAt?: unknown; expiresAt?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
     if (!accountId.trim()) throw new BadRequestException('accountId is required');
+    const role = parseRole(body?.role);
     const effectiveAt = parseIsoDate(body?.effectiveAt, 'effectiveAt'); const expiresAt = parseIsoDate(body?.expiresAt, 'expiresAt');
     if (effectiveAt && expiresAt && expiresAt <= effectiveAt) throw new BadRequestException('expiresAt must be after effectiveAt');
     const correlationId = correlationHeader?.trim() || undefined;
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: correlationId ?? 'administration-role-assign' });
-    await this.roles.assign({ actorId: principal.accountId, accountId, role: parseRole(body?.role), ...(effectiveAt ? { effectiveAt } : {}), ...(expiresAt ? { expiresAt } : {}), ...(correlationId ? { correlationId } : {}) });
+    await this.roles.assign({ actorId: principal.accountId, accountId, role, ...(effectiveAt ? { effectiveAt } : {}), ...(expiresAt ? { expiresAt } : {}), ...(correlationId ? { correlationId } : {}) });
     return { assigned: true };
   }
 
