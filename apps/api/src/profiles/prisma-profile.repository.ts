@@ -7,6 +7,11 @@ import { DatabaseService } from '../database/database.service.js';
 export class PrismaProfileRepository implements ProfileRepository {
   constructor(private readonly database: DatabaseService) {}
 
+  async findByAccountId(accountId: string): Promise<Profile | null> {
+    const row = await this.database.profile.findFirst({ where: { accountId } });
+    return row ? this.map(row) : null;
+  }
+
   async findById(id: string): Promise<Profile | null> {
     const row = await this.database.profile.findUnique({ where: { id } });
     return row ? this.map(row) : null;
