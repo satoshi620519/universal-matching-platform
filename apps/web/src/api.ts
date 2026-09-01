@@ -57,3 +57,5 @@ export function listProfileCategories(){return apiRequest<{categories:ProfileCat
 export function createMyProfile(input:{categoryId:string;fields:Record<string,string|number|boolean|null>;geographicScope?:{kind:string;countryCode?:string;regionCode?:string}}){return apiRequest('/profiles/me',{method:'POST',body:JSON.stringify(input)});}
 export function discoverProfiles(params:{categoryId:string;scope?:string;countryCode?:string;limit?:number}){const q=new URLSearchParams({categoryId:params.categoryId,scope:params.scope??'global',limit:String(params.limit??20)});if(params.countryCode)q.set('countryCode',params.countryCode);return apiRequest<{items:DiscoveryProfile[];nextCursor?:string}>('/discovery?'+q);}
 export function decideMatch(input:{targetAccountId:string;decision:'like'|'pass';idempotencyKey:string}){return apiRequest('/matches/decision',{method:'POST',body:JSON.stringify(input)});}
+
+export function createConversationFromMutualMatch(targetAccountId:string){return apiRequest<Conversation>('/conversations/from-mutual-match',{method:'POST',body:JSON.stringify({targetAccountId})});}
