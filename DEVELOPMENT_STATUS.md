@@ -1058,12 +1058,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 3e26b7f46c0d9f9822e4bcd2a332b0b4d6ea5555, 2e0111c12b6e65118223ba66caabdca0d77fe164, f5abc905fb6d3ffea9305ff2a06560881f3aa676, 613eb7fac993998e31fa9b3b6ecefd93aa0fd855.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Configuration version repository boundary — IMPLEMENTED, CI PENDING
+- Resumed from the exact Milestone 2 checkpoint after the version/value persistence schema.
+- Added a narrow ConfigurationVersionRepository contract for draft creation/loading and current published-version lookup.
+- Added PrismaConfigurationVersionRepository using the typed physical schema without embedding configuration precedence or publication transitions.
+- Added focused repository tests for draft creation and status-constrained draft/published lookup.
+- Registered the repository through Nest DI.
+- Version lifecycle transitions remain deliberately outside the repository so immutable publication can own atomic state changes as an application transaction.
+- Commits: 94630c5c061f9da7fe479c841f456f7b1a393844, aad2e9e309b1a7e1c6e3be08f240d70596cdbbf1, 86d751b840486690505d319cd65896eb9489f529, 6d8273097853ae4460f2baf48d6df7e17f3e2d1f.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for migrations 0009/0010 and Prisma mappings; preserve exact failure details if validation exposes schema or migration drift.
-2. Add a narrow ConfigurationVersionRepository boundary for draft creation/loading and published-version lookup without embedding runtime precedence.
-3. Define immutable publication as an application transaction only after repository primitives exist; publication must atomically supersede the prior published version and publish the selected draft.
-4. Do not add rollback/reversion before publication history and transaction semantics are tested.
-5. Update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the configuration version repository and preceding migrations/Prisma mappings; preserve exact failure details if validation exposes generated-client or schema drift.
+2. Inspect the repository transaction conventions (DatabaseService/Prisma interactive transactions and migration adapter) and add a narrow publication transaction boundary.
+3. Implement immutable publication atomically: selected draft must transition to published while the prior current published version for the same scope transitions to superseded in one transaction.
+4. Add focused success/no-current-published and transaction-failure tests before exposing any publication transport.
+5. Keep runtime precedence in resolveConfigurationValue() and do not add rollback/reversion until immutable publication history is established.
+6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
