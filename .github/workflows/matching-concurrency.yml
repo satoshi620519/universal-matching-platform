@@ -11,6 +11,9 @@ on:
     paths:
       - 'apps/api/src/matching/**'
       - 'apps/api/prisma/**'
+      - 'packages/database/migrations/**'
+      - 'apps/api/package.json'
+      - 'pnpm-lock.yaml'
       - 'packages/domain/**'
       - 'apps/api/scripts/run-matching-concurrency-integration.mjs'
       - '.github/workflows/matching-concurrency.yml'
