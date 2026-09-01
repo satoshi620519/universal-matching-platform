@@ -10,7 +10,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       principalResolver as never,
       ({ list: vi.fn().mockResolvedValue([{ id:'cat-1' }]) } as never),
       ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }) } as never),
-      ({ findById: vi.fn() } as never),
+      ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
     );
@@ -20,6 +20,14 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const create=vi.spyOn((c as any).profiles,'create');
     await c.createMyProfile({ categoryId:'cat-1', fields:{ displayName:'Satoshi' } }, 'Bearer test');
     expect(create.mock.calls[0][0].accountId).toBe('viewer-1');
+  });
+
+  it('hydrates and updates only the authenticated account profile', async () => {
+    const c=controller(); const repo=(c as any).profileRepository; const update=vi.spyOn((c as any).profiles,'update');
+    await c.getMyProfile('Bearer test');
+    expect(repo.findByAccountId).toHaveBeenCalledWith('viewer-1');
+    await c.updateMyProfile({ fields:{ displayName:'Updated' } },'Bearer test');
+    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ fields:{displayName:'Updated'} }));
   });
 
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
