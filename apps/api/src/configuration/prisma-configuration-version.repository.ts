@@ -32,6 +32,47 @@ export class PrismaConfigurationVersionRepository extends ConfigurationVersionRe
     return row ? this.map(row) : undefined;
   }
 
+  async findByVersionNumber(scope: ConfigurationScope, versionNumber: bigint): Promise<ConfigurationVersionRecord | undefined> {
+    const row = await this.database.configurationVersion.findUnique({
+      where: { scope_versionNumber: { scope, versionNumber } },
+    });
+    return row ? this.map(row) : undefined;
+  }
+
+  async nextVersionNumber(scope: ConfigurationScope): Promise<bigint> {
+    const latest = await this.database.configurationVersion.findFirst({
+      where: { scope }, orderBy: { versionNumber: 'desc' }, select: { versionNumber: true },
+    });
+    return (latest?.versionNumber ?? 0n) + 1n;
+  }
+
+  async createDraftFromVersion(sourceVersionId: string, versionNumber: bigint): Promise<ConfigurationVersionRecord> {
+    return this.database.$transaction(async (tx) => {
+      const source = await tx.configurationVersion.findUnique({
+        where: { id: sourceVersionId }, include: { values: true },
+      });
+      if (!source || source.status === 'draft') throw new Error('configuration historical version not found');
+
+      const draft = await tx.configurationVersion.create({
+        data: { scope: source.scope, status: 'draft', versionNumber },
+      });
+      if (source.values.length) {
+        await tx.configurationValue.createMany({
+          data: source.values.map((value) => ({
+            configurationVersionId: draft.id,
+            settingKey: value.settingKey,
+            valueType: value.valueType,
+            booleanValue: value.booleanValue,
+            integerValue: value.integerValue,
+            decimalValue: value.decimalValue,
+            textValue: value.textValue,
+          })),
+        });
+      }
+      return this.map(draft);
+    });
+  }
+
   private map(row: {
     id: string; scope: string; status: string; versionNumber: bigint;
     createdAt: Date; publishedAt: Date | null; supersededAt: Date | null;
