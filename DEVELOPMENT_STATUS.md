@@ -1,3 +1,10 @@
+## Migration execution completion boundaries — NO-OP AND INPUT IMMUTABILITY COVERED
+- Continued from the milestone-pointer correction and exact migration orchestration checkpoint without reopening completed implementation slices.
+- Added regression coverage proving fully applied migration histories produce an empty result without invoking apply.
+- Added an explicit execution-level guard proving executePendingMigrations does not mutate caller-owned migration artifacts.
+- Commit: 5037cf6688571f6fbcb8b1dd742d992a83aac9b7.
+- CI state: additional regression coverage committed; latest Milestone 2 workflow validation evidence remains unavailable and green is not inferred.
+
 ## Status continuity correction — MILESTONE POINTER REALIGNED
 - The repository status header was stale and still identified Milestone 1 despite the authoritative checkpoint history showing Milestone 2 configuration implementation as the active completed slice.
 - Realigned CURRENT MILESTONE and CURRENT TASK to Milestone 2 validation/closure rather than allowing future sessions to resume from an obsolete Milestone 1 task.
