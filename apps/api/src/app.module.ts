@@ -89,11 +89,13 @@ import { HealthStatusService } from './health/health-status.service.js';
 import { ConfigurationVersionRepository } from './configuration/configuration-version.repository.js';
 import { PrismaConfigurationVersionRepository } from './configuration/prisma-configuration-version.repository.js';
 import { ConfigurationPublicationService } from './configuration/configuration-publication.service.js';
+import { ConfigurationSettingDefinitionProvider } from './configuration/configuration-setting-definition.provider.js';
+import { InMemoryConfigurationSettingDefinitionProvider } from './configuration/in-memory-configuration-setting-definition.provider.js';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
-  providers: [ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
@@ -133,6 +135,10 @@ import { ConfigurationPublicationService } from './configuration/configuration-p
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     OpaqueSessionAuthenticationAdapter,
+    {
+      provide: ConfigurationSettingDefinitionProvider,
+      useExisting: InMemoryConfigurationSettingDefinitionProvider,
+    },
     {
       provide: ConfigurationVersionRepository,
       useExisting: PrismaConfigurationVersionRepository,
