@@ -48,7 +48,7 @@ describe('ProfileService', () => {
     expect(categoryLookup).not.toHaveBeenCalled();
     expect(save).toHaveBeenCalledTimes(1);
   });
-});
+
 
   it('validates category field rules before persistence', async () => {
     const save = vi.fn();
@@ -60,3 +60,4 @@ describe('ProfileService', () => {
       .rejects.toThrow('too short');
     expect(save).not.toHaveBeenCalled();
   });
+});
