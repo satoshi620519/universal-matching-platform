@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service.js';
 
 export type NotificationRecord = {
@@ -19,7 +20,7 @@ export class PrismaNotificationRepository {
     kind: string;
     payload: unknown;
   }): Promise<NotificationRecord> {
-    return this.database.notification.create({ data: input });
+    return this.database.notification.create({ data: { ...input, payload: input.payload as Prisma.InputJsonValue } });
   }
 
   async listForAccount(accountId: string, limit = 50): Promise<NotificationRecord[]> {
