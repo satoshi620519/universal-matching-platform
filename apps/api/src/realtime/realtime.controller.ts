@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, MessageEvent, Sse } from '@nestjs/common';
+import { Controller, Headers, MessageEvent, Sse } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { SseRealtimePublisher } from './sse-realtime-publisher.js';
@@ -17,12 +17,20 @@ export class RealtimeController {
   ): Observable<MessageEvent> {
     const request = this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'realtime-events' });
     return new Observable<MessageEvent>((subscriber) => {
+      let subscription: { unsubscribe: () => void } | undefined;
+      let closed = false;
+
       void request.then((principal) => {
-        const subscription = this.publisher.streamFor(principal.accountId)
+        if (closed) return;
+        subscription = this.publisher.streamFor(principal.accountId)
           .pipe(map((event) => ({ id: event.eventId, type: event.eventType, data: event })))
           .subscribe(subscriber);
-        return () => subscription.unsubscribe();
       }).catch((error) => subscriber.error(error));
+
+      return () => {
+        closed = true;
+        subscription?.unsubscribe();
+      };
     });
   }
 }
