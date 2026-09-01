@@ -1,3 +1,10 @@
+## Repository validation continuation — CONCRETE DUPLICATE IMPORT FIX
+- Continued static repository review from the migration validation checkpoint without adding new product functionality.
+- Found a concrete duplicate type import in postgres-migration-executor.test.ts; this can trigger lint/type hygiene failures despite otherwise valid test behavior.
+- Consolidated runtime and type imports into one type-safe import declaration.
+- Commit: 741ba2aa75847c539c25bcd9841b75160b298dff.
+- CI state: source-level regression fix committed; workflow execution evidence remains unavailable and green is not inferred.
+
 ## Migration planner boundary continuation — APPLIED-STATE CONTRACT TESTED
 - Continued from the latest migration validation checkpoint without reopening completed configuration implementation.
 - Added focused planner tests proving unknown applied versions do not suppress valid pending migrations and applied-version set ordering cannot affect planning.
