@@ -886,12 +886,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 8beab90e120630e7b8960af2f28a0aaf2f8ea87e, 3a7b75af093b7c7d1ae1d6ec2e0b948df07110e0, 8ed340a6269c8a27c901f0a27c5921a784abf577, 23baf7ceb3c6516b2c1e48d67d39b14fcaebde32, 31bd22507fce7f0a6d358c0a0af56eb0cfecc5a3, ddfb73f5e4fc042aeb85b70035631bb07adc68b9.
 - CI state: workflow evidence for this slice and preceding outbox/provider-boundary commits remains unavailable through the current connector; do not infer green.
 
+
+## Administrative authorization read boundary — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and followed dependency order: role persistence now has an authoritative read path before any privileged endpoint or mutation surface is introduced.
+- Added RoleAssignmentRepository.findActiveForAccount(accountId, now) as the narrow authorization input boundary.
+- Added PrismaRoleAssignmentRepository filtering by effectiveAt, expiry and revocation in the authoritative query, with deterministic ordering.
+- Added AdministrativeRoleAccessService for explicit hasRole/hasAnyRole evaluation; authentication alone remains insufficient for privilege.
+- Added focused tests for positive/negative role checks and explicit multi-role checks.
+- Registered the repository and access service through Nest DI.
+- Added ADMINISTRATIVE_AUTHORIZATION_READ_BOUNDARY.md documenting the request principal → active assignment → explicit capability path and deferring mutation/endpoints until audit persistence exists.
+- Commits: b25d985532351e3179f75f1c9b26469d0e3b1059, 51951c23f06d595887b3122d74ac5b96f7094cf9, 9dad8a1064cd51b0d1e923c05ea224504e9f77dc, 9d27a478b39efdcfe22345d719da0e9d6f167b0b, c9c44bd74ef35fe5cb1111304404dd8f3e88c845, 0e271e3e26ad01207ff22ba17d8bf96251a37654.
+- CI state: workflow evidence for this slice and preceding administration/outbox commits remains unavailable through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the administration-role slice and preceding outbox/provider-boundary commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Implement the smallest role-assignment repository/read boundary needed for authoritative request-time role evaluation; do not infer administrative privilege from authentication alone.
-3. Trace the next audit persistence milestone separately from roles and preserve append-oriented, data-minimized semantics.
-4. Keep failed-email operations as application services until explicit role authorization and audit persistence can be composed.
-5. Keep real outbound email provider selection deferred, preserve stable messageId correlation and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the administrative role/read-boundary slice and preceding related commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Implement the smallest append-oriented audit persistence contract required before role assignment mutation or privileged failed-email operations are exposed.
+3. Keep role authorization read-only until audit persistence can record privilege changes and privileged actions coherently.
+4. Keep failed-email operations as application services; compose them with explicit role authorization and audit only after those dependencies exist.
+5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
