@@ -985,12 +985,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 75bbdfd62cc8b7398591ccfa59f10b95014793cd, 935cc81a5887edd79fe922db6b444dc7d1df9b93, 7f92eff2ee67a2efd509a028599c2dd55ba6bc90, 1a847b1e85c2a436aead28d3ef1eded57ecad70f.
 - CI state: implementation committed; validation evidence pending. Do not infer green until workflow results are inspected.
 
+
+## Administrative role management HTTP integration coverage — IMPLEMENTED, CI PENDING
+- Resumed from the exact administrative role-management transport checkpoint and added the next validation layer rather than expanding unrelated functionality.
+- Added real Nest/Fastify HTTP integration coverage around AdministrativeRoleManagementController and ApiErrorFilter.
+- Verified authentication failure returns 401 before role mutation invocation.
+- Verified application capability denial propagates as 403 with the request correlation ID and is never converted into a successful mutation response.
+- Verified HTTP success is emitted only after the authorized application mutation resolves and forwards the authenticated actor/target/role correctly.
+- Tests intentionally replace authentication and application collaborators while using the real HTTP controller/error boundary, avoiding a brittle duplicate of persistence and audit implementation already covered at lower layers.
+- Added ADMINISTRATIVE_ROLE_MANAGEMENT_HTTP_INTEGRATION.md documenting the validation boundary.
+- Commits: 1e7b3f72aeea91f2e7cbcf3082952bad03fc2bd5, cd31007b6c7bc9be0810c9e97a8bf8b3374d123b.
+- CI state: implementation committed; workflow validation for this latest slice is pending and must not be inferred from earlier green runs.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the administrative role-management transport commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Add focused application/HTTP integration coverage for capability denial propagation and successful audited role mutation through the real Nest/Fastify application only after the current unit/type validation state is known.
-3. Review bootstrap provisioning invocation ergonomics against repository deployment/command conventions without creating an unauthenticated runtime endpoint.
-4. Keep controllers thin: request principal → validated input → authorized application boundary.
-5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the latest administrative role-management HTTP integration commits and preceding transport commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Inspect repository conventions for explicit deployment/operator command entrypoints to make InitialAdministratorProvisioningService operational without introducing any unauthenticated HTTP bootstrap route.
+3. If no grounded command convention exists, document the service invocation contract and keep bootstrap transport deferred rather than inventing a runtime mechanism.
+4. Review administrative audit correlation propagation so future privileged transport operations can carry x-request-id into audit records without coupling audit persistence to HTTP.
+5. Keep controllers thin and avoid duplicating authorization, mutation, lifecycle or audit logic across transport tests.
+6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
