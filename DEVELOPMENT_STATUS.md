@@ -1140,13 +1140,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 1fe1476fb7acfec4ce2241ff3a77600389e617e0, ab75dbeb5fc2a4a8761f525c366dbe9ea41a4378, 3dc2c651d8138b28c790772953378635a82031f1, 472df2dfb74a7aa5a71cbbd3d905df1e72ad0060, 401ffe3b00f7ca73f97702af1ebf699b3b43314f.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Immutable configuration reversion — IMPLEMENTED, CI PENDING
+- Resumed from runtime effective projection and implemented reversion without mutating historical published/superseded versions.
+- Reversion selects a historical non-draft version, allocates the next version number, clones immutable typed values into a new draft inside a database transaction, then routes publication through the existing transactional publication service.
+- Historical source rows remain unchanged; reversion produces a new version identity and append-only history.
+- Added distinct reversion audit action with explicit actor/correlation context.
+- Missing/draft historical versions fail before clone/publication mutation.
+- Added focused service tests and CONFIGURATION_REVERSION.md; registered the service through Nest DI.
+- Commits: 8e46f4a59e8da4cba0fd3c12d708ac82c47b3ea8, 01902f2846d786bd41f5ef22ce9eb5a9fcffa2fe, f1fd6d9fc3db30acf0bbb94f568a58f12e18bfc3, 52eea846a74c8435a7ce49b5d1861d403e2a849a, 0434afdbc2d748811e39c887a359a36c93d4a782, ce8e631aad5aa05d2760ad9d83f1c5abf3e6c4b7.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for runtime effective configuration projection and preceding Milestone 2 slices; preserve exact failures rather than inferring green.
-2. Review immutable version history requirements and add a narrow reversion operation only if it can be represented as publishing a new immutable version derived from historical values rather than mutating superseded rows.
-3. Keep reversion actor/correlation explicit and audit it as a distinct privileged lifecycle action.
-4. Add focused transaction tests proving failed reversion cannot partially change current published state.
-5. Do not add transport/UI until the lifecycle and runtime boundaries are validated.
-6. Update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the complete Milestone 2 configuration lifecycle; preserve exact failures rather than inferring green.
+2. Review all configuration application boundaries for compile/type inconsistencies introduced across repository interfaces and services, fixing only concrete validation failures.
+3. If lifecycle validation is clean, close Milestone 2 with a concise architecture/status checkpoint rather than adding speculative transport/UI.
+4. Only then select the next milestone from the repository roadmap and resume from the recorded checkpoint.
+5. Update this checkpoint after validation/closure.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
