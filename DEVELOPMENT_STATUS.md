@@ -1709,3 +1709,60 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added controller-level tests for publish-after-commit and no-publication-on-null paths.
 - Commits: 2f9c0d78d27aa1fe24e8469e2851d1ce619778e1, 84b4bf34f8c60643974cfd60821160bddc2cff4c, 3a3869abe855af2be3b889ab94486c2c4eb7262d.
 - Next exact task: validate post-commit publication in CI, then choose and implement the minimum actual realtime transport adapter behind RealtimePublisher, with reconnect/reconciliation remaining HTTP-authoritative.
+
+
+# Sales-ready product completion program — ACTIVE
+
+## Product goal
+Transform the validated backend/domain platform into a product that a buyer can actually open, operate, brand, deploy, and sell/use. The completion criterion is not merely CI green: an operator must be able to open a real UI and demonstrate the product end-to-end.
+
+## Continuity protocol (mandatory for every work session)
+1. Read this section and the latest repository HEAD before selecting work.
+2. Work only on the earliest incomplete dependency-ordered item below.
+3. Do not recreate a completed boundary or repeat a previously resolved investigation without new evidence.
+4. After every concrete implementation or validation result, append: completed work, evidence, commit SHA, remaining work, and exact next action.
+5. If work stops unexpectedly, the next session must resume from the latest `Exact next action` rather than re-planning completed work.
+6. Never mark a product slice complete solely because code exists; record validation evidence separately.
+
+## Current verified baseline
+- Backend/API, database migrations, domain boundaries, messaging foundation, notifications, authorization boundaries, and matching concurrency gate have substantial implemented coverage.
+- Latest previously reported aggregate CI success: #1247 for commit c311b1b20c027c31381b0a1611004541df7305b0. Treat future validation independently if HEAD changes.
+- UI workspace placeholders exist at apps/web, apps/admin, and apps/mobile, but their package scripts currently provide validation only (no runnable user-facing dev server yet).
+
+## Delivery roadmap (dependency ordered)
+### Phase A — Runnable Web Product (ACTIVE, first priority)
+- [ ] Inventory existing API capabilities and define the minimum end-to-end user journeys.
+- [ ] Establish runnable web application foundation and development server.
+- [ ] Authentication/onboarding screens using existing grounded backend contracts.
+- [ ] Profile creation/editing UI.
+- [ ] Discovery/matching UI.
+- [ ] Conversation/message/notification UI.
+- [ ] Responsive usability and error/loading/empty states.
+- [ ] End-to-end local demo verification: browser-openable and manually operable.
+
+### Phase B — Operator/Admin Product
+- [ ] Runnable admin application foundation.
+- [ ] User, moderation, role, configuration and operational workflows using existing APIs.
+- [ ] Operator acceptance/demo checklist.
+
+### Phase C — Mobile Product
+- [ ] Select implementation approach based on existing contracts and reuse boundaries.
+- [ ] Implement core customer journeys and device verification.
+
+### Phase D — Production Readiness
+- [ ] Environment configuration and secrets documentation.
+- [ ] Production database and migration runbook.
+- [ ] Deployment topology and reproducible deployment configuration.
+- [ ] Observability, backups, failure recovery and security review.
+- [ ] Production smoke-test checklist.
+
+### Phase E — Sales Package
+- [ ] Buyer installation guide.
+- [ ] Branding/customization guide.
+- [ ] Administrator guide.
+- [ ] Demo data/demo flow.
+- [ ] License/package structure and release checklist.
+- [ ] Final acceptance: a buyer can install and operate the product from documentation.
+
+## Exact next action
+Inventory the existing API/controller routes and application capabilities, map them to the smallest Phase A browser user journeys, and record the resulting UI/API contract matrix here before introducing a frontend framework or screens. This prevents speculative UI work and establishes a resumable implementation sequence.
