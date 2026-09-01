@@ -1,3 +1,14 @@
+## Milestone 3 completion gate — PRIVACY-AWARE PROFILE PROJECTION
+- Continued from category-specific validation without reopening completed persistence, CRUD or schema-validation work.
+- Added domain-owned explicit field visibility policy with public/owner/privileged scopes and a viewer context.
+- Added projection that intentionally omits account identity from projected output and filters fields by explicit visibility.
+- Projection fails closed: fields absent from policy are not exposed.
+- Added unauthorized exposure regression tests covering other viewers, owners, privileged viewers and unknown-policy fields.
+- Commits: d1b5207b0e544652a0442a87387d401c3bf9a883, 3d2630037e12a1e58f96584c75501343f3a0c8aa, 3d385052548b5cc95468f1833982b1bb9d921c84.
+- Milestone 3 implementation completion gates are now represented in code: category-specific validation, unauthorized field exposure, and geographic scope validation. Formal green closure still requires executable test/CI evidence; do not claim green from code inspection alone.
+- Next exact task: inspect all M3 changes for migration/schema integration gaps, then record a single bounded completion assessment rather than reopening completed slices. If no gap exists, prepare Milestone 4 discovery/matching dependency baseline.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 completion gate progress — CATEGORY-SPECIFIC PROFILE VALIDATION
 - Continued from the category administration checkpoint without reopening completed CRUD or persistence work.
 - Added domain-owned ProfileFieldSchema rules supporting allowed-field checks, required fields, primitive type checks, string length limits and numeric bounds.
