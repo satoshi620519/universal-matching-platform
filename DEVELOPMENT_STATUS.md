@@ -1128,12 +1128,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 9bbbeaf70ff3234fff81d05e476f2bff46e178df, 1594be2c5a1d3ba2b65b6db9317995360bbfd095, 4b5c9e36a91ca8dd50b8518a44f7c9c98af3a7b4.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Runtime effective configuration projection — IMPLEMENTED, CI PENDING
+- Resumed from publication audit integration and added only the required published-value loading/projection path.
+- Added ConfigurationEffectiveValueRepository for loading values belonging exclusively to published versions.
+- Prisma projection converts the physical typed-column representation back into domain primitive values and fails closed if persisted rows violate the typed-column contract.
+- Added ConfigurationEffectiveValueService that delegates all scope precedence to the existing central resolveConfigurationValue() function; no second precedence engine was introduced.
+- Domain defaults remain authoritative when no published value exists.
+- Added focused tests for central precedence delegation and default fallback.
+- Registered effective value repository/service through Nest DI.
+- Commits: 1fe1476fb7acfec4ce2241ff3a77600389e617e0, ab75dbeb5fc2a4a8761f525c366dbe9ea41a4378, 3dc2c651d8138b28c790772953378635a82031f1, 472df2dfb74a7aa5a71cbbd3d905df1e72ad0060, 401ffe3b00f7ca73f97702af1ebf699b3b43314f.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for publication audit integration and preceding Milestone 2 configuration slices; preserve exact failures rather than inferring green.
-2. Add a narrow published-value loading/projection boundary for the current published version of a scope.
-3. Convert persisted typed columns back to the domain configuration value representation without duplicating runtime precedence.
-4. Feed candidate published values into the existing central resolveConfigurationValue() path; persistence projection must not invent a second precedence engine.
-5. Defer rollback/reversion until effective runtime projection is tested.
+1. Verify CI/workflow evidence for runtime effective configuration projection and preceding Milestone 2 slices; preserve exact failures rather than inferring green.
+2. Review immutable version history requirements and add a narrow reversion operation only if it can be represented as publishing a new immutable version derived from historical values rather than mutating superseded rows.
+3. Keep reversion actor/correlation explicit and audit it as a distinct privileged lifecycle action.
+4. Add focused transaction tests proving failed reversion cannot partially change current published state.
+5. Do not add transport/UI until the lifecycle and runtime boundaries are validated.
 6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
