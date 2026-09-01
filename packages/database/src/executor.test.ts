@@ -38,6 +38,28 @@ describe('executePendingMigrations', () => {
     expect(applyCalled).toBe(false);
   });
 
+  it('returns an immutable empty result when no migrations are pending', async () => {
+    const result = await executePendingMigrations(migrations, {
+      listAppliedVersions: async () => [1, 2],
+      apply: async () => {
+        throw new Error('apply must not be called');
+      },
+    });
+
+    expect(result).toEqual([]);
+  });
+
+  it('does not mutate the supplied migration artifacts', async () => {
+    const original = [...migrations];
+
+    await executePendingMigrations(migrations, {
+      listAppliedVersions: async () => [1],
+      apply: async () => undefined,
+    });
+
+    expect(migrations).toEqual(original);
+  });
+
   it('stops when a migration fails', async () => {
     const applied: number[] = [];
 
