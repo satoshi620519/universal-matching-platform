@@ -1,3 +1,9 @@
+## Status continuity correction — MILESTONE POINTER REALIGNED
+- The repository status header was stale and still identified Milestone 1 despite the authoritative checkpoint history showing Milestone 2 configuration implementation as the active completed slice.
+- Realigned CURRENT MILESTONE and CURRENT TASK to Milestone 2 validation/closure rather than allowing future sessions to resume from an obsolete Milestone 1 task.
+- Did not mark Milestone 2 green or formally complete: accessible workflow evidence for the latest configuration commit range remains unavailable.
+- This correction prevents duplicate work and preserves the dependency order: validate/close M2 first, then begin M3 Profiles, categories and geography.
+
 ## Migration orchestration boundary continuation — LOAD FAILURE STOPS EXECUTION
 - Continued from the exact migration executor failure-boundary checkpoint without reopening completed configuration or migration logic.
 - Added regression coverage proving a migration artifact source failure propagates before executor history reads or migration apply calls occur.
@@ -45,9 +51,9 @@
 # Development Status
 
 CURRENT PHASE: Phase 3 — Implementation
-CURRENT MILESTONE: Milestone 1 — Core API, database and identity
-CURRENT TASK: Validate the corrected application integration and align the new safety enforcement schema with the repository-owned SQL migration contract.
-STATUS: Migration execution and HTTP application integration gates are validated against real CI infrastructure. CI #426 is fully green.
+CURRENT MILESTONE: Milestone 2 — Configuration resolution
+CURRENT TASK: Obtain validation evidence for the completed Milestone 2 configuration lifecycle, then formally close the milestone before starting Milestone 3.
+STATUS: Milestone 1 foundational gates include prior validated CI evidence; Milestone 2 implementation is complete with expanded regression coverage, but current Milestone 2 CI evidence remains unavailable and must not be inferred.
 
 ## Continuation protocol — READ FIRST
 GitHub main is the persistent source of truth. Before every new work session:
