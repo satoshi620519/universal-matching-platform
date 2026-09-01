@@ -1,3 +1,11 @@
+## Milestone 4 evidence accessibility — INDEPENDENT CONCURRENCY WORKFLOW
+- Workflow-run lookup remained unavailable for the aggregate CI commit, so no execution result was inferred.
+- Added a dedicated Matching Concurrency Gate workflow with workflow_dispatch and path-trigger support, isolating the PostgreSQL reciprocal-transition evidence from unrelated CI stages.
+- Dedicated workflow provisions PostgreSQL, runs the isolated integration command, emits explicit MATCHING_CONCURRENCY_GATE=passed attestation, and uploads the evidence log with failure-on-missing behavior.
+- Commit: b1d0f7f34987d0ccf44db6cfd042b0d149d0a10a.
+- Next exact task: obtain execution output from a dispatch/push-triggered dedicated workflow; if GitHub run visibility remains unavailable through the integration, preserve the evidence-pending state and continue only with work that does not pretend M4 is verified.
+- CI state: independently runnable gate configured; actual run result still not observable/confirmed here.
+
 ## Milestone 4 evidence slice — EXPLICIT CI GATE ATTESTATION
 - Attempted to inspect workflow runs for the latest checkpoint commit; no runs were returned by the available GitHub integration, so no CI success was inferred.
 - Added explicit post-test verification in CI: requires a non-empty concurrency log and writes MATCHING_CONCURRENCY_GATE=passed to the GitHub step summary only after the integration command succeeds.
