@@ -15,6 +15,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
   async transition(input: MatchTransitionCommand): Promise<MatchTransitionResult> {
     const command = createMatchTransitionCommand(input);
     return this.database.$transaction(async (tx) => {
+      await this.lockPair(tx, command.actorAccountId, command.targetAccountId);
       const existing = await tx.matchInteraction.findUnique({
         where: { actorAccountId_idempotencyKey: { actorAccountId: command.actorAccountId, idempotencyKey: command.idempotencyKey } },
       });
@@ -35,6 +36,15 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
         throw error;
       }
     });
+  }
+
+  private async lockPair(
+    tx: { $executeRaw: (strings: TemplateStringsArray, ...values: unknown[]) => Promise<unknown> },
+    firstAccountId: string,
+    secondAccountId: string,
+  ): Promise<void> {
+    const pair = [firstAccountId, secondAccountId].sort().join(':');
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${pair}))`;
   }
 
   private async resultFor(
