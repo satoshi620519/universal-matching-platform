@@ -1,3 +1,13 @@
+## Milestone 4 state slice — IDEMPOTENT MUTUAL MATCH TRANSITION CONTRACT
+- Continued from strategy decision semantics and defined interaction/state contracts before persistence.
+- Added directed like/pass interaction command requiring distinct actor/target and a non-empty idempotency key.
+- Added MatchTransitionRepository port and explicit transition result carrying pending/matched state, mutual flag and replay marker.
+- Added pure reciprocal state resolution: only like+like becomes matched; all non-mutual/pass paths remain pending.
+- Added regression tests for self-transition rejection, idempotency-key requirement and reciprocal mutual-match semantics.
+- Commits: 55f3c58ef31c7645aa602f14454bf41a2edf7c14, 06fe9878162744d10a4d178186adab9f292c500a, 023ad553d1d2155193e9aa45b3eed9ed81660b47, a1ae2a35bd23b208dd300f185f47fdbd4b843950, a94340c504abd1f779b835dfab223da623fe4fe2.
+- Next exact task: implement transactional Prisma transition persistence with unique idempotency boundaries and concurrent reciprocal-like protection; duplicate/concurrent tests must drive the adapter design.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 decision slice — INITIAL MATCH STRATEGY CONTRACT
 - Continued from explicit discovery exclusions and did not create match persistence before decision semantics were defined.
 - Added domain MatchStrategy port with named strategy key and explicit MatchDecision union (eligible/no_match).
