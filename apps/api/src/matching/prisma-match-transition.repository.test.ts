@@ -15,7 +15,8 @@ function databaseFor(sequence: {
     if (sequence.create instanceof Error) throw sequence.create;
     return sequence.create ?? { decision: 'like' };
   });
-  const tx = { matchInteraction: { findUnique, create } };
+  const $executeRaw = vi.fn().mockResolvedValue(undefined);
+  const tx = { matchInteraction: { findUnique, create }, $executeRaw };
   return {
     $transaction: vi.fn(async (fn: (value: typeof tx) => unknown) => fn(tx)),
     tx,
@@ -24,6 +25,13 @@ function databaseFor(sequence: {
 
 describe('PrismaMatchTransitionRepository executable transition scenarios', () => {
   const command = { actorAccountId: 'a1', targetAccountId: 'a2', decision: 'like' as const, idempotencyKey: 'k1' };
+
+  it('acquires a transaction-scoped pair lock before reading transition state', async () => {
+    const database = databaseFor({ create: { decision: 'like' }, reciprocal: null });
+    await new PrismaMatchTransitionRepository(database as never).transition(command);
+    expect(database.tx.$executeRaw).toHaveBeenCalledTimes(1);
+    expect(database.tx.$executeRaw.mock.calls[0].join('')).toContain('pg_advisory_xact_lock');
+  });
 
   it('replays an existing idempotency key without creating a duplicate', async () => {
     const database = databaseFor({ byIdempotency: { decision: 'like' }, reciprocal: null });
