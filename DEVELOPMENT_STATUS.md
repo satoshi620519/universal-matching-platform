@@ -1645,3 +1645,7 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Deliberately deferred message payloads, read state, typing, realtime transport and notification fan-out until conversation access/persistence is validated.
 - Commits: f3fc1f56e13b77913552832ca55da7cc77621fd5, 8e15de9c057835c3dfa326c38a06f9a51e68f615, 022db61816cc93f8e757e4405cd751971f85083b, 3620fd042f15d5f86014baa1a37c955b956b6709, d491c0c0f2bdb968819b5ab0b4c526501084dbfd.
 - Next exact task: add a narrow conversation repository/access boundary and validate it before adding message delivery concerns.
+
+- Continued M5 with a narrow participant-scoped conversation repository and focused repository tests (commits 35c96eb1793c939d3e78fb272397b7706d8dd9f0 and 09ef7e58a474496e49223d3daf2fcefd3121f96f).
+- Access is resolved through the conversation_participants composite identity rather than exposing direct conversation lookup by arbitrary account.
+- Next exact task: validate the repository boundary in CI, then add message persistence only after participant access is confirmed.
