@@ -72,3 +72,5 @@ export * from './data-lifecycle-governance-contract.js';
 export * from './deployment-installation-contract.js';
 
 export * from './deployment-readiness-contract.js';
+
+export * from './configuration-resolution.js';
