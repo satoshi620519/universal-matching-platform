@@ -9,15 +9,15 @@ import { ConfigurationEffectiveValueRepository } from './configuration-effective
 export class ConfigurationEffectiveValueService {
   constructor(private readonly values: ConfigurationEffectiveValueRepository) {}
 
-  async resolve<T>(
-    definition: ConfigurationSettingDefinition<T>,
-  ): Promise<T> {
+  async resolve(
+    definition: ConfigurationSettingDefinition,
+  ): Promise<boolean | bigint | number | string> {
     const published = await this.values.findPublishedValues(definition.key);
     return resolveConfigurationValue(
       definition,
       published.map((value) => ({
         scope: value.scope,
-        value: value.value as T,
+        value: value.value as boolean | bigint | number | string,
       })),
     );
   }
