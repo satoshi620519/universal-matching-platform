@@ -4,6 +4,7 @@ import { PrismaConversationRepository } from './prisma-conversation.repository.j
 import { PrismaMessageRepository } from './prisma-message.repository.js';
 import { PrismaNotificationRepository } from './prisma-notification.repository.js';
 import { MessageRealtimePublicationService } from './message-realtime-publication.service.js';
+import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
 
 @Controller('conversations')
 export class MessagingController {
@@ -13,6 +14,7 @@ export class MessagingController {
     private readonly messages: PrismaMessageRepository,
     private readonly notifications: PrismaNotificationRepository,
     private readonly messageRealtime: MessageRealtimePublicationService,
+    private readonly matches: PrismaMatchTransitionRepository,
   ) {}
 
   @Post()
@@ -24,6 +26,20 @@ export class MessagingController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'conversation-create' });
     const participantAccountIds = [...(body.participantAccountIds ?? []), principal.accountId];
     return this.conversations.create(participantAccountIds);
+  }
+
+  @Post('from-mutual-match')
+  async createConversationFromMutualMatch(
+    @Body() body: { targetAccountId?: string },
+    @Headers('authorization') authorization?: string,
+    @Headers('x-request-id') requestId?: string,
+  ) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'conversation-mutual-match' });
+    const targetAccountId = body.targetAccountId?.trim() ?? '';
+    if (!targetAccountId || !(await this.matches.isMutualMatch(principal.accountId, targetAccountId))) {
+      return { statusCode: HttpStatus.NOT_FOUND };
+    }
+    return this.conversations.create([principal.accountId, targetAccountId]);
   }
 
   @Get(':conversationId/messages')
