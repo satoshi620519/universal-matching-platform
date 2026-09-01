@@ -1,6 +1,6 @@
 CREATE TABLE audit_records (
   audit_record_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  actor_account_id UUID NOT NULL REFERENCES accounts(account_id),
+  actor_account_id UUID NOT NULL REFERENCES accounts(id),
   area TEXT NOT NULL,
   action TEXT NOT NULL,
   target_id TEXT NULL,
