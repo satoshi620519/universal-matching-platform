@@ -30,10 +30,20 @@ export class EmailOutboxDispatchService {
       return true;
     } catch (error) {
       const failure = classifyEmailDeliveryFailure(error);
+      const failureError = failure.kind + ': ' + failure.message;
+
+      if (failure.kind === 'permanent') {
+        await this.outbox.markFailed(message.id, {
+          failedAt: new Date(),
+          error: failureError,
+        });
+        return false;
+      }
+
       const delayMs = Math.min(60_000 * 2 ** Math.min(message.attempts, 6), 60 * 60_000);
       await this.outbox.reschedule(message.id, {
         availableAt: new Date(Date.now() + delayMs),
-        error: failure.kind + ': ' + failure.message,
+        error: failureError,
       });
       return false;
     }
