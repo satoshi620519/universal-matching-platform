@@ -42,4 +42,39 @@ export class PrismaMessageRepository {
       });
     });
   }
+
+  async listForParticipant(input: {
+    conversationId: string;
+    accountId: string;
+    limit?: number;
+    before?: { createdAt: Date; id: string };
+  }): Promise<MessageRecord[] | null> {
+    const participant = await this.database.conversationParticipant.findUnique({
+      where: {
+        conversationId_accountId: {
+          conversationId: input.conversationId,
+          accountId: input.accountId,
+        },
+      },
+      select: { accountId: true },
+    });
+    if (!participant) return null;
+
+    const limit = Math.min(Math.max(input.limit ?? 50, 1), 100);
+    return this.database.message.findMany({
+      where: {
+        conversationId: input.conversationId,
+        ...(input.before
+          ? {
+              OR: [
+                { createdAt: { lt: input.before.createdAt } },
+                { createdAt: input.before.createdAt, id: { lt: input.before.id } },
+              ],
+            }
+          : {}),
+      },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      take: limit,
+    });
+  }
 }
