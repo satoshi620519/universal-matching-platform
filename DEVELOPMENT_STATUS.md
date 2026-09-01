@@ -1891,3 +1891,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: exact backend event contract inspection complete; runtime browser/build evidence remains pending an executable workspace environment.
 - Remaining work: inspect existing profile/discovery/matching modules to determine the next user-visible product journey; messaging can create conversations only by account ID with currently exposed APIs, so a grounded discovery/connection flow is required for consumer usability.
 - Exact next action: inventory profile, discovery and matching controllers/routes and identify the first complete exposed journey for finding/connecting accounts. Implement only an API-backed flow; do not seed fake profiles or duplicate unavailable backend functionality.
+
+
+## Phase A discovery/matching inventory — NO PUBLIC USER JOURNEY ENDPOINT YET
+- Executed the recorded inventory step without repeating realtime or messaging work.
+- Found substantial domain/service/repository infrastructure for profiles, discovery eligibility, geographic scope, categories and match state transitions.
+- Verified ProfileService and DiscoveryService are application services, but the current API source inventory exposes no profile/discovery/matching HTTP controllers/routes that the browser can call safely.
+- Matching directory currently contains persistence/repository implementation and tests rather than a public HTTP interaction controller.
+- Decision: do not create a fake discovery UI backed by seeded profiles or bypass service authorization. The consumer journey cannot honestly be completed from the current public API surface yet.
+- Completed work: exact capability inventory and dependency boundary identification; no duplicate implementation created.
+- Remaining work: expose the minimal authenticated API surface required by the already-existing services: profile category lookup, own-profile create/update, discovery query with server-owned projection policy, and explicit match/interaction transition endpoint where domain rules authorize it.
+- Exact next action: inspect existing domain contracts (profile/category/discovery query/projection and match transition) and app module wiring, then add the smallest controller/transport layer around existing services without duplicating domain logic; add tests for authorization and projection boundaries before wiring the discovery UI.
