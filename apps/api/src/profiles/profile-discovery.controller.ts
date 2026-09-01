@@ -2,6 +2,7 @@ import { Body, Controller, Get, Headers, Patch, Post, Query } from '@nestjs/comm
 import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CategoryService } from './category.service.js';
+import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 import { ProfileService } from './profile.service.js';
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
@@ -20,6 +21,7 @@ export class ProfileDiscoveryController {
   constructor(
     private readonly principalResolver: RequestPrincipalResolver,
     private readonly categories: CategoryService,
+    private readonly schemas: CategoryFieldSchemaService,
     private readonly profiles: ProfileService,
     private readonly profileRepository: PrismaProfileRepository,
     private readonly discovery: DiscoveryService,
@@ -27,12 +29,12 @@ export class ProfileDiscoveryController {
   ) {}
 
   @Get('profile-categories')
-  async listCategories() { return { categories: await this.categories.list() }; }
+  async listCategories() { return { categories: (await this.categories.list()).map(category => ({ ...category, fieldSchema: this.schemas.schemaFor(category.key) })) }; }
 
   @Post('profiles/me')
   async createMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string } }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-create' });
-    return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: DEFAULT_FIELD_SCHEMA, geographicScope: this.scope(body.geographicScope) });
+    return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope) });
   }
 
   @Get('profiles/me')
@@ -46,7 +48,7 @@ export class ProfileDiscoveryController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new Error('profile not found');
-    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? DEFAULT_FIELD_SCHEMA : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined });
+    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined });
   }
 
   @Get('discovery')
@@ -60,6 +62,12 @@ export class ProfileDiscoveryController {
   async decide(@Body() body: { targetAccountId?: string; decision?: 'like' | 'pass'; idempotencyKey?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-decision' });
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
+  }
+
+  private async schemaFor(categoryId: string): Promise<ProfileFieldSchema> {
+    const category = (await this.categories.list()).find(item => item.id === categoryId);
+    if (!category) return DEFAULT_FIELD_SCHEMA;
+    return this.schemas.schemaFor(category.key);
   }
 
   private scope(input?: { kind?: string; countryCode?: string; regionCode?: string }) {
