@@ -1,4 +1,4 @@
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import {
   FastifyAdapter,
@@ -13,6 +13,10 @@ import { AdministrativeRoleManagementController } from './administrative-role-ma
 import { AdministrativeRoleManagementService } from './administrative-role-management.service.js';
 
 describe('Administrative role management HTTP boundary', () => {
+  @Controller('administration/roles')
+  class RoleManagementHttpTestController extends AdministrativeRoleManagementController {
+    @Body() override assign: AdministrativeRoleManagementController['assign'];
+  }
   async function createApp(input?: {
     readonly requireAuthenticated?: ReturnType<typeof vi.fn>;
     readonly assign?: ReturnType<typeof vi.fn>;
