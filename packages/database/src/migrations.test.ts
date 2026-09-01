@@ -16,6 +16,12 @@ describe('parseMigrationFilename', () => {
     expect(() => parseMigrationFilename('create_accounts.sql')).toThrow();
     expect(() => parseMigrationFilename('0000_create_accounts.sql')).toThrow();
   });
+
+  it('rejects filenames outside the committed migration naming contract', () => {
+    expect(() => parseMigrationFilename('0001_Create_Accounts.sql')).toThrow();
+    expect(() => parseMigrationFilename('0001_create_accounts.SQL')).toThrow();
+    expect(() => parseMigrationFilename('0001__create_accounts.sql')).toThrow();
+  });
 });
 
 describe('repository migration sequence', () => {
@@ -67,6 +73,12 @@ describe('orderMigrationFilenames', () => {
       ]),
     ).toThrow('Duplicate migration version: 1');
   });
+
+  it('does not mutate the caller filename array', () => {
+    const filenames = ['0002_add_status.sql', '0001_create_accounts.sql'];
+    orderMigrationFilenames(filenames);
+    expect(filenames).toEqual(['0002_add_status.sql', '0001_create_accounts.sql']);
+  });
 });
 
 describe('planMigrations', () => {
@@ -86,6 +98,12 @@ describe('planMigrations', () => {
     expect(planMigrations(migrations, new Set([1, 2, 3]))).toEqual({
       pending: [],
     });
+  });
+
+  it('does not mutate migration artifacts while planning', () => {
+    const original = [...migrations];
+    planMigrations(migrations, new Set([1]));
+    expect(migrations).toEqual(original);
   });
 
   it('rejects duplicate versions', () => {
