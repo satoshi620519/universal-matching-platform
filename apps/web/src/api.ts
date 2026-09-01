@@ -46,3 +46,7 @@ export function getAuthenticatedAccount() {
 export function createConversation(participantAccountIds: string[]) { return apiRequest<Conversation>('/conversations',{method:'POST',body:JSON.stringify({participantAccountIds})}); }
 export function listMessages(conversationId:string) { return apiRequest<{messages:Message[]}>(\`/conversations/\${conversationId}/messages\`); }
 export function sendMessage(conversationId:string, body:string) { return apiRequest<Message>(\`/conversations/\${conversationId}/messages\`,{method:'POST',body:JSON.stringify({body})}); }
+
+export type RealtimeEvent = { eventId:string; eventType:string; schemaVersion:number; occurredAt:string; resource:{type:string;id:string}; payload:{conversationId?:string;messageId?:string;senderAccountId?:string} };
+export function realtimeEventsUrl() { const credential=sessionStorage.getItem('connect.credential'); if(!credential) return null; return API_BASE_URL + '/realtime/events'; }
+export function realtimeCredential() { return sessionStorage.getItem('connect.credential'); }
