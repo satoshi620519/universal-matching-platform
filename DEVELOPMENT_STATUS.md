@@ -1766,3 +1766,20 @@ Transform the validated backend/domain platform into a product that a buyer can 
 
 ## Exact next action
 Inventory the existing API/controller routes and application capabilities, map them to the smallest Phase A browser user journeys, and record the resulting UI/API contract matrix here before introducing a frontend framework or screens. This prevents speculative UI work and establishes a resumable implementation sequence.
+
+
+## Phase A discovery checkpoint — API/UI contract inventory COMPLETE
+- Resumed from the recorded Exact next action and did not recreate completed backend work.
+- Enumerated the actual controller surface directly from the repository tree instead of inferring product capabilities from roadmap prose.
+- Grounded browser-facing contracts currently available include: password registration, sign-in, email verification, sign-out, authenticated account lookup/deletion request, account activation/lookup, authenticated capability evaluation, conversations, participant-scoped message reads/writes, account-scoped notifications/read acknowledgement, and authenticated SSE realtime events.
+- Minimum Phase A browser journeys mapped to grounded contracts:
+  1. Access: Register → verify email → sign in → authenticated session/account.
+  2. Account: View authenticated account → account state actions available from existing API.
+  3. Messaging: Create/select conversation → list messages → send message → reconcile notification/realtime event.
+  4. Safety/session: Sign out and account deletion request.
+- Important gap recorded: current exposed controller inventory does not yet provide a grounded profile-edit or discovery/matching browse HTTP surface suitable for speculative UI implementation. Those screens must not be fabricated against invented endpoints; Phase A starts with the available end-to-end flows and later adds missing backend boundaries only when required by the validated product journey.
+- Completed work: API/UI contract inventory and dependency-ordered minimum journey definition.
+- Evidence: repository controller inventory at current HEAD (auth, accounts, capabilities, messaging, realtime, verification, administration, health).
+- Commit: pending this checkpoint update.
+- Remaining Phase A work: establish the runnable web application foundation without inventing backend contracts.
+- Exact next action: inspect the existing apps/web workspace and shared frontend dependencies, then implement the smallest runnable development server/application shell that can host the grounded Access and Messaging journeys. Record framework choice, commands, files changed, validation command and next action here.
