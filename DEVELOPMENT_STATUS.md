@@ -911,11 +911,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 1cef289046e743f60f3738fac3e401d80ec55a81, bfd7e082d729d6e4d96838f78164eaee1f1c3484, fc5ce534ba79e3acbf920799dcda4bd0c7901d49, 10640606c7b9a78b6761d225e81f815ef861e444, 219bff07e3e3d1d25e484667d8d26e4d14ddfe5e, 78b3f8c1e795433f90cf54d9c4d47a8735c6188b, d6216cf11facc199104cdb0d9af837e8e980baad, 294cec83f84abacd9851b737f45c2eeed5d43744, 31846533ca31a324c243177384ca88a4f2f21939.
 - CI state: this audit slice is not yet validated through CI evidence available to the current connector; do not infer green.
 
+
+## Audited administrative role mutation boundary — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and used the completed role read + audit persistence dependencies without reopening unrelated work.
+- Extended RoleAssignmentRepository with explicit assign() and lifecycle-qualified revokeActive() operations.
+- Prisma assignment persists assigning authority and upserts only stable role vocabulary entries; no role value is taken from request-time privilege claims.
+- Revocation updates only currently active assignments at the mutation time and returns the number of transitioned records.
+- Added RoleAssignmentMutationService requiring explicit actor identity, validating effective/expiry windows and appending data-minimized audit records after successful mutation.
+- No revocation audit record is written when no active assignment changed, preventing false-positive operational history.
+- Added focused tests for assigning authority + audit, no-op revocation and invalid time windows.
+- Registered mutation service through Nest DI and documented AUDITED_ROLE_ASSIGNMENT_MUTATION_BOUNDARY.md.
+- Commits: 8ede382b3e2147229394dd50aa6d3b41680d9dc2, 15d6146ff73bc0afcea2808d789af40dcba5bcac, c53a1c7d32b130c471fc4072a3ba1e5bc9948542, 15c193dd8b53c2ee65dff454dd2c4eca116069ba, f8022ea71068af9f4be27f82637a3a15660c03bb, bce0c1b795d11e7db159deab376c9a7ca5ca8181.
+- CI state: this mutation slice remains unverified by CI evidence available through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the audit persistence slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Implement the smallest audited role-assignment mutation boundary (assign/revoke) using explicit actor identity, persisted active-role semantics and append-only audit records.
-3. Do not expose public administrative HTTP endpoints until the mutation boundary has authorization composition and audit failure semantics defined.
-4. After role mutation is coherent, compose explicit role authorization + audit around the existing failed-email review/requeue application service.
+1. Verify CI/workflow evidence for the audited role mutation slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Implement the smallest explicit administrative capability policy that authorizes which persisted active roles may perform role assignment/revocation, without introducing a public endpoint yet.
+3. Compose that capability policy with request principal identity, RoleAssignmentMutationService and audit persistence; define failure ordering before transport.
+4. After administrative mutation authorization is coherent, integrate the same authorization + audit composition around failed-email requeue operations.
 5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
