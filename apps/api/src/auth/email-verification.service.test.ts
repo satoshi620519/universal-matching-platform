@@ -27,7 +27,7 @@ describe('EmailVerificationService', () => {
     const consumeIfUsable = vi.fn().mockResolvedValue({ accountId: 'account-1' });
     const updateStatus = vi.fn().mockResolvedValue({ id: 'account-1' });
     const service = new EmailVerificationService(
-      { findById: vi.fn().mockResolvedValue({ id: 'account-1', status: 'pending' }), updateStatus } as any,
+      { findById: vi.fn().mockResolvedValue({ id: 'account-1', status: 'pending-onboarding' }), updateStatus } as any,
       { consumeIfUsable } as any,
     );
 
