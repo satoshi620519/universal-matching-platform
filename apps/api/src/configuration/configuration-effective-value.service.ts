@@ -9,7 +9,6 @@ import { ConfigurationEffectiveValueRepository } from './configuration-effective
 export class ConfigurationEffectiveValueService {
   constructor(private readonly values: ConfigurationEffectiveValueRepository) {}
 
-  async resolve(
   async resolve<T>(
     definition: ResolutionConfigurationSettingDefinition<T>,
   ): Promise<T> {
