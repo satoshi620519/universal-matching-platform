@@ -9,11 +9,13 @@ const prisma = url ? new PrismaClient({ datasources: { db: { url } } }) : undefi
 integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   const accountA = '11111111-1111-4111-8111-111111111111';
   const accountB = '22222222-2222-4222-8222-222222222222';
+  const accountC = '33333333-3333-4333-8333-333333333333';
 
   beforeEach(async () => {
     await prisma!.$executeRawUnsafe('TRUNCATE TABLE "match_interactions" CASCADE');
     await prisma!.account.upsert({ where: { id: accountA }, update: {}, create: { id: accountA, status: 'active' } });
     await prisma!.account.upsert({ where: { id: accountB }, update: {}, create: { id: accountB, status: 'active' } });
+    await prisma!.account.upsert({ where: { id: accountC }, update: {}, create: { id: accountC, status: 'active' } });
   });
 
   afterAll(async () => {
@@ -30,6 +32,18 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     expect(fulfilled.filter((result) => !result.value.replayed)).toHaveLength(1);
     const count = await prisma!.matchInteraction.count({ where: { actorAccountId: command.actorAccountId, targetAccountId: command.targetAccountId } });
     expect(count).toBe(1);
+  });
+
+  it('serializes the same actor idempotency key even when conflicting targets race', async () => {
+    const repository = new PrismaMatchTransitionRepository(prisma as never);
+    const first = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'shared-key' };
+    const conflicting = { ...first, targetAccountId: accountC };
+    const results = await Promise.allSettled([repository.transition(first), repository.transition(conflicting)]);
+    expect(results.every((result) => result.status === 'fulfilled')).toBe(true);
+    const fulfilled = results.filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof repository.transition>>> => result.status === 'fulfilled');
+    expect(fulfilled.filter((result) => result.value.replayed)).toHaveLength(1);
+    expect(fulfilled.filter((result) => !result.value.replayed)).toHaveLength(1);
+    expect(await prisma!.matchInteraction.count({ where: { actorAccountId: accountA, idempotencyKey: 'shared-key' } })).toBe(1);
   });
 
   it('serializes reciprocal likes into one pending then one matched transition', async () => {
