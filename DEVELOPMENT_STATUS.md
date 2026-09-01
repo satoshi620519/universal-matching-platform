@@ -874,12 +874,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 708ac14023c9a96d39fcb9ac225b6f181a3c0fcc, 2b051d253d7d049dfe1419fc47d2462321bab12e.
 - CI state: recent outbox/process/identity/terminal/review/provider-boundary commits remain unverified through the current connector; do not infer green.
 
+
+## Administration role foundation — IMPLEMENTED, CI evidence pending
+- Resumed from the persistent exact-next-action checkpoint and did not expose failed-email operations publicly before an administration foundation exists.
+- Traced DOMAIN_MODEL.md and DATA_MODEL_DRAFT.md: Administration/Audit owns roles, operational scopes and append-oriented audit records; role assignments require effective periods and assigning authority.
+- Added provider-neutral AdministrativeRoleKey vocabulary (moderator, administrator, auditor) and deterministic active-assignment lifecycle evaluation.
+- Added focused domain tests covering stable keys plus effective, expired and revoked assignments.
+- Added ordered migration 0007_create_administration_roles.sql with roles and role_assignments, effective-period constraints, assigning-authority reference and authorization-oriented indexes.
+- Added Prisma mappings and Account relations for role assignments without introducing an HTTP administration surface.
+- Extended the repository-owned migration sequence regression guard through version 0007.
+- Commits: 8beab90e120630e7b8960af2f28a0aaf2f8ea87e, 3a7b75af093b7c7d1ae1d6ec2e0b948df07110e0, 8ed340a6269c8a27c901f0a27c5921a784abf577, 23baf7ceb3c6516b2c1e48d67d39b14fcaebde32, 31bd22507fce7f0a6d358c0a0af56eb0cfecc5a3, ddfb73f5e4fc042aeb85b70035631bb07adc68b9.
+- CI state: workflow evidence for this slice and preceding outbox/provider-boundary commits remains unavailable through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for recent outbox/process/identity/terminal/review/provider-boundary commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Continue the repository's broader administration foundation rather than exposing failed-email operations: trace the next grounded role/permission and audit persistence milestones and implement only the smallest dependency-ordered slice.
-3. Keep real outbound email provider selection deferred until deployment requirements explicitly select a vendor; LoggingOutboundEmailSender remains the non-network default.
-4. Preserve stable messageId correlation across retries, terminal transitions and manual requeue, and keep raw verification tokens out of durable outbox records.
-5. Keep migration execution and standalone worker topology explicit, then update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the administration-role slice and preceding outbox/provider-boundary commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Implement the smallest role-assignment repository/read boundary needed for authoritative request-time role evaluation; do not infer administrative privilege from authentication alone.
+3. Trace the next audit persistence milestone separately from roles and preserve append-oriented, data-minimized semantics.
+4. Keep failed-email operations as application services until explicit role authorization and audit persistence can be composed.
+5. Keep real outbound email provider selection deferred, preserve stable messageId correlation and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
