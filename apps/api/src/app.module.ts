@@ -39,6 +39,9 @@ import { PrismaEmailOutboxRepository } from './auth/prisma-email-outbox.reposito
 import { EmailOutboxDispatchService } from './auth/email-outbox-dispatch.service.js';
 import { EmailOutboxWorker } from './auth/email-outbox-worker.js';
 import { EmailOutboxProcessService } from './auth/email-outbox-process.service.js';
+import { FailedEmailOutboxRepository } from './auth/failed-email-outbox.repository.js';
+import { PrismaFailedEmailOutboxRepository } from './auth/prisma-failed-email-outbox.repository.js';
+import { FailedEmailOutboxReviewService } from './auth/failed-email-outbox-review.service.js';
 import { OutboundEmailSender } from './auth/outbound-email-sender.js';
 import { LoggingOutboundEmailSender } from './auth/logging-outbound-email-sender.js';
 import { EmailVerificationUrlPolicy } from './auth/email-verification-url-policy.js';
@@ -93,7 +96,9 @@ import { HealthStatusService } from './health/health-status.service.js';
     EmailOutboxDispatchService,
     EmailOutboxWorker,
     EmailOutboxProcessService,
+    FailedEmailOutboxReviewService,
     PrismaEmailOutboxRepository,
+    PrismaFailedEmailOutboxRepository,
     LoggingOutboundEmailSender,
     EnvironmentEmailVerificationUrlPolicy,
     PrismaEmailVerificationTokenRepository,
@@ -127,6 +132,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     {
       provide: AuthenticationIdentityRepository,
       useExisting: PrismaAuthenticationIdentityRepository,
+    },
+    {
+      provide: FailedEmailOutboxRepository,
+      useExisting: PrismaFailedEmailOutboxRepository,
     },
     {
       provide: EmailOutboxRepository,
