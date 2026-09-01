@@ -29,7 +29,9 @@ export class PostgresMigrationExecutor implements MigrationExecutor {
 
   async apply(migration: MigrationArtifact): Promise<void> {
     await this.client.transaction(async (tx) => {
-      await tx.query(migration.sql);
+      for (const statement of migration.sql.split(';').map((value) => value.trim()).filter(Boolean)) {
+        await tx.query(statement);
+      }
       await tx.query(
         'INSERT INTO schema_migrations (version) VALUES ($1)',
         [migration.version],
