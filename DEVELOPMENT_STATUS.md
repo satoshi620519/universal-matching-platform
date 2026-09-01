@@ -17,6 +17,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
+## Validation hardening continuation — MIGRATION CONTRACT GUARDS STRENGTHENED
+- Continued validation work without adding speculative product functionality.
+- Reviewed the migration planner source and strengthened concrete boundary tests around the committed filename contract and mutation safety.
+- Added regression coverage rejecting uppercase segments/extensions and malformed double-underscore filenames.
+- Added guards proving filename ordering and migration planning do not mutate caller-owned arrays/artifacts.
+- Commit: e1a1450bfb500785418e4287b775d9c03561fc45.
+- CI state: validation evidence still unavailable from accessible workflow history; these are committed regression guards, not inferred green results.
+
 ## Repository-source validation continuation — CONCRETE REGRESSION FIX APPLIED
 - Resumed from repository state rather than conversational assumptions because DEVELOPMENT_STATUS.md remains the authoritative continuation record.
 - Inspected the committed migration sequence regression guard and found a concrete inconsistency: the input included 0008_create_audit_records.sql but the expected ordered result stopped at 0007.
