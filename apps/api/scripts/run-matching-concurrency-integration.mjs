@@ -9,6 +9,7 @@ if (!process.env.MATCHING_TEST_DATABASE_URL) {
 const databaseUrl = process.env.MATCHING_TEST_DATABASE_URL;
 
 execSync('pnpm --filter @universal/database build', { stdio: 'inherit' });
+execSync('pnpm prisma generate', { stdio: 'inherit' });
 
 const { PrismaClient } = await import('@prisma/client');
 const {
@@ -38,7 +39,6 @@ try {
     `Applied database migrations: ${appliedVersions.length > 0 ? appliedVersions.join(', ') : 'none'}`,
   );
 
-  execSync('pnpm prisma generate', { stdio: 'inherit' });
   execSync('pnpm prisma migrate deploy', {
     stdio: 'inherit',
     env: { ...process.env, DATABASE_URL: databaseUrl },
