@@ -1,3 +1,10 @@
+## Migration orchestration boundary continuation — LOAD FAILURE STOPS EXECUTION
+- Continued from the exact migration executor failure-boundary checkpoint without reopening completed configuration or migration logic.
+- Added regression coverage proving a migration artifact source failure propagates before executor history reads or migration apply calls occur.
+- Added an explicit source boundary test documenting that nested directories are ignored while top-level regular files remain subject to the strict migration filename contract.
+- Commits: 4a5aaf5c11318f22ed5cc81f78187975dc9db791, 7a32b563ded390701cfda92a2c5fb6aa4b8b8b69.
+- CI state: committed orchestration/source boundary coverage; workflow execution evidence remains unavailable and green is not inferred.
+
 ## Migration executor failure-boundary validation — REGRESSION COVERAGE ADDED
 - Continued from migration artifact source integrity without duplicating completed implementation work.
 - Added focused tests for tracking-table initialization failure propagation; history queries must not proceed after initialization failure.
