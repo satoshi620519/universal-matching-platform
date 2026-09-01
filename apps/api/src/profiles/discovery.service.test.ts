@@ -15,7 +15,7 @@ describe('DiscoveryService', () => {
       ],
       nextCursor: 'next',
     });
-    const service = new DiscoveryService({ discover });
+    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
     const result = await service.discover({
       subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope,
       limit: 20, projectionPolicy: policy,
@@ -28,8 +28,18 @@ describe('DiscoveryService', () => {
 
   it('passes a validated query to the repository', async () => {
     const discover = vi.fn().mockResolvedValue({ items: [] });
-    const service = new DiscoveryService({ discover });
+    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
     await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
     expect(discover).toHaveBeenCalledWith(expect.objectContaining({ limit: 10, categoryId: 'dating' }));
   });
 });
+
+  it('applies explicit block and safety exclusions before projection', async () => {
+    const discover = vi.fn().mockResolvedValue({ items: [{ id: 'p2', accountId: 'a2', categoryId: 'dating', fields: { name: 'Hidden' }, geographicScope: scope }] });
+    const block = { excludes: vi.fn().mockResolvedValue(true) };
+    const safety = { excludes: vi.fn().mockResolvedValue(false) };
+    const service = new DiscoveryService({ discover }, block, safety);
+    const result = await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
+    expect(result.items).toEqual([]);
+    expect(safety.excludes).not.toHaveBeenCalled();
+  });
