@@ -2,6 +2,7 @@ import { Body, Controller, Get, Headers, HttpStatus, Param, Post } from '@nestjs
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { PrismaConversationRepository } from './prisma-conversation.repository.js';
 import { PrismaMessageRepository } from './prisma-message.repository.js';
+import { PrismaNotificationRepository } from './prisma-notification.repository.js';
 
 @Controller('conversations')
 export class MessagingController {
@@ -9,6 +10,7 @@ export class MessagingController {
     private readonly principalResolver: RequestPrincipalResolver,
     private readonly conversations: PrismaConversationRepository,
     private readonly messages: PrismaMessageRepository,
+    private readonly notifications: PrismaNotificationRepository,
   ) {}
 
   @Post()
@@ -45,5 +47,26 @@ export class MessagingController {
     const message = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
     if (!message) return { statusCode: HttpStatus.NOT_FOUND };
     return message;
+  }
+
+  @Get('/notifications')
+  async listNotifications(
+    @Headers('authorization') authorization?: string,
+    @Headers('x-request-id') requestId?: string,
+  ) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'notification-list' });
+    return { notifications: await this.notifications.listForAccount(principal.accountId) };
+  }
+
+  @Post('/notifications/:notificationId/read')
+  async markNotificationRead(
+    @Param('notificationId') notificationId: string,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-request-id') requestId?: string,
+  ) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'notification-read' });
+    const updated = await this.notifications.markReadForAccount(notificationId, principal.accountId);
+    if (!updated) return { statusCode: HttpStatus.NOT_FOUND };
+    return { updated: true };
   }
 }
