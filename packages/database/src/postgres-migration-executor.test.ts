@@ -68,7 +68,7 @@ describe('PostgresMigrationExecutor', () => {
     await executor.apply({
       version: 4,
       filename: '0004_create_safety_enforcements.sql',
-      sql: 'CREATE TABLE safety_enforcements ();',
+      sql: 'CREATE TABLE safety_enforcements ()',
     });
 
     expect(events).toEqual([
