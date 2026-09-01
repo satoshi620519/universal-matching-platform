@@ -1689,3 +1689,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Notification ownership is derived exclusively from RequestPrincipalResolver; acknowledgement cannot target another account's notification.
 - Commits: 8445dbdb28a59d85afab91bd3f74d552af72a74b, efde9b22b450b69c27d6808da365cb780ddbda07, 81e998481d45a7aab2536e3484c105909439d035.
 - Next exact task: validate notification HTTP wiring in CI, then inspect existing websocket/SSE infrastructure before adding the minimum realtime fan-out path; do not introduce a parallel realtime transport if one already exists.
+
+- CI #1137 and CI #1138 completed successfully, validating the notification HTTP boundary and status checkpoint.
+- Audited the repository for an existing realtime transport: no WebSocket/SSE/gateway implementation exists; only the provider-neutral realtime architecture contract is present.
+- Added the minimum provider-neutral RealtimePublisher boundary and a Noop fallback, preserving durable HTTP/database state as authoritative and avoiding premature transport selection.
+- Commits: 46eb651b5d82575b1bb408a1cab99d92f629dcbf, 303560e4a40c43c8f5860bdc3b9e3179a4a41d80, b46c629811d3d4b63da31129009ea959b9d25161, d4f25a10bdfd6df054898d381033afd1a005326e.
+- Next exact task: validate the realtime abstraction in CI, then add a committed-event publication seam from messaging without making WebSocket delivery an alternate mutation path.
