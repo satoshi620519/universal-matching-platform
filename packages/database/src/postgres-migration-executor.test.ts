@@ -6,6 +6,9 @@ import {
   type SqlMigrationQueryClient,
 } from './postgres-migration-executor.js';
 
+const queryStub = (): SqlMigrationQueryClient['query'] =>
+  async <T = unknown>(): Promise<T> => undefined as T;
+
 describe('PostgresMigrationExecutor', () => {
   it('initializes tracking and returns ordered applied versions', async () => {
     const query = vi
@@ -28,14 +31,13 @@ describe('PostgresMigrationExecutor', () => {
   });
 
   it('propagates migration SQL failures and does not record the version', async () => {
-    const rootQuery: SqlMigrationQueryClient['query'] = vi.fn();
-    const txQuery: SqlMigrationQueryClient['query'] = vi
-      .fn()
-      .mockRejectedValueOnce(new Error('migration SQL failed'));
+    const rootQuery = vi.fn(queryStub());
+    const txQuery = vi.fn(queryStub());
+    txQuery.mockRejectedValueOnce(new Error('migration SQL failed'));
     const client: SqlMigrationClient = {
-      query: rootQuery,
+      query: rootQuery as SqlMigrationQueryClient['query'],
       transaction: async <T>(operation: (tx: SqlMigrationQueryClient) => Promise<T>) =>
-        operation({ query: txQuery }),
+        operation({ query: txQuery as SqlMigrationQueryClient['query'] }),
     };
     const executor = new PostgresMigrationExecutor(client);
 
@@ -48,21 +50,18 @@ describe('PostgresMigrationExecutor', () => {
 
   it('applies SQL and records the version through the transaction-scoped client', async () => {
     const events: string[] = [];
-    const rootQuery: SqlMigrationQueryClient['query'] = vi.fn(
-      async <T = unknown>(_sql: string, _params?: readonly unknown[]): Promise<T> =>
-        undefined as T,
-    );
-    const txQuery: SqlMigrationQueryClient['query'] = vi.fn(
-      async <T = unknown>(sql: string, _params?: readonly unknown[]): Promise<T> => {
+    const rootQuery = vi.fn(queryStub());
+    const txQuery = vi.fn(
+      async <T = unknown>(sql: string): Promise<T> => {
         events.push(sql);
         return undefined as T;
       },
     );
     const client: SqlMigrationClient = {
-      query: rootQuery,
+      query: rootQuery as SqlMigrationQueryClient['query'],
       transaction: async <T>(
         operation: (tx: SqlMigrationQueryClient) => Promise<T>,
-      ) => operation({ query: txQuery }),
+      ) => operation({ query: txQuery as SqlMigrationQueryClient['query'] }),
     };
     const executor = new PostgresMigrationExecutor(client);
 
