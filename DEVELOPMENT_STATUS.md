@@ -2007,3 +2007,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static contract inspection and focused test additions complete; full workspace runtime/build/migration execution remains pending executable workspace environment.
 - Remaining work: discovery client needs deduplication across unstable data pages and cursor reset on category change; category schema lookup should use direct repository lookup rather than list+find; conversation pair uniqueness/idempotency remains unresolved; notification polling/realtime integration and notification event creation coverage remain incomplete.
 - Exact next action: inspect conversation persistence schema and existing conversation creation tests, design an idempotent canonical participant-pair uniqueness strategy without weakening generic group conversation capability. Do not change completed discovery pagination unless a concrete defect is found.
+
+
+## Phase B direct conversation idempotency — CANONICAL PAIR STRATEGY IMPLEMENTED
+- Resumed from Exact next action and inspected the actual generic conversation schema, participant repository, mutual-match creation path and tests before changing anything.
+- Preserved generic group conversation capability. The existing conversations + conversation_participants tables remain the source of truth for arbitrary participant sets.
+- Added a separate direct_conversation_pairs mapping table exclusively for two-account direct conversations. It stores sorted account_low_id/account_high_id, unique conversation_id, primary-key pair uniqueness and a low<high CHECK constraint.
+- Added PrismaConversationRepository.createOrFindDirect(accountA, accountB): canonicalizes order, returns an existing pair conversation when present, otherwise creates the conversation and pair mapping transactionally.
+- Mutual-match conversation creation now uses createOrFindDirect, making repeated UI clicks/retries idempotent for the same pair while leaving generic POST /conversations group creation behavior unchanged.
+- Added focused repository and controller tests for canonical sorting/existing-pair reuse and mutual-match routing through the idempotent path.
+- Commits: f93abae7597170079a01728ca35b4a5447784ca4, 2c297d525d3fa5a975ca3f8f35850c82307b7656, 5263df106c9dc0be2c17b43d4977a71bb56bf2a0, 27287c6922b36f482d7800eb5ef10742d0335732, 0682ceae05c3f2c205cb734b8597bcb0e6db10b7.
+- Validation status: static schema/transaction/route contract inspection complete; full runtime migration/build execution remains pending executable workspace environment. Prisma generated client/schema mapping for directConversationPair must be regenerated as part of migration deployment.
+- Remaining work: direct-pair creation needs database unique-conflict recovery for true concurrent first inserts across separate transactions/processes; notification event creation coverage is incomplete; realtime subscription/polling UX is incomplete; discovery dedup/reset remains; production migration rollout needs duplicate preflight checks.
+- Exact next action: inspect notification creation call sites and message/match domain events. Implement only missing real event→notification persistence paths (no synthetic notifications), then add focused recipient-scoping tests before considering realtime UI polling.
