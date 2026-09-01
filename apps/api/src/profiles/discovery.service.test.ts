@@ -1,0 +1,35 @@
+import { describe, expect, it, vi } from 'vitest';
+import { DiscoveryService } from './discovery.service.js';
+
+const scope = { kind: 'country', countryCode: 'JP' } as const;
+const policy = { name: 'public', phone: 'owner' } as const;
+
+describe('DiscoveryService', () => {
+  it('filters ineligible candidates before privacy projection', async () => {
+    const discover = vi.fn().mockResolvedValue({
+      items: [
+        { id: 'self', accountId: 'a1', categoryId: 'dating', fields: { name: 'Self', phone: 'x' }, geographicScope: scope },
+        { id: 'wrong-category', accountId: 'a2', categoryId: 'friends', fields: { name: 'Friend' }, geographicScope: scope },
+        { id: 'wrong-country', accountId: 'a3', categoryId: 'dating', fields: { name: 'US' }, geographicScope: { kind: 'country', countryCode: 'US' } },
+        { id: 'ok', accountId: 'a4', categoryId: 'dating', fields: { name: 'Visible', phone: 'hidden' }, geographicScope: scope },
+      ],
+      nextCursor: 'next',
+    });
+    const service = new DiscoveryService({ discover });
+    const result = await service.discover({
+      subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope,
+      limit: 20, projectionPolicy: policy,
+    });
+    expect(result.items).toEqual([{
+      id: 'ok', categoryId: 'dating', fields: { name: 'Visible' }, geographicScope: scope,
+    }]);
+    expect(result.nextCursor).toBe('next');
+  });
+
+  it('passes a validated query to the repository', async () => {
+    const discover = vi.fn().mockResolvedValue({ items: [] });
+    const service = new DiscoveryService({ discover });
+    await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
+    expect(discover).toHaveBeenCalledWith(expect.objectContaining({ limit: 10, categoryId: 'dating' }));
+  });
+});
