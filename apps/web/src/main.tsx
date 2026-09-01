@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
+const API_BASE_URL = (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_API_BASE_URL ?? 'http://localhost:3000';
+
+type AccessStatus = 'idle' | 'loading' | 'success' | 'error';
+
 type Feature = { icon: string; title: string; text: string };
 type Screen = 'home' | 'signin' | 'register';
 
@@ -14,6 +18,24 @@ const features: Feature[] = [
 function AccessForm({ screen, onBack }: { screen: 'signin' | 'register'; onBack: () => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [status, setStatus] = useState<AccessStatus>('idle');
+  const [message, setMessage] = useState('');
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault(); setStatus('loading'); setMessage('');
+    try {
+      const response = await fetch(API_BASE_URL + (screen === 'signin' ? '/auth/sign-in' : '/auth/register'), {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) throw new Error('Request failed');
+      if (screen === 'signin') {
+        const body = await response.json() as { credential?: string };
+        if (!body.credential) throw new Error('Invalid email or password');
+        sessionStorage.setItem('connect.credential', body.credential);
+        setMessage('Signed in successfully. Your secure session credential is stored for this browser session.');
+      } else setMessage('Registration received. Please check your email for the verification step.');
+      setStatus('success');
+    } catch (error) { setStatus('error'); setMessage(error instanceof Error ? error.message : 'Something went wrong. Please try again.'); }
+  }
   const title = screen === 'signin' ? 'Welcome back.' : 'Start your journey.';
   return <main className="accessPage">
     <nav><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</button><button className="textButton" onClick={onBack}>← Back</button></nav>
@@ -21,13 +43,14 @@ function AccessForm({ screen, onBack }: { screen: 'signin' | 'register'; onBack:
       <div className="eyebrow">{screen === 'signin' ? 'WELCOME BACK' : 'CREATE YOUR ACCOUNT'}</div>
       <h1>{title}</h1>
       <p>{screen === 'signin' ? 'Sign in to continue your conversations and connections.' : 'Create your account and discover a more thoughtful way to connect.'}</p>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={submit}>
         <label>Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@example.com" required /></label>
         <label>Password<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="At least 8 characters" minLength={8} required /></label>
         {screen === 'register' && <label className="check"><input type="checkbox" required /> <span>I agree to the Terms and Privacy Policy.</span></label>}
-        <button className="primary wide" type="submit">{screen === 'signin' ? 'Sign in →' : 'Create account →'}</button>
+        <button className="primary wide" type="submit" disabled={status === 'loading'}>{status === 'loading' ? 'Please wait…' : screen === 'signin' ? 'Sign in →' : 'Create account →'}</button>
+        {status !== 'idle' && <div className={'accessMessage ' + status} role="status">{message}</div>}
       </form>
-      <div className="accessHint">API connection is the next integration step; this screen is intentionally validated as UI state first.</div>
+      <div className="accessHint">Secure access requests are sent to the configured platform API.</div>
     </section>
   </main>;
 }
