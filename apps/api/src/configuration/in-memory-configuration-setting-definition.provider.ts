@@ -4,9 +4,9 @@ import { ConfigurationSettingDefinitionProvider } from './configuration-setting-
 
 @Injectable()
 export class InMemoryConfigurationSettingDefinitionProvider extends ConfigurationSettingDefinitionProvider {
-  constructor(private readonly definitions: readonly ConfigurationSettingDefinition[] = []) { super(); }
+  constructor(private readonly definitions: readonly ConfigurationSettingDefinition<unknown>[] = []) { super(); }
 
-  find(key: string): ConfigurationSettingDefinition | undefined {
+  find(key: string): ConfigurationSettingDefinition<unknown> | undefined {
     return this.definitions.find((definition) => definition.key === key);
   }
 }
