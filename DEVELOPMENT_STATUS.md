@@ -1105,12 +1105,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: f484f3d42394e51431ec2a3caf951233d0a49f78, bc0935ff119213994b7d1fad7e276d5abac459c8, 362260d75c28760727706eb1f41f6fc12cf344ad, 6b2b9fefbd3883a12473cfe483d5e25188316c51, b3570addbb0086f0fbc720ae0a893389e7ea075d.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Validated configuration draft editing — IMPLEMENTED, CI PENDING
+- Resumed from the authoritative definition-provider checkpoint and proceeded directly to the required persistence/editing path without introducing unrelated abstractions.
+- Added ConfigurationValueRepository with narrow upsert semantics and Prisma typed-column mapping for boolean, integer, decimal and text values.
+- Added ConfigurationDraftEditingService: it loads only an editable draft, resolves the authoritative definition, validates key/type/scope/runtime value, then persists the validated typed value.
+- Published and superseded versions are rejected through draft-only lookup before any persistence mutation; unknown settings also fail before mutation.
+- Upsert replaces a setting value within the same draft version instead of creating duplicate rows, matching the database uniqueness contract.
+- Added focused editing tests and registered the repository/service through Nest DI.
+- Commits: c5d7fd19f881162cd857d876df5adde7d59e095f, 49d0ab4a4ef3daff8b486e338f801205137efe30, 872e259b792cdf131ee7595ed1dff5d6585fa962, d8c774b942df4c8e48605f503a29f03ec618c91e, 1d986b91e0320640e31a1c78f345f5f2bd96927f.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the setting-definition provider and preceding configuration slices; preserve exact validation failures rather than inferring green.
-2. Add a narrow draft value repository boundary supporting replace/upsert semantics only for a specified version ID; do not permit direct lifecycle transitions.
-3. Add a draft editing application service that loads the version as draft, resolves the authoritative setting definition, validates the typed value, then persists it through the draft-value boundary.
-4. Ensure published/superseded versions and unknown settings are rejected before persistence mutation.
-5. Keep publication transactional and separate; after validated editing, integrate successful publication with the existing minimal audit contract.
+1. Verify CI/workflow evidence for the validated draft editing path and preceding Milestone 2 slices; preserve exact failures rather than inferring green.
+2. Inspect the existing audit-record application/repository contract and integrate successful configuration publication with the minimal audit contract without changing publication atomicity.
+3. Ensure audit integration receives actor/correlation from a privileged application boundary rather than inventing identity inside configuration persistence.
+4. After publication audit is established, add published-value loading/projection that supplies values to the existing central domain resolver without duplicating precedence.
+5. Defer rollback/reversion until published history loading and audit semantics are tested.
 6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
