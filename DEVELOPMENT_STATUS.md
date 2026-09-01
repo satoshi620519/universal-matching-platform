@@ -1,3 +1,11 @@
+## Milestone 4 CI correctness — FAILURE-PRESERVING EVIDENCE PIPELINE
+- Continued with workflow correctness review instead of repeating unavailable execution polling.
+- Identified a concrete CI false-green risk: the concurrency command was piped through tee, and without pipefail the shell could report tee success even when the PostgreSQL integration command failed.
+- Updated the dedicated workflow to use bash with set -o pipefail, preserving the actual test exit status while still writing matching-concurrency.log for artifact inspection.
+- Commit: 0787c64b724f70c422821d4013cfba8046287769.
+- Next exact task: obtain an actual workflow execution for the corrected evidence pipeline and inspect the job conclusion, summary attestation, and uploaded log artifact. No M4 pass is inferred before that evidence exists.
+- CI state: execution visibility remains unavailable; implementation-side false-green path removed.
+
 ## Milestone 4 evidence readiness — COMMIT-IDENTIFIABLE EXECUTION ATTESTATION
 - Checked both the latest implementation commit (fea38c3d23e83d9330c380d21d7929d62a01931d) and its status checkpoint (463f5a9714df2d2d00923e86c09a89820b2a444a) through workflow-run and combined-status APIs.
 - Both checks returned empty workflow/status lists; this confirms lack of observable execution evidence through the accessible GitHub integration, not a passing result.
