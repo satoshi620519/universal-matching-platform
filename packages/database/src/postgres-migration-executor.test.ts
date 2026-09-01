@@ -1,8 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { SqlMigrationClient, SqlMigrationQueryClient } from './postgres-migration-executor.js';
-import { PostgresMigrationExecutor } from './postgres-migration-executor.js';
-import type { SqlMigrationQueryClient } from './postgres-migration-executor.js';
+import {
+  PostgresMigrationExecutor,
+  type SqlMigrationClient,
+  type SqlMigrationQueryClient,
+} from './postgres-migration-executor.js';
 
 describe('PostgresMigrationExecutor', () => {
   it('initializes tracking and returns ordered applied versions', async () => {
