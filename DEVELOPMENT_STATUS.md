@@ -1,3 +1,13 @@
+## Milestone 3 application slice — PROFILE CREATE/UPDATE WITH CATEGORY GUARD
+- Added ProfileService application use cases for create and update rather than expanding persistence implementation further.
+- Creation checks authoritative category existence before profile construction/persistence.
+- Update rejects missing profiles, validates a replacement category only when category identity changes, and avoids unnecessary category reads for field/scope-only edits.
+- Added focused regression coverage for missing category, successful guarded creation, missing profile update and unchanged-category optimization.
+- Registered ProfileService in the Nest provider graph.
+- Commits: 2176b187b6069117f5719cb4a1ad01050db4d520, cf12ebb3f27cd502227600c6b905f4f2585d99f3, b414502075a4f4fc88b30f0825ab970d3362ee0d.
+- Next exact task: add category administration/use-case boundary or privacy-aware profile projection according to the Milestone 3 dependency plan; do not reopen completed profile persistence/create-update guards.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 persistence slice — AUTHORITATIVE PRISMA ADAPTERS IMPLEMENTED
 - Located the authoritative API persistence boundary: apps/api/prisma/schema.prisma plus DatabaseService (PrismaClient) and existing Injectable Prisma repository convention.
 - Added Category and Profile Prisma schema models, Account/Category relations, geographic scope columns and lookup indexes.
