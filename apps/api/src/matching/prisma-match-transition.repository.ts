@@ -34,6 +34,14 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     });
   }
 
+  async isMutualMatch(firstAccountId: string, secondAccountId: string): Promise<boolean> {
+    const [forward, reverse] = await Promise.all([
+      this.database.matchInteraction.findUnique({ where: { actorAccountId_targetAccountId: { actorAccountId: firstAccountId, targetAccountId: secondAccountId } } }),
+      this.database.matchInteraction.findUnique({ where: { actorAccountId_targetAccountId: { actorAccountId: secondAccountId, targetAccountId: firstAccountId } } }),
+    ]);
+    return forward?.decision === 'like' && reverse?.decision === 'like';
+  }
+
   private async lockPair(
     tx: { $executeRaw: (strings: TemplateStringsArray, ...values: unknown[]) => Promise<unknown> },
     firstAccountId: string,
