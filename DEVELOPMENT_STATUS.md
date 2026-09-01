@@ -1657,3 +1657,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Focused tests cover unauthorized writes and empty-body rejection.
 - Commits: 16062935195c79a147bfc8372bb7bbfa302867e1, 9fa4d91d668f8a9b37a2a1fc051c6213c44cc6b6, e4bf4e33e402243015dc94754b9724926b242a02, a29adac0cd752f07d366f5462e59c6b6fedb7daf.
 - Next exact task: validate message persistence in CI, then add participant-scoped message reads before exposing HTTP APIs.
+
+- CI #1119 completed successfully for the message persistence checkpoint; Matching Concurrency Gate #51 also succeeded.
+- Added participant-scoped message reads with bounded limits (1..100), deterministic newest-first ordering, and an optional stable composite cursor boundary.
+- Non-participants receive no message data and the query is not issued when membership is absent.
+- Commits: ccc55ea932fd738959aa6476a184638d765e35b5 and 5bfde718688dfc8bb8e53b5579d7d610770c0265.
+- Next exact task: validate message reads in CI, then expose the already-authorized conversation/message operations through a narrow HTTP API boundary.
