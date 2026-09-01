@@ -936,11 +936,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: adeed9e6165b7d44c1f828e18e6cd1c316a1f334, 97a41c23a79310e73e80ac25050b8a0093cefcb1, c910b30f8c01ddefc7f453c323ce129622f40e71, 2c0698375d87be0f05fcaa1690f36c87df604de6, 8763779f7c653aff21d12c3b93e5c03362b4979b, 3a9c2e4cdd660d12430040668f593eedb80669be, e2e7ad3154ed14d9d77058a1f96b8a3bd442848b.
 - CI state: this slice remains unverified by CI evidence available through the current connector; do not infer green.
 
+
+## Privileged failed-email outbox application boundary — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and found the failed-email review service under apps/api/src/auth rather than recreating a parallel email module.
+- Added PrivilegedFailedEmailOutboxService as the composition boundary around the existing FailedEmailOutboxReviewService.
+- Both list and requeue require the existing review-failed-email-outbox administrative capability before accessing the outbox.
+- Successful privileged review appends a minimal audit record without copying message bodies or email contents.
+- Successful guarded requeue appends a target-correlated audit record; no-op requeues do not create false-positive audit history.
+- Added focused ordering tests for authorize → operation → audit, authorization failure preventing both operation/audit, and successful vs no-op requeue audit behavior.
+- Registered the composed service through Nest DI and added PRIVILEGED_FAILED_EMAIL_OUTBOX_BOUNDARY.md.
+- Commits: b36bee213ba5fa10b2d3d0c24362e61d12cc925f, 0ac1c076839cca7646d7b048cbac5c8ea5551214, 4e33a3b1a9eb98546c9682f2a4152cd4a17ec29e, 7a02f4cc1d22d4df6487445d2d7c29643f22db33.
+- CI state: this composition slice remains unverified by CI evidence available through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the administrative capability policy slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Compose AdministrativeCapabilityAccessService + AuditRecordService around FailedEmailOutboxReviewService so privileged failed-message review and manual requeue have one coherent application boundary.
-3. Keep transport deferred until the composed application service has focused authorization/audit ordering tests.
-4. After the privileged failed-email boundary is coherent, trace the smallest grounded HTTP administration transport already supported by the repository authentication conventions.
+1. Verify CI/workflow evidence for the privileged failed-email boundary and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Trace the existing authenticated controller conventions and request-principal resolver to identify the smallest grounded administrative HTTP transport for the completed privileged operations.
+3. Do not expose direct repository access from transport; controllers must compose request principal → application boundary only.
+4. Add transport tests for unauthenticated/unauthorized behavior, bounded list input and requeue correlation without logging sensitive email content.
 5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
