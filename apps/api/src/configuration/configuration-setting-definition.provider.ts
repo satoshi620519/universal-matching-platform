@@ -1,5 +1,5 @@
-import type { ConfigurationSettingDefinition } from '@universal/domain';
+import type { DraftConfigurationSettingDefinition } from '@universal/domain';
 
 export abstract class ConfigurationSettingDefinitionProvider {
-  abstract find(key: string): ConfigurationSettingDefinition<unknown> | undefined;
+  abstract find(key: string): DraftConfigurationSettingDefinition | undefined;
 }
