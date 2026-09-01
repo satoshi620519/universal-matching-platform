@@ -36,6 +36,8 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     const results = await Promise.all([repositoryA.transition(a), repositoryB.transition(b)]);
     const interactions = await prisma!.matchInteraction.count();
     expect(interactions).toBe(2);
-    expect(results.some((result) => result.mutual)).toBe(true);
+    expect(results.filter((result) => result.mutual)).toHaveLength(1);
+    expect(results.filter((result) => result.state === 'matched')).toHaveLength(1);
+    expect(results.filter((result) => result.state === 'pending')).toHaveLength(1);
   });
 });
