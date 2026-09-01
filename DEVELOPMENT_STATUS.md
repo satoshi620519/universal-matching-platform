@@ -1,3 +1,13 @@
+## Milestone 4 persistence slice — TRANSACTIONAL MATCH TRANSITIONS
+- Continued from the idempotent transition contract and implemented persistence rather than reopening discovery work.
+- Added MatchInteraction Prisma model and checked-in migration with directed uniqueness, per-actor idempotency uniqueness, reciprocal lookup index and DB-level self-interaction check.
+- Added PrismaMatchTransitionRepository using a transaction, replay lookup before create, unique-conflict recovery for idempotency races, and reciprocal interaction lookup for mutual-state resolution.
+- Added focused adapter contract tests for transactional boundary, idempotency conflict recovery and reciprocal lookup.
+- Registered repository in Nest behind MatchTransitionRepository.
+- Commits: 21657886d908c9feda5ec7c4d36b911c6b570b36, d835234f2e03962a828e60b70f70b17f52c4d2d3, f1d56c43a5fe5020fddc31ac7fa30bcf85af4b58, 24e93b0baf875d55e6f676adc97b158c889b3914, 5b3d31f31d2bb7d9a71a56c01465e0062b62b170.
+- Next exact task: add executable-style repository tests for duplicate/replay and concurrent reciprocal transition scenarios, then close M4 completion evidence without revisiting unrelated discovery contracts.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 state slice — IDEMPOTENT MUTUAL MATCH TRANSITION CONTRACT
 - Continued from strategy decision semantics and defined interaction/state contracts before persistence.
 - Added directed like/pass interaction command requiring distinct actor/target and a non-empty idempotency key.
