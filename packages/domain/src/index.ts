@@ -76,3 +76,7 @@ export * from './deployment-readiness-contract.js';
 export * from './configuration-resolution.js';
 
 export * from './configuration-setting-definition.js';
+
+export * from './category.js';
+export * from './geographic-scope.js';
+export * from './profile.js';
