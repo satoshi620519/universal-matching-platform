@@ -1902,3 +1902,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Completed work: exact capability inventory and dependency boundary identification; no duplicate implementation created.
 - Remaining work: expose the minimal authenticated API surface required by the already-existing services: profile category lookup, own-profile create/update, discovery query with server-owned projection policy, and explicit match/interaction transition endpoint where domain rules authorize it.
 - Exact next action: inspect existing domain contracts (profile/category/discovery query/projection and match transition) and app module wiring, then add the smallest controller/transport layer around existing services without duplicating domain logic; add tests for authorization and projection boundaries before wiring the discovery UI.
+
+
+## Phase B public profile/discovery transport — MINIMAL API SURFACE EXPOSED
+- Resumed from the recorded Exact next action and inspected existing CategoryService, ProfileService, DiscoveryService, ProfileProjection domain policy, geographic scope validation, match transition domain contract, repository implementation, and Nest module wiring before adding transport.
+- Added ProfileDiscoveryController as a thin authenticated transport layer over existing services/repositories; no profile/discovery/matching domain logic was duplicated.
+- Exposed grounded endpoints: GET /profile-categories; POST /profiles/me; GET /profiles/me; GET /discovery; POST /matches/decision.
+- Discovery uses a server-owned explicit public projection policy and the existing DiscoveryService eligibility/exclusion pipeline rather than returning raw profile records.
+- Match decisions reuse the existing transactional/idempotent PrismaMatchTransitionRepository and domain self-target validation.
+- Profile transport currently uses a deliberately small default field schema (displayName/headline/bio) because category-specific dynamic field schema configuration is not yet exposed by existing services; this limitation is explicit and should be generalized from configuration rather than copied into the UI.
+- Commits: 1fe58a58de544772d1ccfc9a4e1e5e216a35c566, 0ebe64c452a106025cf398b9f577382862912154.
+- Validation status: static contract/module inspection complete; runtime Nest build and integration tests remain pending an executable workspace environment. Transport-level authorization/projection tests are still required before production release.
+- Remaining work: add controller tests for authenticated principal ownership, discovery projection/exclusion and match idempotency/error mapping; then wire Web onboarding → profile → discovery → like/pass → mutual-match conversation creation using these APIs.
+- Exact next action: inspect existing API test conventions and add focused transport tests for ProfileDiscoveryController without duplicating domain tests. After those tests are recorded, wire the web discovery journey to the new API surface.
