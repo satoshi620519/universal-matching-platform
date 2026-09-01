@@ -70,6 +70,7 @@ import { AuditRecordService } from './administration/audit-record.service.js';
 import { RoleAssignmentMutationService } from './administration/role-assignment-mutation.service.js';
 import { AdministrativeCapabilityAccessService } from './administration/administrative-capability-access.service.js';
 import { AdministrativeRoleManagementService } from './administration/administrative-role-management.service.js';
+import { InitialAdministratorProvisioningService } from './administration/initial-administrator-provisioning.service.js';
 import { PrivilegedFailedEmailOutboxService } from './administration/privileged-failed-email-outbox.service.js';
 import { AdministrativeFailedEmailOutboxController } from './administration/administrative-failed-email-outbox.controller.js';
 import { HealthController } from './health/health.controller.js';
@@ -88,7 +89,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 @Module({
   imports: [DatabaseModule],
   controllers: [AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
-  providers: [AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
