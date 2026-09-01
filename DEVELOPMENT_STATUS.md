@@ -1,3 +1,11 @@
+## Milestone 4 evidence redundancy — LOG-VISIBLE ATTESTATION
+- Queried the latest evidence implementation commit (a9c1c9b31d1b9c91db0bbe542a5ef2c5b67822d2): workflow_runs=[] and statuses=[] through the available GitHub integration, so no execution result was inferred.
+- Reviewed the evidence chain for inspectability once a run becomes visible. The gate result was written to GitHub Step Summary but not mirrored into normal job output.
+- Added a final cat of GITHUB_STEP_SUMMARY so the exact PostgreSQL engine, commit, evidence label and explicit passed/failed marker are also visible in captured execution logs, improving redundancy if summary UI access differs from artifact/log access.
+- Commit: 642b48fd8da41ed044d7f519ec071f56ac6c3a02.
+- Next exact task: obtain and inspect a real execution for this evidence chain; verify job conclusion plus matching commit/attestation in logs and matching-concurrency.log artifact. No M4 pass is inferred before that evidence exists.
+- CI state: latest evidence commit queried; workflow_runs=[] and statuses=[] through available integration; no green status inferred.
+
 ## Milestone 4 evidence semantics — EXPLICIT PASS/FAIL ATTESTATION
 - Reviewed the corrected workflow as an evidence chain rather than repeating unavailable workflow polling.
 - Identified a concrete observability gap: the step summary emitted only on success, while failures relied solely on job conclusion/log interpretation.
