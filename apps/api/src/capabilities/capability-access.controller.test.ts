@@ -114,11 +114,11 @@ describe('capability access API boundary', () => {
     })).rejects.toBeInstanceOf(UnauthorizedException);
   });
 
-  it('rejects a malformed principal verification level', async () => {
+  it('uses the persisted verification record rather than the principal verification level', async () => {
     await expect(controllerFor({
       accountId: 'account-1',
       authenticationMethod: 'test',
       verificationLevel: 'invalid',
-    }, 3).evaluateAuthenticated({})).rejects.toBeInstanceOf(UnauthorizedException);
+    }, 3).evaluateAuthenticated({})).resolves.toEqual({ allowed: true, reason: 'allowed' });
   });
 });
