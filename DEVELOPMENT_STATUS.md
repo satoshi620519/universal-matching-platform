@@ -924,11 +924,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 8ede382b3e2147229394dd50aa6d3b41680d9dc2, 15d6146ff73bc0afcea2808d789af40dcba5bcac, c53a1c7d32b130c471fc4072a3ba1e5bc9948542, 15c193dd8b53c2ee65dff454dd2c4eca116069ba, f8022ea71068af9f4be27f82637a3a15660c03bb, bce0c1b795d11e7db159deab376c9a7ca5ca8181.
 - CI state: this mutation slice remains unverified by CI evidence available through the current connector; do not infer green.
 
+
+## Administrative capability policy and authorized role management — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and added the missing policy composition instead of introducing an administrative HTTP transport prematurely.
+- Added AdministrativeCapability vocabulary and a centralized role-to-capability policy: administrator manages administrative roles; moderator/administrator may review failed email outbox operations.
+- Added AdministrativeCapabilityAccessService with explicit can()/require() decisions backed by authoritative persisted active-role evaluation.
+- Added AdministrativeRoleManagementService that enforces capability authorization before delegating to the existing audited mutation service.
+- Added focused tests proving policy role selection, forbidden capability rejection, authorization-before-mutation ordering and no mutation after authorization failure.
+- Registered capability access and authorized role management through Nest DI.
+- Added ADMINISTRATIVE_CAPABILITY_POLICY.md documenting the policy and reusable composition for failed-email operations.
+- Commits: adeed9e6165b7d44c1f828e18e6cd1c316a1f334, 97a41c23a79310e73e80ac25050b8a0093cefcb1, c910b30f8c01ddefc7f453c323ce129622f40e71, 2c0698375d87be0f05fcaa1690f36c87df604de6, 8763779f7c653aff21d12c3b93e5c03362b4979b, 3a9c2e4cdd660d12430040668f593eedb80669be, e2e7ad3154ed14d9d77058a1f96b8a3bd442848b.
+- CI state: this slice remains unverified by CI evidence available through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the audited role mutation slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Implement the smallest explicit administrative capability policy that authorizes which persisted active roles may perform role assignment/revocation, without introducing a public endpoint yet.
-3. Compose that capability policy with request principal identity, RoleAssignmentMutationService and audit persistence; define failure ordering before transport.
-4. After administrative mutation authorization is coherent, integrate the same authorization + audit composition around failed-email requeue operations.
+1. Verify CI/workflow evidence for the administrative capability policy slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Compose AdministrativeCapabilityAccessService + AuditRecordService around FailedEmailOutboxReviewService so privileged failed-message review and manual requeue have one coherent application boundary.
+3. Keep transport deferred until the composed application service has focused authorization/audit ordering tests.
+4. After the privileged failed-email boundary is coherent, trace the smallest grounded HTTP administration transport already supported by the repository authentication conventions.
 5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
