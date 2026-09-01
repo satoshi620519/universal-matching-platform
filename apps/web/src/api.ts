@@ -1,5 +1,8 @@
 export const API_BASE_URL = (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_API_BASE_URL ?? 'http://localhost:3000';
 
+export type Message = { id:string; conversationId:string; senderAccountId:string; body:string; createdAt:string };
+export type Conversation = { id:string; createdAt:string; participants:Array<{accountId:string; joinedAt:string}> };
+
 export type Account = {
   id: string;
   status: string;
@@ -39,3 +42,7 @@ export function verifyEmail(token: string) {
 export function getAuthenticatedAccount() {
   return apiRequest<Account>('/accounts/authenticated');
 }
+
+export function createConversation(participantAccountIds: string[]) { return apiRequest<Conversation>('/conversations',{method:'POST',body:JSON.stringify({participantAccountIds})}); }
+export function listMessages(conversationId:string) { return apiRequest<{messages:Message[]}>(\`/conversations/\${conversationId}/messages\`); }
+export function sendMessage(conversationId:string, body:string) { return apiRequest<Message>(\`/conversations/\${conversationId}/messages\`,{method:'POST',body:JSON.stringify({body})}); }
