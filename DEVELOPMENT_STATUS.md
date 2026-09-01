@@ -1,3 +1,10 @@
+## Milestone 4 evidence slice — EXPLICIT CI GATE ATTESTATION
+- Attempted to inspect workflow runs for the latest checkpoint commit; no runs were returned by the available GitHub integration, so no CI success was inferred.
+- Added explicit post-test verification in CI: requires a non-empty concurrency log and writes MATCHING_CONCURRENCY_GATE=passed to the GitHub step summary only after the integration command succeeds.
+- Commit: 0860ada323c31ae94751799a83a578b999cd93e0.
+- Next exact task: obtain actual CI run visibility/execution evidence for this commit; M4 remains execution-evidence pending until a concrete run result is available.
+- CI state: not observable through the currently available workflow-run lookup; no green status inferred.
+
 ## Milestone 4 execution wiring — CI POSTGRESQL CONCURRENCY GATE
 - Promoted the opt-in PostgreSQL concurrency test from a manually configured command to a mandatory CI gate using the existing isolated GitHub Actions PostgreSQL service.
 - CI now runs the matching concurrency integration after the normal test suite, supplies MATCHING_TEST_DATABASE_URL, captures diagnostics, and uploads a dedicated artifact on failure.
