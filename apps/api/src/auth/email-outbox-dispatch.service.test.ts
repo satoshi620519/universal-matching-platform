@@ -36,8 +36,36 @@ describe('EmailOutboxDispatchService', () => {
 
     await expect(service.dispatchOne()).resolves.toBe(false);
     expect(reschedule).toHaveBeenCalledWith('outbox-1', expect.objectContaining({
-      error: 'provider unavailable',
+      error: 'unknown: provider unavailable',
       availableAt: expect.any(Date),
     }));
   });
 });
+
+
+  it('moves permanent failures to a terminal state without rescheduling', async () => {
+    const markFailed = vi.fn().mockResolvedValue(undefined);
+    const reschedule = vi.fn().mockResolvedValue(undefined);
+    const service = new EmailOutboxDispatchService(
+      {
+        claimNext: vi.fn().mockResolvedValue({
+          id: 'outbox-1', accountId: 'account-1',
+          emailAddress: 'user@example.test', kind: 'email-verification', attempts: 1,
+        }),
+        markFailed,
+        reschedule,
+      } as any,
+      {
+        issueAndDeliver: vi.fn().mockRejectedValue(
+          Object.assign(new Error('recipient rejected'), { status: 422 }),
+        ),
+      } as any,
+    );
+
+    await expect(service.dispatchOne()).resolves.toBe(false);
+    expect(markFailed).toHaveBeenCalledWith('outbox-1', expect.objectContaining({
+      error: 'permanent: recipient rejected',
+      failedAt: expect.any(Date),
+    }));
+    expect(reschedule).not.toHaveBeenCalled();
+  });
