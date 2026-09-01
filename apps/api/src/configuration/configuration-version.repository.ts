@@ -16,4 +16,7 @@ export abstract class ConfigurationVersionRepository {
   abstract createDraft(scope: ConfigurationScope, versionNumber: bigint): Promise<ConfigurationVersionRecord>;
   abstract findDraft(id: string): Promise<ConfigurationVersionRecord | undefined>;
   abstract findPublished(scope: ConfigurationScope): Promise<ConfigurationVersionRecord | undefined>;
+  abstract findByVersionNumber(scope: ConfigurationScope, versionNumber: bigint): Promise<ConfigurationVersionRecord | undefined>;
+  abstract nextVersionNumber(scope: ConfigurationScope): Promise<bigint>;
+  abstract createDraftFromVersion(sourceVersionId: string, versionNumber: bigint): Promise<ConfigurationVersionRecord>;
 }
