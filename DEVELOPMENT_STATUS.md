@@ -1841,3 +1841,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: contract inspection complete; runtime build/execution evidence remains pending an executable workspace environment.
 - Remaining work: inspect opaque session Authorization header semantics and existing email verification endpoint, then wire the verification state and authenticated session bootstrap without guessing token transport.
 - Exact next action: inspect OpaqueSessionAuthenticationAdapter/request principal resolution and EmailVerificationController contracts; implement the smallest grounded post-registration verification/session flow and record exact validation evidence.
+
+
+## Phase A verification/session transport — EMAIL VERIFICATION FLOW GROUNDED
+- Resumed from the latest Exact next action; did not repeat registration/sign-in contract inspection.
+- Verified opaque session semantics from OpaqueSessionAuthenticationAdapter: authenticated requests must send Authorization: Bearer <credential>; credentials are hashed server-side and revoked/expired sessions are rejected.
+- Verified email verification contract: POST /auth/email-verification accepts {token} and returns {verified:boolean}; no token format was invented by the UI.
+- Implemented a browser-visible verification state with loading, success and failure feedback against the real endpoint, reachable at #verify and linked after successful registration.
+- Preserved backend semantics: a false verified result is shown as an invalid/expired verification link rather than pretending account activation succeeded.
+- Commits: e028d4e2bb0f16bc1e7a93a970952a71c84d65ce, 4bf36f2b861c650eb572f1598111fc9fcce2880a.
+- Remaining work: centralize authenticated API requests so stored opaque credentials are consistently attached as Bearer credentials, then bootstrap the authenticated account view from the existing authenticated account endpoint.
+- Exact next action: inspect AuthenticatedAccountLookupController and its exact response shape; add a small centralized API request helper with Bearer credential handling, then implement the first authenticated account/dashboard state without duplicating authentication logic.
