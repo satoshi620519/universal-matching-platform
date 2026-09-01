@@ -26,7 +26,7 @@ export class PasswordRegistrationService {
     const passwordHash = await this.passwordHasher.hash(input.password);
 
     const registration = await this.registrations.create({
-      accountStatus: 'pending',
+      accountStatus: 'pending-onboarding',
       providerType: 'email-password',
       providerSubject: input.providerSubject,
       passwordHash,
