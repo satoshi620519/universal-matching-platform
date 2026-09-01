@@ -1,3 +1,14 @@
+## Milestone 3 application continuation — CATEGORY ADMINISTRATION BOUNDARY
+- Continued from the exact ProfileService checkpoint without reopening completed profile persistence or create/update guards.
+- Added CategoryService create/update/list use cases around the existing CategoryRepository port.
+- Category creation rejects duplicate stable keys before persistence.
+- Category update rejects missing categories and checks replacement-key uniqueness only when the key actually changes.
+- Added focused regression coverage for duplicate creation, missing update, unchanged-key optimization and conflicting replacement keys.
+- Registered CategoryService in the Nest provider graph.
+- Commits: 68b184df4531f042bc484ca43708292a1cba46a6, 2053181cb622f04f78d439ab5dc2c6c885c01bd6, 2010ea8e084d7ff5063f0bc1d6fe2cb12c0be893.
+- Next exact task: implement the remaining Milestone 3 category-specific profile validation baseline before privacy-aware projection work; do not duplicate generic category CRUD or profile persistence.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 application slice — PROFILE CREATE/UPDATE WITH CATEGORY GUARD
 - Added ProfileService application use cases for create and update rather than expanding persistence implementation further.
 - Creation checks authoritative category existence before profile construction/persistence.
