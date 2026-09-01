@@ -61,6 +61,9 @@ import { InMemoryRequestRateLimiter } from './common/rate-limit/in-memory-reques
 import { RequestAuthenticationAdapter } from './auth/authentication-adapter.js';
 import { RequestPrincipalResolver } from './auth/request-principal-resolver.js';
 import { DatabaseModule } from './database/database.module.js';
+import { RoleAssignmentRepository } from './administration/role-assignment.repository.js';
+import { PrismaRoleAssignmentRepository } from './administration/prisma-role-assignment.repository.js';
+import { AdministrativeRoleAccessService } from './administration/administrative-role-access.service.js';
 import { HealthController } from './health/health.controller.js';
 import { VerificationAccessController } from './verification/verification-access.controller.js';
 import { VerificationAccessService } from './verification/verification-access.service.js';
@@ -77,7 +80,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 @Module({
   imports: [DatabaseModule],
   controllers: [HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
-  providers: [EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [AdministrativeRoleAccessService, PrismaRoleAssignmentRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
@@ -117,6 +120,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     OpaqueSessionAuthenticationAdapter,
+    {
+      provide: RoleAssignmentRepository,
+      useExisting: PrismaRoleAssignmentRepository,
+    },
     {
       provide: AccountRepository,
       useExisting: PrismaAccountRepository,
