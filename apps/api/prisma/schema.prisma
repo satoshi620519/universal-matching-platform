@@ -198,3 +198,35 @@ model AuditRecord {
   @@index([action, occurredAt])
   @@map("audit_records")
 }
+
+model ConfigurationVersion {
+  id           String               @id @default(uuid()) @map("configuration_version_id") @db.Uuid
+  scope        String
+  status       String
+  versionNumber BigInt              @map("version_number")
+  createdAt    DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  publishedAt  DateTime?            @map("published_at") @db.Timestamptz(6)
+  supersededAt DateTime?            @map("superseded_at") @db.Timestamptz(6)
+  values       ConfigurationValue[]
+
+  @@unique([scope, versionNumber])
+  @@index([scope, status, createdAt])
+  @@map("configuration_versions")
+}
+
+model ConfigurationValue {
+  id                     String               @id @default(uuid()) @map("configuration_value_id") @db.Uuid
+  configurationVersionId String               @map("configuration_version_id") @db.Uuid
+  settingKey             String               @map("setting_key")
+  valueType              String               @map("value_type")
+  booleanValue           Boolean?             @map("boolean_value")
+  integerValue           BigInt?              @map("integer_value")
+  decimalValue           Decimal?             @map("decimal_value") @db.Decimal
+  textValue              String?              @map("text_value")
+  createdAt              DateTime             @default(now()) @map("created_at") @db.Timestamptz(6)
+  version                ConfigurationVersion @relation(fields: [configurationVersionId], references: [id], onDelete: Restrict)
+
+  @@unique([configurationVersionId, settingKey])
+  @@index([configurationVersionId, settingKey])
+  @@map("configuration_values")
+}
