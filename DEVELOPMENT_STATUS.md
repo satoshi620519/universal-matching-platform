@@ -1795,3 +1795,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Implementation commits: 653e5adb2e5f2f70fc30fcbbeb97170d87e35e9c, d1a3effae6897bfdd5c08dc47edf5ef6b08ce5ca, 52f6852a7dbe15254e97f84163c526c2257a40dc, 8270f6d02b3e8e478a2145096317531544fd1b6a, 11f141f47302423575c3d99b593f50d0c941735d, 113807d2a95497bec437c99e8f5d12fe066b8bae.
 - Remaining work: install/resolve workspace dependencies and validate typecheck/build, then connect the shell to the first grounded authentication journey.
 - Exact next action: validate the new apps/web package configuration against the workspace dependency model and TypeScript/Vite build requirements; fix only concrete validation failures, then record the exact runnable command and begin the Access journey (register/sign-in) UI.
+
+
+## Phase A access UI — INTERNATIONAL-FIRST REGISTER/SIGN-IN FLOW IMPLEMENTED (API WIRING PENDING)
+- Resumed from the recorded web validation/access-journey checkpoint; did not repeat the completed API inventory or landing-shell work.
+- Corrected the concrete package-boundary issue found during workspace review: Vite and the React plugin are build-time tooling and were moved to devDependencies, while React runtime packages remain dependencies.
+- Added browser-visible Sign in and Create account states reachable from the international landing shell, with responsive layouts, accessible email/password fields, registration consent acknowledgement, and clear navigation back to the product home.
+- Kept initial copy and visual language English/international-first for overseas sales while avoiding country-specific assumptions.
+- Deliberately stopped short of fake authentication: form submission does not claim success because API request/response transport and session persistence must be grounded against the existing backend contracts before integration.
+- Validation status: implementation checkpoint only; dependency installation/build execution remains pending in an executable local/CI environment.
+- Commits: 78d47988a18f65bdb2b6fb887187d6576ababecc, d9a21118603dd9e1f14ce08d133fe68f6372ae29, e35a012045cb25fc9d5fcc56a7ae3d6f40e698fb.
+- Remaining work: connect registration/sign-in UI to the actual existing HTTP contracts, with explicit loading/error/success/session handling rather than simulated authentication.
+- Exact next action: inspect the precise request/response contracts of password-registration and password-sign-in controllers/services (including routes, DTO fields and session behavior), then implement only the grounded frontend API client and access-form integration. Record validation evidence and the next action afterward.
