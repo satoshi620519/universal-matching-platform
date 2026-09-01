@@ -16,18 +16,19 @@ export class PrismaConfigurationValueRepository extends ConfigurationValueReposi
       where: { configurationVersionId_settingKey: {
         configurationVersionId: value.versionId, settingKey: value.settingKey,
       } },
-      create: { configurationVersionId: value.versionId, settingKey: value.settingKey, ...data },
-      update: data,
+      create: { configurationVersionId: value.versionId, settingKey: value.settingKey, ...data } as Prisma.ConfigurationValueUncheckedCreateInput,
+      update: data as Prisma.ConfigurationValueUncheckedUpdateInput,
     });
   }
 
-  private toTypedColumns(value: DraftConfigurationValueRecord) {
+  private toTypedColumns(value: DraftConfigurationValueRecord): Prisma.ConfigurationValueUncheckedUpdateInput {
     const empty = { booleanValue: null, integerValue: null, decimalValue: null, textValue: null };
     switch (value.valueType) {
       case 'boolean': return { valueType: value.valueType, ...empty, booleanValue: value.value as boolean };
       case 'integer': return { valueType: value.valueType, ...empty, integerValue: value.value as bigint };
       case 'decimal': return { valueType: value.valueType, ...empty, decimalValue: new Prisma.Decimal(value.value as number) };
       case 'text': return { valueType: value.valueType, ...empty, textValue: value.value as string };
+      default: throw new Error('Unsupported configuration value type');
     }
   }
 }
