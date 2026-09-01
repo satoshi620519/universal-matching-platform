@@ -59,3 +59,7 @@ export function discoverProfiles(params:{categoryId:string;scope?:string;country
 export function decideMatch(input:{targetAccountId:string;decision:'like'|'pass';idempotencyKey:string}){return apiRequest('/matches/decision',{method:'POST',body:JSON.stringify(input)});}
 
 export function createConversationFromMutualMatch(targetAccountId:string){return apiRequest<Conversation>('/conversations/from-mutual-match',{method:'POST',body:JSON.stringify({targetAccountId})});}
+
+export type Notification = { id:string; kind:string; payload:unknown; createdAt:string; readAt:string|null };
+export function listNotifications(){return apiRequest<{notifications:Notification[]}>('/conversations/notifications');}
+export function markNotificationRead(notificationId:string){return apiRequest<{updated?:boolean}>('/conversations/notifications/'+encodeURIComponent(notificationId)+'/read',{method:'POST'});}
