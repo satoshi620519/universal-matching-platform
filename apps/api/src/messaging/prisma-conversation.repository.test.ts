@@ -2,6 +2,13 @@ import { describe, expect, it, vi } from 'vitest';
 import { PrismaConversationRepository } from './prisma-conversation.repository.js';
 
 describe('PrismaConversationRepository', () => {
+  it('uses a canonical sorted pair and returns an existing direct conversation', async () => {
+    const findUnique = vi.fn().mockResolvedValue({ conversation: { id:'c-existing', participants: [] } });
+    const repository = new PrismaConversationRepository({ directConversationPair: { findUnique } } as never);
+    await expect(repository.createOrFindDirect('z-account','a-account')).resolves.toEqual(expect.objectContaining({ id:'c-existing' }));
+    expect(findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { accountLowId_accountHighId: { accountLowId:'a-account', accountHighId:'z-account' } } }));
+  });
+
   it('creates one participant record per distinct account', async () => {
     const create = vi.fn().mockResolvedValue({ id: 'c1', createdAt: new Date(), participants: [] });
     const repository = new PrismaConversationRepository({ conversation: { create } } as never);
