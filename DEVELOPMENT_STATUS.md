@@ -1094,12 +1094,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 07730bd85a307815f476aef91ea104d4532801f9, b4caef8403029865a941fecffb48dad1792d1729, 35ff9f7cb39ef814053d75ab06e8e09585806a58, 42972c8daf6f9b42816099f1b4eb5a3eb00a7fbd.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Configuration setting definition provider — IMPLEMENTED, CI PENDING
+- Resumed from the exact draft-validation checkpoint and inspected repository conventions; no grounded generic registry abstraction existed, so a narrow configuration-specific provider was introduced rather than inventing a framework-wide registry.
+- Added ConfigurationSettingDefinitionProvider with exact-key lookup and an Injectable in-memory implementation.
+- Application composition now owns the provider; controllers and persistence repositories do not own setting catalogs.
+- The default provider is intentionally empty/fail-closed: unknown settings do not become implicitly valid.
+- Added focused exact-key/unknown-setting tests and CONFIGURATION_SETTING_DEFINITION_PROVIDER.md.
+- Registered the provider through Nest DI so a future authoritative catalog source can replace the implementation without changing validation callers.
+- Commits: f484f3d42394e51431ec2a3caf951233d0a49f78, bc0935ff119213994b7d1fad7e276d5abac459c8, 362260d75c28760727706eb1f41f6fc12cf344ad, 6b2b9fefbd3883a12473cfe483d5e25188316c51, b3570addbb0086f0fbc720ae0a893389e7ea075d.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the draft validation boundary and preceding configuration publication/persistence slices; preserve exact validation failures rather than inferring green.
-2. Inspect existing domain/application registry conventions and introduce the smallest authoritative setting-definition provider required to validate real draft edits without hard-coded controller policy.
-3. Add a narrow draft value editing repository/application boundary that accepts only validated typed values and refuses edits to published/superseded versions.
-4. Keep publication immutable and transactional; editing must not contain lifecycle transition logic.
-5. After validated draft editing exists, integrate successful publication with the existing minimal audit contract.
+1. Verify CI/workflow evidence for the setting-definition provider and preceding configuration slices; preserve exact validation failures rather than inferring green.
+2. Add a narrow draft value repository boundary supporting replace/upsert semantics only for a specified version ID; do not permit direct lifecycle transitions.
+3. Add a draft editing application service that loads the version as draft, resolves the authoritative setting definition, validates the typed value, then persists it through the draft-value boundary.
+4. Ensure published/superseded versions and unknown settings are rejected before persistence mutation.
+5. Keep publication transactional and separate; after validated editing, integrate successful publication with the existing minimal audit contract.
 6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
