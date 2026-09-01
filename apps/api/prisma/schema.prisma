@@ -140,12 +140,14 @@ model EmailOutboxMessage {
   availableAt  DateTime  @default(now()) @map("available_at") @db.Timestamptz(6)
   lockedAt     DateTime? @map("locked_at") @db.Timestamptz(6)
   deliveredAt  DateTime? @map("delivered_at") @db.Timestamptz(6)
+  failedAt     DateTime? @map("failed_at") @db.Timestamptz(6)
   lastError    String?   @map("last_error")
   createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
   account      Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   @@index([status, availableAt])
+  @@index([status, failedAt])
   @@index([accountId, createdAt])
   @@map("email_outbox_messages")
 }
