@@ -838,12 +838,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 2b35ce79af8228317eeaf51d8c0529bfc273feda, 8e1fe791fd97c02251a62dd1298510ccf22bc331, 157601dba5b88b5656ddf342ae35b03d9da2269d, fc13ccda8344330e2040eee97d69fb534aa532b3, 29d76a3a444e0e0c6da1f7511a07a296d733277f, 60fdad8e33756c0338fe3cf6a4df7d5ab534839e, eefc849d02dfe0493299e9792ea46d4abb9d1196, 9b1508463841c2468a94abeeffd431608bc561d2.
 - CI state remains unverified through the current connector; do not infer green.
 
+
+## Email outbox terminal failure policy — IMPLEMENTED, CI evidence pending
+- Resumed from the persistent exact-next-action checkpoint and did not recreate completed verification, outbox, worker, process or identity work.
+- Added explicit terminal EmailOutboxMessage status 'failed' and failedAt persistence field.
+- Added ordered migration 0006_add_email_outbox_terminal_failure.sql and extended the committed migration sequence regression guard through version 0006.
+- Added EmailOutboxRepository.markFailed() and Prisma terminal-state persistence that clears worker locks and bounds stored error text.
+- Dispatcher now transitions classified permanent failures directly to 'failed' without rescheduling; transient and unknown failures retain bounded exponential backoff.
+- Added regression coverage proving a 422-style permanent provider failure calls markFailed and never calls reschedule.
+- Added EMAIL_OUTBOX_TERMINAL_FAILURE_POLICY.md documenting the terminal state, operational review boundary and explicit non-adoption of an invented external DLQ.
+- Commits: 0fc2bce7a88c47c02b8c6f2077be9c0ee92143fa, 3cc7defdce792d80703b68c0784b2b160b248be1, d0b328a4012189e24a010e2883b7f15cc923009d, 62cc644abb1080dd61f6a424d7cde33b0158edc7, 9d0f7ffe341b9df43f3872d4bad6a23eeb9985b7, bc37d75c70dbed1704d1157559e4d26a6594ff34, 53f70e36b83b710db9d296138c29cbca5e45004d, 0ac443f1086fbfa7cf1f5d5e0342eaee7ee88215.
+- CI state: recent outbox/process/identity/terminal-failure workflow evidence remains unavailable through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for all recent outbox/process/identity commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Select a real outbound email provider only after inspecting repository/environment configuration and operational constraints; do not invent credentials or silently enable network delivery.
-3. Evolve retry policy so permanent failures are not blindly retried forever, including an explicit terminal/dead-letter state and migration only if the persistence contract changes.
-4. Keep stable messageId correlation across retries and preserve the prohibition on raw verification tokens in durable outbox records.
-5. Keep the standalone process explicit and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for recent outbox/process/identity/terminal-failure commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Inspect repository configuration and deployment constraints for a grounded real outbound email provider choice; do not invent credentials or silently enable network delivery.
+3. Define operational handling for terminal failed messages (review/query boundary and safe manual requeue semantics) before automated recovery is introduced.
+4. Keep stable messageId correlation across retries and terminal transitions; preserve the prohibition on raw verification tokens in durable outbox records.
+5. Keep migration execution and the standalone worker process explicit, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
