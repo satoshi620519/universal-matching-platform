@@ -39,7 +39,7 @@ export class MessagingController {
     if (!targetAccountId || !(await this.matches.isMutualMatch(principal.accountId, targetAccountId))) {
       return { statusCode: HttpStatus.NOT_FOUND };
     }
-    return this.conversations.create([principal.accountId, targetAccountId]);
+    return this.conversations.createOrFindDirect(principal.accountId, targetAccountId);
   }
 
   @Get(':conversationId/messages')
