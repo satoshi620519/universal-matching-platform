@@ -48,7 +48,7 @@ import { EmailVerificationUrlPolicy } from './auth/email-verification-url-policy
 import { EnvironmentEmailVerificationUrlPolicy } from './auth/environment-email-verification-url-policy.js';
 import { EmailVerificationTokenRepository } from './auth/email-verification-token.repository.js';
 import { PrismaEmailVerificationTokenRepository } from './auth/prisma-email-verification-token.repository.js';
-import { PasswordSignInTransportService } from './auth/password-sign-in-transport.service.js';
+import { PasswordSignInTransportService } from './auth/password-sign-in.transport-service.js';
 import { PasswordSignInController } from './auth/password-sign-in.controller.js';
 import { SessionController } from './auth/session.controller.js';
 import { SessionRepository } from './auth/session.repository.js';
@@ -112,143 +112,39 @@ import { PrismaConversationRepository } from './messaging/prisma-conversation.re
 import { PrismaMessageRepository } from './messaging/prisma-message.repository.js';
 import { PrismaNotificationRepository } from './messaging/prisma-notification.repository.js';
 import { RealtimePublisher } from './realtime/realtime-publisher.js';
-import { NoopRealtimePublisher } from './realtime/noop-realtime-publisher.js';
+import { SseRealtimePublisher } from './realtime/sse-realtime-publisher.js';
 import { MessageRealtimePublicationService } from './messaging/message-realtime-publication.service.js';
+import { RealtimeController } from './realtime/realtime.controller.js';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController, MessagingController],
-  providers: [PrismaMatchTransitionRepository, PrismaConversationRepository, PrismaMessageRepository, PrismaNotificationRepository, MessageRealtimePublicationService, NoopRealtimePublisher, AllowAllDiscoveryExclusionPolicy, DiscoveryService, PrismaDiscoveryProfileRepository, CategoryService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
-    HealthStatusService,
-    CapabilityAccessService,
-    AccountActivationService,
-    VerificationAccessService,
-    AccountLookupService,
-    RequestPrincipalResolver,
-    PrismaAccountRepository,
-    PrismaAuthenticationIdentityRepository,
-    PrismaPasswordCredentialRepository,
-    PrismaPasswordRegistrationRepository,
-    PasswordRegistrationService,
-    PasswordRegistrationTransportService,
-    PasswordSignInService,
-    EmailVerificationService,
-    EmailVerificationDeliveryService,
-    EmailOutboxDispatchService,
-    EmailOutboxWorker,
-    EmailOutboxProcessService,
-    FailedEmailOutboxReviewService,
-    PrismaEmailOutboxRepository,
-    PrismaFailedEmailOutboxRepository,
-    LoggingOutboundEmailSender,
-    EnvironmentEmailVerificationUrlPolicy,
-    PrismaEmailVerificationTokenRepository,
-    PasswordSignInTransportService,
-    SessionIssuanceService,
-    SessionRevocationService,
-    PrismaSessionRepository,
-    MinimumPasswordPolicy,
-    InMemoryRequestRateLimiter,
-    NodeScryptPasswordHasher,
-    PrismaVerificationRepository,
-    PrismaSafetyEnforcementRepository,
-    VerificationService,
-    VerificationLevelAccessService,
-    VerificationCapabilityAccessService,
-    AuthenticationIdentityService,
-    AnonymousAuthenticationAdapter,
-    OpaqueSessionAuthenticationAdapter,
-    {
-      provide: ConfigurationEffectiveValueRepository,
-      useExisting: PrismaConfigurationEffectiveValueRepository,
-    },
-    {
-      provide: ConfigurationValueRepository,
-      useExisting: PrismaConfigurationValueRepository,
-    },
-    {
-      provide: ConfigurationSettingDefinitionProvider,
-      useExisting: InMemoryConfigurationSettingDefinitionProvider,
-    },
-    {
-      provide: ConfigurationVersionRepository,
-      useExisting: PrismaConfigurationVersionRepository,
-    },
-    {
-      provide: AuditRecordRepository,
-      useExisting: PrismaAuditRecordRepository,
-    },
-    {
-      provide: RoleAssignmentRepository,
-      useExisting: PrismaRoleAssignmentRepository,
-    },
-    {
-      provide: AccountRepository,
-      useExisting: PrismaAccountRepository,
-    },
-    {
-      provide: SafetyEnforcementRepository,
-      useExisting: PrismaSafetyEnforcementRepository,
-    },
-    {
-      provide: VerificationRepository,
-      useExisting: PrismaVerificationRepository,
-    },
-    {
-      provide: AuthenticationIdentityRepository,
-      useExisting: PrismaAuthenticationIdentityRepository,
-    },
-    {
-      provide: FailedEmailOutboxRepository,
-      useExisting: PrismaFailedEmailOutboxRepository,
-    },
-    {
-      provide: EmailOutboxRepository,
-      useExisting: PrismaEmailOutboxRepository,
-    },
-    {
-      provide: OutboundEmailSender,
-      useExisting: LoggingOutboundEmailSender,
-    },
-    {
-      provide: EmailVerificationUrlPolicy,
-      useExisting: EnvironmentEmailVerificationUrlPolicy,
-    },
-    {
-      provide: EmailVerificationTokenRepository,
-      useExisting: PrismaEmailVerificationTokenRepository,
-    },
-    {
-      provide: SessionRepository,
-      useExisting: PrismaSessionRepository,
-    },
-    {
-      provide: RequestRateLimiter,
-      useExisting: InMemoryRequestRateLimiter,
-    },
-    {
-      provide: PasswordPolicy,
-      useExisting: MinimumPasswordPolicy,
-    },
-    {
-      provide: PasswordRegistrationRepository,
-      useExisting: PrismaPasswordRegistrationRepository,
-    },
-    {
-      provide: PasswordHasher,
-      useExisting: NodeScryptPasswordHasher,
-    },
-    {
-      provide: PasswordCredentialRepository,
-      useExisting: PrismaPasswordCredentialRepository,
-    },
+  controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController, MessagingController, RealtimeController],
+  providers: [PrismaMatchTransitionRepository, PrismaConversationRepository, PrismaMessageRepository, PrismaNotificationRepository, MessageRealtimePublicationService, SseRealtimePublisher, AllowAllDiscoveryExclusionPolicy, DiscoveryService, PrismaDiscoveryProfileRepository, CategoryService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+    HealthStatusService, CapabilityAccessService, AccountActivationService, VerificationAccessService, AccountLookupService, RequestPrincipalResolver, PrismaAccountRepository, PrismaAuthenticationIdentityRepository, PrismaPasswordCredentialRepository, PrismaPasswordRegistrationRepository, PasswordRegistrationService, PasswordRegistrationTransportService, PasswordSignInService, EmailVerificationService, EmailVerificationDeliveryService, EmailOutboxDispatchService, EmailOutboxWorker, EmailOutboxProcessService, FailedEmailOutboxReviewService, PrismaEmailOutboxRepository, PrismaFailedEmailOutboxRepository, LoggingOutboundEmailSender, EnvironmentEmailVerificationUrlPolicy, PrismaEmailVerificationTokenRepository, PasswordSignInTransportService, SessionIssuanceService, SessionRevocationService, PrismaSessionRepository, MinimumPasswordPolicy, InMemoryRequestRateLimiter, NodeScryptPasswordHasher, PrismaVerificationRepository, PrismaSafetyEnforcementRepository, VerificationService, VerificationLevelAccessService, VerificationCapabilityAccessService, AuthenticationIdentityService, AnonymousAuthenticationAdapter, OpaqueSessionAuthenticationAdapter,
+    { provide: ConfigurationEffectiveValueRepository, useExisting: PrismaConfigurationEffectiveValueRepository },
+    { provide: ConfigurationValueRepository, useExisting: PrismaConfigurationValueRepository },
+    { provide: ConfigurationSettingDefinitionProvider, useExisting: InMemoryConfigurationSettingDefinitionProvider },
+    { provide: ConfigurationVersionRepository, useExisting: PrismaConfigurationVersionRepository },
+    { provide: AuditRecordRepository, useExisting: PrismaAuditRecordRepository },
+    { provide: RoleAssignmentRepository, useExisting: PrismaRoleAssignmentRepository },
+    { provide: AccountRepository, useExisting: PrismaAccountRepository },
+    { provide: SafetyEnforcementRepository, useExisting: PrismaSafetyEnforcementRepository },
+    { provide: VerificationRepository, useExisting: PrismaVerificationRepository },
+    { provide: AuthenticationIdentityRepository, useExisting: PrismaAuthenticationIdentityRepository },
+    { provide: FailedEmailOutboxRepository, useExisting: PrismaFailedEmailOutboxRepository },
+    { provide: EmailOutboxRepository, useExisting: PrismaEmailOutboxRepository },
+    { provide: OutboundEmailSender, useExisting: LoggingOutboundEmailSender },
+    { provide: EmailVerificationUrlPolicy, useExisting: EnvironmentEmailVerificationUrlPolicy },
+    { provide: EmailVerificationTokenRepository, useExisting: PrismaEmailVerificationTokenRepository },
+    { provide: SessionRepository, useExisting: PrismaSessionRepository },
+    { provide: RequestRateLimiter, useExisting: InMemoryRequestRateLimiter },
+    { provide: PasswordPolicy, useExisting: MinimumPasswordPolicy },
+    { provide: PasswordRegistrationRepository, useExisting: PrismaPasswordRegistrationRepository },
+    { provide: PasswordHasher, useExisting: NodeScryptPasswordHasher },
     { provide: DiscoveryExclusionPolicy, useExisting: AllowAllDiscoveryExclusionPolicy },
-    { provide: RealtimePublisher, useExisting: NoopRealtimePublisher },
+    { provide: RealtimePublisher, useExisting: SseRealtimePublisher },
     { provide: MatchTransitionRepository, useExisting: PrismaMatchTransitionRepository },
-    {
-      provide: RequestAuthenticationAdapter,
-      useExisting: OpaqueSessionAuthenticationAdapter,
-    },
+    { provide: RequestAuthenticationAdapter, useExisting: OpaqueSessionAuthenticationAdapter },
   ],
 })
 export class AppModule {}
