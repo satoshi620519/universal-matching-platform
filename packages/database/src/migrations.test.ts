@@ -38,7 +38,8 @@ describe('repository migration sequence', () => {
       '0004_create_safety_enforcements.sql',
       '0005_create_email_outbox_messages.sql',
       '0006_add_email_outbox_terminal_failure.sql',
-        '0007_create_administration_roles.sql',
+      '0007_create_administration_roles.sql',
+      '0008_create_audit_records.sql',
     ]);
   });
 });
