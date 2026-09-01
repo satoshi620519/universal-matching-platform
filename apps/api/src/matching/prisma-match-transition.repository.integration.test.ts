@@ -23,7 +23,11 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   it('does not duplicate directed interactions under concurrent identical requests', async () => {
     const repository = new PrismaMatchTransitionRepository(prisma as never);
     const command = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'same-request' };
-    await Promise.allSettled([repository.transition(command), repository.transition(command)]);
+    const results = await Promise.allSettled([repository.transition(command), repository.transition(command)]);
+    expect(results.every((result) => result.status === 'fulfilled')).toBe(true);
+    const fulfilled = results.filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof repository.transition>>> => result.status === 'fulfilled');
+    expect(fulfilled.filter((result) => result.value.replayed)).toHaveLength(1);
+    expect(fulfilled.filter((result) => !result.value.replayed)).toHaveLength(1);
     const count = await prisma!.matchInteraction.count({ where: { actorAccountId: command.actorAccountId, targetAccountId: command.targetAccountId } });
     expect(count).toBe(1);
   });
@@ -39,5 +43,6 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     expect(results.filter((result) => result.mutual)).toHaveLength(1);
     expect(results.filter((result) => result.state === 'matched')).toHaveLength(1);
     expect(results.filter((result) => result.state === 'pending')).toHaveLength(1);
+    expect(results.every((result) => result.replayed === false)).toBe(true);
   });
 });
