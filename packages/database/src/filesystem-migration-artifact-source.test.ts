@@ -31,6 +31,19 @@ describe('FilesystemMigrationArtifactSource', () => {
     await expect(source.load()).resolves.toEqual([]);
   });
 
+  it('ignores the repository migration directory placeholder', async () => {
+    const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
+    await mkdir(directory);
+    await writeFile(join(directory, '.gitkeep'), '');
+    await writeFile(join(directory, '0001_first.sql'), 'SELECT 1;');
+
+    const source = new FilesystemMigrationArtifactSource(directory);
+
+    await expect(source.load()).resolves.toEqual([
+      { version: 1, filename: '0001_first.sql', sql: 'SELECT 1;' },
+    ]);
+  });
+
   it('rejects a duplicate migration version before reading migration SQL', async () => {
     const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
     await mkdir(directory);
