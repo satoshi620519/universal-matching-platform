@@ -7,17 +7,17 @@ import { RoleAssignmentRepository } from './role-assignment.repository.js';
 export class RoleAssignmentMutationService {
   constructor(private readonly assignments: RoleAssignmentRepository, private readonly audit: AuditRecordService) {}
 
-  async assign(input: { readonly actorId: string; readonly accountId: string; readonly role: AdministrativeRoleKey; readonly effectiveAt?: Date; readonly expiresAt?: Date }): Promise<void> {
+  async assign(input: { readonly actorId: string; readonly accountId: string; readonly role: AdministrativeRoleKey; readonly effectiveAt?: Date; readonly expiresAt?: Date; readonly correlationId?: string }): Promise<void> {
     const effectiveAt = input.effectiveAt ?? new Date();
     if (input.expiresAt && input.expiresAt <= effectiveAt) throw new Error('expiresAt must be after effectiveAt');
     await this.assignments.assign({ accountId: input.accountId, role: input.role, effectiveAt, ...(input.expiresAt ? { expiresAt: input.expiresAt } : {}), assignedByAccountId: input.actorId });
-    await this.audit.append({ actorId: input.actorId, area: 'security', action: 'assign-administrative-role', targetId: input.accountId, occurredAt: effectiveAt.toISOString() });
+    await this.audit.append({ actorId: input.actorId, area: 'security', action: 'assign-administrative-role', targetId: input.accountId, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: effectiveAt.toISOString() });
   }
 
-  async revoke(input: { readonly actorId: string; readonly accountId: string; readonly role: AdministrativeRoleKey; readonly revokedAt?: Date }): Promise<boolean> {
+  async revoke(input: { readonly actorId: string; readonly accountId: string; readonly role: AdministrativeRoleKey; readonly revokedAt?: Date; readonly correlationId?: string }): Promise<boolean> {
     const revokedAt = input.revokedAt ?? new Date();
     if (await this.assignments.revokeActive(input.accountId, input.role, revokedAt) === 0) return false;
-    await this.audit.append({ actorId: input.actorId, area: 'security', action: 'revoke-administrative-role', targetId: input.accountId, occurredAt: revokedAt.toISOString() });
+    await this.audit.append({ actorId: input.actorId, area: 'security', action: 'revoke-administrative-role', targetId: input.accountId, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: revokedAt.toISOString() });
     return true;
   }
 }
