@@ -959,12 +959,26 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 73bdfcbf6cdbd053390ec0d3f8ead406837fba6c, 0a60394ad43fe4e22094fce0d95006de6fe12e1b, a1bcfa20d15b2458cf2a91cccc88648a7bda338b, 47ee3efa08cdc5e67760a89c8f066adfaf626488.
 - CI state: this transport slice remains unverified by CI evidence available through the current connector; do not infer green.
 
+
+## Initial administrator provisioning boundary — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and resolved bootstrap before exposing runtime role-management HTTP routes.
+- Confirmed no existing bootstrap/config convention could be safely reused; deliberately avoided an unauthenticated bootstrap endpoint or self-escalation path.
+- Added InitialAdministratorProvisioningService as a dedicated deployment/operator boundary, separate from runtime AdministrativeRoleManagementService.
+- Provisioning accepts an explicit pre-existing account ID, creates administrator only when none is already active for that account, and is idempotent for repeated operator invocation.
+- Bootstrap assignments intentionally have no invented human assigning actor; assignedByAccountId is optional at the repository boundary to match the nullable persistence model, while ordinary runtime mutation still supplies the authenticated actor.
+- Added focused tests for first provisioning and idempotent repeated invocation.
+- Registered the provisioning service through Nest DI but deliberately exposed no public HTTP route.
+- Added INITIAL_ADMINISTRATOR_PROVISIONING_BOUNDARY.md documenting deployment-time-only semantics and prohibitions.
+- Commits: d42af0176b9df78292c66bce5cc5e65b192a06f5, a51b827671beabe2e185baa69287bac06d52300a, 1bfb628179e565b3126864307f8cd2912fc4577f, 850c81abe56cd71a42a3148a04493d5cf86d33d0, 88a1c5ff90264c1e6153cb29b2311222a37d5e94, ebce999936a6345a242f8a2dac36e6536a15934d.
+- CI state: this bootstrap slice remains unverified by CI evidence available through the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the administrative transport slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Review the completed administrative role-management application boundary against the same authenticated-controller convention and add transport only if it can be grounded without inventing bootstrap/first-admin behavior.
-3. Before exposing role mutation HTTP routes, resolve and document the initial administrator provisioning/bootstrap path so the system cannot ship with an unreachable or self-escalating role-management surface.
-4. Keep all transport controllers thin: request principal → validated input → authorized application boundary.
-5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the initial-administrator provisioning slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Trace repository conventions for operator/deployment commands and, if grounded, expose initial provisioning only through an explicit non-HTTP command entrypoint; otherwise keep the service boundary documented rather than inventing runtime behavior.
+3. Add the thin authenticated administrative role-management HTTP transport only after confirming bootstrap invocation remains outside that transport.
+4. Transport must resolve principal → validate input → AdministrativeRoleManagementService, with no direct repository access or role checks in controllers.
+5. Add focused transport tests for authentication, capability denial propagation, time-window validation and no sensitive audit payload leakage.
+6. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
