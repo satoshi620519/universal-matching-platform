@@ -19,12 +19,25 @@ const {
 } = await import('../../../packages/database/dist/index.js');
 
 const prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+
+const executeStatements = async (client, sql, params = []) => {
+  if (params.length > 0) {
+    return client.$queryRawUnsafe(sql, ...params);
+  }
+
+  let lastResult = [];
+  for (const statement of sql.split(';').map((value) => value.trim()).filter(Boolean)) {
+    lastResult = await client.$queryRawUnsafe(statement);
+  }
+  return lastResult;
+};
+
 const sqlClient = {
-  query: (sql, params = []) => prisma.$queryRawUnsafe(sql, ...params),
+  query: (sql, params = []) => executeStatements(prisma, sql, params),
   transaction: (operation) =>
     prisma.$transaction(async (tx) =>
       operation({
-        query: (sql, params = []) => tx.$queryRawUnsafe(sql, ...params),
+        query: (sql, params = []) => executeStatements(tx, sql, params),
       }),
     ),
 };
