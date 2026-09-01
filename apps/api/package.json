@@ -8,6 +8,7 @@
     "typecheck": "pnpm prisma:generate && tsc --noEmit -p tsconfig.json",
     "lint": "eslint src --max-warnings=0",
     "test": "vitest run",
+    "test:matching:concurrency": "node scripts/run-matching-concurrency-integration.mjs",
     "prisma:generate": "prisma generate",
     "email-outbox:run": "tsx src/email-outbox-worker.main.ts",
     "administrator:provision": "tsx src/administration/initial-administrator-provisioning.main.ts"
