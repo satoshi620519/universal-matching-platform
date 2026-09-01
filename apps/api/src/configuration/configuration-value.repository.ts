@@ -1,4 +1,4 @@
-import type { ConfigurationPrimitiveType } from '@universal/domain';
+export type ConfigurationPrimitiveType = 'boolean' | 'integer' | 'decimal' | 'text';
 
 export interface DraftConfigurationValueRecord {
   readonly versionId: string;
