@@ -1,3 +1,13 @@
+## Milestone 4 correctness hardening — IDEMPOTENCY SCOPE SERIALIZATION
+- Continued from the evidence-pending checkpoint without repeating unavailable workflow polling.
+- Identified a concrete gap: pair-level locking serializes reciprocal transitions but does not serialize the database's actor+idempotency-key uniqueness when the same key races with different targets.
+- Added a second transaction-scoped advisory lock for actor+idempotency key, preventing that race from reaching a unique-violation recovery path inside an already-failed PostgreSQL transaction.
+- Corrected replay semantics to resolve state from the persisted interaction's actor/target pair rather than the incoming retry target, preventing a conflicting retry payload from producing the wrong reciprocal lookup.
+- Added unit coverage for both advisory locks and persisted-pair replay semantics, plus PostgreSQL integration coverage for same-key/different-target concurrency.
+- Commits: 3cbb0b0b2030021af042bbe2b7f98ae2cbd11478, 438165e4dea1988fad6ab8ee794b7c96721adf7c, ef6677052380921e2494a9da8742b7e68c7edc88.
+- Next exact task: obtain actual isolated PostgreSQL execution evidence for the expanded concurrency matrix; further implementation changes should remain concrete-failure-driven.
+- CI state: execution evidence remains pending; no green status inferred.
+
 ## Milestone 4 execution evidence check — EXACT TRIGGER COMMIT INSPECTION
 - Inspected workflow runs specifically for commit 91ed49df466f13f0ff1523e7e860112f2226b696, the matching-source commit that should satisfy the dedicated workflow path trigger, rather than checking only status/documentation commits.
 - The available GitHub workflow-run query returned an empty run list. This is concrete evidence of unavailable execution visibility/no associated run through the accessible integration, not a passing result.
