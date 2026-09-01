@@ -1,3 +1,13 @@
+## Milestone 4 baseline — DISCOVERY QUERY AND ELIGIBILITY
+- Began M4 at its dependency boundary after the bounded M3 review; did not reopen completed M3 slices.
+- Added domain-owned DiscoveryQuery with subject/category/geography, bounded limit (1..100) and opaque cursor contract plus validation tests.
+- Added DiscoveryProfileRepository port returning a cursor page, establishing pagination semantics before adapter/API work.
+- Added initial configurable-eligibility baseline excluding self, category mismatch and incompatible country scope while allowing global candidates.
+- Added focused eligibility regression tests for self/category/geography/global cases.
+- Commits: 986f62ab34421d7d4b5d12b20184a42541d5b58e, 214103cd39b5e2dc1f9e6dcc19d0de45e901814b, 45ab365e275a22fe2fc3c0bf60f08e7328eeb081, 894e7b1f0e9287ace1514617144656e3838b7b49, 0b8a96651908b0d0c0eba9b84408ceaddd5ef394.
+- Next exact task: implement Prisma discovery adapter with stable cursor ordering and then application-level eligibility composition; block/safety exclusions must be introduced as explicit dependencies rather than hidden query assumptions.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 bounded integration review — MIGRATION GAP CLOSED
 - Performed the planned single bounded M3 integration review instead of reopening completed domain/application slices.
 - Identified the concrete schema integration gap: Profile/Category Prisma models existed without a checked-in migration artifact discoverable in the repository.
