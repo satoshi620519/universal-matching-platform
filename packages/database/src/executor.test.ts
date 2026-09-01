@@ -23,6 +23,21 @@ describe('executePendingMigrations', () => {
     expect(result).toEqual([2]);
   });
 
+  it('rejects duplicate applied history before applying migrations', async () => {
+    let applyCalled = false;
+
+    await expect(
+      executePendingMigrations(migrations, {
+        listAppliedVersions: async () => [1, 1],
+        apply: async () => {
+          applyCalled = true;
+        },
+      }),
+    ).rejects.toThrow('Migration history contains duplicate applied versions');
+
+    expect(applyCalled).toBe(false);
+  });
+
   it('stops when a migration fails', async () => {
     const applied: number[] = [];
 
