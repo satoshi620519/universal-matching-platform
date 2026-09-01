@@ -1,3 +1,14 @@
+## Milestone 4 application slice — DISCOVERY ELIGIBILITY COMPOSITION
+- Continued from the Prisma cursor adapter without reopening query or pagination contracts.
+- Added DiscoveryService composing validated query -> repository page -> eligibility filter -> privacy projection.
+- Self, category mismatch and incompatible geography are removed before projection; projection receives the subject viewer context and fails closed per existing policy.
+- Preserved opaque nextCursor passthrough while returning projected rather than persistence-shaped profiles.
+- Added application regression tests proving ineligible candidates never reach results and owner-only fields are not exposed to discovery viewers.
+- Registered DiscoveryService in Nest.
+- Commits: 9e3706ab771703bab6fad46184aa74ec91f7d689, 799e292a14e851a8bd426d074ed59a18de1af472, 9879f6b188651fe3ab67cc2ae44e3e7bc321514a.
+- Next exact task: introduce block/safety exclusion as explicit discovery eligibility dependencies; do not hide those policies inside the Prisma query or start match state persistence before exclusion semantics are explicit.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 persistence slice — PRISMA DISCOVERY WITH STABLE CURSORS
 - Continued from the DiscoveryQuery/Eligibility baseline without implementing matching state prematurely.
 - Added PrismaDiscoveryProfileRepository implementing the domain discovery port.
