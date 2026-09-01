@@ -22,20 +22,15 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
       });
       if (existing) return this.resultFor(existing, true, tx);
 
-      try {
-        const interaction = await tx.matchInteraction.create({ data: {
-          actorAccountId: command.actorAccountId, targetAccountId: command.targetAccountId,
-          decision: command.decision, idempotencyKey: command.idempotencyKey,
-        }});
-        return this.resultFor(interaction, false, tx);
-      } catch (error) {
-        if (!(error instanceof Error) || !('code' in error) || (error as { code?: string }).code !== 'P2002') throw error;
-        const replay = await tx.matchInteraction.findUnique({
-          where: { actorAccountId_idempotencyKey: { actorAccountId: command.actorAccountId, idempotencyKey: command.idempotencyKey } },
-        });
-        if (replay) return this.resultFor(replay, true, tx);
-        throw error;
-      }
+      const interaction = await tx.matchInteraction.create({
+        data: {
+          actorAccountId: command.actorAccountId,
+          targetAccountId: command.targetAccountId,
+          decision: command.decision,
+          idempotencyKey: command.idempotencyKey,
+        },
+      });
+      return this.resultFor(interaction, false, tx);
     });
   }
 
