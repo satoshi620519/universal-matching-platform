@@ -1,3 +1,14 @@
+## Milestone 4 persistence slice — PRISMA DISCOVERY WITH STABLE CURSORS
+- Continued from the DiscoveryQuery/Eligibility baseline without implementing matching state prematurely.
+- Added PrismaDiscoveryProfileRepository implementing the domain discovery port.
+- Query is category-bounded, deterministically ordered by immutable profile id, and uses limit+1 pagination to determine next-page availability.
+- Cursor is opaque base64url JSON carrying the stable id boundary; malformed cursors are rejected explicitly.
+- Added focused adapter contract tests for deterministic ordering, limit+1/skip semantics and opaque malformed-cursor handling.
+- Registered the adapter with Nest.
+- Commits: b04fc22cc567b1e2e4ae63867f7c21538ec5b20c, ef8783a70b816b5ca4138e0dfcbb89725430d316, 561864a091d3a23628cc6d56c7a058aa66b5fc58.
+- Next exact task: compose discovery repository results with domain eligibility in an application service; geography/self/category filtering must occur before projection, while block/safety exclusions remain explicit pending dependencies.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 baseline — DISCOVERY QUERY AND ELIGIBILITY
 - Began M4 at its dependency boundary after the bounded M3 review; did not reopen completed M3 slices.
 - Added domain-owned DiscoveryQuery with subject/category/geography, bounded limit (1..100) and opaque cursor contract plus validation tests.
