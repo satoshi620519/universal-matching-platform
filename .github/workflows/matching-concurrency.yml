@@ -21,6 +21,10 @@ on:
       - 'apps/api/scripts/run-matching-concurrency-integration.mjs'
       - '.github/workflows/matching-concurrency.yml'
 
+concurrency:
+  group: matching-concurrency-gate-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   postgres-concurrency:
     name: PostgreSQL reciprocal transition evidence
