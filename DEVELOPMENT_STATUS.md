@@ -1,3 +1,12 @@
+## Milestone 4 CI install correctness — ABSENT LOCKFILE RECONCILIATION
+- Continued with repository-input verification rather than repeating unavailable workflow polling.
+- Confirmed the repository declares pnpm@10.0.0 and pnpm-workspace.yaml, but no pnpm-lock.yaml exists at the repository root (and no alternate package lockfile is present).
+- This exposed a concrete regression in the prior frozen-lockfile hardening: pnpm install --frozen-lockfile would fail before the PostgreSQL concurrency suite could execute, and the workflow also watched a nonexistent lockfile path.
+- Restored pnpm install --no-frozen-lockfile and removed the nonexistent pnpm-lock.yaml trigger. This preserves an executable evidence pipeline while accurately documenting that dependency-graph reproducibility cannot be claimed until a committed lockfile is intentionally introduced and maintained.
+- Commit: 5bb05804af28e7ff4b604fc83a4e3769ffe797a2.
+- Next exact task: obtain a real execution for the corrected executable workflow; inspect conclusion, explicit attestation and commit-addressable artifact. Do not claim frozen dependency reproducibility without an actual committed lockfile.
+- CI state: execution evidence remains pending; a concrete pre-test workflow failure introduced by the prior hardening was removed.
+
 ## Milestone 4 evidence reproducibility — FROZEN LOCKFILE EXECUTION
 - Continued with a concrete review of the execution environment rather than repeating unavailable workflow-run polling.
 - Found that the dedicated evidence workflow used pnpm install --no-frozen-lockfile even though pnpm-lock.yaml is explicitly part of the trigger surface.
