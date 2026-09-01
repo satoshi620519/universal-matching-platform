@@ -1756,6 +1756,15 @@ Transform the validated backend/domain platform into a product that a buyer can 
 - [ ] Observability, backups, failure recovery and security review.
 - [ ] Production smoke-test checklist.
 
+
+### Phase D.5 — Buyer-selectable Payment Provider Layer
+- [ ] Define provider-neutral payment capability contract; do not embed buyer credentials in source control.
+- [ ] Buyer admin settings: select enabled provider(s) and configure provider-owned credentials through environment/secret references.
+- [ ] Initial adapters prioritized by market coverage and documented buyer contracts (for example Stripe, PayPal, Adyen, Checkout.com), subject to each provider's current integration requirements.
+- [ ] Webhook verification, idempotency, refund/cancellation lifecycle and audit records.
+- [ ] Provider sandbox test matrix and buyer setup guide.
+- [ ] Provider fallback/disable behavior and region-aware availability configuration.
+
 ### Phase E — Sales Package
 - [ ] Buyer installation guide.
 - [ ] Branding/customization guide.
@@ -1807,3 +1816,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commits: 78d47988a18f65bdb2b6fb887187d6576ababecc, d9a21118603dd9e1f14ce08d133fe68f6372ae29, e35a012045cb25fc9d5fcc56a7ae3d6f40e698fb.
 - Remaining work: connect registration/sign-in UI to the actual existing HTTP contracts, with explicit loading/error/success/session handling rather than simulated authentication.
 - Exact next action: inspect the precise request/response contracts of password-registration and password-sign-in controllers/services (including routes, DTO fields and session behavior), then implement only the grounded frontend API client and access-form integration. Record validation evidence and the next action afterward.
+
+
+## Product architecture decision — BUYER-SELECTABLE MULTI-PAYMENT PROVIDERS
+- Sales model clarified: this product does not require the platform template seller to contract with payment processors for every buyer deployment. The buyer/operator contracts with providers available to their own business and region.
+- Product requirement: buyers must be able to select supported payment provider integrations rather than being locked to one processor.
+- No payment implementation was found in the current repository inventory, so no existing payment code was duplicated or rewritten.
+- Architecture direction recorded: provider-neutral payment boundary + isolated provider adapters + operator configuration + buyer-owned secrets + verified webhooks/idempotency/audit trails.
+- Security constraint: provider API keys, merchant IDs and webhook secrets must never be committed into the product repository or exposed through the customer-facing UI.
+- This work is dependency-ordered after the runnable customer/admin product foundations because provider configuration requires a real operator boundary; payment support is now an explicit required phase before final sales acceptance.
+- Completed work: sales architecture decision and roadmap insertion.
+- Evidence: repository-wide payment/billing/subscription filename inventory returned no existing implementation boundary to reuse.
+- Remaining work: complete Phase A runnable product and Phase B operator UI before implementing provider configuration; then define the neutral payment contract before choosing adapter-specific SDK details.
+- Exact next action: return to the previously recorded Phase A dependency order (inspect exact password registration/sign-in request/response/session contracts and wire the real Access UI). Do not start payment adapters prematurely or invent provider credentials/contracts.
