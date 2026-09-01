@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { DiscoveryExclusionPolicy } from './discovery-exclusion.policy.js';
 import {
   createDiscoveryQuery,
   evaluateDiscoveryEligibility,
@@ -11,7 +12,11 @@ import {
 
 @Injectable()
 export class DiscoveryService {
-  constructor(private readonly profiles: DiscoveryProfileRepository) {}
+  constructor(
+    private readonly profiles: DiscoveryProfileRepository,
+    private readonly blockExclusions: DiscoveryExclusionPolicy,
+    private readonly safetyExclusions: DiscoveryExclusionPolicy,
+  ) {}
 
   async discover(input: {
     subjectAccountId: string;
@@ -27,10 +32,14 @@ export class DiscoveryService {
       ? undefined
       : input.geographicScope.countryCode;
 
-    const items = page.items
-      .filter((candidate) => evaluateDiscoveryEligibility(
-        input.subjectAccountId, input.categoryId, subjectCountryCode, candidate,
-      ).eligible)
+    const eligible = await Promise.all(page.items.map(async (candidate) => {
+      if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate).eligible) return null;
+      if (await this.blockExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
+      if (await this.safetyExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
+      return candidate;
+    }));
+
+    const items = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null)
       .map((candidate) => projectProfile(
         candidate,
         { accountId: input.subjectAccountId },
