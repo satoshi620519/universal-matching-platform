@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, TooManyRequestsException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { DuplicateAuthenticationIdentityError } from './duplicate-authentication-identity.error.js';
 import { normalizeEmailProviderSubject } from './email-provider-subject.js';
@@ -30,7 +30,7 @@ export class PasswordRegistrationTransportService {
     });
 
     if (!decision.allowed) {
-      throw new TooManyRequestsException('Registration temporarily unavailable');
+      throw new HttpException('Registration temporarily unavailable', HttpStatus.TOO_MANY_REQUESTS);
     }
 
     const email = normalizeEmailProviderSubject(input.email);
