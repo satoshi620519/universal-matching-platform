@@ -7,6 +7,8 @@ import {
   type Profile,
   type ProfileFieldValue,
   type ProfileRepository,
+  type ProfileFieldSchema,
+  validateProfileFields,
 } from '@universal/domain';
 
 @Injectable()
@@ -20,10 +22,13 @@ export class ProfileService {
     accountId: string;
     categoryId: string;
     fields: Record<string, ProfileFieldValue>;
+    fieldSchema: ProfileFieldSchema;
     geographicScope: GeographicScope;
   }): Promise<Profile> {
     const category = await this.categories.findById(input.categoryId);
     if (!category) throw new Error('profile category not found');
+
+    validateProfileFields(input.fieldSchema, input.fields);
 
     const profile = createProfile({
       id: randomUUID(),
@@ -39,6 +44,7 @@ export class ProfileService {
   async update(id: string, input: {
     categoryId?: string;
     fields?: Record<string, ProfileFieldValue>;
+    fieldSchema?: ProfileFieldSchema;
     geographicScope?: GeographicScope;
   }): Promise<Profile> {
     const existing = await this.profiles.findById(id);
@@ -49,10 +55,13 @@ export class ProfileService {
       throw new Error('profile category not found');
     }
 
+    const fields = input.fields ?? existing.fields;
+    if (input.fieldSchema) validateProfileFields(input.fieldSchema, fields);
+
     const profile = createProfile({
       ...existing,
       categoryId,
-      fields: input.fields ?? existing.fields,
+      fields,
       geographicScope: input.geographicScope ?? existing.geographicScope,
     });
     await this.profiles.save(profile);
