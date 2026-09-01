@@ -1,3 +1,13 @@
+## Milestone 3 persistence slice — AUTHORITATIVE PRISMA ADAPTERS IMPLEMENTED
+- Located the authoritative API persistence boundary: apps/api/prisma/schema.prisma plus DatabaseService (PrismaClient) and existing Injectable Prisma repository convention.
+- Added Category and Profile Prisma schema models, Account/Category relations, geographic scope columns and lookup indexes.
+- Added PrismaProfileRepository implementing the domain port with explicit global/country/region mapping and malformed persisted-scope rejection.
+- Added PrismaCategoryRepository implementing stable id/key lookup, deterministic list ordering and upsert persistence.
+- Added focused adapter tests and registered both adapters with the Nest application provider graph.
+- Commits: b8cbf2bd7c46b7613635e5a8dbc70740539196e1, 6173797529264e385a3458dfc3640a1091478510, cfb0c64fdd38b117d558016c9885e387f49e8c98, 95cf7a142a0864f30e923e7f28e3fdc86e6dd4df, 4671a766aa9ada72f25f6179487094dfea2fffa7.
+- Next exact task: add application use cases for category/profile creation and update with category existence checks; privacy-aware projections remain pending.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 persistence preparation — DOMAIN PORTS ESTABLISHED
 - Inspected repository package conventions before adding persistence implementation and found no existing generic profile/category repository to duplicate.
 - Added domain-owned ProfileRepository port with find/save/delete identity operations.
