@@ -63,3 +63,7 @@ export function createConversationFromMutualMatch(targetAccountId:string){return
 export type Notification = { id:string; kind:string; payload:unknown; createdAt:string; readAt:string|null };
 export function listNotifications(){return apiRequest<{notifications:Notification[]}>('/conversations/notifications');}
 export function markNotificationRead(notificationId:string){return apiRequest<{updated?:boolean}>('/conversations/notifications/'+encodeURIComponent(notificationId)+'/read',{method:'POST'});}
+
+export type MyProfile = { id:string; accountId:string; categoryId:string; fields:Record<string,string|number|boolean|null>; geographicScope:{kind:string;countryCode?:string;regionCode?:string} };
+export function getMyProfile(){return apiRequest<MyProfile|null>('/profiles/me');}
+export function updateMyProfile(input:{categoryId?:string;fields?:Record<string,string|number|boolean|null>;geographicScope?:{kind:string;countryCode?:string;regionCode?:string}}){return apiRequest<MyProfile>('/profiles/me',{method:'PATCH',body:JSON.stringify(input)});}
