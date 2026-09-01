@@ -86,3 +86,5 @@ export * from './category-repository.js';
 export * from './profile-repository.js';
 
 export * from './profile-field-schema.js';
+
+export * from './profile-projection.js';
