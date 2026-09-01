@@ -1151,11 +1151,21 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 8e46f4a59e8da4cba0fd3c12d708ac82c47b3ea8, 01902f2846d786bd41f5ef22ce9eb5a9fcffa2fe, f1fd6d9fc3db30acf0bbb94f568a58f12e18bfc3, 52eea846a74c8435a7ce49b5d1861d403e2a849a, 0434afdbc2d748811e39c887a359a36c93d4a782, ce8e631aad5aa05d2760ad9d83f1c5abf3e6c4b7.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Milestone 2 validation review — CI EVIDENCE UNAVAILABLE, ONE CONCRETE TYPE FIX APPLIED
+- Resumed from the exact validation checkpoint before adding new functionality.
+- Queried workflow evidence for the latest Milestone 2 checkpoint commit; the available GitHub workflow-run endpoint returned no associated runs, so no CI result was inferred.
+- Reviewed package validation commands: repository-level Turbo build/typecheck/lint/test and API Prisma generation/typecheck, lint and Vitest remain the intended validation gates.
+- Performed a concrete application-boundary review and removed one unnecessary `as any` escape in ConfigurationReversionService by preserving ConfigurationScope through repository calls.
+- No speculative architecture, transport or UI was added during validation review.
+- Fix commit: cd12d68884aff0e0d6016e5a14d7d3f685d78e31.
+- Milestone 2 implementation remains functionally complete but CI validation evidence is still unavailable from the accessible workflow history; do not mark green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the complete Milestone 2 configuration lifecycle; preserve exact failures rather than inferring green.
-2. Review all configuration application boundaries for compile/type inconsistencies introduced across repository interfaces and services, fixing only concrete validation failures.
-3. If lifecycle validation is clean, close Milestone 2 with a concise architecture/status checkpoint rather than adding speculative transport/UI.
-4. Only then select the next milestone from the repository roadmap and resume from the recorded checkpoint.
+1. Obtain repository CI validation evidence for the latest Milestone 2 commit range when workflow visibility/runs are available; run or inspect typecheck, lint, tests and build rather than inferring success.
+2. If concrete validation failures appear, fix only those failures and revalidate.
+3. If validation is clean, close Milestone 2 with a concise architecture/status checkpoint.
+4. Then inspect the repository roadmap and select the next dependency-ordered milestone without recreating completed configuration work.
 5. Update this checkpoint after validation/closure.
 
 ## Architecture constraints
