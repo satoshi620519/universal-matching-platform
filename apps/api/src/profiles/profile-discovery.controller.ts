@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Patch, Post, Query } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CategoryService } from './category.service.js';
@@ -38,7 +38,15 @@ export class ProfileDiscoveryController {
   @Get('profiles/me')
   async getMyProfile(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-me' });
-    return this.profileRepository.findById(principal.accountId);
+    return this.profileRepository.findByAccountId(principal.accountId);
+  }
+
+  @Patch('profiles/me')
+  async updateMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string } }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-update' });
+    const existing = await this.profileRepository.findByAccountId(principal.accountId);
+    if (!existing) throw new Error('profile not found');
+    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? DEFAULT_FIELD_SCHEMA : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined });
   }
 
   @Get('discovery')
