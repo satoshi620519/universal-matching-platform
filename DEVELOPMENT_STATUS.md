@@ -1,3 +1,12 @@
+## Milestone 4 integration slice — POSTGRESQL CONCURRENCY GATE
+- Added opt-in database-backed PostgreSQL integration coverage for match transition concurrency, separate from fast unit tests.
+- Added concurrent duplicate-request scenario asserting one directed interaction survives.
+- Added concurrent reciprocal-like scenario asserting both directed interactions persist and at least one completed transition observes mutual state.
+- Added isolated test runner requiring MATCHING_TEST_DATABASE_URL and explicitly documenting destructive TRUNCATE behavior; test is skipped in ordinary unit runs when no isolated database is configured.
+- Commits: 933d13508f13dd296c6104bc258fb0b4bb9f67d8, 56c2007796fd852486aecdda646c22a62da29273, f1aa8233ea8ce3b3bb8ab3e8034c55d110bae270, ec6c8311044a7e5a8841d36806ee7bedb41de76e.
+- Next exact task: run the integration gate against an isolated migrated PostgreSQL instance and fix any real isolation race exposed; do not mark M4 complete until execution evidence is obtained.
+- CI state: implementation committed; integration execution requires isolated database configuration and no green status is inferred.
+
 ## Milestone 4 verification slice — EXECUTABLE MATCH TRANSITION SCENARIOS
 - Replaced source-string-only adapter evidence with executable mocked repository scenarios.
 - Added replay test proving an existing idempotency key returns replayed result without a second create.
