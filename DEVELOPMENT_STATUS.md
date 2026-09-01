@@ -898,11 +898,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: b25d985532351e3179f75f1c9b26469d0e3b1059, 51951c23f06d595887b3122d74ac5b96f7094cf9, 9dad8a1064cd51b0d1e923c05ea224504e9f77dc, 9d27a478b39efdcfe22345d719da0e9d6f167b0b, c9c44bd74ef35fe5cb1111304404dd8f3e88c845, 0e271e3e26ad01207ff22ba17d8bf96251a37654.
 - CI state: workflow evidence for this slice and preceding administration/outbox commits remains unavailable through the current connector; do not infer green.
 
+
+## Append-oriented audit persistence — IMPLEMENTED, CI evidence pending
+- Resumed from the exact checkpoint and implemented the smallest audit dependency before exposing role mutation or privileged operations.
+- Reused the existing AuditRecord domain contract and Administration/Audit ownership rather than inventing a parallel event model.
+- Added AuditRecordRepository with append-only persistence semantics; no update/delete methods exist on the boundary.
+- Added PrismaAuditRecordRepository and AuditRecordService with domain validation before persistence.
+- Added migration 0008_create_audit_records.sql with actor/action/target chronological indexes and minimal metadata fields.
+- Added Prisma AuditRecord mapping and Account relation, plus Nest DI registration.
+- Added focused tests proving valid data-minimized append behavior and invalid records are rejected before persistence.
+- Added APPEND_ORIENTED_AUDIT_PERSISTENCE.md explicitly excluding raw credentials, verification tokens, message bodies and unrestricted request payload copies.
+- Commits: 1cef289046e743f60f3738fac3e401d80ec55a81, bfd7e082d729d6e4d96838f78164eaee1f1c3484, fc5ce534ba79e3acbf920799dcda4bd0c7901d49, 10640606c7b9a78b6761d225e81f815ef861e444, 219bff07e3e3d1d25e484667d8d26e4d14ddfe5e, 78b3f8c1e795433f90cf54d9c4d47a8735c6188b, d6216cf11facc199104cdb0d9af837e8e980baad, 294cec83f84abacd9851b737f45c2eeed5d43744, 31846533ca31a324c243177384ca88a4f2f21939.
+- CI state: this audit slice is not yet validated through CI evidence available to the current connector; do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the administrative role/read-boundary slice and preceding related commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Implement the smallest append-oriented audit persistence contract required before role assignment mutation or privileged failed-email operations are exposed.
-3. Keep role authorization read-only until audit persistence can record privilege changes and privileged actions coherently.
-4. Keep failed-email operations as application services; compose them with explicit role authorization and audit only after those dependencies exist.
+1. Verify CI/workflow evidence for the audit persistence slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Implement the smallest audited role-assignment mutation boundary (assign/revoke) using explicit actor identity, persisted active-role semantics and append-only audit records.
+3. Do not expose public administrative HTTP endpoints until the mutation boundary has authorization composition and audit failure semantics defined.
+4. After role mutation is coherent, compose explicit role authorization + audit around the existing failed-email review/requeue application service.
 5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
