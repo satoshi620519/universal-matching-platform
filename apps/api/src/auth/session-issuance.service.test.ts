@@ -14,11 +14,12 @@ describe('SessionIssuanceService', () => {
       authenticationMethod: 'password',
     });
 
-    expect(create).toHaveBeenCalledWith({
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({
       accountId: 'account-1',
       authenticationMethod: 'password',
       expiresAt: new Date('2026-09-07T00:00:00.000Z'),
-    });
+      credentialHash: expect.any(String),
+    }));
     vi.useRealTimers();
   });
 });
