@@ -64,6 +64,9 @@ import { DatabaseModule } from './database/database.module.js';
 import { RoleAssignmentRepository } from './administration/role-assignment.repository.js';
 import { PrismaRoleAssignmentRepository } from './administration/prisma-role-assignment.repository.js';
 import { AdministrativeRoleAccessService } from './administration/administrative-role-access.service.js';
+import { AuditRecordRepository } from './administration/audit-record.repository.js';
+import { PrismaAuditRecordRepository } from './administration/prisma-audit-record.repository.js';
+import { AuditRecordService } from './administration/audit-record.service.js';
 import { HealthController } from './health/health.controller.js';
 import { VerificationAccessController } from './verification/verification-access.controller.js';
 import { VerificationAccessService } from './verification/verification-access.service.js';
@@ -80,7 +83,7 @@ import { HealthStatusService } from './health/health-status.service.js';
 @Module({
   imports: [DatabaseModule],
   controllers: [HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
-  providers: [AdministrativeRoleAccessService, PrismaRoleAssignmentRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [AdministrativeRoleAccessService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
@@ -120,6 +123,10 @@ import { HealthStatusService } from './health/health-status.service.js';
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     OpaqueSessionAuthenticationAdapter,
+    {
+      provide: AuditRecordRepository,
+      useExisting: PrismaAuditRecordRepository,
+    },
     {
       provide: RoleAssignmentRepository,
       useExisting: PrismaRoleAssignmentRepository,
