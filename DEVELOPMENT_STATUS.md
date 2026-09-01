@@ -1663,3 +1663,10 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Non-participants receive no message data and the query is not issued when membership is absent.
 - Commits: ccc55ea932fd738959aa6476a184638d765e35b5 and 5bfde718688dfc8bb8e53b5579d7d610770c0265.
 - Next exact task: validate message reads in CI, then expose the already-authorized conversation/message operations through a narrow HTTP API boundary.
+
+- CI #1121 and CI #1122 completed successfully, validating participant-scoped message reads and the checkpoint.
+- Added the narrow authenticated HTTP boundary for conversation creation and message reads/writes.
+- Authenticated identity is bound server-side through RequestPrincipalResolver; client input cannot select the sender identity.
+- Repository participant checks remain the persistence authorization boundary, so the controller does not duplicate authorization logic.
+- Commits: d0905f8ec5b6b33f60aac7f91539e9291373e19d, f812a322c02bd8907fd7a150e0c2bef11d99fb07, c638e97cde14a61a0e917a444535c450640affb5.
+- Next exact task: validate the HTTP boundary in CI, then add notification records/outbox integration without recreating the existing email outbox infrastructure.
