@@ -1,3 +1,11 @@
+## Migration artifact source integrity — DIRECTORY CONTENT FAIL-CLOSED
+- Continued from migration history integrity validation without reopening completed implementation slices.
+- Found that FilesystemMigrationArtifactSource silently ignored regular non-.sql files, allowing unexpected artifacts in a configured migration directory to go unnoticed.
+- Changed source loading to pass every regular file through the existing strict filename contract, while directories remain ignored.
+- Added regression coverage proving a regular notes.txt file causes source loading to fail rather than being silently skipped.
+- Commits: 2cb6ed4767aba89d763a1ea3b0ec54c888310201, ef83bb1f6dd404b43d6111f3689119a250bed9dd.
+- CI state: source integrity fix committed; workflow execution evidence remains unavailable and green is not inferred.
+
 ## Migration execution history integrity — DUPLICATE HISTORY FAIL-CLOSED
 - Continued static validation from the exact prior checkpoint without reopening completed product slices.
 - Found that executePendingMigrations collapsed duplicate applied-version history into a Set, silently masking corrupted/duplicate history.
