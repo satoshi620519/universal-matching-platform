@@ -13,20 +13,20 @@ export class AdministrativeRoleManagementController {
   constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly roles: AdministrativeRoleManagementService) {}
 
   @Post('accounts/:accountId/assign')
-  async assign(@Param('accountId') accountId: string, @Body() body: { role?: unknown; effectiveAt?: unknown; expiresAt?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async assign(@Param('accountId') accountId: string, @Body() body: { role?: unknown; effectiveAt?: unknown; expiresAt?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
     if (!accountId.trim()) throw new BadRequestException('accountId is required');
     const effectiveAt = parseIsoDate(body?.effectiveAt, 'effectiveAt'); const expiresAt = parseIsoDate(body?.expiresAt, 'expiresAt');
     if (effectiveAt && expiresAt && expiresAt <= effectiveAt) throw new BadRequestException('expiresAt must be after effectiveAt');
-    const correlationId = requestId?.trim() || undefined;
+    const correlationId = correlationHeader?.trim() || undefined;
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: correlationId ?? 'administration-role-assign' });
     await this.roles.assign({ actorId: principal.accountId, accountId, role: parseRole(body?.role), ...(effectiveAt ? { effectiveAt } : {}), ...(expiresAt ? { expiresAt } : {}), ...(correlationId ? { correlationId } : {}) });
     return { assigned: true };
   }
 
   @Post('accounts/:accountId/:role/revoke')
-  async revoke(@Param('accountId') accountId: string, @Param('role') role: string, @Body() body: { revokedAt?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async revoke(@Param('accountId') accountId: string, @Param('role') role: string, @Body() body: { revokedAt?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
     if (!accountId.trim()) throw new BadRequestException('accountId is required');
-    const revokedAt = parseIsoDate(body?.revokedAt, 'revokedAt'); const correlationId = requestId?.trim() || undefined;
+    const revokedAt = parseIsoDate(body?.revokedAt, 'revokedAt'); const correlationId = correlationHeader?.trim() || undefined;
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: correlationId ?? 'administration-role-revoke' });
     return { revoked: await this.roles.revoke({ actorId: principal.accountId, accountId, role: parseRole(role), ...(revokedAt ? { revokedAt } : {}), ...(correlationId ? { correlationId } : {}) }) };
   }
