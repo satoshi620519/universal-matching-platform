@@ -4,13 +4,14 @@ import { ProfileService } from './profile.service.js';
 describe('ProfileService', () => {
   const category = { id: 'c1', key: 'dating', displayName: 'Dating' };
   const scope = { kind: 'global' } as const;
+  const schema = { displayName: { kind: 'string', required: true, minLength: 2 } } as const;
 
   it('rejects creation when the category does not exist', async () => {
     const service = new ProfileService(
       { save: vi.fn(), findById: vi.fn(), delete: vi.fn() },
       { findById: vi.fn().mockResolvedValue(null), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
     );
-    await expect(service.create({ accountId: 'a1', categoryId: 'missing', fields: {}, geographicScope: scope }))
+    await expect(service.create({ accountId: 'a1', categoryId: 'missing', fields: {}, fieldSchema: schema, geographicScope: scope }))
       .rejects.toThrow('profile category not found');
   });
 
@@ -20,7 +21,7 @@ describe('ProfileService', () => {
       { save, findById: vi.fn(), delete: vi.fn() },
       { findById: vi.fn().mockResolvedValue(category), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
     );
-    const profile = await service.create({ accountId: 'a1', categoryId: 'c1', fields: { age: 20 }, geographicScope: scope });
+    const profile = await service.create({ accountId: 'a1', categoryId: 'c1', fields: { displayName: 'Satoshi' }, fieldSchema: schema, geographicScope: scope });
     expect(profile.categoryId).toBe('c1');
     expect(save).toHaveBeenCalledWith(profile);
   });
@@ -48,3 +49,14 @@ describe('ProfileService', () => {
     expect(save).toHaveBeenCalledTimes(1);
   });
 });
+
+  it('validates category field rules before persistence', async () => {
+    const save = vi.fn();
+    const service = new ProfileService(
+      { save, findById: vi.fn(), delete: vi.fn() },
+      { findById: vi.fn().mockResolvedValue(category), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+    );
+    await expect(service.create({ accountId: 'a1', categoryId: 'c1', fields: { displayName: 'A' }, fieldSchema: schema, geographicScope: scope }))
+      .rejects.toThrow('too short');
+    expect(save).not.toHaveBeenCalled();
+  });
