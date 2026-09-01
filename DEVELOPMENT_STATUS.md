@@ -1,3 +1,10 @@
+## Filesystem migration source edge completion — EMPTY AND DUPLICATE VERSION BOUNDARIES
+- Continued from the exact migration execution completion checkpoint without reopening completed configuration or prior source-boundary work.
+- Added regression coverage for an explicitly empty migration directory returning an empty artifact set.
+- Added duplicate-version source coverage proving filename ordering/uniqueness validation fails before artifact loading can proceed with ambiguous versions.
+- Commit: ea44f224f3c9a4a4466ebeac30e25cb5279cc150.
+- CI state: source boundary coverage expanded; latest Milestone 2 workflow validation evidence remains unavailable and green is not inferred.
+
 ## Migration execution completion boundaries — NO-OP AND INPUT IMMUTABILITY COVERED
 - Continued from the milestone-pointer correction and exact migration orchestration checkpoint without reopening completed implementation slices.
 - Added regression coverage proving fully applied migration histories produce an empty result without invoking apply.
