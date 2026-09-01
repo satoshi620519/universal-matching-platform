@@ -24,6 +24,7 @@ model Account {
   profiles                  Profile[]
   sentMatchInteractions     MatchInteraction[] @relation("MatchInteractionActor")
   receivedMatchInteractions MatchInteraction[] @relation("MatchInteractionTarget")
+  conversationParticipants ConversationParticipant[]
 
   @@map("accounts")
 }
@@ -276,4 +277,24 @@ model MatchInteraction {
   @@unique([actorAccountId, targetAccountId])
   @@index([targetAccountId, actorAccountId])
   @@map("match_interactions")
+}
+
+model Conversation {
+  id String @id @default(uuid()) @map("conversation_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  participants ConversationParticipant[]
+
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  conversationId String @map("conversation_id") @db.Uuid
+  accountId String @map("account_id") @db.Uuid
+  joinedAt DateTime @default(now()) @map("joined_at") @db.Timestamptz(6)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, accountId])
+  @@index([accountId, joinedAt])
+  @@map("conversation_participants")
 }
