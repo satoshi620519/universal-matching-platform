@@ -1021,11 +1021,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 1b81e269b601c1fb876221098d0c1558f64e660d, 32e587240d6aa3b1de8702851ab2ee81556ce38c, 857f499accf91adbe925da832b4ed47df599971a, 4efd9193548163da31f2bdd5c6694645ac7702e2, ffc49c07a49df099f04fc958650fbe821b083fed, 0bb4a2b748b88064c7c9ee72e59a91728df638e6, e59c771368448b90f5d0ecef098059ce4b8b0282.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## HTTP correlation convention reconciliation — IMPLEMENTED, CI PENDING
+- Resumed from the exact checkpoint and inspected the shared HTTP boundary before changing privileged controllers.
+- Confirmed the repository-wide canonical header is observability.CORRELATION_ID_HEADER = x-correlation-id.
+- configureHttpApplication() resolves and returns x-correlation-id on every HTTP request; ApiErrorFilter uses the same convention for errors.
+- Corrected administrative role and failed-email transports away from their parallel x-request-id convention to x-correlation-id.
+- Privileged transports still pass an internal request label to authentication when no canonical correlation value exists; this label is not audit correlation metadata.
+- Extended HTTP integration coverage to assert canonical correlation propagation into the role-management application input.
+- Added HTTP_CORRELATION_CONVENTION.md so future transports consume the shared convention instead of redefining header names.
+- Commits: ab1d219ee6f0cd0c173498437748554d739d6ed3, 5fd3a23ebce9758e8a32210316b17a34418fcdf9, 83d22313ff50074ffa62b73a55183a48ffa9269a, ec6b573ac215a232511495bf27463daa8c299b10.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the administrative audit correlation commits and the preceding administrative command/transport slices; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Reconcile the repository-wide HTTP correlation header convention (x-request-id vs observability x-correlation-id) at the shared HTTP boundary before changing individual privileged controllers again.
-3. If a single canonical header can be grounded from configureHttpApplication()/ApiErrorFilter conventions, normalize there and add regression coverage; otherwise document the boundary mismatch and avoid speculative transport churn.
-4. Continue only with the next Milestone 1 requirement gap after correlation convention is settled.
+1. Verify CI/workflow evidence for the canonical HTTP correlation reconciliation and preceding administrative slices; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Resume the next Milestone 1 requirement gap from PRODUCT_REQUIREMENTS.md/ARCHITECTURE.md rather than expanding completed administrative transport.
+3. Before implementation, inspect existing domain/application boundaries for the smallest unmet required capability and prefer additive slices with explicit tests.
+4. Preserve the canonical x-correlation-id convention at the shared HTTP boundary and do not reintroduce per-controller correlation header names.
 5. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
