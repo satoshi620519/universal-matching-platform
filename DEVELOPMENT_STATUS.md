@@ -1676,3 +1676,10 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Added notification persistence migration 0016, Prisma mapping, account-scoped repository, bounded reads, and ownership-safe read acknowledgement.
 - Commits: 3cc91831cf13167c7f3c8a1ce978778aacdeda34, a5ffdd736fcaf8e5c4a594fa99aede827d4f192b, 1bc3c88018be9eefa2caca5d6534fc187281bd2a, 0e4afac4ed8329a779992f22f3c0cbc5ade87010.
 - Next exact task: validate notification persistence in CI, then connect message creation to recipient notification creation transactionally before considering realtime fan-out.
+
+- CI #1131 completed successfully; Matching Concurrency Gate #53 was already successful, so notification persistence is validated.
+- Connected message creation to recipient in-app notification creation inside the same database transaction.
+- The sender is excluded; each other conversation participant receives a durable message.created notification containing conversation/message/sender identifiers.
+- This reuses the notification table and avoids duplicating the existing email outbox worker.
+- Commits: 0363e5777086e57f25790eb8ea0a895884cced04 and 331dbae2f07b069c2950548971de22dec05434e6.
+- Next exact task: validate transactional message-notification integration in CI, then expose account-scoped notification reads/acknowledgement through the authenticated HTTP boundary before realtime fan-out.
