@@ -18,7 +18,7 @@ export class FilesystemMigrationArtifactSource
     const entries = await readdir(this.directory, { withFileTypes: true });
     const filenames = orderMigrationFilenames(
       entries
-        .filter((entry) => entry.isFile())
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.sql'))
         .map((entry) => entry.name),
     );
 
