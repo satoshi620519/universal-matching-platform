@@ -47,20 +47,28 @@ jobs:
           node-version: 22
       - run: pnpm install --no-frozen-lockfile
       - name: Run isolated PostgreSQL concurrency evidence
+        id: concurrency
         env:
           MATCHING_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/universal_matching
         shell: bash
         run: |
           set -o pipefail
           pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
-      - name: Attest gate success
-        if: success()
+      - name: Attest gate result
+        if: always()
+        env:
+          TEST_OUTCOME: ${{ steps.concurrency.outcome }}
         run: |
-          test -s matching-concurrency.log
-          echo "MATCHING_CONCURRENCY_GATE=passed" >> "$GITHUB_STEP_SUMMARY"
+          test -f matching-concurrency.log
           echo "DATABASE_ENGINE=PostgreSQL 16" >> "$GITHUB_STEP_SUMMARY"
           echo "EVIDENCE_COMMIT=$GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
           echo "EVIDENCE_LABEL=${{ inputs.evidence_label || 'path-triggered' }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$TEST_OUTCOME" = "success" ]; then
+            test -s matching-concurrency.log
+            echo "MATCHING_CONCURRENCY_GATE=passed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "MATCHING_CONCURRENCY_GATE=failed" >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Upload concurrency evidence
         if: always()
         uses: actions/upload-artifact@v4
