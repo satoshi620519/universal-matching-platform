@@ -55,6 +55,11 @@ jobs:
         env:
           MATCHING_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/universal_matching
         run: pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
+      - name: Verify concurrency gate result
+        if: success()
+        run: |
+          test -s matching-concurrency.log
+          echo "MATCHING_CONCURRENCY_GATE=passed" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload matching concurrency diagnostics
         if: always()
         uses: actions/upload-artifact@v4
