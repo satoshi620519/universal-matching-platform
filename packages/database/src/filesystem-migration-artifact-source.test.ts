@@ -31,10 +31,11 @@ describe('FilesystemMigrationArtifactSource', () => {
     await expect(source.load()).resolves.toEqual([]);
   });
 
-  it('ignores the repository migration directory placeholder', async () => {
+  it('ignores repository migration directory placeholders and documentation', async () => {
     const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
     await mkdir(directory);
     await writeFile(join(directory, '.gitkeep'), '');
+    await writeFile(join(directory, 'README.md'), '# migrations');
     await writeFile(join(directory, '0001_first.sql'), 'SELECT 1;');
 
     const source = new FilesystemMigrationArtifactSource(directory);
@@ -69,14 +70,14 @@ describe('FilesystemMigrationArtifactSource', () => {
     ]);
   });
 
-  it('rejects regular files that violate the migration filename contract', async () => {
+  it('rejects SQL files that violate the migration filename contract', async () => {
     const directory = join(tmpdir(), `migration-source-${randomUUID()}`);
     await mkdir(directory);
     await writeFile(join(directory, '0001_first.sql'), 'SELECT 1;');
-    await writeFile(join(directory, 'notes.txt'), 'not a migration');
+    await writeFile(join(directory, 'notes.sql'), 'not a migration');
 
     const source = new FilesystemMigrationArtifactSource(directory);
 
-    await expect(source.load()).rejects.toThrow();
+    await expect(source.load()).rejects.toThrow('Invalid migration filename: notes.sql');
   });
 });
