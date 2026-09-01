@@ -3,6 +3,7 @@ import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js'
 import { PrismaConversationRepository } from './prisma-conversation.repository.js';
 import { PrismaMessageRepository } from './prisma-message.repository.js';
 import { PrismaNotificationRepository } from './prisma-notification.repository.js';
+import { MessageRealtimePublicationService } from './message-realtime-publication.service.js';
 
 @Controller('conversations')
 export class MessagingController {
@@ -11,6 +12,7 @@ export class MessagingController {
     private readonly conversations: PrismaConversationRepository,
     private readonly messages: PrismaMessageRepository,
     private readonly notifications: PrismaNotificationRepository,
+    private readonly messageRealtime: MessageRealtimePublicationService,
   ) {}
 
   @Post()
@@ -44,9 +46,10 @@ export class MessagingController {
     @Headers('x-request-id') requestId?: string,
   ) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'message-create' });
-    const message = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
-    if (!message) return { statusCode: HttpStatus.NOT_FOUND };
-    return message;
+    const created = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
+    if (!created) return { statusCode: HttpStatus.NOT_FOUND };
+    await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
+    return created.message;
   }
 
   @Get('/notifications')
