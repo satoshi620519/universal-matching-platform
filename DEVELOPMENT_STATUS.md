@@ -1993,3 +1993,17 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: static schema/domain/transport contract inspection complete; runtime migration/build/browser integration remains pending executable workspace environment. Controller schema lookup currently uses CategoryService.list for simplicity and should be optimized to direct findById before high-volume production traffic.
 - Remaining work: add focused dynamic schema transport tests, persistent/versioned configuration integration for category schemas, direct category lookup optimization, discovery pagination/loading states, and conversation pair idempotency. Before expanding categories further, validate migration safety and compile the web/API workspace.
 - Exact next action: inspect existing migration test conventions and profile migration contracts, add a focused test proving the one-profile-per-account migration artifact and category schema validation behavior, then proceed to discovery pagination without revisiting completed onboarding work.
+
+
+## Phase B schema verification + scalable discovery — TESTS AND CURSOR PAGINATION ADDED
+- Resumed strictly from the recorded Exact next action. Inspected existing migration contract-test conventions and discovery API cursor support; did not revisit completed onboarding/profile lifecycle work.
+- Added migration contract coverage for the one-profile-per-account artifact, asserting the unique index name and account_id target.
+- Added focused CategoryFieldSchemaService tests covering category-specific extension and safe BASE fallback. This tests configuration behavior without duplicating lower-level ProfileService validation tests.
+- Confirmed existing discovery backend already supports cursor and nextCursor, so no redundant backend pagination implementation was created.
+- Extended web discovery API client to pass cursor only when present.
+- Implemented client pagination state: initial discovery replaces results; Load more appends the next server-authorized page; nextCursor controls continuation availability.
+- Added explicit loading/disabled states and retained honest empty/error messaging. No seeded profiles or fake pagination were introduced.
+- Commits: f82c306e9b745059f21e4300b7e30fd17b415eb2, 37721eb00c5ab335c0831f56aa22e3008fac432d, 8ae64b09c3f8440a1a4c378e16ed1df80e41edfc, 1fe0f7f921c3687aae094a8025dbf4e2bdbb71bc, c85bdf296f96e4030886ebc8dd1ae31c8f57b015.
+- Validation status: static contract inspection and focused test additions complete; full workspace runtime/build/migration execution remains pending executable workspace environment.
+- Remaining work: discovery client needs deduplication across unstable data pages and cursor reset on category change; category schema lookup should use direct repository lookup rather than list+find; conversation pair uniqueness/idempotency remains unresolved; notification polling/realtime integration and notification event creation coverage remain incomplete.
+- Exact next action: inspect conversation persistence schema and existing conversation creation tests, design an idempotent canonical participant-pair uniqueness strategy without weakening generic group conversation capability. Do not change completed discovery pagination unless a concrete defect is found.
