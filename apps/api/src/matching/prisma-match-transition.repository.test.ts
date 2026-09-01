@@ -26,11 +26,12 @@ function databaseFor(sequence: {
 describe('PrismaMatchTransitionRepository executable transition scenarios', () => {
   const command = { actorAccountId: 'a1', targetAccountId: 'a2', decision: 'like' as const, idempotencyKey: 'k1' };
 
-  it('acquires a transaction-scoped pair lock before reading transition state', async () => {
+  it('acquires transaction-scoped pair and idempotency locks with 64-bit hash keys', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
     await new PrismaMatchTransitionRepository(database as never).transition(command);
     expect(database.tx.$executeRaw).toHaveBeenCalledTimes(2);
     expect(database.tx.$executeRaw.mock.calls.every((call) => call.join('').includes('pg_advisory_xact_lock'))).toBe(true);
+    expect(database.tx.$executeRaw.mock.calls.every((call) => call.join('').includes('hashtextextended'))).toBe(true);
   });
 
   it('replays an existing idempotency key without creating a duplicate', async () => {
