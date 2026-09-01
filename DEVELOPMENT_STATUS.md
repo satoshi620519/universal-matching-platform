@@ -1,3 +1,12 @@
+## Milestone 4 evidence semantics — EXPLICIT PASS/FAIL ATTESTATION
+- Reviewed the corrected workflow as an evidence chain rather than repeating unavailable workflow polling.
+- Identified a concrete observability gap: the step summary emitted only on success, while failures relied solely on job conclusion/log interpretation.
+- Added an explicit named concurrency step outcome and an always-running attestation step that records the exact commit, PostgreSQL version, evidence label and MATCHING_CONCURRENCY_GATE=passed or failed.
+- The failure-preserving pipefail behavior remains unchanged; failed tests still fail the job while producing a machine-readable failure attestation and log artifact.
+- Commit: a9c1c9b31d1b9c91db0bbe542a5ef2c5b67822d2.
+- Next exact task: obtain an actual workflow execution for this final evidence chain and inspect job conclusion, explicit attestation and uploaded log artifact; no green result is inferred before that evidence exists.
+- CI state: execution visibility remains unavailable; evidence output now represents both outcomes explicitly.
+
 ## Milestone 4 CI trigger completeness — MIGRATION AND DEPENDENCY COVERAGE
 - Reviewed the dedicated workflow trigger surface instead of repeating unavailable run/status polling.
 - Identified a concrete evidence gap: the isolated runner executes prisma migrate deploy, but changes under the repository migration boundary and dependency lockfile/API package could alter the executed PostgreSQL behavior without triggering the dedicated concurrency gate.
