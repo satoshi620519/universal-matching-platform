@@ -6,12 +6,12 @@ CREATE TABLE roles (
 
 CREATE TABLE role_assignments (
   role_assignment_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  account_id UUID NOT NULL REFERENCES accounts(account_id),
+  account_id UUID NOT NULL REFERENCES accounts(id),
   role_id UUID NOT NULL REFERENCES roles(role_id),
   effective_at TIMESTAMPTZ NOT NULL,
   expires_at TIMESTAMPTZ NULL,
   revoked_at TIMESTAMPTZ NULL,
-  assigned_by_account_id UUID NULL REFERENCES accounts(account_id),
+  assigned_by_account_id UUID NULL REFERENCES accounts(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CHECK (expires_at IS NULL OR expires_at > effective_at)
 );
