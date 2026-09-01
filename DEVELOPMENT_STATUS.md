@@ -17,6 +17,14 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 
 ## Latest checkpoint — 2026-08-31
 
+## Repository-source validation continuation — CONCRETE REGRESSION FIX APPLIED
+- Resumed from repository state rather than conversational assumptions because DEVELOPMENT_STATUS.md remains the authoritative continuation record.
+- Inspected the committed migration sequence regression guard and found a concrete inconsistency: the input included 0008_create_audit_records.sql but the expected ordered result stopped at 0007.
+- Corrected the expected sequence to include migration 0008, preventing a false failing regression test as the committed migration set grows.
+- Commit: 0be6af15ab2e9fb4dc83f42fddbef5867373a604.
+- CI state: commit created; validation evidence still pending. Do not infer green.
+
+
 ### HTTP application integration gate — COMPLETE
 - Added real Fastify/Nest HTTP integration coverage for `GET /health` with both caller-provided and generated correlation IDs.
 - Investigated repeated CI HTTP 500 responses using server-side exception logging rather than speculative production changes.
