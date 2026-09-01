@@ -22,6 +22,8 @@ model Account {
   assignedRoleAssignments   RoleAssignment[] @relation("RoleAssignmentAssigner")
   auditRecords              AuditRecord[]
   profiles                  Profile[]
+  sentMatchInteractions     MatchInteraction[] @relation("MatchInteractionActor")
+  receivedMatchInteractions MatchInteraction[] @relation("MatchInteractionTarget")
 
   @@map("accounts")
 }
@@ -259,4 +261,19 @@ model Profile {
   @@index([accountId, categoryId])
   @@index([scopeKind, countryCode, regionCode])
   @@map("profiles")
+}
+
+model MatchInteraction {
+  id String @id @default(uuid()) @db.Uuid
+  actorAccountId String @map("actor_account_id") @db.Uuid
+  targetAccountId String @map("target_account_id") @db.Uuid
+  decision String
+  idempotencyKey String @map("idempotency_key")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  actor Account @relation("MatchInteractionActor", fields: [actorAccountId], references: [id], onDelete: Cascade)
+  target Account @relation("MatchInteractionTarget", fields: [targetAccountId], references: [id], onDelete: Cascade)
+  @@unique([actorAccountId, idempotencyKey])
+  @@unique([actorAccountId, targetAccountId])
+  @@index([targetAccountId, actorAccountId])
+  @@map("match_interactions")
 }
