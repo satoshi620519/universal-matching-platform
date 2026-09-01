@@ -1033,11 +1033,23 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: ab1d219ee6f0cd0c173498437748554d739d6ed3, 5fd3a23ebce9758e8a32210316b17a34418fcdf9, 83d22313ff50074ffa62b73a55183a48ffa9269a, ec6b573ac215a232511495bf27463daa8c299b10.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Configuration resolution baseline — IMPLEMENTED, CI PENDING
+- Resumed from the milestone dependency graph and moved to Milestone 2 rather than expanding completed administrative transport.
+- Added a pure typed configuration resolution primitive in the domain package.
+- Setting definitions now own typed defaults and explicitly allowed scopes.
+- Resolution precedence is deterministic: category-region > category > region > deployment > platform > default.
+- More-specific values are ignored when the setting does not permit that scope; explicit validation rejects invalid scope assignments.
+- Added focused tests for precedence, fallback/default behavior, scope restrictions and invalid assignments.
+- Added CONFIGURATION_RESOLUTION_BASELINE.md to record the boundary and deliberately defer persistence, draft validation, immutable publication, rollback, audit and client projection to subsequent Milestone 2 slices.
+- Commits: 3683f748d67d963d87054c66eaab15c12fd87838, cec701aed9be2d90db0ad4fe27a7b78e0d4e647d, 72cfe378b9e86f9089740119de580cb911794d57, b8cfe9e34241514ef0d12a12fbfc92beb662e1d7.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the canonical HTTP correlation reconciliation and preceding administrative slices; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Resume the next Milestone 1 requirement gap from PRODUCT_REQUIREMENTS.md/ARCHITECTURE.md rather than expanding completed administrative transport.
-3. Before implementation, inspect existing domain/application boundaries for the smallest unmet required capability and prefer additive slices with explicit tests.
-4. Preserve the canonical x-correlation-id convention at the shared HTTP boundary and do not reintroduce per-controller correlation header names.
+1. Verify CI/workflow evidence for the configuration resolution baseline and preserve any failure details before expanding Milestone 2.
+2. Inspect existing database migration and persistence conventions, then design the smallest configuration version persistence model supporting drafts and immutable published versions without introducing untyped configuration blobs as the primary contract.
+3. Keep runtime precedence in the centralized domain resolver; persistence must supply values, not reimplement precedence.
+4. Add rollback/reversion only after immutable publication semantics are established and tested.
 5. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
