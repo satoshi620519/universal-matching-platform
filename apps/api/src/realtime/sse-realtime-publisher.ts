@@ -7,15 +7,15 @@ export class SseRealtimePublisher extends RealtimePublisher {
   private readonly streams = new Map<string, Subject<RealtimeEvent>>();
 
   publishToAccount(accountId: string, event: RealtimeEvent): Promise<void> {
-    this.streamFor(accountId).next(event);
+    this.getStream(accountId).next(event);
     return Promise.resolve();
   }
 
   streamFor(accountId: string): Observable<RealtimeEvent> {
-    return this.streamFor(accountId).asObservable();
+    return this.getStream(accountId).asObservable();
   }
 
-  private streamFor(accountId: string): Subject<RealtimeEvent> {
+  private getStream(accountId: string): Subject<RealtimeEvent> {
     let stream = this.streams.get(accountId);
     if (!stream) {
       stream = new Subject<RealtimeEvent>();
