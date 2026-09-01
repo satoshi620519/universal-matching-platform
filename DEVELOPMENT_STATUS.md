@@ -1116,12 +1116,24 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: c5d7fd19f881162cd857d876df5adde7d59e095f, 49d0ab4a4ef3daff8b486e338f801205137efe30, 872e259b792cdf131ee7595ed1dff5d6585fa962, d8c774b942df4c8e48605f503a29f03ec618c91e, 1d986b91e0320640e31a1c78f345f5f2bd96927f.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Configuration publication audit integration — IMPLEMENTED, CI PENDING
+- Resumed from validated draft editing and integrated only the existing minimal AuditRecordService contract; no new audit schema or parallel audit pipeline was introduced.
+- ConfigurationPublicationService now requires an explicit privileged audit context containing actor identity and optional correlation ID.
+- Actor identity is supplied by the caller boundary rather than synthesized by configuration persistence.
+- Successful publication appends a narrow configuration audit event after the immutable database transaction commits.
+- Failed/missing publication paths do not emit a successful-publication audit record.
+- Added focused tests for successful correlation propagation and absence of audit on missing/failed publication.
+- Added CONFIGURATION_PUBLICATION_AUDIT.md.
+- Commits: 9bbbeaf70ff3234fff81d05e476f2bff46e178df, 1594be2c5a1d3ba2b65b6db9317995360bbfd095, 4b5c9e36a91ca8dd50b8518a44f7c9c98af3a7b4.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the validated draft editing path and preceding Milestone 2 slices; preserve exact failures rather than inferring green.
-2. Inspect the existing audit-record application/repository contract and integrate successful configuration publication with the minimal audit contract without changing publication atomicity.
-3. Ensure audit integration receives actor/correlation from a privileged application boundary rather than inventing identity inside configuration persistence.
-4. After publication audit is established, add published-value loading/projection that supplies values to the existing central domain resolver without duplicating precedence.
-5. Defer rollback/reversion until published history loading and audit semantics are tested.
+1. Verify CI/workflow evidence for publication audit integration and preceding Milestone 2 configuration slices; preserve exact failures rather than inferring green.
+2. Add a narrow published-value loading/projection boundary for the current published version of a scope.
+3. Convert persisted typed columns back to the domain configuration value representation without duplicating runtime precedence.
+4. Feed candidate published values into the existing central resolveConfigurationValue() path; persistence projection must not invent a second precedence engine.
+5. Defer rollback/reversion until effective runtime projection is tested.
 6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
