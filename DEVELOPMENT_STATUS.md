@@ -1596,12 +1596,18 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Fix commit: cd12d68884aff0e0d6016e5a14d7d3f685d78e31.
 - Milestone 2 implementation remains functionally complete but CI validation evidence is still unavailable from the accessible workflow history; do not mark green.
 
+## Milestone 4 PostgreSQL matching concurrency — VERIFIED
+- Matching Concurrency Gate #44 completed successfully for commit 0361486ecccba52af7a4a1a2b5a59ae7adf1ee65.
+- This is real execution evidence, not inferred status: the dedicated isolated PostgreSQL concurrency workflow reached a successful conclusion after the migration/schema reconciliation work.
+- The previously pending evidence checkpoint is now closed for the matching concurrency slice.
+- Remaining CI #1104 was still in progress at the time of this checkpoint update; do not infer its conclusion.
+- Next exact task: inspect the repository roadmap/status and select the next dependency-ordered incomplete milestone; do not recreate completed matching concurrency or configuration work.
+
 ## Exact next action
-1. Obtain repository CI validation evidence for the latest Milestone 2 commit range when workflow visibility/runs are available; run or inspect typecheck, lint, tests and build rather than inferring success.
-2. If concrete validation failures appear, fix only those failures and revalidate.
-3. If validation is clean, close Milestone 2 with a concise architecture/status checkpoint.
-4. Then inspect the repository roadmap and select the next dependency-ordered milestone without recreating completed configuration work.
-5. Update this checkpoint after validation/closure.
+1. Confirm the final conclusion of CI #1104 for the same commit when available.
+2. Review the project roadmap and DEVELOPMENT_STATUS checkpoint to identify the earliest dependency-ordered incomplete milestone.
+3. Implement only that next milestone boundary, preserving the verified matching concurrency and completed configuration work.
+4. Update this checkpoint after each concrete implementation or validation result.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
