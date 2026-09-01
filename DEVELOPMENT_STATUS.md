@@ -1,3 +1,12 @@
+## Milestone 4 evidence reproducibility — FROZEN LOCKFILE EXECUTION
+- Continued with a concrete review of the execution environment rather than repeating unavailable workflow-run polling.
+- Found that the dedicated evidence workflow used pnpm install --no-frozen-lockfile even though pnpm-lock.yaml is explicitly part of the trigger surface.
+- This could allow the runner to resolve/update dependencies differently from the committed lockfile, weakening commit-to-execution reproducibility.
+- Changed the workflow to pnpm install --frozen-lockfile so dependency resolution failure is explicit and any PostgreSQL concurrency evidence is tied to the committed dependency graph.
+- Commit: 7c691c980012e9cd22f7afd9cc273d5c1bada4e7.
+- Next exact task: obtain a real execution for the reproducible final workflow and inspect conclusion, explicit attestation and commit-addressable artifact; no green result is inferred before that evidence exists.
+- CI state: execution evidence remains pending; dependency environment is now lockfile-reproducible.
+
 ## Milestone 4 execution evidence check — FINAL WORKFLOW COMMITS INSPECTED
 - Queried workflow-run and combined-status visibility for both the corrected workflow commit 025e682ebde6d20b85448428d709eaad78f4908d and its checkpoint c4ebec5d7995adfd9ba62b840000fb0b75db152a.
 - Both commits returned workflow_runs=[] and statuses=[] through the available GitHub integration; this is recorded as unavailable execution visibility, not success.
