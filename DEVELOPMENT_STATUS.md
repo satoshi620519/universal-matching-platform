@@ -1,3 +1,10 @@
+## Migration executor failure-boundary validation — REGRESSION COVERAGE ADDED
+- Continued from migration artifact source integrity without duplicating completed implementation work.
+- Added focused tests for tracking-table initialization failure propagation; history queries must not proceed after initialization failure.
+- Added focused tests for migration SQL failure propagation; version recording must not be attempted after SQL execution fails inside the transaction callback.
+- Commit: 3fef8084b7ca7a23251831258ffbf369e35071ef.
+- CI state: committed failure-boundary regression coverage; workflow execution evidence remains unavailable and green is not inferred.
+
 ## Migration artifact source integrity — DIRECTORY CONTENT FAIL-CLOSED
 - Continued from migration history integrity validation without reopening completed implementation slices.
 - Found that FilesystemMigrationArtifactSource silently ignored regular non-.sql files, allowing unexpected artifacts in a configured migration directory to go unnoticed.
