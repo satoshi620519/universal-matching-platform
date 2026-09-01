@@ -1,0 +1,56 @@
+name: Matching Concurrency Gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'apps/api/src/matching/**'
+      - 'apps/api/prisma/**'
+      - 'packages/domain/**'
+      - 'apps/api/scripts/run-matching-concurrency-integration.mjs'
+      - '.github/workflows/matching-concurrency.yml'
+
+jobs:
+  postgres-concurrency:
+    name: PostgreSQL reciprocal transition evidence
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: universal_matching
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d universal_matching"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --no-frozen-lockfile
+      - name: Run isolated PostgreSQL concurrency evidence
+        env:
+          MATCHING_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/universal_matching
+        run: pnpm --filter @universal/api test:matching:concurrency 2>&1 | tee matching-concurrency.log
+      - name: Attest gate success
+        if: success()
+        run: |
+          test -s matching-concurrency.log
+          echo "MATCHING_CONCURRENCY_GATE=passed" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload concurrency evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: matching-concurrency-evidence
+          path: matching-concurrency.log
+          if-no-files-found: error
