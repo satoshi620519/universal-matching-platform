@@ -1670,3 +1670,9 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Repository participant checks remain the persistence authorization boundary, so the controller does not duplicate authorization logic.
 - Commits: d0905f8ec5b6b33f60aac7f91539e9291373e19d, f812a322c02bd8907fd7a150e0c2bef11d99fb07, c638e97cde14a61a0e917a444535c450640affb5.
 - Next exact task: validate the HTTP boundary in CI, then add notification records/outbox integration without recreating the existing email outbox infrastructure.
+
+- CI #1125 and CI #1126 completed successfully, validating the Messaging HTTP boundary and checkpoint.
+- Audited the existing email outbox worker/retry infrastructure and deliberately did not duplicate it; messaging notifications are being introduced first as durable in-app notification records.
+- Added notification persistence migration 0016, Prisma mapping, account-scoped repository, bounded reads, and ownership-safe read acknowledgement.
+- Commits: 3cc91831cf13167c7f3c8a1ce978778aacdeda34, a5ffdd736fcaf8e5c4a594fa99aede827d4f192b, 1bc3c88018be9eefa2caca5d6534fc187281bd2a, 0e4afac4ed8329a779992f22f3c0cbc5ade87010.
+- Next exact task: validate notification persistence in CI, then connect message creation to recipient notification creation transactionally before considering realtime fan-out.
