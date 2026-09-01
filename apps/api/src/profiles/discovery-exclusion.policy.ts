@@ -3,7 +3,7 @@ export abstract class DiscoveryExclusionPolicy {
 }
 
 export class AllowAllDiscoveryExclusionPolicy extends DiscoveryExclusionPolicy {
-  async excludes(): Promise<boolean> {
+  async excludes(_subjectAccountId: string, _candidateAccountId: string): Promise<boolean> {
     return false;
   }
 }
