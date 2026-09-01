@@ -11,6 +11,23 @@ export type ConversationRecord = {
 export class PrismaConversationRepository {
   constructor(private readonly database: DatabaseService) {}
 
+  async createOrFindDirect(accountA: string, accountB: string): Promise<ConversationRecord> {
+    const [low, high] = [accountA.trim(), accountB.trim()].sort();
+    if (!low || !high || low === high) throw new Error('A direct conversation requires two distinct participants');
+    const existing = await this.database.directConversationPair.findUnique({
+      where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
+      include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
+    });
+    if (existing) return existing.conversation;
+    return this.database.$transaction(async (tx) => {
+      const raced = await tx.directConversationPair.findUnique({ where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } }, include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } } });
+      if (raced) return raced.conversation;
+      const conversation = await tx.conversation.create({ data: { participants: { create: [{ accountId: low }, { accountId: high }] } }, include: { participants: { orderBy: { joinedAt: 'asc' } } } });
+      await tx.directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
+      return conversation;
+    });
+  }
+
   async create(participantAccountIds: string[]): Promise<ConversationRecord> {
     const accountIds = [...new Set(participantAccountIds.map((value) => value.trim()).filter(Boolean))];
     if (accountIds.length < 2) throw new Error('A conversation requires at least two distinct participants');
