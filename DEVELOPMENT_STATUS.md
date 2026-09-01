@@ -1,3 +1,14 @@
+## Milestone 3 bounded integration review — MIGRATION GAP CLOSED
+- Performed the planned single bounded M3 integration review instead of reopening completed domain/application slices.
+- Identified the concrete schema integration gap: Profile/Category Prisma models existed without a checked-in migration artifact discoverable in the repository.
+- Added one coherent PostgreSQL migration creating categories/profiles, stable-key uniqueness, account/category foreign keys, cascade/restrict deletion semantics and required lookup indexes.
+- Added migration contract tests that assert tables, FK boundaries, uniqueness and indexes without pretending the migration was executed.
+- Commits: 32e1e00abcd01a8cb07958735ae92dd20f438db0, 34816d2e1dd952c4aefceb85ce74992fe3289774.
+- M3 code-scope assessment: no further implementation slice identified after bounded review; category validation, geography validation, privacy projection and schema migration artifact are present.
+- Formal milestone closure remains blocked on executable migration/test/CI evidence. Do not loop on static review; proceed dependency-order to M4 while preserving this evidence limitation.
+- Next exact task: start Milestone 4 with discovery query contract and eligibility filtering domain baseline; do not implement matching state persistence before eligibility semantics are defined.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 3 completion gate — PRIVACY-AWARE PROFILE PROJECTION
 - Continued from category-specific validation without reopening completed persistence, CRUD or schema-validation work.
 - Added domain-owned explicit field visibility policy with public/owner/privileged scopes and a viewer context.
