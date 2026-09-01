@@ -1,3 +1,12 @@
+## Milestone 4 CI trigger completeness — MIGRATION AND DEPENDENCY COVERAGE
+- Reviewed the dedicated workflow trigger surface instead of repeating unavailable run/status polling.
+- Identified a concrete evidence gap: the isolated runner executes prisma migrate deploy, but changes under the repository migration boundary and dependency lockfile/API package could alter the executed PostgreSQL behavior without triggering the dedicated concurrency gate.
+- Expanded path triggers to include packages/database/migrations/**, apps/api/package.json and pnpm-lock.yaml while retaining matching source, schema, domain, runner and workflow triggers.
+- This aligns workflow activation with all repository inputs that can materially change the isolated concurrency execution environment.
+- Commit: bb61547d1efbdd903cbd96d20b1b9dc45c59ebbc.
+- Next exact task: obtain an actual workflow execution for the corrected trigger/evidence pipeline and inspect conclusion, summary attestation and uploaded log artifact; no green result is inferred before that evidence exists.
+- CI state: execution visibility remains unavailable; trigger coverage is now aligned with migration/dependency inputs.
+
 ## Milestone 4 CI correctness — FAILURE-PRESERVING EVIDENCE PIPELINE
 - Continued with workflow correctness review instead of repeating unavailable execution polling.
 - Identified a concrete CI false-green risk: the concurrency command was piped through tee, and without pipefail the shell could report tee success even when the PostgreSQL integration command failed.
