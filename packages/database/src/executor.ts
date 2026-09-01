@@ -12,7 +12,11 @@ export async function executePendingMigrations(
   executor: MigrationExecutor,
 ): Promise<readonly number[]> {
   const appliedVersions = await executor.listAppliedVersions();
-  const plan = planMigrations(migrations, new Set(appliedVersions));
+  const uniqueAppliedVersions = new Set(appliedVersions);
+  if (uniqueAppliedVersions.size !== appliedVersions.length) {
+    throw new Error('Migration history contains duplicate applied versions');
+  }
+  const plan = planMigrations(migrations, uniqueAppliedVersions);
 
   const applied: number[] = [];
   for (const migration of plan.pending) {
