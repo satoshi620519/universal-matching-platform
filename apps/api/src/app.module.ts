@@ -99,6 +99,7 @@ import { PrismaConfigurationEffectiveValueRepository } from './configuration/pri
 import { ConfigurationEffectiveValueService } from './configuration/configuration-effective-value.service.js';
 import { ConfigurationReversionService } from './configuration/configuration-reversion.service.js';
 import { PrismaProfileRepository } from './profiles/prisma-profile.repository.js';
+import { PrismaDiscoveryProfileRepository } from './profiles/prisma-discovery-profile.repository.js';
 import { ProfileService } from './profiles/profile.service.js';
 import { CategoryService } from './profiles/category.service.js';
 import { PrismaCategoryRepository } from './profiles/prisma-category.repository.js';
@@ -106,7 +107,7 @@ import { PrismaCategoryRepository } from './profiles/prisma-category.repository.
 @Module({
   imports: [DatabaseModule],
   controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
-  providers: [CategoryService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [PrismaDiscoveryProfileRepository, CategoryService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
