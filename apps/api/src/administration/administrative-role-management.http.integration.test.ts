@@ -119,7 +119,7 @@ describe('Administrative role management HTTP boundary', () => {
       expect(response.statusCode, response.body).toBe(201);
       expect(response.json()).toEqual({ assigned: true });
       expect(assign).toHaveBeenCalledWith(
-        expect.objectContaining({
+        expect.objectContaining({ correlationId: 'admin-success-request',
           actorId: 'admin-1',
           accountId: 'account-1',
           role: 'moderator',
