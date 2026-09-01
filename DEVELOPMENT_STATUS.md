@@ -1,3 +1,11 @@
+## Milestone 4 execution wiring — CI POSTGRESQL CONCURRENCY GATE
+- Promoted the opt-in PostgreSQL concurrency test from a manually configured command to a mandatory CI gate using the existing isolated GitHub Actions PostgreSQL service.
+- CI now runs the matching concurrency integration after the normal test suite, supplies MATCHING_TEST_DATABASE_URL, captures diagnostics, and uploads a dedicated artifact on failure.
+- The runner itself applies migrations before executing, so the gate is self-preparing against the CI database.
+- Commit: 31df2ad46333512434ee059cc4f21a8c3f1d850a.
+- Next exact task: inspect the workflow run triggered by this commit and use its actual job result/logs as M4 execution evidence; fix only concrete failures found there.
+- CI state: workflow execution pending inspection; no green status inferred.
+
 ## Milestone 4 concurrency hardening — RECIPROCAL PAIR SERIALIZATION
 - Continued from the PostgreSQL concurrency gate and fixed a real isolation risk before claiming execution success.
 - Reciprocal transitions now acquire a transaction-scoped PostgreSQL advisory lock derived from the unordered account pair, serializing A→B and B→A transitions without globally locking the interaction table.
