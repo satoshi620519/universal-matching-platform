@@ -50,3 +50,10 @@ export function sendMessage(conversationId:string, body:string) { return apiRequ
 export type RealtimeEvent = { eventId:string; eventType:string; schemaVersion:number; occurredAt:string; resource:{type:string;id:string}; payload:{conversationId?:string;messageId?:string;senderAccountId?:string} };
 export function realtimeEventsUrl() { const credential=sessionStorage.getItem('connect.credential'); if(!credential) return null; return API_BASE_URL + '/realtime/events'; }
 export function realtimeCredential() { return sessionStorage.getItem('connect.credential'); }
+
+export type ProfileCategory = { id:string; name?:string; key?:string };
+export type DiscoveryProfile = { accountId:string; fields:Record<string, unknown>; categoryId:string };
+export function listProfileCategories(){return apiRequest<{categories:ProfileCategory[]}>('/profile-categories');}
+export function createMyProfile(input:{categoryId:string;fields:Record<string,string|number|boolean|null>;geographicScope?:{kind:string;countryCode?:string;regionCode?:string}}){return apiRequest('/profiles/me',{method:'POST',body:JSON.stringify(input)});}
+export function discoverProfiles(params:{categoryId:string;scope?:string;countryCode?:string;limit?:number}){const q=new URLSearchParams({categoryId:params.categoryId,scope:params.scope??'global',limit:String(params.limit??20)});if(params.countryCode)q.set('countryCode',params.countryCode);return apiRequest<{items:DiscoveryProfile[];nextCursor?:string}>('/discovery?'+q);}
+export function decideMatch(input:{targetAccountId:string;decision:'like'|'pass';idempotencyKey:string}){return apiRequest('/matches/decision',{method:'POST',body:JSON.stringify(input)});}
