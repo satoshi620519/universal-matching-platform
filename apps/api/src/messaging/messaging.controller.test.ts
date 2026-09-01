@@ -12,7 +12,7 @@ describe('MessagingController', () => {
   });
 
   it('uses the authenticated account for message writes', async () => {
-    const createForParticipant = vi.fn().mockResolvedValue({ id: 'm1' });
+    const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
     const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never);
     await controller.createMessage('c1', { body: 'hello' });
     expect(createForParticipant).toHaveBeenCalledWith({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
