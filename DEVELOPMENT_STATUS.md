@@ -1,3 +1,11 @@
+## Milestone 4 test hardening — LOCK-AWARE SCENARIOS
+- Continued without repeating unavailable workflow polling; inspected the post-lock test surface for regressions introduced by concurrency hardening.
+- Found that executable repository mocks needed the new transaction $executeRaw capability; added it and an explicit advisory-lock invocation assertion so unit scenarios remain aligned with production transaction behavior.
+- Strengthened real PostgreSQL reciprocal concurrency expectations from “at least one mutual” to deterministic serialized outcome: exactly one matched/mutual result and exactly one pending result, while both directed interactions persist.
+- Commits: c26b950e30936271283ab4a83e21da0c0825b6dd, 8f6167aeb7bd3a73551e770f3074ce47edbf8921.
+- Next exact task: obtain actual execution evidence from the dedicated workflow or another isolated PostgreSQL runner; do not reimplement the concurrency layer unless a concrete execution failure exposes a defect.
+- CI state: workflow runs and commit statuses still not returned by available integration; no green status inferred.
+
 ## Milestone 4 evidence accessibility — INDEPENDENT CONCURRENCY WORKFLOW
 - Workflow-run lookup remained unavailable for the aggregate CI commit, so no execution result was inferred.
 - Added a dedicated Matching Concurrency Gate workflow with workflow_dispatch and path-trigger support, isolating the PostgreSQL reciprocal-transition evidence from unrelated CI stages.
