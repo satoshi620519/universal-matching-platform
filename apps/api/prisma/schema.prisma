@@ -21,6 +21,7 @@ model Account {
   roleAssignments           RoleAssignment[]
   assignedRoleAssignments   RoleAssignment[] @relation("RoleAssignmentAssigner")
   auditRecords              AuditRecord[]
+  profiles                  Profile[]
 
   @@map("accounts")
 }
@@ -229,4 +230,33 @@ model ConfigurationValue {
   @@unique([configurationVersionId, settingKey])
   @@index([configurationVersionId, settingKey])
   @@map("configuration_values")
+}
+
+model Category {
+  id          String    @id @default(uuid()) @db.Uuid
+  key         String    @unique
+  displayName String    @map("display_name")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  profiles    Profile[]
+
+  @@map("categories")
+}
+
+model Profile {
+  id          String   @id @default(uuid()) @db.Uuid
+  accountId   String   @map("account_id") @db.Uuid
+  categoryId  String   @map("category_id") @db.Uuid
+  fields      Json     @default("{}")
+  scopeKind   String   @map("scope_kind")
+  countryCode String?  @map("country_code")
+  regionCode  String?  @map("region_code")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@index([accountId, categoryId])
+  @@index([scopeKind, countryCode, regionCode])
+  @@map("profiles")
 }
