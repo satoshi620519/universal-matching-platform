@@ -16,7 +16,7 @@ describe('PrismaPasswordRegistrationRepository', () => {
     });
     const accountCreate = vi.fn().mockResolvedValue({
       id: 'account-1',
-      status: 'pending',
+      status: 'pending-onboarding',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -34,14 +34,14 @@ describe('PrismaPasswordRegistrationRepository', () => {
     const repository = new PrismaPasswordRegistrationRepository(database);
 
     const result = await repository.create({
-      accountStatus: 'pending',
+      accountStatus: 'pending-onboarding',
       providerType: 'email-password',
       providerSubject: 'user@example.test',
       passwordHash: 'opaque-hash',
     });
 
     expect(database.$transaction).toHaveBeenCalledTimes(1);
-    expect(accountCreate).toHaveBeenCalledWith({ data: { status: 'pending' } });
+    expect(accountCreate).toHaveBeenCalledWith({ data: { status: 'pending-onboarding' } });
     expect(identityCreate).toHaveBeenCalledWith({
       data: {
         accountId: 'account-1',
@@ -71,7 +71,7 @@ describe('PrismaPasswordRegistrationRepository', () => {
     const repository = new PrismaPasswordRegistrationRepository(database);
 
     await expect(repository.create({
-      accountStatus: 'pending',
+      accountStatus: 'pending-onboarding',
       providerType: 'email-password',
       providerSubject: 'user@example.test',
       passwordHash: 'opaque-hash',
