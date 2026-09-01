@@ -1,4 +1,4 @@
-export type EmailOutboxMessageStatus = 'pending' | 'delivered';
+export type EmailOutboxMessageStatus = 'pending' | 'delivered' | 'failed';
 
 export interface EmailOutboxMessage {
   readonly id: string;
@@ -20,6 +20,11 @@ export abstract class EmailOutboxRepository {
   abstract claimNext(now: Date): Promise<EmailOutboxMessage | null>;
 
   abstract markDelivered(id: string, deliveredAt: Date): Promise<void>;
+
+  abstract markFailed(
+    id: string,
+    input: { readonly failedAt: Date; readonly error: string },
+  ): Promise<void>;
 
   abstract reschedule(
     id: string,
