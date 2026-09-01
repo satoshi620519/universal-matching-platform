@@ -1,3 +1,13 @@
+## Milestone 4 concurrency hardening — RECIPROCAL PAIR SERIALIZATION
+- Continued from the PostgreSQL concurrency gate and fixed a real isolation risk before claiming execution success.
+- Reciprocal transitions now acquire a transaction-scoped PostgreSQL advisory lock derived from the unordered account pair, serializing A→B and B→A transitions without globally locking the interaction table.
+- This ensures the second reciprocal transaction observes the first committed interaction before resolving mutual state, eliminating the simultaneous-read pending/pending race in the repository algorithm.
+- Hardened the integration gate by seeding required Account foreign-key fixtures and applying Prisma migrations to the isolated test database before execution.
+- Corrected a fixture replacement regression immediately after inspection; final fixture constants are explicit UUIDs.
+- Commits: ce7fe48a6b149f187fb9f2e92783134252a3f9d4, 4317f7fff2322385b304c04ffaf2b6e3b77551ef, 810ed1abfb166a75743c846cd5b24af45b86ed3f, e8b20c693a8cb2b34aec27ca765c3ca2602e5714.
+- Next exact task: execute the isolated PostgreSQL integration gate and record actual pass/fail evidence; if execution cannot be performed from the available environment, leave M4 execution evidence explicitly pending rather than inferring success.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 integration slice — POSTGRESQL CONCURRENCY GATE
 - Added opt-in database-backed PostgreSQL integration coverage for match transition concurrency, separate from fast unit tests.
 - Added concurrent duplicate-request scenario asserting one directed interaction survives.
