@@ -46,6 +46,25 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     expect(await prisma!.matchInteraction.count({ where: { actorAccountId: accountA, idempotencyKey: 'shared-key' } })).toBe(1);
   });
 
+  it('rejects a second directed interaction with a different idempotency key', async () => {
+    const repository = new PrismaMatchTransitionRepository(prisma as never);
+    await repository.transition({
+      actorAccountId: accountA,
+      targetAccountId: accountB,
+      decision: 'like',
+      idempotencyKey: 'first-key',
+    });
+    await expect(repository.transition({
+      actorAccountId: accountA,
+      targetAccountId: accountB,
+      decision: 'like',
+      idempotencyKey: 'second-key',
+    })).rejects.toMatchObject({ code: 'P2002' });
+    expect(await prisma!.matchInteraction.count({
+      where: { actorAccountId: accountA, targetAccountId: accountB },
+    })).toBe(1);
+  });
+
   it('serializes reciprocal likes into one pending then one matched transition', async () => {
     const repositoryA = new PrismaMatchTransitionRepository(prisma as never);
     const repositoryB = new PrismaMatchTransitionRepository(prisma as never);
