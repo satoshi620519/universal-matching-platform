@@ -43,11 +43,6 @@ describe('Administrative role management HTTP boundary', () => {
       new FastifyAdapter(),
     );
     app.useGlobalFilters(new ApiErrorFilter());
-    app.getHttpAdapter().getInstance().setErrorHandler((error: unknown, request: unknown, reply: unknown) => {
-      const exception = error instanceof Error ? error : new Error(String(error));
-      const status = error instanceof UnauthorizedException || error instanceof ForbiddenException ? error.getStatus() : 500;
-      (reply as any).status(status).send({ statusCode: status, code: status === 500 ? 'INTERNAL_ERROR' : 'HTTP_ERROR', message: exception.message });
-    });
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
     return app;
