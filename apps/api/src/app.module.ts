@@ -111,11 +111,13 @@ import { MessagingController } from './messaging/messaging.controller.js';
 import { PrismaConversationRepository } from './messaging/prisma-conversation.repository.js';
 import { PrismaMessageRepository } from './messaging/prisma-message.repository.js';
 import { PrismaNotificationRepository } from './messaging/prisma-notification.repository.js';
+import { RealtimePublisher } from './realtime/realtime-publisher.js';
+import { NoopRealtimePublisher } from './realtime/noop-realtime-publisher.js';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController, MessagingController],
-  providers: [PrismaMatchTransitionRepository, PrismaConversationRepository, PrismaMessageRepository, PrismaNotificationRepository, AllowAllDiscoveryExclusionPolicy, DiscoveryService, PrismaDiscoveryProfileRepository, CategoryService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [PrismaMatchTransitionRepository, PrismaConversationRepository, PrismaMessageRepository, PrismaNotificationRepository, NoopRealtimePublisher, AllowAllDiscoveryExclusionPolicy, DiscoveryService, PrismaDiscoveryProfileRepository, CategoryService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
@@ -240,6 +242,7 @@ import { PrismaNotificationRepository } from './messaging/prisma-notification.re
       useExisting: PrismaPasswordCredentialRepository,
     },
     { provide: DiscoveryExclusionPolicy, useExisting: AllowAllDiscoveryExclusionPolicy },
+    { provide: RealtimePublisher, useExisting: NoopRealtimePublisher },
     { provide: MatchTransitionRepository, useExisting: PrismaMatchTransitionRepository },
     {
       provide: RequestAuthenticationAdapter,
