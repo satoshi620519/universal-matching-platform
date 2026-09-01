@@ -32,7 +32,7 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     expect(count).toBe(1);
   });
 
-  it('documents reciprocal-like concurrency as a database integration gate', async () => {
+  it('serializes reciprocal likes into one pending then one matched transition', async () => {
     const repositoryA = new PrismaMatchTransitionRepository(prisma as never);
     const repositoryB = new PrismaMatchTransitionRepository(prisma as never);
     const a = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'a-to-b' };
@@ -44,5 +44,9 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     expect(results.filter((result) => result.state === 'matched')).toHaveLength(1);
     expect(results.filter((result) => result.state === 'pending')).toHaveLength(1);
     expect(results.every((result) => result.replayed === false)).toBe(true);
+    const matched = results.find((result) => result.state === 'matched')!;
+    const pending = results.find((result) => result.state === 'pending')!;
+    expect(matched.mutual).toBe(true);
+    expect(pending.mutual).toBe(false);
   });
 });
