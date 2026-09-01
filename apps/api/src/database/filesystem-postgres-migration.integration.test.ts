@@ -32,7 +32,9 @@ describe.skipIf(!DATABASE_URL)(
       await database.$connect();
 
       try {
+        await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
+        await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS safety_enforcements');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
         await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
