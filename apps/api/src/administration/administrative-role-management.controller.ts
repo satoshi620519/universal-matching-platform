@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Headers, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Headers, Inject, Param, Post } from '@nestjs/common';
 import type { AdministrativeRoleKey } from '@universal/domain';
 
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
@@ -10,7 +10,12 @@ function parseRole(value: unknown): AdministrativeRoleKey { if (typeof value !==
 
 @Controller('administration/roles')
 export class AdministrativeRoleManagementController {
-  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly roles: AdministrativeRoleManagementService) {}
+  constructor(
+    @Inject(RequestPrincipalResolver)
+    private readonly principalResolver: RequestPrincipalResolver,
+    @Inject(AdministrativeRoleManagementService)
+    private readonly roles: AdministrativeRoleManagementService,
+  ) {}
 
   @Post('accounts/:accountId/assign')
   async assign(@Param('accountId') accountId: string, @Body() body: { role?: unknown; effectiveAt?: unknown; expiresAt?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationHeader?: string) {
