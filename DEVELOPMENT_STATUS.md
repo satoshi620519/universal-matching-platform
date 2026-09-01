@@ -1,3 +1,13 @@
+## Milestone 4 safety slice — EXPLICIT DISCOVERY EXCLUSIONS
+- Continued from discovery application composition without moving matching persistence ahead of exclusion semantics.
+- Added explicit DiscoveryExclusionPolicy port and default allow-all adapter as an intentional integration seam.
+- DiscoveryService now applies base eligibility, then block exclusion, then safety exclusion, and only projects candidates surviving all checks.
+- Added regression coverage proving a blocked candidate is removed before projection and short-circuits subsequent safety evaluation.
+- Registered the explicit baseline policy in Nest; concrete block/safety persistence adapters remain a future dependency rather than hidden assumptions.
+- Commits: cdfe7c4ffe78eb682c093556a25337fcf91d69a0, d41e36cbe592669ae8bdc9b31f2121b6a418141f, c244ac9d4c47fb3598ab1f47c327925562c4e2fa, 53039da8497f45d2f28adca6bbc3b95213c5263d, 11d7a1f.
+- Next exact task: define matching strategy port and decision contract on top of already-safe discovery candidates; do not create mutual-match persistence or transitions before strategy output and idempotency semantics are explicit.
+- CI state: implementation committed; no green status inferred.
+
 ## Milestone 4 application slice — DISCOVERY ELIGIBILITY COMPOSITION
 - Continued from the Prisma cursor adapter without reopening query or pagination contracts.
 - Added DiscoveryService composing validated query -> repository page -> eligibility filter -> privacy projection.
