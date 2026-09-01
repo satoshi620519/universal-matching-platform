@@ -26,6 +26,7 @@ model Account {
   receivedMatchInteractions MatchInteraction[] @relation("MatchInteractionTarget")
   conversationParticipants ConversationParticipant[]
   sentMessages Message[] @relation("MessageSender")
+  notifications Notification[]
 
   @@map("accounts")
 }
@@ -314,4 +315,18 @@ model Message {
   @@index([conversationId, createdAt, id])
   @@index([senderAccountId, createdAt])
   @@map("messages")
+}
+
+
+model Notification {
+  id String @id @default(uuid()) @map("notification_id") @db.Uuid
+  accountId String @map("account_id") @db.Uuid
+  kind String
+  payload Json @default("{}")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  readAt DateTime? @map("read_at") @db.Timestamptz(6)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, createdAt, id])
+  @@map("notifications")
 }
