@@ -1,3 +1,11 @@
+## Milestone 4 CI syntax integrity — DUPLICATE YAML KEY REMOVED
+- Reviewed the latest workflow after the artifact hardening change instead of repeating execution polling.
+- Found a concrete workflow hygiene defect: the artifact upload block contained duplicate if-no-files-found keys, introduced by the prior edit.
+- Removed the duplicate and retained the required error behavior exactly once, avoiding ambiguous YAML parsing/linter behavior.
+- Commit: 025e682ebde6d20b85448428d709eaad78f4908d.
+- Next exact task: obtain a real execution for the corrected final workflow and inspect conclusion, explicit attestation and commit-addressable artifact; no green result is inferred before that evidence exists.
+- CI state: execution evidence remains pending; workflow definition is now free of the detected duplicate-key defect.
+
 ## Milestone 4 evidence artifact integrity — COMMIT-ADDRESSABLE MANDATORY LOG
 - Continued without repeating unavailable workflow polling.
 - Made the uploaded concurrency artifact commit-addressable using the exact github.sha and configured missing evidence logs as an upload error.
