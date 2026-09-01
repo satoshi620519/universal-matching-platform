@@ -72,7 +72,7 @@ describe('PostgresMigrationExecutor', () => {
     });
 
     expect(events).toEqual([
-      'CREATE TABLE safety_enforcements ();',
+      'CREATE TABLE safety_enforcements ()',
       'INSERT INTO schema_migrations (version) VALUES ($1)',
     ]);
     expect(rootQuery).not.toHaveBeenCalled();
