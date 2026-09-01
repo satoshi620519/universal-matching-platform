@@ -94,11 +94,14 @@ import { InMemoryConfigurationSettingDefinitionProvider } from './configuration/
 import { ConfigurationValueRepository } from './configuration/configuration-value.repository.js';
 import { PrismaConfigurationValueRepository } from './configuration/prisma-configuration-value.repository.js';
 import { ConfigurationDraftEditingService } from './configuration/configuration-draft-editing.service.js';
+import { ConfigurationEffectiveValueRepository } from './configuration/configuration-effective-value.repository.js';
+import { PrismaConfigurationEffectiveValueRepository } from './configuration/prisma-configuration-effective-value.repository.js';
+import { ConfigurationEffectiveValueService } from './configuration/configuration-effective-value.service.js';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController],
-  providers: [ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  providers: [ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService,
     CapabilityAccessService,
     AccountActivationService,
@@ -138,6 +141,10 @@ import { ConfigurationDraftEditingService } from './configuration/configuration-
     AuthenticationIdentityService,
     AnonymousAuthenticationAdapter,
     OpaqueSessionAuthenticationAdapter,
+    {
+      provide: ConfigurationEffectiveValueRepository,
+      useExisting: PrismaConfigurationEffectiveValueRepository,
+    },
     {
       provide: ConfigurationValueRepository,
       useExisting: PrismaConfigurationValueRepository,
