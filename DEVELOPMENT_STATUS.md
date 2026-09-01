@@ -1,3 +1,10 @@
+## Migration planner boundary continuation — APPLIED-STATE CONTRACT TESTED
+- Continued from the latest migration validation checkpoint without reopening completed configuration implementation.
+- Added focused planner tests proving unknown applied versions do not suppress valid pending migrations and applied-version set ordering cannot affect planning.
+- Added an explicit validateMigrationArtifacts immutability/order regression guard.
+- Commit: b80b67601190d404ec77b7dad107031f0e329e0a.
+- CI state: committed regression coverage; workflow validation evidence remains unavailable, so green is not inferred.
+
 # Development Status
 
 CURRENT PHASE: Phase 3 — Implementation
