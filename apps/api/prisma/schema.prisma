@@ -261,6 +261,7 @@ model Profile {
   account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
+  @@unique([accountId])
   @@index([accountId, categoryId])
   @@index([scopeKind, countryCode, regionCode])
   @@map("profiles")
