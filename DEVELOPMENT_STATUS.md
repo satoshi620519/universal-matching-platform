@@ -1702,3 +1702,10 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Current publisher remains Noop until a transport is selected and validated; no speculative WebSocket/SSE stack was introduced.
 - Commits: 7df03de93ab828f41230e3009cd4a7703a57000c, 4808abf6e38bcaba05597b0ceefb0157f642fb81, ccc2b090bcd5e260e99e952d7f3088be0656d855.
 - Next exact task: validate the publication seam in CI, then add a post-commit invocation path that cannot publish rolled-back transactions before transport selection.
+
+- CI #1146 and CI #1147 completed successfully, validating the realtime publication seam and checkpoint.
+- Connected message realtime publication only after createForParticipant's database transaction has returned successfully; rolled-back/non-participant mutations return null and never publish.
+- Repository returns recipient identifiers alongside the committed message so publication does not repeat recipient queries outside the authoritative transaction.
+- Added controller-level tests for publish-after-commit and no-publication-on-null paths.
+- Commits: 2f9c0d78d27aa1fe24e8469e2851d1ce619778e1, 84b4bf34f8c60643974cfd60821160bddc2cff4c, 3a3869abe855af2be3b889ab94486c2c4eb7262d.
+- Next exact task: validate post-commit publication in CI, then choose and implement the minimum actual realtime transport adapter behind RealtimePublisher, with reconnect/reconciliation remaining HTTP-authoritative.
