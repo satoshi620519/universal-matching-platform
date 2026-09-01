@@ -25,6 +25,7 @@ model Account {
   sentMatchInteractions     MatchInteraction[] @relation("MatchInteractionActor")
   receivedMatchInteractions MatchInteraction[] @relation("MatchInteractionTarget")
   conversationParticipants ConversationParticipant[]
+  sentMessages Message[] @relation("MessageSender")
 
   @@map("accounts")
 }
@@ -283,6 +284,7 @@ model Conversation {
   id String @id @default(uuid()) @map("conversation_id") @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   participants ConversationParticipant[]
+  messages Message[]
 
   @@map("conversations")
 }
@@ -297,4 +299,19 @@ model ConversationParticipant {
   @@id([conversationId, accountId])
   @@index([accountId, joinedAt])
   @@map("conversation_participants")
+}
+
+
+model Message {
+  id String @id @default(uuid()) @map("message_id") @db.Uuid
+  conversationId String @map("conversation_id") @db.Uuid
+  senderAccountId String @map("sender_account_id") @db.Uuid
+  body String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender Account @relation("MessageSender", fields: [senderAccountId], references: [id], onDelete: Restrict)
+
+  @@index([conversationId, createdAt, id])
+  @@index([senderAccountId, createdAt])
+  @@map("messages")
 }
