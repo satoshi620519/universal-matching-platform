@@ -1,4 +1,4 @@
-import { Injectable, TooManyRequestsException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PasswordSignInService } from './password-sign-in.service.js';
 import { SessionIssuanceService } from './session-issuance.service.js';
@@ -31,7 +31,7 @@ export class PasswordSignInTransportService {
     });
 
     if (!decision.allowed) {
-      throw new TooManyRequestsException('Sign-in temporarily unavailable');
+      throw new HttpException('Sign-in temporarily unavailable', HttpStatus.TOO_MANY_REQUESTS);
     }
 
     const result = await this.signIn.signIn({
