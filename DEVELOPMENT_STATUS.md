@@ -972,13 +972,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: d42af0176b9df78292c66bce5cc5e65b192a06f5, a51b827671beabe2e185baa69287bac06d52300a, 1bfb628179e565b3126864307f8cd2912fc4577f, 850c81abe56cd71a42a3148a04493d5cf86d33d0, 88a1c5ff90264c1e6153cb29b2311222a37d5e94, ebce999936a6345a242f8a2dac36e6536a15934d.
 - CI state: this bootstrap slice remains unverified by CI evidence available through the current connector; do not infer green.
 
+
+## Administrative role management HTTP transport — IMPLEMENTED, CI PENDING
+- Resumed from the exact checkpoint after separating initial administrator provisioning from runtime transport.
+- Added AdministrativeRoleManagementController following the existing RequestPrincipalResolver authenticated-controller convention.
+- Added POST /administration/roles/accounts/:accountId/assign and POST /administration/roles/accounts/:accountId/:role/revoke.
+- Transport validates non-empty target account IDs, closed administrative role vocabulary, optional ISO timestamps and effective/expiry ordering before mutation.
+- Controller forwards only authenticated actor identity and validated input to AdministrativeRoleManagementService; no direct repository access, capability checks or audit writes were added to transport.
+- Bootstrap provisioning remains intentionally outside HTTP role management.
+- Added focused controller tests for authenticated principal forwarding, invalid role/time-window rejection before mutation, and revocation target forwarding.
+- Registered controller through Nest DI and documented ADMINISTRATIVE_ROLE_MANAGEMENT_TRANSPORT.md.
+- Commits: 75bbdfd62cc8b7398591ccfa59f10b95014793cd, 935cc81a5887edd79fe922db6b444dc7d1df9b93, 7f92eff2ee67a2efd509a028599c2dd55ba6bc90, 1a847b1e85c2a436aead28d3ef1eded57ecad70f.
+- CI state: implementation committed; validation evidence pending. Do not infer green until workflow results are inspected.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the initial-administrator provisioning slice and preceding administration commits; if unavailable, preserve that exact limitation rather than claiming validation.
-2. Trace repository conventions for operator/deployment commands and, if grounded, expose initial provisioning only through an explicit non-HTTP command entrypoint; otherwise keep the service boundary documented rather than inventing runtime behavior.
-3. Add the thin authenticated administrative role-management HTTP transport only after confirming bootstrap invocation remains outside that transport.
-4. Transport must resolve principal → validate input → AdministrativeRoleManagementService, with no direct repository access or role checks in controllers.
-5. Add focused transport tests for authentication, capability denial propagation, time-window validation and no sensitive audit payload leakage.
-6. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
+1. Verify CI/workflow evidence for the administrative role-management transport commits; if unavailable, preserve that exact limitation rather than claiming validation.
+2. Add focused application/HTTP integration coverage for capability denial propagation and successful audited role mutation through the real Nest/Fastify application only after the current unit/type validation state is known.
+3. Review bootstrap provisioning invocation ergonomics against repository deployment/command conventions without creating an unauthenticated runtime endpoint.
+4. Keep controllers thin: request principal → validated input → authorized application boundary.
+5. Preserve stable email message correlation, defer real provider selection, and update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
 - RequestPrincipal defines accountId, authenticationMethod and optional verificationLevel.
