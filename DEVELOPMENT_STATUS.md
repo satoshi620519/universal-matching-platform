@@ -1069,12 +1069,25 @@ Never overwrite a working boundary based on conversational memory. Prefer reposi
 - Commits: 94630c5c061f9da7fe479c841f456f7b1a393844, aad2e9e309b1a7e1c6e3be08f240d70596cdbbf1, 86d751b840486690505d319cd65896eb9489f529, 6d8273097853ae4460f2baf48d6df7e17f3e2d1f.
 - CI state: implementation committed; validation evidence pending. Do not infer green.
 
+
+## Immutable configuration publication transaction — IMPLEMENTED, CI PENDING
+- Resumed from the exact repository checkpoint and used DatabaseService's Prisma interactive transaction convention rather than inventing a separate transaction abstraction.
+- Added ConfigurationPublicationService as the application lifecycle boundary; repository access remains read/create oriented.
+- Publication first resolves the selected record as a draft, then runs one interactive transaction.
+- Within that transaction, any current published version for the same scope is transitioned to superseded and the selected draft is conditionally transitioned to published.
+- Conditional draft update count is checked so a concurrent/non-draft transition cannot be reported as successful publication.
+- No-current-published publication is supported; missing drafts fail before a transaction opens; transaction failures propagate without a success result.
+- Added focused tests for normal replacement, first publication, missing draft and transaction failure.
+- Registered ConfigurationPublicationService through Nest DI and added CONFIGURATION_PUBLICATION_TRANSACTION.md.
+- Commits: 798ee13c359acb79306967ffd6869927bbf34817, 6c5520227c6b3407c820a8f36be94ed2bbc1d5a3, de6ca8ca34ff21de9439c2851908058cf5193dd6, 2b014bdb72001b9141712c175f766246a602401a.
+- CI state: implementation committed; validation evidence pending. Do not infer green.
+
 ## Exact next action
-1. Verify CI/workflow evidence for the configuration version repository and preceding migrations/Prisma mappings; preserve exact failure details if validation exposes generated-client or schema drift.
-2. Inspect the repository transaction conventions (DatabaseService/Prisma interactive transactions and migration adapter) and add a narrow publication transaction boundary.
-3. Implement immutable publication atomically: selected draft must transition to published while the prior current published version for the same scope transitions to superseded in one transaction.
-4. Add focused success/no-current-published and transaction-failure tests before exposing any publication transport.
-5. Keep runtime precedence in resolveConfigurationValue() and do not add rollback/reversion until immutable publication history is established.
+1. Verify CI/workflow evidence for immutable configuration publication and preceding Milestone 2 persistence slices; preserve exact validation failures rather than inferring green.
+2. Inspect setting-definition ownership and add a narrow draft value editing/validation boundary so publication cannot publish arbitrary unvalidated typed rows.
+3. Keep editing separate from publication: drafts may change, published/superseded versions remain immutable.
+4. After draft validation exists, add publication audit integration using the existing minimal AuditRecord contract and canonical optional correlation propagation where a privileged transport eventually supplies it.
+5. Do not add rollback/reversion transport until a tested immutable history and validated publication path exist.
 6. Update this checkpoint after the next coherent slice.
 
 ## Architecture constraints
