@@ -1,3 +1,11 @@
+## Milestone 4 CI input completeness — WORKSPACE DEPENDENCY SURFACE COVERAGE
+- Queried the latest corrected executable workflow commit 5bb05804af28e7ff4b604fc83a4e3769ffe797a2: workflow_runs=[] and statuses=[] through the available GitHub integration; no execution result was inferred.
+- Reviewed the actual runner/package/workspace inputs and found a concrete trigger gap: the workflow installs the entire pnpm workspace and depends on the database workspace for Prisma migration behavior, but root package metadata, pnpm workspace configuration and database workspace changes were not fully in the trigger surface.
+- Expanded triggers to include package.json, pnpm-workspace.yaml and packages/database/** (while retaining the explicit migration/schema/API/domain paths).
+- Commit: 5b8208e4bf0df0fe0915dfefe53846e9c80b3fa8.
+- Next exact task: obtain a real execution for the complete executable workflow and inspect conclusion, explicit attestation and commit-addressable artifact; no green result is inferred before that evidence exists.
+- CI state: latest corrected executable commit inspected; workflow_runs=[] and statuses=[] through available integration.
+
 ## Milestone 4 CI install correctness — ABSENT LOCKFILE RECONCILIATION
 - Continued with repository-input verification rather than repeating unavailable workflow polling.
 - Confirmed the repository declares pnpm@10.0.0 and pnpm-workspace.yaml, but no pnpm-lock.yaml exists at the repository root (and no alternate package lockfile is present).
