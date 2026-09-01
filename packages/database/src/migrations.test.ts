@@ -100,6 +100,18 @@ describe('planMigrations', () => {
     });
   });
 
+  it('ignores applied versions that are not present in committed artifacts', () => {
+    expect(planMigrations(migrations, new Set([1, 99]))).toEqual({
+      pending: [migrations[0], migrations[2]],
+    });
+  });
+
+  it('does not require applied versions to arrive in any particular order', () => {
+    expect(planMigrations(migrations, new Set([3, 1]))).toEqual({
+      pending: [migrations[0]],
+    });
+  });
+
   it('does not mutate migration artifacts while planning', () => {
     const original = [...migrations];
     planMigrations(migrations, new Set([1]));
@@ -121,6 +133,19 @@ describe('planMigrations', () => {
 
 
 describe('validateMigrationArtifacts', () => {
+  it('returns a new ordered array without mutating the caller artifacts', () => {
+    const artifacts = [
+      { version: 2, filename: '0002_add_status.sql', sql: 'SELECT 2;' },
+      { version: 1, filename: '0001_create_accounts.sql', sql: 'SELECT 1;' },
+    ];
+    const validated = validateMigrationArtifacts(artifacts);
+    expect(validated).toEqual([artifacts[1], artifacts[0]]);
+    expect(artifacts).toEqual([
+      { version: 2, filename: '0002_add_status.sql', sql: 'SELECT 2;' },
+      { version: 1, filename: '0001_create_accounts.sql', sql: 'SELECT 1;' },
+    ]);
+  });
+
   it('rejects artifacts whose declared version does not match the filename', () => {
     expect(() =>
       validateMigrationArtifacts([
