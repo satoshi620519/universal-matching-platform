@@ -1,3 +1,11 @@
+## Migration execution history integrity — DUPLICATE HISTORY FAIL-CLOSED
+- Continued static validation from the exact prior checkpoint without reopening completed product slices.
+- Found that executePendingMigrations collapsed duplicate applied-version history into a Set, silently masking corrupted/duplicate history.
+- Added a fail-closed uniqueness check before planning so duplicate applied versions abort before any migration execution.
+- Added regression coverage proving no apply call occurs after duplicate history is detected.
+- Commits: d829ca7d352017192e462b8ef045c6e091638965, 803dc1602153b1a38ee980ecc8e11562f614e2c0.
+- CI state: source-level integrity fix and regression test committed; workflow execution evidence remains unavailable and green is not inferred.
+
 ## Repository validation continuation — CONCRETE DUPLICATE IMPORT FIX
 - Continued static repository review from the migration validation checkpoint without adding new product functionality.
 - Found a concrete duplicate type import in postgres-migration-executor.test.ts; this can trigger lint/type hygiene failures despite otherwise valid test behavior.
