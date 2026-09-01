@@ -1,3 +1,11 @@
+## Milestone 4 evidence artifact integrity — COMMIT-ADDRESSABLE MANDATORY LOG
+- Continued without repeating unavailable workflow polling.
+- Made the uploaded concurrency artifact commit-addressable using the exact github.sha and configured missing evidence logs as an upload error.
+- This prevents ambiguous artifact association and ensures an execution cannot silently omit the expected matching-concurrency.log evidence.
+- Commit: fe939655e22cce7481303c22be3e19fde3c820d3.
+- Next exact task: obtain a real workflow execution and inspect conclusion, explicit attestation, and commit-addressable artifact.
+- CI state: execution evidence remains pending; no green result inferred.
+
 ## Milestone 4 evidence redundancy — LOG-VISIBLE ATTESTATION
 - Queried the latest evidence implementation commit (a9c1c9b31d1b9c91db0bbe542a5ef2c5b67822d2): workflow_runs=[] and statuses=[] through the available GitHub integration, so no execution result was inferred.
 - Reviewed the evidence chain for inspectability once a run becomes visible. The gate result was written to GitHub Step Summary but not mirrored into normal job output.
