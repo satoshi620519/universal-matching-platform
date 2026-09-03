@@ -84,3 +84,10 @@
 - Independently verified the production Quick Launch service/repository contract against the required lifecycle: drafts are publishable only from `draft` status; publication creates an immutable domain snapshot; repository publication supersedes the prior published version transactionally; current publication and complete history are separately retrievable.
 - Added focused backend lifecycle behavior tests for create → save → publish → current published → history and invalid publication rejection (`a3bb2f588b9b20b09651737ee6bcd0091ca79e3a`).
 - Exact next task: inspect CI for this final lifecycle test. If all gates pass, update DEVELOPMENT_STATUS.md and M8 checkpoint to formally close M8, then move to the next unfinished roadmap milestone without repeating M7/M8 work.
+
+
+## Final publication semantics coverage
+- Latest CI run `33719623650` was still in progress at continuation start, so M8 was not prematurely marked complete.
+- Extended backend lifecycle coverage with the commercial versioning invariant: publishing a newer version supersedes the prior published version while retaining both records in immutable history (`241235d1e8512a8a3f45a5d6aafc03dde1f643d5`).
+- Also anchored the lifecycle fixture to the production Quick Launch domain validation contract.
+- Exact next task: inspect CI for this final coverage commit. If successful, formally close M8 in DEVELOPMENT_STATUS.md and this checkpoint; then resume the next unfinished roadmap milestone without revisiting M8.
