@@ -2354,3 +2354,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 682037b95f817efe229b0342ee67ef0f6dbecfd0.
 - Remaining diagnostics after this checkpoint: ProfileDiscoveryController tests (two constructor arity + two unknown-type assertions) and RealtimeReconciliation tests (two constructor arity errors).
 - Resume point if interrupted: inspect CI triggered by 682037b95f817efe229b0342ee67ef0f6dbecfd0. If the final messaging diagnostic clears, process ProfileDiscoveryController test diagnostics as the next coherent group. Do not revisit passing migration gates or concurrency evidence.
+
+
+## Checkpoint 2026-09-03 — PROFILE TEST HARNESS + FINAL MESSAGING ARITY FIX APPLIED
+- Resumed from the exact prior checkpoint and confirmed new CI runs were triggered by the pending fixes.
+- GitHub write capability is available again; applied the already-diagnosed changes without reopening completed investigation work.
+- Fixed final MessagingController test construction that still supplied 5 dependencies instead of the current 6.
+- Fixed ProfileDiscoveryController test harness alignment: supplied the missing seventh dependency, corrected the auth-failure construction, and locally narrowed two unknown spy-call values used only in assertions.
+- Fix commits: 34f30f51d7b6402f956d7d30cc66ed8080e80e8d and 12dbe8e82a8b759ff572f8332916c8e407585db0.
+- Validation status: PENDING on CI runs triggered by these commits.
+- Expected remaining diagnostic group after successful validation: RealtimeReconciliation tests (two constructor-arity errors).
+- Resume point if interrupted: inspect the newest CI whose head includes 12dbe8e8. If Messaging/Profile diagnostics clear, fetch the exact remaining diagnostics and address only the RealtimeReconciliation constructor group. Do not revisit passed migration gates or matching concurrency evidence.
