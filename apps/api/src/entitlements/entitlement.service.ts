@@ -45,8 +45,10 @@ export class EntitlementService {
     });
   }
 
-  async revoke(id: string, state: EntitlementState): Promise<EntitlementRecord> {
-    return this.transition({ id, state } as EntitlementRecord, 'revoked');
+  async revoke(id: string): Promise<EntitlementRecord> {
+    const record = await this.repository.findById(id);
+    if (!record) throw new Error(`entitlement not found: ${id}`);
+    return this.transition(record, 'revoked');
   }
 
   private transition(
