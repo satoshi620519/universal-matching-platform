@@ -19,6 +19,12 @@ describe('Quick Launch configuration', () => {
     expect(Object.isFrozen(published)).toBe(true);
   });
 
+  it('publishes profile schema definitions without creating profile value ownership', () => {
+    const published = publishQuickLaunchConfiguration({ ...draft, profileSchema: { fields: [{ key: 'display_name', label: 'Display name', type: 'text', required: true, visibility: 'public' }, { key: 'goal', label: 'Goal', type: 'select', visibility: 'public', options: ['friendship', 'dating'] }] } }, 2, '2026-09-03T00:00:00.000Z');
+    expect(published.profileSchema?.fields.map(field => field.key)).toEqual(['display_name', 'goal']);
+    expect(Object.isFrozen(published.profileSchema?.fields)).toBe(true);
+  });
+
   it('rejects incomplete or ambiguous launch settings', () => {
     expect(() => validateQuickLaunchDraft({ ...draft, applicationName: ' ' })).toThrow('applicationName');
     expect(() => validateQuickLaunchDraft({ ...draft, supportedCountries: [] })).toThrow('country');
