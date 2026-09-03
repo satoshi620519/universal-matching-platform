@@ -84,3 +84,6 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 42. Quick Launch is the supported no-code purchaser configuration layer and uses versioned draft → validate → immutable publish semantics.
 43. Advanced Customization is an explicit developer extension layer, not unrestricted modification of protected authorization, privacy, payment, verification or moderation boundaries.
 44. Every future configuration domain must declare schema, defaults, Quick Launch visibility, extension contract, publication behavior, migration compatibility and authorization requirements before implementation.
+
+45. Branding/Theme is the first Universal Configuration Engine domain expansion. It extends existing Quick Launch configuration semantics and must reuse M8 draft/publish/history behavior rather than introducing another version lifecycle.
+46. Existing `primaryColor` and `logoUrl` remain backward-compatible launch-level fields while richer secondary/accent/typography values are introduced through the extensible BrandingThemeConfiguration contract.
