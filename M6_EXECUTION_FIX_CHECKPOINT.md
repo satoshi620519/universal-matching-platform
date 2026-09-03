@@ -12,16 +12,17 @@ Track only execution-verification fixes for M6. Do not repeat completed M6 imple
 - Matching immediate-enforcement verification test committed as `61c50f76e814751cf19ac22deab0a92994539c62`.
 - Messaging immediate-enforcement verification test committed as `235cb9b00a24fdb76c46e40c84854d1b73b61260`.
 - Discovery immediate-enforcement verification test committed as `3a797cc86389322ff91602d48ea4ce44700e0725`.
-- These three latest test commits are now on `main` in sequence; current-main CI verification is the next required gate.
+- Added `apps/api/src/administration/prisma-audit-record.repository.test.ts` to verify the privileged-moderation audit record is persisted through the Prisma `auditRecord.create` adapter with actor, action, target, correlation ID, and timestamp preserved.
+- Audit persistence adapter verification committed as `349fbc1b9612bade5193a8276087e2dd4df392ca`.
+- CI lookup for `3a797cc86389322ff91602d48ea4ce44700e0725` returned no workflow run yet; therefore the three immediate-enforcement tests are not marked CI-verified until a current-main CI run is observable.
 
 ## Anti-duplication rule
 Before every change, inspect this checkpoint, current `main`, and recent commits. Do not recreate existing M6 repositories, controllers, moderation service, migrations, or safety enforcement. Add only missing verification or fix a concrete failing CI/test. Record each completed change here so another ChatGPT instance does not repeat it.
 
 ## Remaining M6 gates
-1. Verify current-main CI for `3a797cc86389322ff91602d48ea4ce44700e0725` and the immediate-enforcement tests.
-2. Inspect existing audit persistence path and add only missing privileged-moderation audit persistence verification.
-3. When all M6 gates are green, mark M6 execution-verified in the project status/audit docs.
-4. Only then proceed to M7.
+1. Verify current-main CI containing the immediate-enforcement tests and audit persistence test.
+2. If CI is green, mark M6 execution-verified in the project status/audit docs.
+3. Only then proceed to M7.
 
 ## Exact next task
-Verify CI for the latest `main` head `3a797cc86389322ff91602d48ea4ce44700e0725`. If green, inspect audit persistence and add only the missing M6 audit persistence verification. If red, fix only the exact failing step. Do not start M7 before M6 is fully verified.
+Verify CI for the latest `main` chain including `349fbc1b9612bade5193a8276087e2dd4df392ca`. If green, update the M6 completion/status documents to execution-verified. If red, fix only the exact failing step. Do not start M7 before M6 is fully verified.
