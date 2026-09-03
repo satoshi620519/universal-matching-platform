@@ -45,6 +45,17 @@ class InMemoryEntitlementRepository extends EntitlementRepository {
     ) ?? null;
   }
 
+  async findUsableForAccount(accountId: string, entitlementKey: string, now: Date): Promise<EntitlementRecord | null> {
+    return [...this.records.values()].find(
+      (record) =>
+        record.accountId === accountId &&
+        record.entitlementKey === entitlementKey &&
+        (record.state === 'active' || record.state === 'scheduled-expiration') &&
+        record.effectiveAt <= now &&
+        (!record.expiresAt || record.expiresAt > now),
+    ) ?? null;
+  }
+
   async transition(
     id: string,
     from: EntitlementRecord['state'],
