@@ -31,6 +31,8 @@ jobs:
         with:
           node-version: 22
       - run: pnpm install --no-frozen-lockfile
+      - name: Verify packaged database migrations
+        run: pnpm --filter @universal/database verify:migrations-build
       - name: Typecheck
         run: set -o pipefail; pnpm typecheck 2>&1 | tee typecheck.log
       - name: Upload typecheck diagnostics
