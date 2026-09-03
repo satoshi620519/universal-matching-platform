@@ -109,3 +109,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 56. Purchaser Profile Schema editing is schema-only inside Quick Launch. Add/remove/type/required/visibility/options controls define future allowed field metadata and must never be presented as an editor for actual user `Profile.fields` values.
 
 57. Profile Schema Published/History summaries are snapshot-derived metadata only. Compact UI may show field counts and required counts; actual profile values remain outside configuration summaries and field definitions remain recoverable from immutable snapshots.
+
+58. Feature Visibility Configuration is presentation/configuration policy, not authorization. It may hide or expose configured capabilities, but AdministrativeRoleAssignment, account state, safety restrictions and future entitlement checks remain independent runtime enforcement layers. Unknown future feature keys default visible to preserve backward compatibility until explicitly configured.
