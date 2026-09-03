@@ -62,3 +62,11 @@
 - Inspected the exact failed CI run `33718781288` instead of guessing. Failure was limited to admin TypeScript: `ImportMeta.env` lacked Vite typings in the new browser transport.
 - Added the minimal `vite-env.d.ts` environment typing boundary (`4638429d317d2f209a8ca8f32e9d7e35e58bf952`). No unrelated CI failures were changed.
 - Exact next task: inspect the CI triggered by this correction. If green, continue with published configuration + history retrieval UI, then lifecycle verification.
+
+
+## Published configuration and history UI
+- CI correction run was still in progress at continuation start; no speculative CI rewrite was made.
+- Continued only with the already-established API contract: `published()` and `history()` endpoints already existed in the workflow client.
+- Added normalized publication/history view models (`a647d9c0a7cf1258eb79aa110fb9718f5dd4406c`).
+- Added purchaser Admin retrieval action and publication status/history panel (`b7f05aad2668c839528fc2754695ff802e62dba2`) plus styling (`33309b1fcbafce3ada4a2be62a689b1500f8c650`).
+- Exact next task: inspect latest CI. If green, perform focused end-to-end lifecycle contract verification for create → save → publish → published → history, including failure behavior. Only after that may M8 be marked complete.
