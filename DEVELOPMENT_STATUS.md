@@ -2385,3 +2385,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 586e82a82735e03860ff5d35620132133facb587.
 - Validation status: PENDING.
 - Resume point if interrupted: inspect CI for 586e82a82735e03860ff5d35620132133facb587. If tests pass, continue to concurrency gate and Build; if a new test fails, fetch its exact diagnostics and fix only that next contract mismatch.
+
+
+## Checkpoint 2026-09-03 — CI TEST STAGE: NEXT CONTRACT FAILURES ADDRESSED
+- CI runs 1408/1409 confirmed Migration verification, PostgreSQL migration command integration, Typecheck, and Lint PASS. Test stage is now the active gate; no completed gates were reworked.
+- Exact test artifact for run 1408 showed 9 failures across 5 files (285 tests already passing).
+- Addressed four coherent stale test-contract/mock groups: filesystem migration integration client adapter shape, Prisma migration executor integration typing contract, conversation race transaction delegate mocks, and ProfileDiscoveryController service mocks (missing update/list).
+- Fix commits: 16d8e87c, a9af8a3f, 935cf0da, d1a58b13.
+- Two migration-integration failures remain intentionally untouched in this pass because they are database cleanup dependency-order failures (DROP authentication_identities blocked by password_credentials FK), a separate coherent issue to validate/fix after these four groups.
+- Validation status: PENDING.
+- Resume point if interrupted: inspect newest CI for d1a58b13. If the four groups clear, handle migration-integration cleanup ordering next; otherwise use exact diagnostics and do not revisit passed gates.
