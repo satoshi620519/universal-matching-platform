@@ -99,3 +99,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 51. Localization is embedded as an optional extension of QuickLaunchDraft. It must validate against the aggregate's existing `supportedCountries`; localization may add locale and country→locale defaults but cannot independently enable countries. Published localization values inherit the same immutable snapshot lifecycle.
 
 52. Localization purchaser controls belong inside the existing Regions step. Country selection remains owned by supportedCountries; country→locale controls are generated only for currently selected countries and may only choose supported locales.
+
+53. Localization Published/History information is derived from immutable snapshots through the existing configuration summary projection. UI shows compact identity fields (default locale and timezone); detailed locale/country mappings remain available in the underlying snapshot rather than being redundantly persisted.
