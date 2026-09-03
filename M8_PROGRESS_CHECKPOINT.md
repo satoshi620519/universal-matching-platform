@@ -91,3 +91,10 @@
 - Extended backend lifecycle coverage with the commercial versioning invariant: publishing a newer version supersedes the prior published version while retaining both records in immutable history (`241235d1e8512a8a3f45a5d6aafc03dde1f643d5`).
 - Also anchored the lifecycle fixture to the production Quick Launch domain validation contract.
 - Exact next task: inspect CI for this final coverage commit. If successful, formally close M8 in DEVELOPMENT_STATUS.md and this checkpoint; then resume the next unfinished roadmap milestone without revisiting M8.
+
+
+## Final CI gate observation
+- Latest CI run `33719749209` was inspected at job level. Migration verification, PostgreSQL migration integration, and Typecheck are confirmed PASS; Lint is currently running, followed by Test, matching concurrency integration/gate, and Build.
+- M8 is intentionally NOT marked complete yet because the repository's full CI gate has not finished successfully.
+- No speculative code changes were made while CI is progressing.
+- Exact resume point: inspect run `33719749209`. If all remaining gates succeed, formally close M8 in DEVELOPMENT_STATUS.md and this checkpoint, then continue from the next unfinished roadmap milestone without repeating M8.
