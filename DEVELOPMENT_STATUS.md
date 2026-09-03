@@ -2164,3 +2164,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: fd0278b44aa8c935fef6c12b446d29da707bc9aa, 15da9ae2b50b7a3da414a49bca34c98d15a492f6.
 - Validation status: fixes are committed and trigger new CI runs, but no completed green run for these exact commits has yet been observed. Release status remains PENDING, not PASS.
 - Exact next action: inspect the workflow runs triggered by fd0278b and 15da9ae2 after completion, obtain failing diagnostics if any remain, and continue only with concrete failures. If all gates pass, produce the final release gate matrix and stop feature work.
+
+
+## CI release gate follow-up — DATABASE PACKAGE BUILD BLOCKER FIXED
+- Checked the actual workflow jobs for the newest commits rather than assuming the previous web syntax fixes were sufficient.
+- Observed both CI runs 1359/1360 fail before typecheck at `Verify packaged database migrations`; downstream gates were correctly skipped.
+- Audited the failing gate's build path and found the production `tsc` build included `src/**/*.test.ts`, while the database package intentionally keeps Vitest tests beside source files. This makes production build depend on test-only globals/types and blocks migration artifact verification.
+- Fixed the concrete boundary issue by excluding `src/**/*.test.ts` from the database production tsconfig build while leaving the Vitest test command unchanged.
+- Fix commit: ${u.result.commit_sha}.
+- Validation status: a new CI run is required for this commit; no release-green claim is made yet.
+- Exact next action: inspect the CI run triggered by this commit. If the migration artifact gate passes, continue through the first actual downstream failure only; do not preemptively modify unrelated code.
