@@ -169,3 +169,10 @@
 - Correct declaration repair: 97fb8f235190fde4fd6ae8eff02cbf08da5fae59.
 - Feature lifecycle commits: e228c1c7e86d151e131b402b11c1f13f46430310 and dfda8a40a5787c568e61b75be7ae3d30fc628ecf.
 - Exact next task: verify CI for 97fb8f23/current commits. Only after concrete green continue Feature Visibility purchaser UI; otherwise fix only reported failures. Runtime authorization remains out of scope.
+
+
+## Configuration Engine checkpoint — CI type boundary repair
+- Exact failed CI: run 33724310311 for 97fb8f23, Admin Typecheck.
+- Concrete root cause from diagnostics: QuickLaunchDraftInput lacked profileSchema despite main.tsx using it.
+- Repair commit: 0ec9ca320ec2c8a0c836448fa3663ab04296b596 (adds typed profileSchema and featureVisibility input shapes).
+- Exact next task: verify CI for 0ec9ca32. If green, proceed with Feature Visibility purchaser UI; if failing, repair only concrete diagnostics. Do not claim Profile Schema or Feature Visibility CI completion before green evidence.
