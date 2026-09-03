@@ -21,7 +21,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
       const existing = await tx.matchInteraction.findUnique({
         where: { actorAccountId_idempotencyKey: { actorAccountId: command.actorAccountId, idempotencyKey: command.idempotencyKey } },
       });
-      if (existing) return this.resultFor(existing, true, tx);
+      if (existing) return { result: await this.resultFor(existing, true, tx), notifications: [] };
 
       const interaction = await tx.matchInteraction.create({
         data: {
