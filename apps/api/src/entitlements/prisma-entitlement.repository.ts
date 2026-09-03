@@ -42,6 +42,14 @@ export class PrismaEntitlementRepository extends EntitlementRepository {
     return rows[0] ? this.toRecord(rows[0]) : null;
   }
 
+  async findByPaymentIntentId(paymentIntentId: string): Promise<EntitlementRecord | null> {
+    const rows = await this.database.$queryRaw<EntitlementRow[]>(Prisma.sql`
+      SELECT id, account_id, entitlement_key, state, effective_at, expires_at, provider_reference, payment_intent_id
+      FROM entitlements WHERE payment_intent_id = ${paymentIntentId} LIMIT 1
+    `);
+    return rows[0] ? this.toRecord(rows[0]) : null;
+  }
+
   async findByPaymentIntent(accountId: string, entitlementKey: string, paymentIntentId: string): Promise<EntitlementRecord | null> {
     const rows = await this.database.$queryRaw<EntitlementRow[]>(Prisma.sql`
       SELECT id, account_id, entitlement_key, state, effective_at, expires_at, provider_reference, payment_intent_id
