@@ -98,3 +98,10 @@
 - M8 is intentionally NOT marked complete yet because the repository's full CI gate has not finished successfully.
 - No speculative code changes were made while CI is progressing.
 - Exact resume point: inspect run `33719749209`. If all remaining gates succeed, formally close M8 in DEVELOPMENT_STATUS.md and this checkpoint, then continue from the next unfinished roadmap milestone without repeating M8.
+
+
+## Exact final CI failure correction
+- CI run `33719749209` completed FAILURE only at Test; Migration verification, PostgreSQL migration integration, Typecheck, and Lint all passed.
+- Exact failure was self-introduced test logic at `quick-launch-configuration.service.spec.ts:28`: `validateQuickLaunchDraft()` is a validation procedure and returned `undefined`; the test incorrectly asserted that it returns the draft object. This was not a production lifecycle defect.
+- Removed only the invalid return-value assertion and unused import (`9bfa4a026c1a75ffb79d0e74e58926d245503d81`), preserving all actual create/save/publish/current/history/supersession coverage.
+- Exact next task: inspect CI triggered by `9bfa4a026c1a75ffb79d0e74e58926d245503d81`. If full CI succeeds, formally close M8; otherwise fix only exact reported diagnostics.
