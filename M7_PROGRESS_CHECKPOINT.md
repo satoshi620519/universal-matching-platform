@@ -70,4 +70,5 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Latest CI `33715702998` is in progress for the preceding typecheck fix and controller tests; do not assume result yet.
 - Production-grade raw-body capture has now been wired at the Fastify/Nest bootstrap with `{ rawBody: true }` (`44c21362110ef535d8b3c3527c58ffe53076f3cd`).
 - Webhook controller no longer accepts an arbitrary `x-raw-body` header; it reads the framework-captured `request.rawBody` (`ea317687cac43df2d88a14fa4a5edf34df366e78`) with focused captured-buffer tests (`53e7044911b7254f20a3e16885aa887d9e94304f`).
-- Inspect CI through `53e70449`. If green, perform final M7 roadmap/status audit; if a failure appears, fix only the exact newly exposed issue.
+- CI `33715860271` failed at Typecheck with one stale focused test call still passing a raw-body string where the controller now expects a captured request object. Fixed only the test invocation (`626e7d967b06aee385610c650fcf9a0980c2fdec`).
+- Inspect fresh CI for `626e7d96` plus the preceding production raw-body commits. If green, perform final M7 roadmap/status audit and update DEVELOPMENT_STATUS.md; if a new failure appears, fix only that exact issue.
