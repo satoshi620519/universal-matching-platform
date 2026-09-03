@@ -2752,3 +2752,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Test gate failed only in apps/admin/src/quick-launch-workflow.spec.ts: the pre-integration assertion still expected 6 steps while the unified workflow intentionally contains 9.
 - Updated the test from a fragile count assertion to an exact ordered workflow contract assertion covering Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish (77d0591c).
 - EXACT NEXT ACTION: inspect the CI run triggered by 77d0591c. Confirm prior green gates remain green and continue to Matching concurrency integration and Build. Fix any subsequent failure from actual logs only; do not merge until every CI gate is green.
+
+
+## Configuration Engine — Full CI green and merge-conflict checkpoint
+- The CI run triggered by the workflow contract test fix completed successfully. The complete configured baseline gate is green, including migrations, Typecheck, Lint, Test, Matching concurrency integration, and Build.
+- Performed final static integration sanity inspection: Quick Launch contains steps 0–8, all four configuration domains remain in the workflow contract, and all four immutable summary projections remain present.
+- PR #1 is currently OPEN but GitHub reports mergeable=false / mergeable_state=dirty, so it must NOT be merged yet despite green CI; this indicates branch divergence/conflict with current main that requires explicit resolution.
+- EXACT NEXT ACTION: inspect the main-vs-integration conflicting files using an execution-capable Git workflow or GitHub conflict-resolution context, rebase/merge current main into feature/config-engine-integration, resolve conflicts without dropping the four-domain integration, rerun CI, then perform final diff review and merge only when CI is green and mergeability is clean.
