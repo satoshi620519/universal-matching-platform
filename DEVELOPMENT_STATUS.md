@@ -2072,3 +2072,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: focused source/test contract coverage added; full PostgreSQL runtime concurrency execution remains pending executable workspace environment.
 - Remaining work: notification realtime refresh/polling UX; production migration preflight/build validation; broader release-readiness verification.
 - Exact next action: inspect the web notification UX and realtime event stream to add account-scoped refresh behavior for notification events without duplicating message realtime delivery.
+
+
+## Phase B notification reconciliation UX — IMPLEMENTED WITHOUT DUPLICATING SSE
+- Resumed from the recorded realtime task and audited the repository before editing. Found that account-scoped SSE transport and reconnect/reconciliation contracts already existed, so no second realtime transport was added.
+- Found the web notification inbox loaded only once and therefore did not reconcile durable notifications after the initial mount.
+- Added lightweight authoritative reconciliation: notification inbox refreshes every 30 seconds and immediately when the browser window regains focus.
+- Each refresh uses the existing authenticated GET /conversations/notifications endpoint; durable server state remains authoritative and no client-side synthetic notifications are introduced.
+- Interval and focus listener are cleaned up on unmount.
+- Commit: d84920f88a543d11ad7cdfdddfe158ed05924b74.
+- Remaining work: notification.created publication is not yet wired into the existing realtime publisher; production migration preflight/build validation and broader release-readiness verification remain.
+- Exact next action: inspect the existing post-commit message publication seam and introduce a minimal post-commit notification publication seam only for already-persisted notifications. Do not create a second SSE transport or publish before the database transaction commits.
