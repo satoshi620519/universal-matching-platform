@@ -113,7 +113,9 @@
 - Preserved existing backend contracts for conversation creation, message loading, sending, and realtime event refresh; no authorization or transport behavior was rewritten.
 - Added explicit field labels and a labelled message list while retaining the existing empty state and realtime status display.
 - Implementation commit: `0def314dd4131d88d57b1cd1e4de510e23d5c1e4`.
-- Next: verify shared primitive compatibility and type/API boundaries, then run repository CI before opening a PR.
+- Shared primitive and existing API contracts reviewed against the actual Conversation implementation. `Field` correctly injects labels/ARIA attributes into `TextInput` and `TextArea`; `List`/`ListRow` preserve valid message list structure; `Button` defaults are explicitly overridden where form submission is required. Conversation authorization, message transport, loading order, and realtime refresh dependencies remain unchanged.
+- No compatibility rewrite was needed after review.
+- Next: open PR and validate the Conversation slice with repository CI before merge.
 
 ## Next continuation point
 
