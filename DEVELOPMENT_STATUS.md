@@ -2365,3 +2365,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: PENDING on CI runs triggered by these commits.
 - Expected remaining diagnostic group after successful validation: RealtimeReconciliation tests (two constructor-arity errors).
 - Resume point if interrupted: inspect the newest CI whose head includes 12dbe8e8. If Messaging/Profile diagnostics clear, fetch the exact remaining diagnostics and address only the RealtimeReconciliation constructor group. Do not revisit passed migration gates or matching concurrency evidence.
+
+
+## Checkpoint 2026-09-03 — FINAL KNOWN TYPECHECK DIAGNOSTICS FIXED
+- CI run 1403 (head 12dbe8e8) reached Typecheck with migration gates PASS and reduced the diagnostics to exactly three errors.
+- Confirmed previous Messaging/Profile constructor fixes worked. Remaining errors were one unknown spy-call access in ProfileDiscoveryController tests and two MessagingController constructor-arity errors in RealtimeReconciliation contract tests.
+- Fixed the final profile assertion by narrowing the spy argument locally.
+- Fixed both realtime reconciliation constructions by supplying the sixth inert dependency required by MessagingController.
+- Fix commits: 6667cee0386b66c1620da42baacbe63662dc1490 and 04576c06f48b24de76b59f84d5a0fb60e16e1537.
+- Validation status: PENDING. This checkpoint intentionally claims no Typecheck PASS until CI confirms it.
+- Resume point if interrupted: inspect newest CI for the latest fix commit. If Typecheck PASSes, continue sequentially with Lint, Test, concurrency gate, and Build; if it fails, fetch exact diagnostics and address only the earliest remaining error.
