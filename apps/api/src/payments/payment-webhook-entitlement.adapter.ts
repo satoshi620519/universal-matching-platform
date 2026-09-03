@@ -16,8 +16,7 @@ export class PaymentWebhookEntitlementAdapter implements PaymentEntitlementServi
   }
 
   async revokeFromPayment(input: { readonly intentId: string; readonly providerReference: string }): Promise<void> {
-    // Revocation lookup is intentionally deferred until a provider event can identify account/key.
-    // Never revoke a guessed entitlement based only on a provider reference.
-    void input;
+    // Revoke only through the explicit payment-intent linkage; never guess an entitlement.
+    await this.entitlements.revokeByPaymentIntent(input.intentId);
   }
 }
