@@ -16,7 +16,8 @@ function databaseFor(sequence: {
     return sequence.create ?? { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' };
   });
   const $executeRaw = vi.fn().mockResolvedValue(undefined);
-  const tx = { matchInteraction: { findUnique, create }, $executeRaw };
+  const createMany = vi.fn().mockResolvedValue({ count: 2 });
+  const tx = { matchInteraction: { findUnique, create }, notification: { createMany }, $executeRaw };
   return {
     $transaction: vi.fn(async (fn: (value: typeof tx) => unknown) => fn(tx)),
     tx,
@@ -71,5 +72,20 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
     const result = await new PrismaMatchTransitionRepository(database as never).transition(command);
     expect(result).toMatchObject({ state: 'pending', mutual: false });
+  });
+
+  it('persists one mutual-match notification for each account only on the new matching transition', async () => {
+    const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
+    await new PrismaMatchTransitionRepository(database as never).transition(command);
+    expect(database.tx.notification.createMany).toHaveBeenCalledWith({ data: [
+      { accountId: 'a1', kind: 'match.mutual', payload: { targetAccountId: 'a2' } },
+      { accountId: 'a2', kind: 'match.mutual', payload: { targetAccountId: 'a1' } },
+    ] });
+  });
+
+  it('does not create notifications for an idempotency replay', async () => {
+    const database = databaseFor({ byIdempotency: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
+    await new PrismaMatchTransitionRepository(database as never).transition(command);
+    expect(database.tx.notification.createMany).not.toHaveBeenCalled();
   });
 });
