@@ -2810,3 +2810,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Shifted subsequent UI step bindings accordingly and updated the workflow contract test.
 - Added focused immutable snapshot summary coverage for profile field count, required count, stable keys, and legacy snapshots without profile schema.
 - EXACT NEXT ACTION: inspect branch diff against main, run CI through GitHub PR, and fix only evidence-backed failures. If green, final review and merge this regression fix as the dedicated Profile Schema Quick Launch integration completion.
+
+## Legal and Support Links Quick Launch — selection checkpoint
+- Re-read latest main status, roadmap, product requirements, configuration specification, architecture, decisions, repository tree, and open PR inventory after PR #4 merge.
+- Avoided reopening already-completed Configuration Engine/Profile Schema work.
+- Selected the explicitly required but not yet integrated Quick Launch domain: Legal and Support Links (privacy policy, terms, support destination/contact).
+- Created branch feature/legal-support-quick-launch from current main.
+- Added LEGAL_SUPPORT_QUICK_LAUNCH_SPEC.md and Decision 62 to lock the metadata-only boundary before implementation.
+- EXACT NEXT ACTION: inspect QuickLaunch domain aggregate, API draft input, immutable snapshot summary, and admin workflow to determine whether any partial implementation already exists; implement only missing end-to-end pieces.
