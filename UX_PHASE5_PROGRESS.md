@@ -63,9 +63,20 @@
 - Implementation commit: `aae5adb45ef2a9c7424aee03279de6ccb63fb814`.
 - Validation completed via repository CI run #2007; all required checks passed before merge.
 
+## Dashboard shell migration in progress
+
+- Branch `feature/ux-dashboard-shell-migration` created from the PR #12 main checkpoint.
+- Authenticated Dashboard shell migrated to shared `HeaderNavigation` rather than duplicating raw navigation markup.
+- Added stable in-page navigation targets for Dashboard, Discover, Activity, and Conversations without changing backend/API behavior.
+- Dashboard hero and conversations sections now have explicit heading associations; account feedback uses accessible live/status semantics.
+- Implementation commit: `2386d9d62fd2eb34a62b912306e5b9d55274c860`.
+- Shared primitive compatibility checked; dashboard sign-out action corrected to use the existing `Button` API without inventing a new variant prop.
+- Compatibility fix commit: `43646eaa6fd85b856be27b1446c8b8ec372ba18d`.
+- Next: run repository CI and open a PR only after required checks are available.
+
 ## Next continuation point
 
-PR #12 is merged. Begin the next smallest coherent migration slice: inspect and migrate the authenticated Dashboard shell first, then handle Notification/Discovery/Conversation sections as separate slices. Reuse `HeaderNavigation`/`BottomNavigation`, `Card`/`List`, and loading/empty/error primitives where semantics fit. Keep backend/API behavior unchanged and do not repeat the completed authentication migration or primitive work.
+Continue from the dashboard shell implementation above. Do not repeat the authentication migration or primitive layers. Keep Notification, Discovery, and Conversation behavioral changes for separate coherent slices after the shell is validated.
 
 ## Interruption-safe rule
 
