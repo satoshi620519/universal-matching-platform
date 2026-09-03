@@ -10,6 +10,7 @@ describe('Realtime reconnect reconciliation contract', () => {
       { listForParticipant } as never,
       {} as never,
       {} as never,
+      {} as never,
     );
 
     // The SSE stream is intentionally transient; reconciliation re-reads durable state.
@@ -26,6 +27,7 @@ describe('Realtime reconnect reconciliation contract', () => {
       {} as never,
       {} as never,
       { listForAccount } as never,
+      {} as never,
       {} as never,
     );
 
