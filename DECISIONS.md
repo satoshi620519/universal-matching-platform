@@ -105,3 +105,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 54. Profile Schema Configuration defines allowed field metadata, while `Profile.fields` remains the sole owner of submitted field values and `ProfileProjectionPolicy` remains the existing runtime visibility mechanism. Configuration may reference visibility semantics but must not create a parallel profile-value store or replace projection ownership.
 
 55. Profile Schema is an optional versioned QuickLaunch aggregate extension. Publication snapshots freeze field definitions/options only; actual `Profile.fields` values are never embedded into configuration snapshots, and runtime ProfileProjectionPolicy ownership remains unchanged.
+
+56. Purchaser Profile Schema editing is schema-only inside Quick Launch. Add/remove/type/required/visibility/options controls define future allowed field metadata and must never be presented as an editor for actual user `Profile.fields` values.
