@@ -56,3 +56,9 @@
 - Wired purchaser UI Save Draft and Publish actions to the existing authorized API workflow, preserving the returned version for subsequent saves/publication (`ff661d7be7089feee8a7d988a705bad9b59c2eba`).
 - Added loading, success and error feedback styling (`2a83789940f18a67c19dc36ec99c6c97093e0b47`).
 - Exact next task: inspect CI for the complete admin/API wiring. If green, add published/history retrieval UI and then perform an end-to-end lifecycle verification against the API contract. Do not declare M8 complete until create → save → publish → published/history behavior is covered.
+
+
+## CI correction
+- Inspected the exact failed CI run `33718781288` instead of guessing. Failure was limited to admin TypeScript: `ImportMeta.env` lacked Vite typings in the new browser transport.
+- Added the minimal `vite-env.d.ts` environment typing boundary (`4638429d317d2f209a8ca8f32e9d7e35e58bf952`). No unrelated CI failures were changed.
+- Exact next task: inspect the CI triggered by this correction. If green, continue with published configuration + history retrieval UI, then lifecycle verification.
