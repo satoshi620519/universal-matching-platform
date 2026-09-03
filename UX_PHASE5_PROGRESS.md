@@ -87,7 +87,7 @@
 - PR #14 CI rerun completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #14 merged into `main` as merge commit `4adcf8db105376163c2356266bc5b005a5b4e7dc`.
 
-## Discovery migration in progress
+## Discovery migration completed
 
 - Re-read the progress record and inspected the current Discovery implementation before editing; completed auth, dashboard shell, notification, and primitive work was not repeated.
 - Branch `feature/ux-discovery-migration` created from the PR #14 main checkpoint.
@@ -101,11 +101,12 @@
 - PR #15 CI run `33742602217` failed at web typecheck. Root cause was two explicit type-contract gaps introduced by the Discovery refactor: `unknown` field state did not match the profile API value union, and the match-decision API wrapper lacked its `{ mutual: boolean }` response type.
 - Fixed only those contracts: Discovery field state now uses the existing API value union and `decideMatch` now has an explicit response type. No behavioral rewrite was made.
 - Fix commits: `68583d2c7ad25b061199ba90ba28ba0674f4e47e`, `0e42b498383315d4903183be2d45f8ed69e8e6b3`.
-- Next: rerun/trigger repository CI on the corrected PR #15 head, then merge only after all required checks pass.
+- PR #15 CI run `33742811375` completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
+- PR #15 merged into `main` as merge commit `7c06738dc87b0516ecfe0bb41663767cf191a2a6`.
 
 ## Next continuation point
 
-Continue from the Discovery implementation above. Do not repeat completed migrations. After Discovery CI and integration, move to Conversation as the remaining major screen slice.
+Discovery migration is complete. Next inspect and migrate Conversation as the remaining major screen slice, reusing existing shared primitives and preserving conversation authorization, message loading, sending, pagination, and real-time behavior. Do not repeat authentication, dashboard shell, notification, discovery, or primitive work. Validate the Conversation slice with CI before any final integration pass.
 
 ## Interruption-safe rule
 
