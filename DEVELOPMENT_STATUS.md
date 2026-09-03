@@ -2313,3 +2313,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 600fbd3f1084fe2a7bc0eaae78a4fb3c17026963.
 - Remaining visible diagnostics after this checkpoint (not bulk-fixed): matching repository test constructor arity/createMany mock, messaging controller test constructor arity, profile discovery test constructor/unknown typing, realtime reconciliation test constructor arity.
 - Resume point if interrupted: inspect CI for 600fbd3f1084fe2a7bc0eaae78a4fb3c17026963; if the profile production error clears, handle the earliest remaining typecheck diagnostic next. Keep completed migration and concurrency evidence untouched.
+
+
+## Checkpoint 2026-09-03 — TYPECHECK TEST HARNESS: MATCH REPOSITORY MOCK CONTRACT FIX
+- CI run 1390 (head 600fbd3f) completed FAILURE at Typecheck; both migration gates remained PASS.
+- Exact diagnostics confirm the ProfileDiscoveryController production signature error is cleared.
+- Earliest remaining diagnostics are in PrismaMatchTransitionRepository tests: multiple constructor calls still pass only DatabaseService after the repository gained the realtime publisher dependency; final test also references createMany absent from its notification mock shape.
+- Updated only this test harness: all repository constructions now receive the existing no-op/mock realtime publisher, and the notification mock explicitly includes createMany.
+- Fix commit: 7658100530f242e867567add8e495266734768a4.
+- Validation status: PENDING.
+- Remaining visible diagnostics not yet changed: messaging controller tests (6 vs 5 constructor args), profile discovery tests (7 vs 6 constructor args plus unknown typing), realtime reconciliation tests (6 vs 5 constructor args).
+- Resume point if interrupted: inspect CI for 7658100530f242e867567add8e495266734768a4. If matching test diagnostics clear, address the next earliest diagnostic group without revisiting passed migration/concurrency evidence or prior production fixes.
