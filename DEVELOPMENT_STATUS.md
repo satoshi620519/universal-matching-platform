@@ -2732,6 +2732,57 @@ Inventory the existing API/controller routes and application capabilities, map t
 - EXACT NEXT ACTION: create a dedicated integration baseline and perform file-level consolidation of the four domains from current branch tips, resolving shared-file changes semantically (not by choosing one branch wholesale). Preserve all domain-specific tests/docs. Run concrete diagnostics when an execution-capable environment becomes available.
 
 
+## Configuration Engine — Integration shared workflow contract
+- Continued from the dedicated feature/config-engine-integration baseline and re-read the exact prior checkpoint before editing.
+- Compared quick-launch-workflow.ts across main, Terminology, Matching Categories, and Matching Rules branch tips instead of selecting one branch wholesale.
+- Semantically consolidated all optional configuration contracts into the integration baseline: terminology, matchingCategories, and matchingRules, while preserving existing featureVisibility and legacy categories.
+- Consolidated Quick Launch step ordering explicitly: Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish.
+- Commit: e158c40e.
+- EXACT NEXT ACTION: consolidate quick-launch-configuration-summary.ts across Feature Visibility, Terminology, Matching Categories, and Matching Rules, preserving all backward-compatible fallbacks; then consolidate main.tsx against the unified workflow step ordering. Do not merge shared files wholesale.
+
+
+## Configuration Engine — Integration shared immutable snapshot summary
+- Continued from the shared workflow checkpoint and compared quick-launch-configuration-summary.ts across all four feature branches.
+- Semantically consolidated Feature Visibility, Terminology, Matching Categories, and Matching Rules summary projections into the integration baseline (5ae085b5).
+- Preserved legacy categories fallback for Matching Categories and missing-metadata behavior for older immutable snapshots.
+- Unified summary now exposes: visible feature count/keys, terminology count/map, matching category total/enabled/keys, and matching rule total/enabled/keys alongside existing branding/localization/profile fields.
+- EXACT NEXT ACTION: consolidate apps/admin/src/main.tsx against the unified workflow ordering and summary model. First map each feature branch's UI blocks by domain and step number; then integrate domain blocks without wholesale replacement. After UI consolidation, inspect all focused tests for retention.
+
+
+## Configuration Engine — Integration shared Quick Launch UI consolidation (step blocks)
+- Continued from the immutable snapshot summary checkpoint and mapped domain-specific main.tsx blocks directly from Terminology, Matching Categories, and Matching Rules branch tips.
+- Integrated dedicated Matching Categories, Terminology, and Matching Rules purchaser UI blocks into feature/config-engine-integration without replacing the shared file wholesale (93e31797).
+- Aligned conditional steps with the unified workflow ordering: existing Profile fields at 2, Matching Categories at 3, Feature Visibility at 4, Terminology at 5, Matching Rules at 6, Onboarding at 7, Review & Publish at 8.
+- IMPORTANT OPEN ITEM: review/publication and history summary rendering in main.tsx still needs semantic consolidation for all four domains; the step blocks alone do not make the integration UI complete.
+- EXACT NEXT ACTION: consolidate review summary rows and Published/History inline summaries so Feature Visibility, Terminology, Matching Categories, and Matching Rules all render from the unified summary model; then inspect focused tests and compilation risks from the combined contract.
+
+
+## Configuration Engine — Integration review/publication/history summary consolidation
+- Continued from the shared Quick Launch UI checkpoint and compared main.tsx summary rendering across all four feature branches before editing.
+- Semantically consolidated Review & Publish rows and Published/History inline summaries for Feature Visibility, Terminology, Matching Categories, and Matching Rules (2120c64d).
+- Review now exposes enabled visible-feature count, custom terminology, configured matching categories, and enabled matching rules.
+- Published and History summaries now render all unified immutable summary projections with backward-compatible absence checks.
+- EXACT NEXT ACTION: inspect retained focused tests/spec files against the integration branch and add a unified integration-focused summary test covering all four domains together. Then inspect TypeScript/step-order risks in main.tsx and workflow contracts; run diagnostics if an execution-capable environment is available.
+
+
+## Configuration Engine — Unified integration verification checkpoint
+- Re-read the exact next action and inspected retained focused specs on feature/config-engine-integration.
+- Confirmed domain configuration specs are retained for Terminology, Matching Categories, and Matching Rules, plus the focused Matching Rules snapshot summary spec.
+- Added a unified integration-focused immutable snapshot summary test exercising Feature Visibility, Terminology, Matching Categories, and Matching Rules together, including legacy absence behavior (8c2c705d).
+- Performed static contract inspection: main.tsx contains steps 0 through 8, workflow ordering is Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish, all four domain bindings are present, and all four summary projection keys exist.
+- NOTE: two expected older summary spec filenames were not present on the integration branch; this is recorded as a test coverage gap rather than falsely claiming full focused-test retention.
+- EXACT NEXT ACTION: inspect package manifests/test scripts and repository workflow to identify executable diagnostics. Then add focused summary coverage for Feature Visibility, Terminology, and Matching Categories if absent, and run available diagnostics in an execution-capable environment before considering the integration branch ready for review.
+
+
+## Configuration Engine — Diagnostics preparation and focused summary coverage checkpoint
+- Continued from unified integration verification and inspected root/workspace/package manifests.
+- Confirmed executable diagnostics are defined through pnpm + Turbo: pnpm test, pnpm typecheck, pnpm lint, pnpm build; admin and config packages expose Vitest/tsc scripts.
+- Added missing focused immutable snapshot summary coverage for Feature Visibility (976d3a6a), Terminology (695e449d), and Matching Categories including legacy categories fallback (5d5f6b7a).
+- Existing Matching Rules focused summary coverage and unified four-domain integration coverage remain retained.
+- Static inspection is not a substitute for execution; no diagnostic command was falsely claimed as run because this GitHub editing context does not provide a package execution shell.
+- EXACT NEXT ACTION: use an execution-capable repository environment (Codex/cloud or local checkout) on feature/config-engine-integration, install dependencies if needed, then run pnpm test, pnpm typecheck, pnpm lint, and pnpm build. Fix any failures before merge/review readiness. After diagnostics, perform final branch diff review against main and create a single integration PR.
+
+
 ## Configuration Engine — PR and CI handoff checkpoint
 - Confirmed repository CI workflow performs the full gate: migrations, typecheck, lint, test, matching concurrency integration, and build on pull requests.
 - Created integration PR #1 from feature/config-engine-integration to main: “feat: integrate Configuration Engine domains”.
@@ -2759,3 +2810,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Performed final static integration sanity inspection: Quick Launch contains steps 0–8, all four configuration domains remain in the workflow contract, and all four immutable summary projections remain present.
 - PR #1 is currently OPEN but GitHub reports mergeable=false / mergeable_state=dirty, so it must NOT be merged yet despite green CI; this indicates branch divergence/conflict with current main that requires explicit resolution.
 - EXACT NEXT ACTION: inspect the main-vs-integration conflicting files using an execution-capable Git workflow or GitHub conflict-resolution context, rebase/merge current main into feature/config-engine-integration, resolve conflicts without dropping the four-domain integration, rerun CI, then perform final diff review and merge only when CI is green and mergeability is clean.
+
+
+## Configuration Engine — main status reconciliation checkpoint
+- Reconciled DEVELOPMENT_STATUS.md with the current main branch history after identifying it as the only file changed by main since the integration merge base.
+- Preserved current-main progress entries and the integration branch CI/fix checkpoints in chronological continuation, avoiding blind overwrite of either branch's progress record.
+- This edit is intended to remove the sole textual merge conflict; CI must be rerun/confirmed after GitHub recomputes mergeability.
+- EXACT NEXT ACTION: inspect PR #1 mergeable state and workflow status. If clean, perform final diff review; if still dirty, inspect the newly reported conflicting file rather than guessing.
