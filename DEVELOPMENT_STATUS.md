@@ -2334,3 +2334,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: f5986590634dcdb8f0c325601ed2998c6d0c9a00.
 - Remaining visible diagnostics after this checkpoint: messaging controller tests (six constructor-arity errors), profile discovery tests (constructor arity plus two unknown-type assertions), realtime reconciliation tests (two constructor-arity errors).
 - Resume point if interrupted: inspect CI for f5986590634dcdb8f0c325601ed2998c6d0c9a00. If these two matching integration diagnostics clear, process the next earliest diagnostic group (messaging controller tests) only. Do not revisit PASS migration gates or Concurrency Gate #93.
+
+
+## Checkpoint 2026-09-03 — TYPECHECK: MESSAGING CONTROLLER TEST CONSTRUCTOR CONTRACT FIX
+- CI run 1394 (head f5986590) completed FAILURE at Typecheck after both migration gates passed.
+- Exact diagnostics confirm matching integration constructor errors are cleared; next earliest group is six MessagingController test constructions expecting 6 dependencies but supplying 5.
+- Inspected MessagingController constructor and confirmed the sixth dependency is PrismaMatchTransitionRepository (matches).
+- Updated only the affected messaging tests to supply an explicit inert matches dependency stub; tests that exercise mutual-match behavior retain their dedicated matches mock.
+- Fix commits: 07be3a1c98593630e697365bf9bd96030099c80d, 8b22226b1d0306a4f814e3da1f1e8156fedd3f6b, 28e1f682f123ed5774942ae914a88846167be5bb.
+- Validation status: PENDING. Remaining visible diagnostics are ProfileDiscoveryController tests (constructor arity + unknown typing) and RealtimeReconciliation tests (constructor arity).
+- Resume point if interrupted: inspect CI for the latest messaging-test fix commit. If messaging diagnostics clear, process ProfileDiscoveryController test diagnostics next, one coherent group at a time. Do not revisit PASS migration gates or previously verified concurrency evidence.
