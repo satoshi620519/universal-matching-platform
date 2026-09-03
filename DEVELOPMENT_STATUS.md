@@ -2739,3 +2739,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Consolidated Quick Launch step ordering explicitly: Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish.
 - Commit: e158c40e.
 - EXACT NEXT ACTION: consolidate quick-launch-configuration-summary.ts across Feature Visibility, Terminology, Matching Categories, and Matching Rules, preserving all backward-compatible fallbacks; then consolidate main.tsx against the unified workflow step ordering. Do not merge shared files wholesale.
+
+
+## Configuration Engine — Integration shared immutable snapshot summary
+- Continued from the shared workflow checkpoint and compared quick-launch-configuration-summary.ts across all four feature branches.
+- Semantically consolidated Feature Visibility, Terminology, Matching Categories, and Matching Rules summary projections into the integration baseline (5ae085b5).
+- Preserved legacy categories fallback for Matching Categories and missing-metadata behavior for older immutable snapshots.
+- Unified summary now exposes: visible feature count/keys, terminology count/map, matching category total/enabled/keys, and matching rule total/enabled/keys alongside existing branding/localization/profile fields.
+- EXACT NEXT ACTION: consolidate apps/admin/src/main.tsx against the unified workflow ordering and summary model. First map each feature branch's UI blocks by domain and step number; then integrate domain blocks without wholesale replacement. After UI consolidation, inspect all focused tests for retention.
