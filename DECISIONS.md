@@ -111,3 +111,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 57. Profile Schema Published/History summaries are snapshot-derived metadata only. Compact UI may show field counts and required counts; actual profile values remain outside configuration summaries and field definitions remain recoverable from immutable snapshots.
 
 58. Feature Visibility Configuration is presentation/configuration policy, not authorization. It may hide or expose configured capabilities, but AdministrativeRoleAssignment, account state, safety restrictions and future entitlement checks remain independent runtime enforcement layers. Unknown future feature keys default visible to preserve backward compatibility until explicitly configured.
+
+59. CI repair evidence must be tied to the exact declaration actually compiled. A patch that targets a similarly named or assumed interface is not considered a repair until the affected compiled declaration is inspected and a subsequent CI run confirms it. Feature Visibility may share QuickLaunch immutable lifecycle but remains metadata-only and cannot grant authorization.
