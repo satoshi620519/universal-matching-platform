@@ -16,8 +16,9 @@ function databaseFor(sequence: {
     return sequence.create ?? { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' };
   });
   const $executeRaw = vi.fn().mockResolvedValue(undefined);
+  const notificationCreateMany = vi.fn().mockResolvedValue({ count: 0 });
   const notificationCreate = vi.fn().mockResolvedValueOnce({ id: 'n1', accountId: 'a1' }).mockResolvedValueOnce({ id: 'n2', accountId: 'a2' });
-  const tx = { matchInteraction: { findUnique, create }, notification: { create: notificationCreate }, $executeRaw };
+  const tx = { matchInteraction: { findUnique, create }, notification: { create: notificationCreate, createMany: notificationCreateMany }, $executeRaw };
   return {
     $transaction: vi.fn(async (fn: (value: typeof tx) => unknown) => fn(tx)),
     tx,
@@ -38,7 +39,7 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
 
   it('replays an existing idempotency key without creating a duplicate', async () => {
     const database = databaseFor({ byIdempotency: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
-    const result = await new PrismaMatchTransitionRepository(database as never).transition(command);
+    const result = await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command);
     expect(result).toMatchObject({ state: 'pending', replayed: true });
     expect(database.tx.matchInteraction.create).not.toHaveBeenCalled();
   });
@@ -49,7 +50,7 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
       reciprocal: null,
     });
     const conflictingRetry = { ...command, targetAccountId: 'a3' };
-    const result = await new PrismaMatchTransitionRepository(database as never).transition(conflictingRetry);
+    const result = await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(conflictingRetry);
     expect(result).toMatchObject({ state: 'pending', replayed: true });
     expect(database.tx.matchInteraction.findUnique.mock.calls.at(-1)?.[0]).toMatchObject({
       where: { actorAccountId_targetAccountId: { actorAccountId: 'a2', targetAccountId: 'a1' } },
@@ -59,25 +60,25 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
   it('propagates a unique constraint failure instead of querying an aborted transaction', async () => {
     const uniqueError = Object.assign(new Error('unique'), { code: 'P2002' });
     const database = databaseFor({ create: uniqueError, reciprocal: null });
-    await expect(new PrismaMatchTransitionRepository(database as never).transition(command)).rejects.toMatchObject({ code: 'P2002' });
+    await expect(new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command)).rejects.toMatchObject({ code: 'P2002' });
     expect(database.tx.matchInteraction.findUnique).toHaveBeenCalledTimes(1);
   });
 
   it('resolves reciprocal concurrent-like visibility to matched', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
-    const result = await new PrismaMatchTransitionRepository(database as never).transition(command);
+    const result = await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command);
     expect(result).toMatchObject({ state: 'matched', mutual: true, replayed: false });
   });
 
   it('keeps a one-sided like pending', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
-    const result = await new PrismaMatchTransitionRepository(database as never).transition(command);
+    const result = await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command);
     expect(result).toMatchObject({ state: 'pending', mutual: false });
   });
 
   it('persists one mutual-match notification for each account only on the new matching transition', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
-    await new PrismaMatchTransitionRepository(database as never).transition(command);
+    await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command);
     expect(database.tx.notification.create).toHaveBeenCalledTimes(2);
   });
 
@@ -95,7 +96,7 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
 
   it('does not create notifications for an idempotency replay', async () => {
     const database = databaseFor({ byIdempotency: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
-    await new PrismaMatchTransitionRepository(database as never).transition(command);
+    await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command);
     expect(database.tx.notification.createMany).not.toHaveBeenCalled();
   });
 });
