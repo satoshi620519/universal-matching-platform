@@ -2711,3 +2711,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added a typed rule model with stable keys, target field, constrained operators, typed values, enabled state, optional non-negative weights, normalization, focused tests, and explicit domain boundaries (3925c17d, 901d0b8e, c908e305).
 - Rules remain configuration inputs only; matching engine interpretation and authorization remain separate responsibilities.
 - EXACT NEXT ACTION: inspect the latest Quick Launch lifecycle contract before integration, then add only missing optional matchingRules metadata, purchaser controls, review/publish immutable snapshot summary, and focused compatibility tests. Keep prior-domain diagnostics as explicit open verification items.
+
+
+## Configuration Engine — Matching Rules Quick Launch integration
+- Re-read exact next action and inspected the actual feature/config-matching-rules branch before editing.
+- Added optional matchingRules metadata to QuickLaunchDraftInput (14d1c101).
+- Added a dedicated purchaser-facing Matching Rules step with stable key, field, constrained operator selection, typed input capture, and enabled state; shifted subsequent step numbering coherently and added Review count (767fc19b).
+- Added the Matching Rules entry to quickLaunchSteps (db2d86f9).
+- Added immutable snapshot summary projection for total/enabled rule counts and stable keys (fec69332).
+- NOTE: this branch was based on main and does not contain later Terminology/Matching Categories branch integrations; those are not overwritten or duplicated here. Cross-branch consolidation must be handled deliberately.
+- EXACT NEXT ACTION: add focused tests for matching-rule snapshot summaries, inspect Published/History rendering, then plan safe branch consolidation or rebase against the integration baseline before declaring cross-domain UI completeness.
