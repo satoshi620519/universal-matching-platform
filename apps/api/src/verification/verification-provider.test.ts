@@ -43,15 +43,28 @@ describe('VerificationProvider', () => {
 
   it('allows a provider to report no outcome yet', async () => {
     class PendingProvider extends VerificationProvider {
-      async createVerification(): Promise<{ readonly providerReference: string }> {
+      async createVerification(
+        _input: VerificationProviderRequest,
+      ): Promise<{ readonly providerReference: string }> {
         return { providerReference: 'pending-1' };
       }
 
-      async getOutcome(): Promise<VerificationProviderOutcome | null> {
+      async getOutcome(_providerReference: string): Promise<VerificationProviderOutcome | null> {
         return null;
       }
     }
 
-    await expect(new PendingProvider().getOutcome('pending-1')).resolves.toBeNull();
+    const provider = new PendingProvider();
+
+    await expect(
+      provider.createVerification({
+        requestId: 'request-2',
+        accountId: 'account-2',
+        level: 2,
+        workflowReference: 'workflow-2',
+      }),
+    ).resolves.toEqual({ providerReference: 'pending-1' });
+
+    await expect(provider.getOutcome('pending-1')).resolves.toBeNull();
   });
 });
