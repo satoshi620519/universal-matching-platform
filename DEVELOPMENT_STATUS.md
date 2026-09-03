@@ -2667,3 +2667,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added focused tests for configured and legacy snapshot behavior (081026c8).
 - Added Published/History summary rendering for terminology metadata (5601c466).
 - EXACT NEXT ACTION: run/obtain concrete typecheck and test diagnostics for feature/config-terminology; repair only concrete failures. Then checkpoint Terminology domain completion and identify the next uncompleted Configuration Engine domain from roadmap/repository evidence.
+
+
+## Configuration Engine — Terminology diagnostics checkpoint
+- Re-read latest status and exact next action before attempting diagnostics.
+- Confirmed repository scripts: root uses pnpm/turbo and apps/admin exposes typecheck (tsc --noEmit) and test (vitest run).
+- GitHub workflow lookup for the latest terminology UI commit returned no pull-request-triggered workflow runs through the available API wrapper. No CI success is inferred.
+- This chat environment currently has repository metadata access but no connected execution workspace capable of running pnpm/turbo locally; diagnostics therefore remain unverified rather than fabricated.
+- Terminology code checkpoint remains complete pending concrete typecheck/test evidence.
+- EXACT NEXT ACTION: when an execution-capable environment is available, run pnpm --filter admin typecheck and pnpm --filter admin test (or equivalent repository scripts), repair only concrete diagnostics, then checkpoint Terminology as verified. Meanwhile inspect roadmap for the next domain only for planning; do not mark Terminology CI green.
