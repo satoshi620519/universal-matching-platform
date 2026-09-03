@@ -30,7 +30,6 @@
 - Before ending any work session, record the exact next action and unfinished state.
 - Do not rely on conversation memory as the sole source of project state.
 
-
 ## Phase 1 consistency review outcome — 2026-08-30
 
 The Phase 1 requirements were reviewed across onboarding, categories, profiles, matching, messaging, notifications, payments, identity verification, safety, moderation, analytics, accessibility, operations, data lifecycle and buyer deployment.
@@ -61,7 +60,6 @@ The following are intentionally deferred to Phase 2 architecture work:
 
 Deferral is intentional. These decisions require detailed architecture, deployment constraints, regional analysis and implementation trade-off review rather than assumptions during product requirements planning.
 
-
 ## Technology stack baseline — 2026-08-30
 
 29. Use TypeScript and Node.js LTS across the primary application stack.
@@ -78,46 +76,28 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 40. Use Docker Compose for local supporting infrastructure and GitHub Actions for CI.
 41. Keep deployment containerized and provider-neutral; payment, identity verification, messaging, production cloud, search and observability vendors remain explicit future adapter selections.
 
-
 ## Universal Configuration Engine boundaries — 2026-09-03
 
 42. Quick Launch is the supported no-code purchaser configuration layer and uses versioned draft → validate → immutable publish semantics.
 43. Advanced Customization is an explicit developer extension layer, not unrestricted modification of protected authorization, privacy, payment, verification or moderation boundaries.
 44. Every future configuration domain must declare schema, defaults, Quick Launch visibility, extension contract, publication behavior, migration compatibility and authorization requirements before implementation.
-
 45. Branding/Theme is the first Universal Configuration Engine domain expansion. It extends existing Quick Launch configuration semantics and must reuse M8 draft/publish/history behavior rather than introducing another version lifecycle.
 46. Existing `primaryColor` and `logoUrl` remain backward-compatible launch-level fields while richer secondary/accent/typography values are introduced through the extensible BrandingThemeConfiguration contract.
-
 47. Branding/Theme values are embedded in the existing versioned QuickLaunchDraft aggregate for the current commercial configuration model. They inherit the established draft → validate → immutable publish → supersede → history lifecycle; no separate endpoint, repository, or version counter is introduced.
-
 48. Purchaser-facing branding/theme customization is exposed inside the existing Quick Launch Branding step and Review & Publish step. The workflow sends the richer contract through the existing create/save endpoints and preserves the single M8 publication lifecycle.
-
 49. Published/history views use compact projections derived from immutable snapshots rather than duplicating full configuration state into separate summary persistence. Each configuration domain contributes display-safe summary fields only.
-
 50. Localization/Geography is the next configuration domain after Branding/Theme. Its contract owns locale/default-locale and optional country→locale behavior, while the existing Quick Launch `supportedCountries` field remains the single source for country enablement until deliberately migrated; no duplicate country list or parallel publication lifecycle is permitted.
-
 51. Localization is embedded as an optional extension of QuickLaunchDraft. It must validate against the aggregate's existing `supportedCountries`; localization may add locale and country→locale defaults but cannot independently enable countries. Published localization values inherit the same immutable snapshot lifecycle.
-
 52. Localization purchaser controls belong inside the existing Regions step. Country selection remains owned by supportedCountries; country→locale controls are generated only for currently selected countries and may only choose supported locales.
-
 53. Localization Published/History information is derived from immutable snapshots through the existing configuration summary projection. UI shows compact identity fields (default locale and timezone); detailed locale/country mappings remain available in the underlying snapshot rather than being redundantly persisted.
-
 54. Profile Schema Configuration defines allowed field metadata, while `Profile.fields` remains the sole owner of submitted field values and `ProfileProjectionPolicy` remains the existing runtime visibility mechanism. Configuration may reference visibility semantics but must not create a parallel profile-value store or replace projection ownership.
-
 55. Profile Schema is an optional versioned QuickLaunch aggregate extension. Publication snapshots freeze field definitions/options only; actual `Profile.fields` values are never embedded into configuration snapshots, and runtime ProfileProjectionPolicy ownership remains unchanged.
-
 56. Purchaser Profile Schema editing is schema-only inside Quick Launch. Add/remove/type/required/visibility/options controls define future allowed field metadata and must never be presented as an editor for actual user `Profile.fields` values.
-
 57. Profile Schema Published/History summaries are snapshot-derived metadata only. Compact UI may show field counts and required counts; actual profile values remain outside configuration summaries and field definitions remain recoverable from immutable snapshots.
-
 58. Feature Visibility Configuration is presentation/configuration policy, not authorization. It may hide or expose configured capabilities, but AdministrativeRoleAssignment, account state, safety restrictions and future entitlement checks remain independent runtime enforcement layers. Unknown future feature keys default visible to preserve backward compatibility until explicitly configured.
-
 59. CI repair evidence must be tied to the exact declaration actually compiled. A patch that targets a similarly named or assumed interface is not considered a repair until the affected compiled declaration is inspected and a subsequent CI run confirms it. Feature Visibility may share QuickLaunch immutable lifecycle but remains metadata-only and cannot grant authorization.
-
 60. Quick Launch admin input types must evolve in lockstep with published configuration extensions. Purchaser UI may not introduce ad-hoc untyped configuration properties; new schema/visibility metadata must be explicitly represented at the workflow input boundary so CI can verify the aggregate end-to-end.
-
 60. Purchaser Feature Visibility UI writes only FeatureVisibilityConfiguration metadata. For compatibility, the existing enabledFeatures list may be synchronized as a product capability list, but neither UI state is authorization and runtime role/safety enforcement remains authoritative.
-
 61. Profile Schema Quick Launch integration must reuse the existing optional profileSchema extension and immutable QuickLaunch lifecycle; purchaser controls edit only field metadata (key, label, type, required, visibility, select options). Actual Profile.fields values and ProfileProjectionPolicy runtime ownership remain outside Quick Launch configuration.
-
 62. Legal and support links are a purchaser-facing Quick Launch metadata domain. They may configure public navigation destinations only and must not control authorization, moderation, retention, verification, or other protected policy.
+63. Phase 5 UX is a platform-wide contract that must be defined before production UI expansion. It uses semantic design tokens, accessible shared components, responsive mobile/tablet/desktop rules, dark-mode and reduced-motion considerations, and complete core user journeys with explicit loading, success, error, empty, and permission states. Buyer customization may alter supported branding/terminology values but must not alter accessibility semantics, safety affordances, navigation meaning, or authorization behavior.
