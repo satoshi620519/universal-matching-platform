@@ -20,7 +20,7 @@ describe('PaymentWebhookController', () => {
     }} as unknown as VerifiedPaymentWebhookTransport;
     const processor = { process: async () => true } as unknown as PaymentWebhookProcessor;
     const controller = new PaymentWebhookController(transport, processor);
-    await controller.receive({ ignored: true }, undefined, 'stripe-signature', '{"ignored":true}');
+    await controller.receive({ ignored: true }, undefined, 'stripe-signature', { rawBody: Buffer.from('{"ignored":true}') } as never);
     expect(input).toEqual({
       signature: 'stripe-signature',
       rawBody: '{"ignored":true}',
