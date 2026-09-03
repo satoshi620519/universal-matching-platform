@@ -77,3 +77,10 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 39. Use Vitest/Supertest/Playwright as the primary automated testing baseline, with Expo-compatible mobile tests.
 40. Use Docker Compose for local supporting infrastructure and GitHub Actions for CI.
 41. Keep deployment containerized and provider-neutral; payment, identity verification, messaging, production cloud, search and observability vendors remain explicit future adapter selections.
+
+
+## Universal Configuration Engine boundaries — 2026-09-03
+
+42. Quick Launch is the supported no-code purchaser configuration layer and uses versioned draft → validate → immutable publish semantics.
+43. Advanced Customization is an explicit developer extension layer, not unrestricted modification of protected authorization, privacy, payment, verification or moderation boundaries.
+44. Every future configuration domain must declare schema, defaults, Quick Launch visibility, extension contract, publication behavior, migration compatibility and authorization requirements before implementation.
