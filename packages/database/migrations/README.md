@@ -35,6 +35,10 @@ Each successfully applied migration records its numeric version and completion t
 
 A migration failure is a deployment/database failure, not an application-level validation error. The runner must return a non-success result and preserve the database in the strongest rollback state supported by the database engine.
 
+## Current release gate limitation
+
+The repository currently verifies that migration artifacts are packaged into `@universal/database/dist/migrations`, but it does not yet contain a concrete production migration runner that applies the `schema_migrations` contract to an empty PostgreSQL database. Therefore artifact packaging is a CI gate, while actual migration execution must be supplied before production deployment.
+
 ## Scope
 
 This contract defines artifact discovery, ordering, tracking and application semantics. It does not prescribe a particular PostgreSQL driver or command-line framework. The concrete runner must use the repository's selected database access technology and must be covered by an empty-database integration test before the migration gate is considered complete.
