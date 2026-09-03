@@ -72,3 +72,5 @@ export * from './match-strategy.js';
 export * from './match-transition.js';
 export * from './match-transition-state.js';
 export * from './conversation.js';
+
+export * from './quick-launch-configuration.js';
