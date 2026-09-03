@@ -2463,3 +2463,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - M8 is the active milestone: Purchaser administration and Quick Launch.
 - Initial M8 repository inspection confirms `apps/admin` exists only as a TypeScript baseline; no commercial administration/configuration model has been implemented there yet.
 - Next exact task: establish the smallest testable M8 configuration domain (branding, geography/category/feature/onboarding controls plus immutable publication workflow) before adding presentation UI.
+
+
+## Checkpoint 2026-09-03 — M8 FORMALLY COMPLETED
+- CI run `33720009442` (head `9bfa4a026c1a75ffb79d0e74e58926d245503d81`) completed SUCCESS after the exact lifecycle-test assertion correction.
+- M8 completion gate is satisfied: Quick Launch configuration domain, validation, draft persistence, immutable publication snapshots, publication supersession/history, administrator authorization, purchaser API, React administration UI, Save Draft/Publish operations, published/history retrieval, and focused frontend/backend lifecycle coverage are implemented.
+- M8 is formally complete. Do not repeat M8 implementation unless a concrete regression is later discovered.
+- Next active roadmap area: continue from the next unfinished commercial milestone, beginning with a documented Phase 4 configuration-system specification and supported Quick Launch vs Advanced Customization boundaries before expanding configuration scope.
