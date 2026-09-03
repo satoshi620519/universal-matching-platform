@@ -2047,3 +2047,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: source-level contract inspection complete; full browser/runtime execution remains pending an executable workspace environment.
 - Remaining work: match-established notification persistence is still absent; direct-pair true concurrent first-insert recovery remains unresolved; notification realtime refresh/polling UX is incomplete; production migration preflight/build validation remains pending.
 - Exact next action: inspect the match transition result path and notification persistence schema, then add a notification only when a real transition newly establishes a mutual match (never on replay). Keep the write transaction/idempotency semantics authoritative and add recipient-scoping/replay tests before realtime UI work.
+
+
+## Phase B mutual-match notifications — REAL EVENT PERSISTENCE IMPLEMENTED
+- Resumed from the exact recorded next action after confirming the current match transition repository and notification persistence shape.
+- Added notification persistence only inside the successful, non-replayed transition that newly observes a reciprocal like. No synthetic or polling-generated notifications were introduced.
+- Both participants receive one match.mutual notification with the counterpart account id as payload, so each recipient's notification remains account-scoped.
+- Idempotency replays return before notification writes, preventing duplicate match notifications on retries.
+- Notification writes occur inside the existing match transition transaction, preserving atomicity with the interaction that establishes the match.
+- Added focused tests for both-recipient payloads and replay suppression.
+- Commits: d4606b275b8230d6360f5db662fef595e3eaf375, 6339000c0cf3e008998f2586cb87b2bf2724725d.
+- Validation status: focused source/test contract coverage added; full runtime execution remains pending executable workspace environment.
+- Remaining work: direct-pair true concurrent first-insert recovery; notification realtime refresh/polling UX; production migration preflight/build validation.
+- Exact next action: inspect direct_conversation_pairs insertion behavior under Prisma unique conflict and implement safe recovery outside an aborted transaction, with focused concurrency/error-path tests. Do not revisit completed discovery or notification event work.
