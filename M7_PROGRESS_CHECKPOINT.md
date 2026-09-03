@@ -54,5 +54,14 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 ## Newly completed
 - Explicit entitlement lookup and revocation by payment-intent linkage; unrelated entitlements are not guessed or revoked.
 - Revocation isolation test covering multiple payment intents.
-- Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Next exact task
-Inspect fresh CI for Stripe HTTP/composition commits. If green, audit the Stripe webhook signature implementation against raw-body requirements and replace the simplified test signature scheme if necessary; then add focused production wiring tests without touching completed provider-neutral contracts.
+- Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Completion push checkpoint
+- User requested completion acceleration on 2026-09-03. Continue from this checkpoint; do not repeat completed M7 work.
+- Latest CI `33715396428` for HTTP/composition work was still running when the completion push began; do not assume its result.
+- Stripe webhook audit found the previous implementation signed `JSON.stringify(payload)`, which is unsafe for provider signatures because reserialization can alter authenticated bytes.
+- Raw-body verification capability added to the provider-neutral transport (`f71ba4c0086ddbd5c8871294637e2db214b8a263`).
+- Stripe adapter now requires exact raw body and supports `v1=` signature extraction with timing-safe comparison (`c5358396af210898f74d69280952388ab2a2c202`).
+- Focused tests cover versioned signature acceptance, tampering, missing raw-body rejection, and missing signed context (`1cf00105e32f3005debf40bdd44775105ce1eb2c`).
+- Controller forwards provider signature and raw-body capability (`24c4169e5b915ddc1f8409102b1033da0e375132`).
+
+## Next exact task
+Inspect CI for all commits through `24c4169e`. If green, complete production-grade raw-body capture in the actual HTTP adapter (do not rely on an arbitrary request header), add focused end-to-end wiring tests, then perform a final M7 completion audit against the roadmap and update DEVELOPMENT_STATUS.md.
