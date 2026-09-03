@@ -117,3 +117,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 60. Quick Launch admin input types must evolve in lockstep with published configuration extensions. Purchaser UI may not introduce ad-hoc untyped configuration properties; new schema/visibility metadata must be explicitly represented at the workflow input boundary so CI can verify the aggregate end-to-end.
 
 60. Purchaser Feature Visibility UI writes only FeatureVisibilityConfiguration metadata. For compatibility, the existing enabledFeatures list may be synchronized as a product capability list, but neither UI state is authorization and runtime role/safety enforcement remains authoritative.
+
+61. Profile Schema Quick Launch integration must reuse the existing optional profileSchema extension and immutable QuickLaunch lifecycle; purchaser controls edit only field metadata (key, label, type, required, visibility, select options). Actual Profile.fields values and ProfileProjectionPolicy runtime ownership remain outside Quick Launch configuration.
