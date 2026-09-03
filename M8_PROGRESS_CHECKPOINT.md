@@ -77,3 +77,10 @@
 - Updated only that fixture to match the current schema (`df13e15b41ec1d884ecdf96f6940111e1d7115b1`).
 - Added focused purchaser lifecycle contract test covering create → save → publish → published → history endpoint sequencing (`3b76c598ce52204be2bde49e4bdac608edb57371`).
 - Exact next task: inspect CI for both corrections. If green, verify backend lifecycle behavior and close M8 formally with final completion criteria; if CI fails, fix only the reported failure.
+
+
+## Backend lifecycle verification
+- At continuation start, latest CI runs `33719456168` and `33719435699` were still in progress, so no green result was inferred and no speculative CI fix was made.
+- Independently verified the production Quick Launch service/repository contract against the required lifecycle: drafts are publishable only from `draft` status; publication creates an immutable domain snapshot; repository publication supersedes the prior published version transactionally; current publication and complete history are separately retrievable.
+- Added focused backend lifecycle behavior tests for create → save → publish → current published → history and invalid publication rejection (`a3bb2f588b9b20b09651737ee6bcd0091ca79e3a`).
+- Exact next task: inspect CI for this final lifecycle test. If all gates pass, update DEVELOPMENT_STATUS.md and M8 checkpoint to formally close M8, then move to the next unfinished roadmap milestone without repeating M7/M8 work.
