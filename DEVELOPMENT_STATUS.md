@@ -2375,3 +2375,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: 6667cee0386b66c1620da42baacbe63662dc1490 and 04576c06f48b24de76b59f84d5a0fb60e16e1537.
 - Validation status: PENDING. This checkpoint intentionally claims no Typecheck PASS until CI confirms it.
 - Resume point if interrupted: inspect newest CI for the latest fix commit. If Typecheck PASSes, continue sequentially with Lint, Test, concurrency gate, and Build; if it fails, fetch exact diagnostics and address only the earliest remaining error.
+
+
+## Checkpoint 2026-09-03 — TYPECHECK+LINT PASS; TEST CONTRACT FAILURE FIX
+- CI run 1406 (head 04576c06) confirmed the final known Typecheck fixes: Typecheck PASS and Lint PASS, with both migration gates also PASS.
+- The next newly exposed failure is in packages/database PostgresMigrationExecutor test, not a TypeScript diagnostic.
+- Exact test diagnostics show listAppliedVersions now consumes a SQL result object with a rows property, while the test mock returned a bare array. This caused result.rows to be undefined.
+- Updated only the stale test mock to return { rows: [{ version: 1 }, { version: 4 }] }, matching the implementation's explicit SqlQueryResult contract.
+- Fix commit: 586e82a82735e03860ff5d35620132133facb587.
+- Validation status: PENDING.
+- Resume point if interrupted: inspect CI for 586e82a82735e03860ff5d35620132133facb587. If tests pass, continue to concurrency gate and Build; if a new test fails, fetch its exact diagnostics and fix only that next contract mismatch.
