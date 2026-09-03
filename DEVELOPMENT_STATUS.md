@@ -2588,3 +2588,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Important CI correction: inspected concrete CI run `33723831628` for Profile Schema summary commit `d16dcd1308594847eeb8c3ec46b7fdf73fd21f68`; it FAILED at Admin Typecheck. Logs identify `SnapshotLike` missing `profileSchema` and implicit-any callbacks in quick-launch-configuration-summary.ts. Do not treat that earlier Profile Schema summary checkpoint as green.
 - Applied focused type correction by adding optional profileSchema snapshot shape (`c71f0fcbee91c581ccbd1e4790bebd7821f57100`); follow-up CI must verify this repair before advancing UI work.
 - Exact next task: inspect CI for the type-fix commit when available. If green, integrate FeatureVisibilityConfiguration into QuickLaunch lifecycle; if failing, fix only the concrete reported issue first. Do not implement feature authorization or duplicate AdministrativeRoleAssignment.
+
+
+## Configuration Engine — Feature Visibility lifecycle integration + CI evidence correction
+- Continued from the CI-repair checkpoint by inspecting the exact repair commit run rather than assuming success.
+- Concrete CI run `33724063973` for `c71f0fcbee91c581ccbd1e4790bebd7821f57100` FAILED at Admin Typecheck. Job steps/logs showed SnapshotLike still lacked profileSchema; the earlier attempted correction targeted the wrong declaration anchor and therefore did not change the actual private `type SnapshotLike`.
+- Applied the concrete repair to the real SnapshotLike shape (`97fb8f235190fde4fd6ae8eff02cbf08da5fae59`). This commit requires its own CI verification; no green status is inferred yet.
+- Continued independent domain work only after resolving the concrete code issue: integrated optional FeatureVisibilityConfiguration into the existing QuickLaunchDraft validation and immutable publication lifecycle (`e228c1c7e86d151e131b402b11c1f13f46430310`).
+- Added aggregate publication coverage (`dfda8a40a5787c568e61b75be7ae3d30fc628ecf`). Feature visibility snapshots freeze metadata only and do not replace AdministrativeRoleAssignment or runtime authorization.
+- Exact next task: inspect CI for `97fb8f235190fde4fd6ae8eff02cbf08da5fae59` and current lifecycle commits. If concrete green, add Feature Visibility purchaser UI; if failure, fix the reported issue first. Do not infer Profile Schema completion as CI-green until a successful post-fix run exists.
