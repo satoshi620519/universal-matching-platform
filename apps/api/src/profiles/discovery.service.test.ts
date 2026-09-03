@@ -32,7 +32,6 @@ describe('DiscoveryService', () => {
     await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
     expect(discover).toHaveBeenCalledWith(expect.objectContaining({ limit: 10, categoryId: 'dating' }));
   });
-});
 
   it('applies explicit block and safety exclusions before projection', async () => {
     const discover = vi.fn().mockResolvedValue({ items: [{ id: 'p2', accountId: 'a2', categoryId: 'dating', fields: { name: 'Hidden' }, geographicScope: scope }] });
@@ -43,3 +42,26 @@ describe('DiscoveryService', () => {
     expect(result.items).toEqual([]);
     expect(safety.excludes).not.toHaveBeenCalled();
   });
+
+  it('observes a newly applied safety restriction on the next discovery immediately', async () => {
+    const discover = vi.fn().mockResolvedValue({
+      items: [{ id: 'p2', accountId: 'a2', categoryId: 'dating', fields: { name: 'Visible' }, geographicScope: scope }],
+    });
+    let restriction: 'none' | 'feature-restricted' = 'none';
+    const effectiveSafety = { resolveForAccount: vi.fn(async () => restriction) };
+    const service = new DiscoveryService(
+      { discover },
+      { excludes: vi.fn().mockResolvedValue(false) },
+      { excludes: vi.fn().mockResolvedValue(false) },
+      effectiveSafety as never,
+    );
+
+    const before = await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
+    expect(before.items).toHaveLength(1);
+
+    restriction = 'feature-restricted';
+    const after = await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
+    expect(after.items).toEqual([]);
+    expect(effectiveSafety.resolveForAccount).toHaveBeenCalledWith('a1', 'general');
+  });
+});
