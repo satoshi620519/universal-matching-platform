@@ -2818,3 +2818,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Created branch feature/legal-support-quick-launch from current main.
 - Added LEGAL_SUPPORT_QUICK_LAUNCH_SPEC.md and Decision 62 to lock the metadata-only boundary before implementation.
 - EXACT NEXT ACTION: inspect QuickLaunch domain aggregate, API draft input, immutable snapshot summary, and admin workflow to determine whether any partial implementation already exists; implement only missing end-to-end pieces.
+
+## Legal and Support Links Quick Launch — implementation checkpoint
+- Inspected current QuickLaunch domain, API lifecycle, admin workflow, immutable summary, and existing tests before implementation; no partial Legal/Support domain existed, so implementation is additive rather than a duplicate rewrite.
+- Added metadata-only legalSupport domain: privacyPolicyUrl, termsOfServiceUrl, supportUrl, supportEmail.
+- Added http/https URL validation, email validation, empty normalization, lowercase normalized email, and immutable published snapshot handling.
+- Reused the existing draft/save/publish/history API lifecycle with no new endpoint or authorization path.
+- Added a dedicated Legal & Support Quick Launch step and shifted downstream step indices to preserve one UI section per workflow step.
+- Added review display plus summary projection and legacy snapshot compatibility tests.
+- EXACT NEXT ACTION: inspect branch diff for accidental scope expansion, then open PR and use full GitHub CI as the validation gate; fix only evidence-backed failures.
