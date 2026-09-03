@@ -75,7 +75,7 @@
 - PR #13 CI run `33741216778` (run #2015) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #13 merged into `main` as merge commit `7e1a2822570db12bd2bfda66b5ef659087156636`.
 
-## Notification migration in progress
+## Notification migration completed
 
 - Branch `feature/ux-notification-migration` created from the PR #13 main checkpoint.
 - Notification inbox migrated to existing shared `Card`, `List`, `ListRow`, and `StatusMessage` primitives without changing notification API polling or read behavior.
@@ -84,11 +84,12 @@
 - Implementation commit: `c24e9f9fa9f4af173d49ce3ac96c30e847c6c66b`.
 - Shared primitive compatibility verified; notification state tightened from `any[]` to an explicit notification item shape.
 - Compatibility/type-safety fix commit: `ca4adbef3c73b804947b31119ba5ee3a9f4bd7f4`.
-- Next: open PR and validate with repository CI before merge.
+- PR #14 CI rerun completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
+- PR #14 merged into `main` as merge commit `4adcf8db105376163c2356266bc5b005a5b4e7dc`.
 
 ## Next continuation point
 
-Continue from the notification implementation above. Do not repeat dashboard/authentication or shared primitive work. After Notification is integrated, move to Discovery as a separate coherent slice.
+Notification migration is complete. Next inspect and migrate Discovery as the smallest coherent slice, reusing existing shared primitives and preserving discovery API/filter/matching behavior. Do not repeat authentication, dashboard shell, notification, or primitive work. Validate the Discovery slice with CI before moving to Conversation.
 
 ## Interruption-safe rule
 
