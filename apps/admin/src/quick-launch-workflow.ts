@@ -2,6 +2,12 @@ export interface QuickLaunchDraftInput {
   applicationName: string;
   logoUrl?: string;
   primaryColor: string;
+  brandingTheme?: {
+    primaryColor: string;
+    secondaryColor?: string;
+    accentColor?: string;
+    typography?: { fontFamily?: string; headingFontFamily?: string; borderRadius?: 'none'|'small'|'medium'|'large' };
+  };
   supportedCountries: readonly string[];
   categories: readonly { key: string; displayName: string }[];
   enabledFeatures: readonly string[];
