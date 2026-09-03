@@ -2404,3 +2404,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 7d0adfc87a9429dbc35fdefdfba1212c15a7da23.
 - Validation status: PENDING CI. No Typecheck PASS claim until this commit is verified.
 - Resume point if interrupted: inspect CI for 7d0adfc87a9429dbc35fdefdfba1212c15a7da23. If Typecheck passes, continue to Lint then Test and address only newly exposed failures. Do not revisit migration gates or earlier fixed diagnostics.
+
+
+## Checkpoint 2026-09-03 — TEST GATE DIAGNOSTICS: 7 FAILURES, 4 CONTRACT GROUPS FIXED
+- CI 1416 reached Test with Migration, Typecheck, and Lint PASS. Test result: 287 passed, 7 failed, 4 skipped.
+- Exact diagnostics grouped into four independent stale test-contract issues.
+- Filesystem migration integration: removed the unsafe adapter cast so PrismaSqlMigrationClient retains its query result shape ({ rows }) expected by PostgresMigrationExecutor.
+- Prisma migration executor integration: removed the unsafe database cast for the same query-result contract reason.
+- Conversation race tests: transaction delegate mock created a conversation without returning an id, causing production code to fail before the intended unique-conflict path; added a minimal conversation result with id.
+- Migration integration cleanup: password_credentials FK depends on authentication_identities; cleanup now drops credentials before identities in setup/finally paths.
+- Fix commits: 90183e5e95bf8a6eccdc10f00d04995de6a7855e, d6ac3295015b7d4c765b1b1f32502944ae79f06d, fde6160a88231e8c47776f77a82d5badffa1ff1a, e79682f155f5c3b970297db9196ea49bcf68443f.
+- Validation status: PENDING CI.
+- Resume point if interrupted: inspect CI for latest fix commits. If these four groups clear, continue from the next exact test diagnostic only; do not revisit passing migration/typecheck/lint gates.
