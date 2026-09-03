@@ -2562,3 +2562,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Published snapshots deep-freeze schema field definitions and select options, preserving immutable version/history semantics without storing actual Profile.fields values or replacing ProfileProjectionPolicy.
 - Added aggregate-level publication coverage (`17873a5b0ba27d2ec576e644a5964f943df17963`).
 - Exact next task: extend the existing purchaser Quick Launch workflow/admin UI with profile field definitions (add/remove/select options/required/visibility), then Review & Publish; do not create a second profile value editor or duplicate runtime projection controls.
+
+
+## Configuration Engine — Profile Schema purchaser UI
+- Continued from the exact Profile Schema UI task; no Profile contract/lifecycle or Localization work was repeated.
+- Confirmed CI run `33722967960` for immutable Profile Schema publication commit `17873a5b0ba27d2ec576e644a5964f943df17963` completed successfully before continuing.
+- Added purchaser schema-only field editor to Quick Launch (`d83750fc5cfd48a734744a41ac1c6cc245fe65f9`): add/remove fields, stable key, label, type, visibility, required flag, and comma-delimited select options.
+- Editor explicitly configures definitions only and does not edit or persist actual user Profile.fields values; Review & Publish shows configured field count.
+- Exact next task: add snapshot-derived Profile Schema summary to Published/History, then checkpoint Profile Schema completion before moving to Feature Visibility.
