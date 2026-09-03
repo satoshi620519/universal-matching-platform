@@ -25,6 +25,7 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Recent commits: `962e31baa268c84ff02f849a9216467ded2bc6a3`, `1c9ecbd95e3e584900b0f9ff7d063895743b3b77`, `42ed0a02e001a18bf099b0aa3464289449aa8273`, `296f69696bba9c3a39da96b0be20627ca3f100be`, `a661affa4eb7977414d9da776df23936b268d52d`, `f04820b21e5a72780e89f6201e5641fecb0c47e2`, `3b82f48d87d0c1e5edcbf210d1e863293fd08c34`, `8782efee878954cfd476eb106e0f075048993cff`.
 
 ## CI
+- CI `33714714076` failed at Typecheck in the new Stripe webhook adapter because nested `data.object` remained inferred as `{}` after narrowing. Fixed with explicit record narrowing before field projection (`fa0085060f8b7874d126ebd95a98ab2da3c17627`); await fresh CI before composition work.
 - CI `33714389959` completed successfully after the final PostgreSQL fixture alignment: migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all passed.
 
 ## Provider adapter progress
