@@ -13,6 +13,7 @@ export interface QuickLaunchDraftInput {
   profileSchema?: { fields: readonly { key: string; label: string; type: 'text'|'number'|'boolean'|'date'|'select'; required?: boolean; visibility: 'public'|'authenticated'|'privileged'; options?: readonly string[] }[] };
   featureVisibility?: { features: readonly { key: string; enabled: boolean }[] };
   categories: readonly { key: string; displayName: string }[];
+  matchingCategories?: { categories: readonly { key: string; label: string; description?: string; enabled: boolean }[] };
   enabledFeatures: readonly string[];
   onboarding: readonly { field: string; required: boolean }[];
 }
