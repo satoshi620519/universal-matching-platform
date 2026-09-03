@@ -2737,3 +2737,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Created integration PR #1 from feature/config-engine-integration to main: “feat: integrate Configuration Engine domains”.
 - PR scope is 18 changed files / 19 commits at creation; merge must remain blocked until CI reports all required gates.
 - EXACT NEXT ACTION: inspect PR #1 workflow runs/jobs. If failures exist, read the failing job logs, apply minimal fixes on the integration branch, and rerun diagnostics. Only after green CI, perform final diff review and merge.
+
+
+## Configuration Engine — CI failure diagnosis and fix checkpoint
+- PR #1 CI completed with failure at Typecheck; migrations passed before the failure, while later lint/test/concurrency/build gates were skipped.
+- Read the actual baseline job log rather than guessing. Root cause: apps/admin/src/main.tsx TS2339 because legacy category fallback literals inferred a union member without optional description, while the editor accesses category.description.
+- Applied a minimal compatibility fix: legacy category fallback projections now include description: undefined, preserving the unified category shape and existing runtime behavior (3f97cf54).
+- An earlier no-op commit (0059a147) was created while attempting a state declaration fix; it changes no file content and should not be treated as a functional fix.
+- EXACT NEXT ACTION: wait for/inspect the new PR CI run triggered by 3f97cf54. If typecheck passes, continue through lint, tests, matching concurrency integration, and build; fix subsequent failures individually. Do not merge until the full CI gate is green.
