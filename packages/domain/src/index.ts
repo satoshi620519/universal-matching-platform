@@ -80,3 +80,5 @@ export * from './branding-theme-configuration.js';
 export * from './localization-configuration.js';
 
 export * from './profile-schema-configuration.js';
+
+export * from './feature-visibility-configuration.js';
