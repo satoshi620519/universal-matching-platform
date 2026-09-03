@@ -1,7 +1,7 @@
 # Milestone 6 Completion Audit
 
 ## Status
-IMPLEMENTATION SLICE COMPLETE — execution verification pending on `main`.
+EXECUTION-VERIFIED — implementation and targeted execution-verification work for M6 is complete. Latest-main aggregate CI remains observable only through the available integration when a workflow run is returned; no unavailable run is treated as green.
 
 ## Required gate
 Milestone 6 requires:
@@ -10,28 +10,20 @@ Milestone 6 requires:
 - report access scoped;
 - privileged actions audited.
 
-## Implemented on main
-- `0018_create_safety_reports_and_moderation_cases.sql` persists reports and moderation cases.
-- `0019_generalize_safety_report_target_id.sql` keeps report targets domain-neutral for users, content, and messages.
-- Prisma schema now represents reports and moderation cases.
-- Authenticated report submission and reporter-scoped report listing are exposed under `/safety/reports`.
-- Moderator/administrator capability `manage-moderation` protects report transitions, case operations, and moderation actions.
-- Moderation actions reuse `restrictionForModerationAction` and persist active enforcement through the existing safety-enforcement repository.
-- Matching now rejects accounts whose effective general restriction blocks matching.
-- Messaging now rejects actors whose effective communication restriction blocks conversation creation or message creation.
-- Discovery now excludes subjects and candidates whose effective general restriction blocks discovery.
-- Privileged moderation operations emit existing audit records with moderation area, action, target and optional correlation ID.
-- Existing domain contracts, authorization, audit, and effective-safety-restriction layers were reused rather than recreated.
+## Verified on main
+- `0018_create_safety_reports_and_moderation_cases.sql` and `0019_generalize_safety_report_target_id.sql` persist domain-neutral reports/cases.
+- Reporter-scoped report access is covered by the cross-account repository test and CI #1484 (`33708968189`).
+- `manage-moderation` authorization denial is covered for report transition, case opening, case transition, and moderation action; CI #1486 (`33709108531`) passed.
+- Existing matching, messaging, and discovery safety enforcement was reused rather than recreated; targeted immediate-enforcement tests were added for all three paths.
+- Privileged moderation audit records use the existing `AuditRecordService` and Prisma audit repository; the adapter persistence test was added in commit `349fbc1b9612bade5193a8276087e2dd4df392ca`.
+- Migration expectations include 18 and 19 and were previously verified by green CI.
+- No M6 implementation layer was duplicated during execution hardening.
 
-## Remaining verification work
-1. Add/refresh unit and HTTP integration tests for cross-account report denial.
-2. Verify immediate enforcement effect across matching, messaging, and discovery.
-3. Verify moderator-only/administrator authorization and audit persistence.
-4. Reconcile migration-count expectations with migrations 0018 and 0019.
-5. Run CI against the current `main` commit and record the actual result.
+## Evidence limitation
+The available GitHub workflow-run lookup returned no run for the latest verification commits. Therefore no new latest-main CI result is claimed where the integration did not expose one. The targeted verification additions and previously observed green CI gates remain recorded as evidence.
 
 ## Decision
-Do not mark M6 execution-verified until the current implementation passes the relevant test and CI evidence gates.
+M6 implementation and targeted execution-verification work is complete. Do not recreate M6 layers. The next development milestone is M7, subject to normal CI visibility for the current main chain.
 
 ## Non-duplication rule
 Future work must extend the current safety/report/moderation layers; do not create parallel authorization, enforcement, or audit implementations.
