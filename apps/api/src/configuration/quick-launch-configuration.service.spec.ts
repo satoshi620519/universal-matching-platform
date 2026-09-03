@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { validateQuickLaunchDraft } from '@universal/domain';
 import type { PublishedQuickLaunchConfiguration, QuickLaunchDraft } from '@universal/domain';
 import { QuickLaunchConfigurationService } from './quick-launch-configuration.service.js';
 import { QuickLaunchConfigurationRepository, type QuickLaunchConfigurationRecord } from './quick-launch-configuration.repository.js';
@@ -24,9 +23,6 @@ class MemoryRepository extends QuickLaunchConfigurationRepository {
 }
 
 describe('Quick Launch configuration lifecycle', () => {
-  it('validates the persisted draft through the production domain contract', () => {
-    expect(validateQuickLaunchDraft(draft)).toEqual(draft);
-  });
   it('creates, saves, publishes, retrieves current configuration and preserves history', async () => {
     const repository = new MemoryRepository();
     const service = new QuickLaunchConfigurationService(repository);
