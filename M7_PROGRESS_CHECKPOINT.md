@@ -64,4 +64,7 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Controller forwards provider signature and raw-body capability (`24c4169e5b915ddc1f8409102b1033da0e375132`).
 
 ## Next exact task
-Inspect CI for all commits through `24c4169e`. If green, complete production-grade raw-body capture in the actual HTTP adapter (do not rely on an arbitrary request header), add focused end-to-end wiring tests, then perform a final M7 completion audit against the roadmap and update DEVELOPMENT_STATUS.md.
+- CI `33715396428` for HTTP/composition work completed SUCCESS.
+- CI `33715550436` exposed exactly one Typecheck error in the new raw-body Stripe signature path: `actual` was `string | null` before `Buffer.from`. Fixed by narrowing before conversion (`33dc6020beeb0401077866c644b7a9bad1b6d35e`).
+- Focused controller wiring test added (`ea384660152a90bfc1378f291d76bf679c46592b`).
+- Inspect fresh CI for commits through `ea384660`. If green, implement production-grade raw-body capture at the Fastify HTTP adapter boundary (not an arbitrary request header), then perform the final M7 roadmap/status audit.
