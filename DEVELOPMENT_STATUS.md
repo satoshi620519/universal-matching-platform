@@ -2508,3 +2508,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added a compact projection helper for published configuration records (`139185c965e9d19f4637c671eaded9b22dc3aa88`) that summarizes snapshot/configuration data without changing persistence or publication semantics.
 - Published & history UI now displays application and Branding/Theme summary values for each immutable version (`ce2e17f71dd13f7032c88cbdade76f85c66d7748`).
 - Exact next task: inspect CI after these commits. If green, begin the next configuration domain (Localization/Geography) by defining its contract on the existing versioned aggregate; do not create a second configuration lifecycle.
+
+
+## Configuration Engine — Localization/Geography domain started (deduplicated continuation)
+- Reviewed DEVELOPMENT_STATUS.md, M8_PROGRESS_CHECKPOINT.md, MASTER_DEVELOPMENT_ROADMAP.md and DECISIONS.md before selecting the next task. M8 and Branding/Theme implementation are not repeated.
+- Latest CI `33721350038` is still in progress at Lint after migration verification and Typecheck succeeded; no completion claim is made while Test/concurrency/build are pending.
+- Began the next unfinished configuration domain from Phase 4/8: Localization/Geography.
+- Added LocalizationConfiguration contract with default locale, supported locales, ISO country boundaries, optional timezone and country→locale mapping (`44dbca92ed20a8aeaca087394552b55692495c79`).
+- Added focused domain boundary tests (`101a0c2efd6388c8b072cc36619f8734dc93668c`) and exported the contract (`939b22e07934b2947af678b53bf4a1b6442e6b78`).
+- Exact next task: after current CI settles, integrate LocalizationConfiguration into the existing QuickLaunchDraft versioned lifecycle and reuse supportedCountries instead of creating duplicate country storage.
