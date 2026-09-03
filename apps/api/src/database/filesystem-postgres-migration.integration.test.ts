@@ -40,13 +40,13 @@ describe.skipIf(!DATABASE_URL)(
           new PrismaSqlMigrationClient(database as any),
         );
 
-        await expect(runMigrations(source, executor)).resolves.toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        await expect(runMigrations(source, executor)).resolves.toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         await expect(runMigrations(source, executor)).resolves.toEqual([]);
 
         const rows = await database.$queryRawUnsafe<Array<{ version: number }>>(
           'SELECT version FROM schema_migrations ORDER BY version',
         );
-        expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
 
         const tables = await database.$queryRawUnsafe<Array<{ table_name: string }>>(
           `SELECT table_name FROM information_schema.tables
