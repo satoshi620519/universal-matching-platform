@@ -6,7 +6,7 @@ describe('MessagingController', () => {
 
   it('always adds the authenticated account when creating a conversation', async () => {
     const create = vi.fn().mockResolvedValue({ id: 'c1' });
-    const controller = new MessagingController(principalResolver as never, { create } as never, {} as never, {} as never, { publishRecipients: vi.fn() } as never);
+    const controller = new MessagingController(principalResolver as never, { create } as never, {} as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never);
     await controller.createConversation({ participantAccountIds: ['a2'] });
     expect(create).toHaveBeenCalledWith(['a2', 'a1']);
   });
