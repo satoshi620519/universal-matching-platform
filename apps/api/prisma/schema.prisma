@@ -331,3 +331,14 @@ model Notification {
   @@index([accountId, createdAt, id])
   @@map("notifications")
 }
+
+model QuickLaunchConfiguration {
+  version Int @id @default(autoincrement())
+  status String
+  draft Json
+  published Json?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  @@index([status, version])
+  @@map("quick_launch_configurations")
+}
