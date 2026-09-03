@@ -131,3 +131,9 @@
 - Localization/Geography is complete through contract, validation, versioned lifecycle, purchaser Regions UI, Review & Publish, immutable publication and snapshot-derived History summaries.
 - Commits: 76d815183f4f1c56862a1431146413270d80c3ca and 7096b4545fac87f4b3d3fe09c4363fe7b3a2b198.
 - Exact next task: inspect existing onboarding/profile contracts and begin Profile Schema Configuration. Do not duplicate onboarding ownership, Regions, country storage, publication lifecycle, or snapshot persistence.
+
+
+## Configuration Engine checkpoint — Profile Schema started
+- Existing ownership inspected: profile.ts owns primitive profile values; profile-projection.ts owns runtime viewer projection.
+- New domain contract commits: 8d6198e1129a1d206070d9a66ca558403d9b897b, 50f07a8541fb5af3acf0057aa2595e361f165bd2, 1350c3ea8692c87790e7340963c7b09e65f87f30.
+- Exact next task: integrate ProfileSchemaConfiguration into QuickLaunchDraft/versioned immutable lifecycle, then purchaser UI. Do not duplicate Profile.fields, ProfileProjectionPolicy, onboarding ownership, or publication persistence.
