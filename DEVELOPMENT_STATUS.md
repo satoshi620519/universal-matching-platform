@@ -2445,3 +2445,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 6d26df71ab6f5471df986173d028752f74ac0181.
 - Validation status: PENDING CI.
 - Resume point: verify Typecheck first; then resume Test gate (previously 293 passed / 1 failed). Do not redo passed migration/lint work.
+
+
+## Checkpoint 2026-09-03 — FINAL TEST FAILURE: INCOMPLETE SCHEMA ISOLATION FIXED
+- CI 1429 passed Migration verification, PostgreSQL migration integration, Typecheck, and Lint; Test remained at 293 passed / 1 failed.
+- Exact diagnostic: migration integration hit existing relation roles (42P07). This was not a migration idempotency defect: the test claimed to start from an empty database but its cleanup dropped only a subset of tables, leaving later migration tables (roles, etc.) from prior CI test activity.
+- Fixed test isolation at the correct boundary by resetting the entire public schema before the test and in finally cleanup, rather than chasing individual dependent tables one by one.
+- Fix commit: 7501782661e620a068bd267c874718e7def3965a.
+- Validation status: PENDING CI.
+- Resume point: inspect CI for 7501782661e620a068bd267c874718e7def3965a. If Test passes, continue to Matching concurrency integration, concurrency gate verification, then Build. Do not revisit passed gates.
