@@ -2544,3 +2544,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Published and History UI now displays compact localization identity (Locale + TZ) alongside existing branding summaries without creating summary persistence (`7096b4545fac87f4b3d3fe09c4363fe7b3a2b198`).
 - Localization/Geography domain is now checkpoint-complete through contract, validation, lifecycle, purchaser UI, review, immutable publication and history summary.
 - Exact next task: begin Profile Schema Configuration by inspecting existing onboarding/profile contracts and defining a versioned purchaser-configurable schema extension without duplicating current onboarding field ownership.
+
+
+## Configuration Engine — Profile Schema domain started
+- Followed the recorded continuation boundary after Localization completion; inspected existing `profile.ts` and `profile-projection.ts` before implementation.
+- Existing Profile remains the owner of actual profile values (`fields: Record<string, primitive>`), and existing ProfileProjectionPolicy remains the viewer-projection mechanism. No replacement profile model or duplicate field-value storage was created.
+- Added ProfileSchemaConfiguration as a purchaser-configurable field-definition contract (`8d6198e1129a1d206070d9a66ca558403d9b897b`) supporting stable field keys, labels, text/number/boolean/date/select types, required flags, visibility and select options.
+- Added schema-to-existing-profile-value validation plus focused boundary tests (`50f07a8541fb5af3acf0057aa2595e361f165bd2`) and exported the contract (`1350c3ea8692c87790e7340963c7b09e65f87f30`).
+- CI note: latest observable CI `33722524739` for the Localization summary projection was in progress when inspected; no green conclusion is inferred for this new Profile Schema work.
+- Exact next task: integrate ProfileSchemaConfiguration as an optional extension of the existing versioned QuickLaunchDraft lifecycle, then add purchaser controls without duplicating Profile.fields or ProfileProjectionPolicy.
