@@ -48,3 +48,11 @@
 - Implemented actual six-step purchaser Quick Launch presentation layer (`7ba33289f7023d893b05374bc4d8857215560223`) and responsive admin styling (`ba6c2311769989f430a6d19931f4e947718acec2`).
 - Current UI is intentionally local-state presentation first; existing workflow client/API boundary remains separate and is ready for wiring after CI validates the React app baseline.
 - Exact next task: inspect CI for the admin React conversion. If green, wire Save Draft / Publish / History to the authorized API with authenticated transport and add success/error/loading states. Then M8 can be closed only after an end-to-end Quick Launch path is tested.
+
+
+## API wiring and operation states
+- Latest CI observed at continuation start was still in progress; no unrelated CI churn was introduced.
+- Added browser Quick Launch API transport with configurable API base URL and administrator authorization header (`fc12b7eecc98429a6d24243e233f062ff3e8b324`) plus focused transport test (`021998526b55e748ea1a3d10ee423dccf4a3e178`).
+- Wired purchaser UI Save Draft and Publish actions to the existing authorized API workflow, preserving the returned version for subsequent saves/publication (`ff661d7be7089feee8a7d988a705bad9b59c2eba`).
+- Added loading, success and error feedback styling (`2a83789940f18a67c19dc36ec99c6c97093e0b47`).
+- Exact next task: inspect CI for the complete admin/API wiring. If green, add published/history retrieval UI and then perform an end-to-end lifecycle verification against the API contract. Do not declare M8 complete until create → save → publish → published/history behavior is covered.
