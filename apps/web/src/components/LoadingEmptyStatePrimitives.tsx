@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 
 type LoadingStateProps = {
   label?: string;
@@ -27,9 +27,10 @@ type EmptyStateProps = {
 };
 
 export function EmptyState({ title, description, action, className = '' }: EmptyStateProps) {
+  const titleId = `ui-empty-state-title-${useId().replace(/:/g, '')}`;
   return (
-    <section className={`ui-empty-state${className ? ` ${className}` : ''}`} aria-labelledby="ui-empty-state-title">
-      <h2 id="ui-empty-state-title">{title}</h2>
+    <section className={`ui-empty-state${className ? ` ${className}` : ''}`} aria-labelledby={titleId}>
+      <h2 id={titleId}>{title}</h2>
       {description ? <p>{description}</p> : null}
       {action ? <div className="ui-empty-state-action">{action}</div> : null}
     </section>
@@ -44,13 +45,14 @@ type ErrorStateProps = {
 };
 
 export function ErrorState({ title, description, action, className = '' }: ErrorStateProps) {
+  const titleId = `ui-error-state-title-${useId().replace(/:/g, '')}`;
   return (
     <section
       className={`ui-error-state${className ? ` ${className}` : ''}`}
       role="alert"
-      aria-labelledby="ui-error-state-title"
+      aria-labelledby={titleId}
     >
-      <h2 id="ui-error-state-title">{title}</h2>
+      <h2 id={titleId}>{title}</h2>
       {description ? <p>{description}</p> : null}
       {action ? <div className="ui-error-state-action">{action}</div> : null}
     </section>
