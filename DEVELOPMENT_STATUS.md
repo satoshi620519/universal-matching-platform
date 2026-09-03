@@ -2642,3 +2642,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Started the next clearly listed Phase 4 configuration area: terminology. Added a stable-key terminology configuration model, normalization/fallback behavior, tests, and domain boundary documentation on branch feature/config-terminology (34e8fbce, 9e1e9708, 2ee144df).
 - Terminology customizes presentation labels only and explicitly does not rename persistence/API/security identifiers.
 - EXACT NEXT ACTION: inspect existing Quick Launch configuration lifecycle types and add optional terminology metadata only if no existing equivalent contract exists; then add purchaser UI and immutable snapshot summary coverage. Record progress immediately after each coherent slice.
+
+
+## Configuration Engine — Terminology Quick Launch integration
+- Re-read the latest status and exact next action before continuing; inspected existing QuickLaunchDraftInput and UI before modifying anything.
+- Added optional terminology metadata to the Quick Launch draft contract on feature/config-terminology (efc85be7).
+- Added a dedicated purchaser-facing Terminology step and Review summary on the same branch (7c22189c).
+- Detected a concurrent-update conflict while updating quickLaunchSteps (409). Did not force overwrite; latest repository content must be re-read before retrying that isolated change.
+- EXACT NEXT ACTION: re-fetch the latest apps/admin/src/quick-launch-workflow.ts, verify whether Terminology step was added by concurrent work, then apply only the missing step update. Afterward add immutable snapshot summary support and tests, recording each coherent checkpoint.
