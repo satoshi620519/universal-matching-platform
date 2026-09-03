@@ -118,3 +118,10 @@
 - Branding/Theme UI checkpoint CI `33720882376` failed only in a pre-existing PostgreSQL payment integration fixture because the test connection had no active schema for unqualified raw CREATE TABLE statements. Typecheck and Lint passed; 342 tests passed.
 - Added explicit `public` schema/search_path setup (`a40467237b5d9fdad0ca626629db5bdeb1dc0793`).
 - Exact next task: inspect this correction's CI before advancing Published/History summaries. M8 remains closed; do not reopen or repeat it.
+
+
+## Post-M8 Configuration Engine continuation
+- Localization domain lifecycle and purchaser UI are now the active continuation; M8 remains closed and must not be reopened for configuration work.
+- Matching Concurrency Gate run 33721715225 for localization aggregate commit 110d745bec7c50c06625c2f3507b806730a42dfd completed successfully with isolated PostgreSQL evidence, attestation and artifact upload.
+- Localization UI commit: 2fff25fd7d3459a1a3b91c6dfbd9e2e0dfab7c3a.
+- Exact next task: add snapshot-derived Localization summaries to Published/History, then checkpoint and move to Profile Schema. Do not create another Regions step or duplicate supportedCountries.
