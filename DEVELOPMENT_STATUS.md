@@ -2730,3 +2730,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Queried repository branches and compared each Configuration Engine feature branch against main. Terminology, Matching Categories, Matching Rules, and Feature Visibility all independently modify shared files (apps/admin/src/main.tsx, quick-launch-configuration-summary.ts, and/or quick-launch-workflow.ts).
 - Therefore automatic branch merging is deliberately deferred: a naive merge would create overlapping UI/summary conflicts and risks losing another domain's changes.
 - EXACT NEXT ACTION: create a dedicated integration baseline and perform file-level consolidation of the four domains from current branch tips, resolving shared-file changes semantically (not by choosing one branch wholesale). Preserve all domain-specific tests/docs. Run concrete diagnostics when an execution-capable environment becomes available.
+
+
+## Configuration Engine — PR and CI handoff checkpoint
+- Confirmed repository CI workflow performs the full gate: migrations, typecheck, lint, test, matching concurrency integration, and build on pull requests.
+- Created integration PR #1 from feature/config-engine-integration to main: “feat: integrate Configuration Engine domains”.
+- PR scope is 18 changed files / 19 commits at creation; merge must remain blocked until CI reports all required gates.
+- EXACT NEXT ACTION: inspect PR #1 workflow runs/jobs. If failures exist, read the failing job logs, apply minimal fixes on the integration branch, and rerun diagnostics. Only after green CI, perform final diff review and merge.
