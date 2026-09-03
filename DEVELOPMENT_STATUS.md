@@ -2488,3 +2488,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Published snapshots deep-freeze branding/theme values so richer purchaser configuration follows the existing immutable version/history semantics (`1554eec28586b2b0be56343712c6938e2e8b77aa`).
 - Added lifecycle coverage proving legacy fields and richer branding/theme values publish together (`82695762959893d6b6041a64f04fc28084ff64f0`).
 - Exact next task: expose secondary/accent/typography controls in the purchaser Admin UI and include them in the review/published display, without changing API endpoints or creating a parallel persistence model.
+
+
+## Configuration Engine — Branding/Theme purchaser UI expansion
+- Extended QuickLaunchDraftInput with the richer branding/theme contract while retaining legacy fields (`5a6647916c6c7d7e1bab1ba95b48a3e903cfcdc2`).
+- Added purchaser-facing controls for secondary color, accent color, body font, heading font and corner radius, and exposed the selected theme values in Review & Publish (`438dad3177268e74099afb9a210d4e323ac2f44a`).
+- No API endpoint or parallel persistence lifecycle was introduced; the UI continues to use existing create/save/publish/published/history operations.
+- Exact next task: inspect CI for the branding/theme UI commits and then verify API payload compatibility. If green, extend the published/history display to show configuration-domain summaries without duplicating the full snapshot.
