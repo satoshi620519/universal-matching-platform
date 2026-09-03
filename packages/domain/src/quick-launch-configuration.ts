@@ -1,4 +1,4 @@
-import type { BrandingThemeConfiguration } from './branding-theme-configuration.js';
+import { validateBrandingThemeConfiguration, type BrandingThemeConfiguration } from './branding-theme-configuration.js';
 
 export interface QuickLaunchDraft {
   readonly applicationName: string;
@@ -24,6 +24,7 @@ export interface PublishedQuickLaunchConfiguration extends QuickLaunchDraft {
 export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   if (!draft.applicationName.trim()) throw new Error('applicationName must not be empty');
   if (!/^#[0-9A-Fa-f]{6}$/.test(draft.primaryColor)) throw new Error('primaryColor must be a #RRGGBB value');
+  if (draft.brandingTheme) validateBrandingThemeConfiguration(draft.brandingTheme);
   if (!draft.supportedCountries.length) throw new Error('at least one supported country is required');
   if (new Set(draft.supportedCountries).size !== draft.supportedCountries.length) throw new Error('supportedCountries must be unique');
   if (!draft.categories.length) throw new Error('at least one category is required');
