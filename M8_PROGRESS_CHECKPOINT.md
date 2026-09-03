@@ -143,3 +143,9 @@
 - Commits: 2c82c8a13652f7d714e0beb1498d6fb0f6702d6e and 17873a5b0ba27d2ec576e644a5964f943df17963.
 - Exact next task: purchaser Quick Launch UI for profile field definitions, followed by Review & Publish summary.
 - Do not duplicate Profile.fields value editing, ProfileProjectionPolicy runtime controls, or immutable publication lifecycle.
+
+
+## Configuration Engine checkpoint — Profile Schema purchaser UI
+- UI commit: d83750fc5cfd48a734744a41ac1c6cc245fe65f9.
+- Verified preceding immutable publication CI run 33722967960 succeeded for commit 17873a5b0ba27d2ec576e644a5964f943df17963.
+- Exact next task: add snapshot-derived Profile Schema summary to Published/History, checkpoint completion, then begin Feature Visibility. Do not duplicate profile value editing or projection ownership.
