@@ -2143,3 +2143,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation note: CI now has a real empty-service migration execution gate; runtime results depend on GitHub Actions execution and should be checked before release tagging.
 - Remaining release-readiness work: inspect migration checksum/immutability policy and production deployment documentation, then perform broader final release gate audit without revisiting completed feature implementation.
 - Exact next action: add migration content integrity tracking or explicitly document immutable migration policy, depending on current migration contract; then verify release documentation commands match the actual scripts.
+
+
+## Release readiness migration integrity + documentation — CONTRACT ALIGNED
+- Re-audited the current migration contract before adding new code and found immutability semantics already explicitly defined: applied migration artifacts must not be edited and corrections require a new version.
+- Avoided adding checksum machinery without a demonstrated requirement, because retrofitting checksums into schema_migrations would itself require compatibility/migration design and could duplicate the existing immutable-release contract.
+- Found stale documentation claiming no concrete production migration runner existed, even though the deploy-facing PostgreSQL command and CI execution gate had subsequently been implemented.
+- Replaced the stale limitation with an explicit integrity policy, immutable artifact/release boundary, deploy command, packaged-artifact behavior, idempotency semantics, and CI execution caveat.
+- Added root README database deployment instructions using the actual DATABASE_URL + @universal/database migrate command.
+- Commits: 9b3fe0d762b56c0207d7b477b6e9c487ea91904e, ec7546017b99f56ff6c861e87372dc92a8dc73e2.
+- Remaining release work: obtain observable CI execution evidence for the latest workflow and perform final cross-check of release gates against actual repository state; do not infer green status from workflow definition alone.
+- Exact next action: inspect latest CI workflow definitions and available run/status evidence for the newest commits, record only observable pass/fail results, and fix a concrete workflow defect only if one is found.
