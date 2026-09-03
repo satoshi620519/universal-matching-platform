@@ -2154,3 +2154,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commits: 9b3fe0d762b56c0207d7b477b6e9c487ea91904e, ec7546017b99f56ff6c861e87372dc92a8dc73e2.
 - Remaining release work: obtain observable CI execution evidence for the latest workflow and perform final cross-check of release gates against actual repository state; do not infer green status from workflow definition alone.
 - Exact next action: inspect latest CI workflow definitions and available run/status evidence for the newest commits, record only observable pass/fail results, and fix a concrete workflow defect only if one is found.
+
+
+## Final CI evidence audit — CONCRETE WEB TYPECHECK BLOCKERS FIXED
+- Inspected actual GitHub Actions run evidence instead of inferring green status from workflow definitions.
+- Latest runs were still in progress at audit time; an earlier completed run (33701295019) was observably failed at @universal/web:typecheck, so the repository must not be marked release-green.
+- Downloaded the uploaded typecheck diagnostics artifact and identified concrete syntax blockers rather than guessing: escaped template literals in apps/web/src/api.ts and an unclosed JSX section/component boundary in NotificationInbox in apps/web/src/main.tsx.
+- Fixed only those concrete parser blockers; no feature behavior or architecture was redesigned.
+- Fix commits: fd0278b44aa8c935fef6c12b446d29da707bc9aa, 15da9ae2b50b7a3da414a49bca34c98d15a492f6.
+- Validation status: fixes are committed and trigger new CI runs, but no completed green run for these exact commits has yet been observed. Release status remains PENDING, not PASS.
+- Exact next action: inspect the workflow runs triggered by fd0278b and 15da9ae2 after completion, obtain failing diagnostics if any remain, and continue only with concrete failures. If all gates pass, produce the final release gate matrix and stop feature work.
