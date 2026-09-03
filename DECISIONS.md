@@ -93,3 +93,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 48. Purchaser-facing branding/theme customization is exposed inside the existing Quick Launch Branding step and Review & Publish step. The workflow sends the richer contract through the existing create/save endpoints and preserves the single M8 publication lifecycle.
 
 49. Published/history views use compact projections derived from immutable snapshots rather than duplicating full configuration state into separate summary persistence. Each configuration domain contributes display-safe summary fields only.
+
+50. Localization/Geography is the next configuration domain after Branding/Theme. Its contract owns locale/default-locale and optional country→locale behavior, while the existing Quick Launch `supportedCountries` field remains the single source for country enablement until deliberately migrated; no duplicate country list or parallel publication lifecycle is permitted.
