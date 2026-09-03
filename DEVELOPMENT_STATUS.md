@@ -2245,3 +2245,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: fe0bf821c15e854c318e9be66780086ca629b46b.
 - Validation status: PENDING until CI for this exact commit completes. Lint/test/concurrency/build remain untouched.
 - Exact next action: inspect the new CI run and continue only from the first observable failed gate.
+
+
+## CI typecheck follow-up — DISCOVERY CALLBACK TYPE FIXED
+- Continued from completed CI run 1378; did not revisit migration or tsconfig work.
+- Downloaded the exact typecheck diagnostics artifact. The TS5095/TS5109 module configuration errors are gone, confirming the previous tsconfig fix worked.
+- First remaining error is TS7006 in Discovery: the callback parameter x in the label formatter had implicit any under noImplicitAny.
+- Applied the minimal explicit parameter type `(x: string)`; no runtime behavior changed.
+- Fix commit: 010bd295960b47786ef6faa94b26b59f843a9c7e.
+- Validation status: PENDING until CI for this exact commit completes. Lint/test/concurrency/build remain untouched.
+- Exact next action: inspect the new CI run and proceed only from the first observable failed gate.
