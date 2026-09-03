@@ -32,16 +32,8 @@ describe.skipIf(!DATABASE_URL)(
       await database.$connect();
 
       try {
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS safety_enforcements');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
+        await database.$executeRawUnsafe('DROP SCHEMA IF EXISTS public CASCADE');
+        await database.$executeRawUnsafe('CREATE SCHEMA public');
 
         const source = new FilesystemMigrationArtifactSource(migrationDirectory);
         const executor = new PostgresMigrationExecutor(
@@ -78,13 +70,8 @@ describe.skipIf(!DATABASE_URL)(
           'verification_requests',
         ]);
       } finally {
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS safety_enforcements');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_outcomes');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
-        await database.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
+        await database.$executeRawUnsafe('DROP SCHEMA IF EXISTS public CASCADE');
+        await database.$executeRawUnsafe('CREATE SCHEMA public');
         await database.$disconnect();
       }
     });
