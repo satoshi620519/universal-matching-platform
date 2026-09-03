@@ -115,7 +115,9 @@
 - Implementation commit: `0def314dd4131d88d57b1cd1e4de510e23d5c1e4`.
 - Shared primitive and existing API contracts reviewed against the actual Conversation implementation. `Field` correctly injects labels/ARIA attributes into `TextInput` and `TextArea`; `List`/`ListRow` preserve valid message list structure; `Button` defaults are explicitly overridden where form submission is required. Conversation authorization, message transport, loading order, and realtime refresh dependencies remain unchanged.
 - No compatibility rewrite was needed after review.
-- Next: open PR and validate the Conversation slice with repository CI before merge.
+- PR #16 opened for Conversation UX migration: https://github.com/satoshi620519/universal-matching-platform/pull/16.
+- CI run `33743268385` (run #2044) is in progress at interruption checkpoint: database migration verification, PostgreSQL integration, typecheck, and lint have passed; `Test` is currently running. Matching concurrency, concurrency gate, diagnostics, and build remain pending.
+- Stop point: do not make further code changes while CI is running. On resume, fetch the latest jobs for run `33743268385`; if all required checks pass, merge PR #16 and update this record with the merge commit. If a check fails, inspect only the failing diagnostic and apply the smallest targeted fix.
 
 ## Next continuation point
 
