@@ -9,6 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    // Preserve exact request bytes for cryptographically signed webhooks.
+    { rawBody: true },
   );
 
   configureHttpApplication(app);
