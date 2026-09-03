@@ -2597,3 +2597,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Continued independent domain work only after resolving the concrete code issue: integrated optional FeatureVisibilityConfiguration into the existing QuickLaunchDraft validation and immutable publication lifecycle (`e228c1c7e86d151e131b402b11c1f13f46430310`).
 - Added aggregate publication coverage (`dfda8a40a5787c568e61b75be7ae3d30fc628ecf`). Feature visibility snapshots freeze metadata only and do not replace AdministrativeRoleAssignment or runtime authorization.
 - Exact next task: inspect CI for `97fb8f235190fde4fd6ae8eff02cbf08da5fae59` and current lifecycle commits. If concrete green, add Feature Visibility purchaser UI; if failure, fix the reported issue first. Do not infer Profile Schema completion as CI-green until a successful post-fix run exists.
+
+
+## Configuration Engine — CI failure root cause advanced
+- Inspected the exact CI run for `97fb8f235190fde4fd6ae8eff02cbf08da5fae59`: run `33724310311` FAILED at Admin Typecheck.
+- The prior SnapshotLike repair addressed the summary projection error, but detailed diagnostics exposed the next concrete dependency: `QuickLaunchDraftInput` in `apps/admin/src/quick-launch-workflow.ts` did not declare `profileSchema`, while main.tsx purchaser UI already used it. This caused property-not-exist, state object excess-property, and downstream implicit-any errors.
+- Added the missing typed profileSchema input shape and aligned future featureVisibility input shape with the versioned configuration model (`0ec9ca320ec2c8a0c836448fa3663ab04296b596`). This is a focused type-boundary repair, not a duplicate Profile implementation.
+- No CI green status is inferred yet. Exact next task: inspect CI for `0ec9ca320ec2c8a0c836448fa3663ab04296b596`; if green, continue Feature Visibility purchaser UI, and if failure, address only the concrete reported error.
