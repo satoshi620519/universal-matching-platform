@@ -41,3 +41,14 @@
 .ui-navigation-icon{display:inline-flex;align-items:center;justify-content:center;line-height:1}
 .ui-bottom-navigation{display:none}
 @media (max-width:40rem){.ui-header-navigation{min-height:3.5rem;padding:var(--space-2) var(--space-4)}.ui-header-navigation nav{display:none}.ui-bottom-navigation{position:fixed;inset:auto 0 0;z-index:900;display:block;padding:var(--space-2) var(--space-3) max(var(--space-2),env(safe-area-inset-bottom));background:var(--color-surface);border-top:1px solid var(--color-border)}.ui-bottom-navigation-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:var(--space-1)}.ui-bottom-navigation-link{width:100%;min-height:3rem;padding:var(--space-2);flex-direction:column;gap:var(--space-1);font-size:var(--font-size-caption)}}
+
+.ui-loading-state{display:flex;align-items:center;justify-content:center;gap:var(--space-3);min-height:6rem;padding:var(--space-6);color:var(--color-text-secondary);font-size:var(--font-size-body-small);text-align:center}
+.ui-loading-indicator{width:1.25rem;height:1.25rem;flex:0 0 auto;border:2px solid var(--color-border);border-top-color:var(--color-brand-primary);border-radius:50%;animation:ui-loading-spin 800ms linear infinite}
+.ui-empty-state,.ui-error-state{display:grid;justify-items:center;gap:var(--space-3);padding:var(--space-8) var(--space-6);text-align:center}
+.ui-empty-state{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-medium)}
+.ui-error-state{background:color-mix(in srgb,var(--color-danger) 6%,var(--color-surface));border:1px solid var(--color-danger);border-radius:var(--radius-medium)}
+.ui-empty-state h2,.ui-error-state h2{margin:0;font-size:var(--font-size-h2);color:var(--color-text-primary)}
+.ui-empty-state p,.ui-error-state p{max-width:40rem;margin:0;color:var(--color-text-secondary);font-size:var(--font-size-body-small);line-height:1.5}
+.ui-empty-state-action,.ui-error-state-action{display:flex;justify-content:center;margin-top:var(--space-2)}
+@media (prefers-reduced-motion:reduce){.ui-loading-indicator{animation:none}}
+@keyframes ui-loading-spin{to{transform:rotate(360deg)}}
