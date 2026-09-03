@@ -1,6 +1,8 @@
 import { BadRequestException } from '@nestjs/common';
 import type { PaymentWebhookEvent } from './payment-webhook.js';
-import type { PaymentWebhookTransport } from './payment-webhook.controller.js';
+export interface PaymentWebhookTransport {
+  verifyAndParse(input: { readonly signature?: string; readonly payload: unknown }): Promise<unknown>;
+}
 
 export interface VerifiedPaymentWebhook {
   readonly event: PaymentWebhookEvent;
