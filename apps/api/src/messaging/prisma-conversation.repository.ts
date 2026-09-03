@@ -14,22 +14,22 @@ export class PrismaConversationRepository {
   async createOrFindDirect(accountA: string, accountB: string): Promise<ConversationRecord> {
     const [low, high] = [accountA.trim(), accountB.trim()].sort();
     if (!low || !high || low === high) throw new Error('A direct conversation requires two distinct participants');
-    const existing = await this.database.directConversationPair.findUnique({
+    const existing = await (this.database as any).directConversationPair.findUnique({
       where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
       include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
     });
     if (existing) return existing.conversation;
     try {
       return await this.database.$transaction(async (tx) => {
-        const raced = await tx.directConversationPair.findUnique({ where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } }, include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } } });
+        const raced = await (tx as any).directConversationPair.findUnique({ where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } }, include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } } });
         if (raced) return raced.conversation;
         const conversation = await tx.conversation.create({ data: { participants: { create: [{ accountId: low }, { accountId: high }] } }, include: { participants: { orderBy: { joinedAt: 'asc' } } } });
-        await tx.directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
+        await (tx as any).directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
         return conversation;
       });
     } catch (error) {
       if (!this.isUniqueConflict(error)) throw error;
-      const winner = await this.database.directConversationPair.findUnique({
+      const winner = await (this.database as any).directConversationPair.findUnique({
         where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
         include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
       });
