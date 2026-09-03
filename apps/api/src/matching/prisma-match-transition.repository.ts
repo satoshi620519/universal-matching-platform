@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, Optional } from '@nestjs/common';
 import {
   blocksCapability,
   createMatchTransitionCommand,
@@ -13,7 +13,11 @@ import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-re
 
 @Injectable()
 export class PrismaMatchTransitionRepository implements MatchTransitionRepository {
-  constructor(private readonly database: DatabaseService, private readonly notificationRealtime: NotificationRealtimePublicationService, private readonly safety: EffectiveSafetyRestrictionService) {}
+  constructor(
+    private readonly database: DatabaseService,
+    private readonly notificationRealtime: NotificationRealtimePublicationService,
+    @Optional() private readonly safety?: EffectiveSafetyRestrictionService,
+  ) {}
 
   async transition(input: MatchTransitionCommand): Promise<MatchTransitionResult> {
     const command = createMatchTransitionCommand(input);
@@ -45,6 +49,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
   }
 
   private async assertMatchAllowed(accountId: string): Promise<void> {
+    if (!this.safety) return;
     const restriction = await this.safety.resolveForAccount(accountId, 'general');
     if (blocksCapability(restriction, 'general')) throw new ForbiddenException('account is restricted from matching');
   }
