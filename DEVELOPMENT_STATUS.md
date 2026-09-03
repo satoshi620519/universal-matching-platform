@@ -2035,3 +2035,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Then add controller test proving repeated mutual-match requests do not create duplicate direct conversations.
 - Do not revisit completed onboarding, profile lifecycle, dynamic category schema, notification inbox, or discovery pagination unless a concrete defect is discovered.
 - Validation caveat: full runtime/build/migration execution has not been available in this work environment; changes so far are based on repository inspection and focused contract tests. Before production release, run full TypeScript build, migration validation, API tests, and browser integration.
+
+
+## Phase B discovery pagination hardening — RESET + DEDUPLICATION IMPLEMENTED
+- Resumed from the latest repository state rather than repeating completed notification/message work.
+- Inspected the actual Discovery web implementation and confirmed two recorded concrete defects remained: category changes retained the previous page/cursor, and appended pages trusted unstable backend pages not to overlap.
+- Updated the category selector to clear discovery results and nextCursor immediately when the category changes.
+- Updated pagination merge behavior to deduplicate profiles by accountId while preserving server page order.
+- No backend pagination logic was duplicated because cursor/nextCursor support already existed and was verified previously.
+- Commit: a855f58555498253ec2d01398089a0da015fd313.
+- Validation status: source-level contract inspection complete; full browser/runtime execution remains pending an executable workspace environment.
+- Remaining work: match-established notification persistence is still absent; direct-pair true concurrent first-insert recovery remains unresolved; notification realtime refresh/polling UX is incomplete; production migration preflight/build validation remains pending.
+- Exact next action: inspect the match transition result path and notification persistence schema, then add a notification only when a real transition newly establishes a mutual match (never on replay). Keep the write transaction/idempotency semantics authoritative and add recipient-scoping/replay tests before realtime UI work.
