@@ -9,6 +9,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
     return new ProfileDiscoveryController(
       principalResolver as never,
       ({ list: vi.fn().mockResolvedValue([{ id:'cat-1' }]) } as never),
+      ({ schemaFor: vi.fn().mockReturnValue({}) } as never),
       ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }) } as never),
       ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
@@ -19,7 +20,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
   it('uses the authenticated account as the profile owner, not request data', async () => {
     const c=controller(); const create=vi.spyOn((c as any).profiles,'create');
     await c.createMyProfile({ categoryId:'cat-1', fields:{ displayName:'Satoshi' } }, 'Bearer test');
-    expect(create.mock.calls[0][0].accountId).toBe('viewer-1');
+    expect((create.mock.calls[0][0] as any).accountId).toBe('viewer-1');
   });
 
   it('hydrates and updates only the authenticated account profile', async () => {
@@ -33,7 +34,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
     await c.discover('cat-1','global',undefined,'10',undefined,'Bearer test');
-    expect(discover.mock.calls[0][0]).toMatchObject({ subjectAccountId:'viewer-1', categoryId:'cat-1', limit:10 });
+    expect(discover.mock.calls[0][0] as any).toMatchObject({ subjectAccountId:'viewer-1', categoryId:'cat-1', limit:10 });
     expect(discover.mock.calls[0][0].projectionPolicy).toEqual({ displayName:'public', headline:'public', bio:'public' });
   });
 
@@ -45,7 +46,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('propagates authentication failure before accessing services', async () => {
     const resolver={ requireAuthenticated: vi.fn().mockRejectedValue(new UnauthorizedException()) };
-    const c=new ProfileDiscoveryController(resolver as never, {} as never, {} as never, {} as never, {} as never, {} as never);
+    const c=new ProfileDiscoveryController(resolver as never, {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
     await expect(c.listCategories()).resolves.toBeDefined();
     await expect(c.getMyProfile()).rejects.toBeInstanceOf(UnauthorizedException);
   });
