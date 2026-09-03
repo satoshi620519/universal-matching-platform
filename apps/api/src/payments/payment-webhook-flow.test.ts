@@ -11,7 +11,7 @@ class Store extends PaymentWebhookIdempotencyStore {
 describe('payment webhook flow', () => {
   it('grants exactly once for duplicate verified success deliveries', async () => {
     const provider = new InMemoryPaymentProvider();
-    const created = await provider.createPaymentIntent({ intentId: 'intent-flow-1', amountMinor: 1000, currency: 'JPY' });
+    const created = await provider.createPaymentIntent({ intentId: 'intent-flow-1', accountId: 'account-flow-1', idempotencyKey: 'key-flow-1', amountMinor: 1000, currency: 'JPY' });
     provider.setStatus(created.providerReference, 'succeeded');
     const calls: string[] = [];
     const entitlements: PaymentEntitlementService = {
@@ -27,7 +27,7 @@ describe('payment webhook flow', () => {
 
   it('does not grant when provider state disagrees with success webhook', async () => {
     const provider = new InMemoryPaymentProvider();
-    const created = await provider.createPaymentIntent({ intentId: 'intent-flow-2', amountMinor: 1000, currency: 'JPY' });
+    const created = await provider.createPaymentIntent({ intentId: 'intent-flow-2', accountId: 'account-flow-2', idempotencyKey: 'key-flow-2', amountMinor: 1000, currency: 'JPY' });
     let grants = 0;
     const entitlements: PaymentEntitlementService = { grantFromPayment: async () => { grants++; }, revokeFromPayment: async () => {} };
     const processor = new PaymentWebhookProcessor(new Store(), provider, entitlements);
