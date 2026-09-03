@@ -2130,3 +2130,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commits: 00977ccc24a2129887b8e1bcef484bada12ca75f, a2233d12f0cd42b5b22fea44b804d3ed87f24ce3.
 - Remaining release work: add a concrete deploy-facing PostgreSQL client/bootstrap command (DATABASE_URL contract) and run empty-database integration against a real PostgreSQL service; current executor abstraction and mock integration coverage are present but not yet a production CLI gate.
 - Exact next action: inspect repository dependency policy and CI service capabilities, then add the smallest production migration command without coupling feature modules or duplicating the runner/executor already present.
+
+
+## Production migration command — IMPLEMENTED + REAL POSTGRESQL CI GATE
+- Re-audited existing runner/executor/artifact infrastructure and added only the missing deploy-facing bootstrap layer.
+- Added packages/database/scripts/migrate-postgres.mjs using DATABASE_URL, the packaged dist/migrations artifacts, existing FilesystemMigrationArtifactSource, runMigrations, and PostgresMigrationExecutor.
+- Added @universal/database migrate command; it builds first, then applies ordered pending migrations and always closes the PostgreSQL client.
+- Transaction wrapper explicitly BEGINs/COMMITs each migration and ROLLBACKs on failure, preserving the existing executor atomicity contract.
+- Added pg dependency for the standalone deployment command.
+- Added CI integration gate that runs the actual deploy-facing migration command against the workflow's PostgreSQL 16 service after packaged artifact verification.
+- Commits: 8db37fc6c3ed9dc2e93cbd19f0853f6664e11204, 40f64a797e7f83bc404a1319f71b9221b0b40807, ${u.result.commit_sha}.
+- Validation note: CI now has a real empty-service migration execution gate; runtime results depend on GitHub Actions execution and should be checked before release tagging.
+- Remaining release-readiness work: inspect migration checksum/immutability policy and production deployment documentation, then perform broader final release gate audit without revisiting completed feature implementation.
+- Exact next action: add migration content integrity tracking or explicitly document immutable migration policy, depending on current migration contract; then verify release documentation commands match the actual scripts.
