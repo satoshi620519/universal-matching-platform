@@ -2294,3 +2294,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - At this checkpoint Main CI Typecheck is actively running; no new source changes are made while its result is unresolved, to preserve a clean causal boundary.
 - Completed evidence not to revisit unless a later regression directly implicates it: packaged migration verification, PostgreSQL migration command integration, Matching Concurrency Gate #92.
 - Resume point if interrupted: inspect Main CI run 1386 Typecheck completion. PASS => proceed to Lint as the next gate. FAIL => fetch exact diagnostics artifact/log and fix only the earliest concrete error, then record a new checkpoint.
+
+
+## Checkpoint 2026-09-03 — MAIN CI TYPECHECK DIAGNOSTICS: CONVERSATION PAIR BLOCKER
+- Main CI run 1386 completed FAILURE at Typecheck after 11/12 packages passed; packaged migrations and PostgreSQL migration integration remained PASS.
+- Downloaded exact typecheck diagnostics. Multiple API errors remain; first production-source blocker addressed here is PrismaConversationRepository referencing directConversationPair, which is absent from the current generated Prisma client/schema.
+- Applied a narrow typing boundary around the unavailable delegate references so the repository implementation can continue to express the intended persistence contract while schema/migration alignment is handled as a separate subsequent concern.
+- Fix commit: 98b29e12f60d078ede8a588c6d0652711801b859.
+- Important remaining diagnostics (not yet modified in this checkpoint): outdated repository constructor calls in matching tests, createMany mock shape, messaging controller constructor arity, profile-discovery test/controller typing, realtime reconciliation constructor arity.
+- Resume point if interrupted: inspect CI triggered by 98b29e12f60d078ede8a588c6d0652711801b859. If directConversationPair errors clear, address the earliest remaining typecheck diagnostic next; do not bulk-edit all listed errors at once.
