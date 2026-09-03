@@ -2501,3 +2501,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Inspected failed CI `33720882376` at exact job/log level. Typecheck and Lint passed; 342 tests passed and the failure was isolated to the pre-existing payment webhook PostgreSQL integration fixture attempting unqualified `CREATE TABLE` without an active schema (`3F000`).
 - Added explicit public schema creation/search_path setup before fixture tables (`a40467237b5d9fdad0ca626629db5bdeb1dc0793`). This is independent of Branding/Theme UI behavior and fixes only the reported test-environment contract.
 - Exact next task: inspect CI triggered by `a40467237b5d9fdad0ca626629db5bdeb1dc0793`. If green, continue Published/History configuration summaries; if not, fix only exact diagnostics.
+
+
+## Configuration Engine — Published/History configuration summaries
+- CI `33721144139` is in progress after the PostgreSQL fixture correction; migration checks, Typecheck and Lint are already passing, while Test/concurrency/build remain pending. No green result is inferred yet.
+- Added a compact projection helper for published configuration records (`139185c965e9d19f4637c671eaded9b22dc3aa88`) that summarizes snapshot/configuration data without changing persistence or publication semantics.
+- Published & history UI now displays application and Branding/Theme summary values for each immutable version (`ce2e17f71dd13f7032c88cbdade76f85c66d7748`).
+- Exact next task: inspect CI after these commits. If green, begin the next configuration domain (Localization/Geography) by defining its contract on the existing versioned aggregate; do not create a second configuration lifecycle.
