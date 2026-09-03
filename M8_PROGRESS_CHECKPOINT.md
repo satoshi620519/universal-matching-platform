@@ -176,3 +176,9 @@
 - Concrete root cause from diagnostics: QuickLaunchDraftInput lacked profileSchema despite main.tsx using it.
 - Repair commit: 0ec9ca320ec2c8a0c836448fa3663ab04296b596 (adds typed profileSchema and featureVisibility input shapes).
 - Exact next task: verify CI for 0ec9ca32. If green, proceed with Feature Visibility purchaser UI; if failing, repair only concrete diagnostics. Do not claim Profile Schema or Feature Visibility CI completion before green evidence.
+
+
+## Configuration Engine checkpoint — Feature Visibility purchaser UI added / CI pending
+- Typed workflow boundary already contains profileSchema and featureVisibility at continuation inspection.
+- Purchaser UI commit: 338f4bb95e00db56d8e8833bac6bdcbb51d53818.
+- Exact next task: verify CI for current boundary/UI commits. After concrete green, add snapshot-derived Feature Visibility summaries to Published/History, then checkpoint domain completion. If CI fails, fix only concrete diagnostics; do not duplicate authorization.
