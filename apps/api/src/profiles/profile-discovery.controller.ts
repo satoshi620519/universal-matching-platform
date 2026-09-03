@@ -7,7 +7,6 @@ import { ProfileService } from './profile.service.js';
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
-import { NotificationRealtimePublicationService } from '../messaging/notification-realtime-publication.service.js';
 import { createGeographicScope, type ProfileFieldSchema, type ProfileProjectionPolicy } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
@@ -27,7 +26,6 @@ export class ProfileDiscoveryController {
     private readonly profileRepository: PrismaProfileRepository,
     private readonly discovery: DiscoveryService,
     private readonly matches: PrismaMatchTransitionRepository,
-    private readonly notificationRealtime: NotificationRealtimePublicationService,
   ) {}
 
   @Get('profile-categories')
