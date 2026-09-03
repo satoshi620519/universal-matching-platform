@@ -2265,3 +2265,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 40a919785bb7bb5142090892680abc0b872c490f.
 - Validation status: PENDING. Additional API typecheck errors remain visible in diagnostics and will be handled in dependency order from the next CI result rather than changing all unrelated files at once.
 - Exact next action: inspect CI for this commit; continue from the first remaining concrete typecheck failure without redoing completed fixes.
+
+
+## Matching concurrency gate follow-up — PRISMA SQL ADAPTER RESULT SHAPE FIXED
+- Continued from the latest independent concurrency gate instead of repeating pending main-CI checks.
+- Fetched the exact failed PostgreSQL 16 job log. Database build and Prisma generation completed; execution stopped before reciprocal transition assertions.
+- The failure was in the integration script adapter: PostgresMigrationExecutor now correctly expects a driver-style { rows } result, while the Prisma $queryRawUnsafe adapter returned a bare array. This made result.rows undefined.
+- Normalized the adapter's multi-statement query return to { rows: [...] }, matching the executor contract already validated by the PostgreSQL migration integration gate.
+- Fix commit: b7cc05938be9ac61412173dbb1d24418133d9eaf.
+- Validation status: PENDING until the newly triggered concurrency gate completes. No claim is made about reciprocal transition correctness because assertions have not yet been reached in the failing run.
+- Exact next action: inspect the new independent concurrency gate and then reconcile its result with the main CI's first remaining typecheck failure without revisiting passed migration packaging work.
