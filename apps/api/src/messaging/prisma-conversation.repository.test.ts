@@ -33,7 +33,7 @@ describe('PrismaConversationRepository', () => {
     const database = {
       directConversationPair,
       $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => {
-        await fn({ directConversationPair: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn() }, conversation: { create: vi.fn() } });
+        await fn({ directConversationPair: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn() }, conversation: { create: vi.fn().mockResolvedValue({ id: 'c-raced', participants: [] }) } });
         throw conflict;
       }),
     };
