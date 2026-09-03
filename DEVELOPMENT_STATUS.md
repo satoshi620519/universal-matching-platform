@@ -2495,3 +2495,9 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added purchaser-facing controls for secondary color, accent color, body font, heading font and corner radius, and exposed the selected theme values in Review & Publish (`438dad3177268e74099afb9a210d4e323ac2f44a`).
 - No API endpoint or parallel persistence lifecycle was introduced; the UI continues to use existing create/save/publish/published/history operations.
 - Exact next task: inspect CI for the branding/theme UI commits and then verify API payload compatibility. If green, extend the published/history display to show configuration-domain summaries without duplicating the full snapshot.
+
+
+## CI correction — PostgreSQL integration fixture
+- Inspected failed CI `33720882376` at exact job/log level. Typecheck and Lint passed; 342 tests passed and the failure was isolated to the pre-existing payment webhook PostgreSQL integration fixture attempting unqualified `CREATE TABLE` without an active schema (`3F000`).
+- Added explicit public schema creation/search_path setup before fixture tables (`a40467237b5d9fdad0ca626629db5bdeb1dc0793`). This is independent of Branding/Theme UI behavior and fixes only the reported test-environment contract.
+- Exact next task: inspect CI triggered by `a40467237b5d9fdad0ca626629db5bdeb1dc0793`. If green, continue Published/History configuration summaries; if not, fix only exact diagnostics.
