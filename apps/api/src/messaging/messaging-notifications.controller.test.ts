@@ -7,14 +7,14 @@ describe('MessagingController notifications', () => {
 
   it('scopes notification reads to the authenticated account', async () => {
     const listForAccount = vi.fn().mockResolvedValue([]);
-    const controller = new MessagingController(principalResolver as never, {} as never, {} as never, { listForAccount } as never, { publishRecipients: vi.fn() } as never);
+    const controller = new MessagingController(principalResolver as never, {} as never, {} as never, { listForAccount } as never, { publishRecipients: vi.fn() } as never, {} as never);
     await controller.listNotifications();
     expect(listForAccount).toHaveBeenCalledWith('a1');
   });
 
   it('scopes notification acknowledgement to the authenticated account', async () => {
     const markReadForAccount = vi.fn().mockResolvedValue(false);
-    const controller = new MessagingController(principalResolver as never, {} as never, {} as never, { markReadForAccount } as never, { publishRecipients: vi.fn() } as never);
+    const controller = new MessagingController(principalResolver as never, {} as never, {} as never, { markReadForAccount } as never, { publishRecipients: vi.fn() } as never, {} as never);
     await expect(controller.markNotificationRead('n1')).resolves.toEqual({ statusCode: 404 });
     expect(markReadForAccount).toHaveBeenCalledWith('n1', 'a1');
   });
