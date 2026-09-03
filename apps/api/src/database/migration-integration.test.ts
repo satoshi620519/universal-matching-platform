@@ -85,7 +85,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
-      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
 
       const migrations = [accountMigration, authenticationIdentityMigration, verificationRequestsMigration, verificationOutcomesMigration];
@@ -133,7 +133,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
-      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
       await prisma.$disconnect();
@@ -147,7 +147,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
-      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
 
@@ -172,7 +172,7 @@ describe.skipIf(!DATABASE_URL)('PostgreSQL migrations', () => {
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS verification_requests');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS password_credentials');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS authentication_identities');
-      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
+      await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS accounts CASCADE');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
       await prisma.$executeRawUnsafe('DROP TABLE IF EXISTS migration_rollback_probe');
       await prisma.$disconnect();
