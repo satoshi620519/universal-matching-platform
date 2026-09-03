@@ -1,4 +1,4 @@
-import type { EntitlementState } from '@universal-matching-platform/domain';
+import type { EntitlementState } from '@universal/domain';
 
 export interface EntitlementRecord {
   readonly id: string;
