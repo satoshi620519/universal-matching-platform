@@ -23,6 +23,15 @@ class MemoryRepository extends QuickLaunchConfigurationRepository {
 }
 
 describe('Quick Launch configuration lifecycle', () => {
+  it('publishes branding/theme extensions as immutable snapshots while retaining legacy fields', async () => {
+    const repository = new MemoryRepository();
+    const service = new QuickLaunchConfigurationService(repository);
+    const created = await service.createDraft({ ...draft, brandingTheme: { primaryColor: '#123456', secondaryColor: '#654321', typography: { fontFamily: 'Inter', borderRadius: 'medium' } } });
+    const published = await service.publish(created.version, new Date('2026-01-01T00:00:00.000Z'));
+    expect(published.published?.brandingTheme).toMatchObject({ secondaryColor: '#654321', typography: { fontFamily: 'Inter', borderRadius: 'medium' } });
+    expect(published.published?.primaryColor).toBe('#123456');
+  });
+
   it('creates, saves, publishes, retrieves current configuration and preserves history', async () => {
     const repository = new MemoryRepository();
     const service = new QuickLaunchConfigurationService(repository);
