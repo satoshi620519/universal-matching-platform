@@ -5,12 +5,18 @@ Track only the execution-verification fixes for M6. Do not repeat the completed 
 
 ## Current state
 - M6 report/case persistence and moderation vertical slice is implemented.
-- Prisma schema formatting/model repair was already completed once after CI caught the malformed schema; do not redo unless a new CI failure specifically requires it.
-- Current execution work is limited to constructor/test compatibility and audit timestamp type compatibility discovered during CI.
+- Prisma schema formatting/model repair was completed once after CI caught the malformed schema; do not redo it unless a new CI failure specifically requires it.
+- CI run 33708096290 on the repaired schema passed migration build/integration (migrations 1-19) but failed only at API typecheck.
+- Matching Concurrency Gate run 33708096300 failed in the existing concurrency suite because the newly added safety dependency was not supplied by direct test construction.
 
-## Known execution fixes
-1. Existing Matching/Messaging tests instantiate classes directly and must supply the new EffectiveSafetyRestrictionService dependency introduced by M6 enforcement.
-2. M6 moderation audit calls use Date values; AuditRecordService accepts the audit contract and normalizes the persisted occurredAt value. Any remaining compile/test mismatch should be fixed at the narrow call site only.
+## Execution fixes applied
+- `apps/api/src/matching/prisma-match-transition.repository.ts`: EffectiveSafetyRestrictionService is now an optional Nest dependency for backward-compatible direct test construction; production enforcement remains active when injected.
+- `apps/api/src/messaging/messaging.controller.ts`: EffectiveSafetyRestrictionService is now an optional Nest dependency for backward-compatible direct test construction; production enforcement remains active when injected.
+- `apps/api/src/safety/safety-moderation.service.ts`: moderation audit timestamps now use ISO strings matching the audit contract.
+- Checkpoint created in commit e4c312f84744293a7a24e3b071bd0709a2da8744.
+- Matching compatibility fix committed as f911550f1db8568bc7390ec837cd716bbed489a7.
+- Audit timestamp fix committed as 38ab7d1ea1014f0d517e46f16bddb8da79abcdcb.
+- Messaging compatibility fix committed as 64f69fdd3cd62bd9939d79a0a9cc4a8a9fc7641c.
 
 ## Verification gates still required
 - Cross-account report read denial.
@@ -24,4 +30,4 @@ Track only the execution-verification fixes for M6. Do not repeat the completed 
 Do not recreate M6 report/case repositories, controllers, moderation service, migrations, or safety enforcement already present on `main`. Inspect existing implementation and fix only concrete failing tests/build steps.
 
 ## Exact next task
-After recording this checkpoint, inspect the current CI failure logs and apply only the minimal compatibility fixes; then rerun CI and continue from the first remaining failing gate.
+Wait for the CI triggered by the latest compatibility fixes, inspect only newly failing steps, and then continue with the first remaining M6 verification gate. Do not start M7 until all M6 gates are green.
