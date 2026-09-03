@@ -2223,3 +2223,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: 6cd80abb921fa7eddebf219e51ff0f4de24f2338, c479ea5c68c476886d232500978f593783a84c50.
 - Validation status: PENDING until CI for these exact commits completes. Downstream typecheck/lint/test/build gates remain untouched because they have not yet executed in this run sequence.
 - Exact next action: inspect the CI triggered by this fix. If PostgreSQL migration integration passes, proceed only to the next observable failed gate.
+
+
+## CI typecheck follow-up — DISCOVERY JSX STRUCTURE FIXED
+- Continued from completed CI run 1374 without revisiting migration gates.
+- Confirmed two upstream gates now pass in the same run: Verify packaged database migrations and PostgreSQL migration command integration.
+- Typecheck was the first remaining failure. Downloaded the typecheck diagnostics artifact and traced the parser error to the Discovery component's line 77 JSX tree.
+- Found a concrete extra closing </div> after the discovery results block, producing TS1005/TS17002 parser errors.
+- Removed only the unmatched closing element; discovery behavior and data flow were not changed.
+- Fix commit: 2249debc6367c4bc8b6ad614609de945ec08b82c.
+- Validation status: PENDING until CI for this exact commit completes. Lint, tests, concurrency integration, and build remain untouched because they were skipped after the typecheck failure.
+- Exact next action: inspect the new CI run; if typecheck passes, proceed only to the first subsequently observable failed gate.
