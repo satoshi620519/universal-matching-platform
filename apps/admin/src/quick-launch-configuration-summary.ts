@@ -3,6 +3,7 @@ import type { QuickLaunchPublishedRecord } from './quick-launch-history';
 type SnapshotLike = {
   applicationName?: unknown;
   profileSchema?: { fields?: unknown[] };
+  featureVisibility?: { features?: unknown[] };
   primaryColor?: unknown;
   localization?: { defaultLocale?: unknown; supportedLocales?: unknown; defaultTimezone?: unknown; countryLocales?: unknown };
   brandingTheme?: {
@@ -33,12 +34,19 @@ export interface QuickLaunchConfigurationSummary {
   profileFieldCount?: number;
   requiredProfileFieldCount?: number;
   profileFieldKeys?: readonly string[];
+  visibleFeatureCount?: number;
+  visibleFeatureKeys?: readonly string[];
 }
 
 export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRecord): QuickLaunchConfigurationSummary {
   const snapshot = snapshotOf(record);
   const theme = snapshot.brandingTheme;
   const typography = theme?.typography;
+  const visibleFeatureKeys = Array.isArray(snapshot.featureVisibility?.features)
+    ? snapshot.featureVisibility.features
+        .filter((feature): feature is { key: string; enabled?: unknown } => !!feature && typeof feature === 'object' && typeof (feature as { key?: unknown }).key === 'string' && (feature as { enabled?: unknown }).enabled === true)
+        .map(feature => feature.key)
+    : undefined;
   return {
     applicationName: typeof snapshot.applicationName === 'string' ? snapshot.applicationName : 'Unnamed configuration',
     primaryColor: typeof snapshot.primaryColor === 'string' ? snapshot.primaryColor : typeof theme?.primaryColor === 'string' ? theme.primaryColor : 'Default',
@@ -53,6 +61,8 @@ export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRe
     profileFieldCount: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.length : undefined,
     requiredProfileFieldCount: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.filter(field => field && typeof field === 'object' && (field as { required?: unknown }).required === true).length : undefined,
     profileFieldKeys: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.map(field => field && typeof field === 'object' && typeof (field as { key?: unknown }).key === 'string' ? (field as { key: string }).key : undefined).filter((key): key is string => key !== undefined) : undefined,
+    visibleFeatureCount: visibleFeatureKeys?.length,
+    visibleFeatureKeys,
     countryLocales: snapshot.localization?.countryLocales && typeof snapshot.localization.countryLocales === 'object' && !Array.isArray(snapshot.localization.countryLocales) ? Object.fromEntries(Object.entries(snapshot.localization.countryLocales as Record<string, unknown>).filter((entry): entry is [string,string] => typeof entry[1] === 'string')) : undefined,
   };
 }
