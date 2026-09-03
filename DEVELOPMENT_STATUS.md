@@ -2612,3 +2612,16 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added purchaser-facing Feature Visibility controls in the existing Features Quick Launch step (338f4bb95e00db56d8e8833bac6bdcbb51d53818). Controls explicitly write configuration visibility metadata while preserving enabledFeatures compatibility; runtime authorization and safety enforcement remain independent.
 - Review & Publish now distinguishes legacy enabled feature list from explicitly configured visible features.
 - Exact next task: inspect CI for current type-boundary and Feature Visibility UI commits. If green, add snapshot-derived Feature Visibility Published/History summaries and checkpoint domain completion; if failing, repair only concrete diagnostics.
+
+
+## Continuity reconciliation — 2026-09-03
+- Before starting new implementation, re-read PROJECT_MASTER.md, MASTER_DEVELOPMENT_ROADMAP.md, DEVELOPMENT_STATUS.md, CONTINUITY_PROTOCOL.md and DECISIONS.md as required by the continuity protocol.
+- Detected a scope divergence: the repository's authoritative DEVELOPMENT_STATUS.md currently records Configuration Engine / Feature Visibility as the exact active task, while recent conversation work created multiple mobile architecture/authentication/navigation branches that are not represented in the authoritative status checkpoint.
+- To prevent duplicate or conflicting work, do not start another mobile feature from conversation memory until the repository state of those mobile branches is reconciled against the authoritative roadmap and status.
+- Recent mobile branches created during the parallel work stream include: feature/mobile-foundation-architecture, feature/mobile-auth-slice, feature/mobile-native-adapter-contract, feature/mobile-runtime-plan, feature/mobile-runtime-bootstrap, feature/mobile-app-shell, feature/mobile-signin-screen, feature/mobile-signin-flow, feature/mobile-registration-contract, feature/mobile-registration-api-alignment, feature/mobile-protected-navigation-contract, and feature/mobile-authenticated-shell.
+- No claim is made that those branches are merged, tested, or production-ready merely because commits exist.
+- CURRENT PHASE: Phase 4 — Universal Configuration Engine (authoritative checkpoint)
+- CURRENT MILESTONE: Feature Visibility Configuration
+- CURRENT TASK: Verify current CI for type-boundary and Feature Visibility UI commits, then add snapshot-derived Published/History summaries only if the concrete diagnostics are clean.
+- STATUS: In progress
+- EXACT NEXT ACTION: Inspect the latest relevant CI evidence for the recorded Configuration Engine commits first; repair only concrete failures. Separately reconcile the mobile branch work into a documented roadmap checkpoint before resuming mobile implementation.
