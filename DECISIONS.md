@@ -95,3 +95,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 49. Published/history views use compact projections derived from immutable snapshots rather than duplicating full configuration state into separate summary persistence. Each configuration domain contributes display-safe summary fields only.
 
 50. Localization/Geography is the next configuration domain after Branding/Theme. Its contract owns locale/default-locale and optional country→locale behavior, while the existing Quick Launch `supportedCountries` field remains the single source for country enablement until deliberately migrated; no duplicate country list or parallel publication lifecycle is permitted.
+
+51. Localization is embedded as an optional extension of QuickLaunchDraft. It must validate against the aggregate's existing `supportedCountries`; localization may add locale and country→locale defaults but cannot independently enable countries. Published localization values inherit the same immutable snapshot lifecycle.
