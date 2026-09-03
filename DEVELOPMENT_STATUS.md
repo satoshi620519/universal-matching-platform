@@ -2234,3 +2234,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 2249debc6367c4bc8b6ad614609de945ec08b82c.
 - Validation status: PENDING until CI for this exact commit completes. Lint, tests, concurrency integration, and build remain untouched because they were skipped after the typecheck failure.
 - Exact next action: inspect the new CI run; if typecheck passes, proceed only to the first subsequently observable failed gate.
+
+
+## CI typecheck follow-up — WEB TYPESCRIPT MODULE CONFIG FIXED
+- Continued from completed CI run 1375; did not revisit the already-passing migration gates or repeat the Discovery JSX investigation.
+- Downloaded the new typecheck diagnostics artifact. The previous JSX parser failure is gone; the first remaining failure is now @universal/web tsconfig configuration.
+- Exact errors: TS5095 (bundler resolution incompatible with inherited NodeNext module) and TS5109 (moduleResolution override incompatible with inherited module).
+- Root cause: web/Vite tsconfig overrides moduleResolution to bundler but inherited module=NodeNext from the repository base config.
+- Fixed the web package locally by explicitly setting module=ESNext alongside moduleResolution=bundler, matching Vite's bundler-oriented compilation model without changing the shared base config used by other packages.
+- Fix commit: fe0bf821c15e854c318e9be66780086ca629b46b.
+- Validation status: PENDING until CI for this exact commit completes. Lint/test/concurrency/build remain untouched.
+- Exact next action: inspect the new CI run and continue only from the first observable failed gate.
