@@ -6,3 +6,9 @@
 .ui-status-success{color:var(--color-success);background:color-mix(in srgb,var(--color-success) 10%,var(--color-surface))}
 .ui-status-warning{color:var(--color-warning);background:color-mix(in srgb,var(--color-warning) 10%,var(--color-surface))}
 .ui-status-error{color:var(--color-danger);background:color-mix(in srgb,var(--color-danger) 10%,var(--color-surface))}
+.ui-card{display:block;padding:var(--space-6);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-medium);color:var(--color-text-primary)}
+.ui-list{display:grid;gap:var(--space-2);margin:0;padding:0;list-style:none}
+.ui-list-row{display:block;margin:0;padding:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-small);color:var(--color-text-primary)}
+.ui-list-row-action{display:block;width:100%;margin:0;padding:var(--space-4);border:0;border-radius:inherit;background:transparent;color:inherit;text-align:inherit;font:inherit;cursor:pointer}
+.ui-list-row-action:disabled{cursor:not-allowed;opacity:.6}
+.ui-list-row-action:hover:not(:disabled){background:var(--color-brand-secondary)}

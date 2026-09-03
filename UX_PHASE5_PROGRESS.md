@@ -14,19 +14,23 @@
 - Primitive export contract test added.
 - PR #7 merged into `main` as merge commit `4279c30d339e9b2083fd25528dec9bd3ce3fd798`.
 - PR #7 CI run `33737131703` (run #1961) completed successfully across typecheck, lint, tests, matching concurrency, concurrency gate, and build.
+- Phase 5 collection primitives implemented on `feature/ux-accessible-collection-primitives`: `Card`, `List`, and keyboard-accessible `ListRow`.
+- Collection primitive styling added using semantic tokens, including hover and disabled states without changing interaction semantics.
+- Collection primitive export contract test extended to cover `Card`, `List`, and `ListRow`.
 
 ## Current branch
 
-`main` at `4279c30d339e9b2083fd25528dec9bd3ce3fd798`
+`feature/ux-accessible-collection-primitives`
 
 ## Latest commits
 
-- `7b89590311259a544e63b7a7e1a8aa0a9fde6228` — correct accessible field cloning; validated by CI run `33737131703`.
-- `4279c30d339e9b2083fd25528dec9bd3ce3fd798` — merge PR #7 into `main`.
+- `12026701492ce8d673e58590b9dbe8c07ddcf216` — add accessible card and list row primitives.
+- `e1fb50ba71f73f87a10dcfd9eb78287cebef6d86` — add semantic card and list row styles.
+- `16ceee9ee3c7f0c1c908d5a7ec603f02e2ae7bba` — cover card and list row primitive exports.
 
 ## Next continuation point
 
-Create a new Phase 5 implementation branch from the current `main` and continue with the next shared accessible primitives: cards/list rows first, followed by dialogs/drawers, navigation, and loading/empty states. After each coherent layer, validate with the repository CI and record the exact commit/CI result here before moving to the next layer. Then migrate existing screens systematically. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or the already-merged `Button`, `Field`, `TextInput`, `TextArea`, and `StatusMessage` primitives.
+Open the Phase 5 collection-primitives PR and validate it with the repository CI. If green, merge it and record the exact merge commit and CI result here. Then continue with dialogs/drawers, followed by navigation, loading/empty states, and systematic migration of existing screens. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or the already-merged `Button`, `Field`, `TextInput`, `TextArea`, and `StatusMessage` primitives.
 
 ## Interruption-safe rule
 

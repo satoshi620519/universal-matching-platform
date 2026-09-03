@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type TextareaHTMLAttributes } from 'react';
+import { cloneElement, isValidElement, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type TextareaHTMLAttributes } from 'react';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { loading?: boolean; loadingLabel?: string };
 
@@ -38,4 +38,38 @@ export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) { r
 
 export function StatusMessage({ tone, children }: { tone: 'success' | 'warning' | 'error'; children: ReactNode }) {
   return <div className={`ui-status ui-status-${tone}`} role={tone === 'error' ? 'alert' : 'status'}>{children}</div>;
+}
+
+export function Card({ className = '', children, ...props }: HTMLAttributes<HTMLElement>) {
+  return <article className={`ui-card${className ? ` ${className}` : ''}`} {...props}>{children}</article>;
+}
+
+export function List({ className = '', children, ...props }: HTMLAttributes<HTMLUListElement>) {
+  return <ul className={`ui-list${className ? ` ${className}` : ''}`} {...props}>{children}</ul>;
+}
+
+type ListRowProps = HTMLAttributes<HTMLLIElement> & {
+  interactive?: boolean;
+  onActivate?: () => void;
+  activateLabel?: string;
+  disabled?: boolean;
+};
+
+export function ListRow({ className = '', children, interactive = false, onActivate, activateLabel, disabled = false, ...props }: ListRowProps) {
+  const isInteractive = interactive || Boolean(onActivate);
+  return (
+    <li className={`ui-list-row${className ? ` ${className}` : ''}`} {...props}>
+      {isInteractive ? (
+        <button
+          type="button"
+          className="ui-list-row-action"
+          onClick={onActivate}
+          disabled={disabled}
+          aria-label={activateLabel}
+        >
+          {children}
+        </button>
+      ) : children}
+    </li>
+  );
 }
