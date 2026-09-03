@@ -2755,3 +2755,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Aligned conditional steps with the unified workflow ordering: existing Profile fields at 2, Matching Categories at 3, Feature Visibility at 4, Terminology at 5, Matching Rules at 6, Onboarding at 7, Review & Publish at 8.
 - IMPORTANT OPEN ITEM: review/publication and history summary rendering in main.tsx still needs semantic consolidation for all four domains; the step blocks alone do not make the integration UI complete.
 - EXACT NEXT ACTION: consolidate review summary rows and Published/History inline summaries so Feature Visibility, Terminology, Matching Categories, and Matching Rules all render from the unified summary model; then inspect focused tests and compilation risks from the combined contract.
+
+
+## Configuration Engine — Integration review/publication/history summary consolidation
+- Continued from the shared Quick Launch UI checkpoint and compared main.tsx summary rendering across all four feature branches before editing.
+- Semantically consolidated Review & Publish rows and Published/History inline summaries for Feature Visibility, Terminology, Matching Categories, and Matching Rules (2120c64d).
+- Review now exposes enabled visible-feature count, custom terminology, configured matching categories, and enabled matching rules.
+- Published and History summaries now render all unified immutable summary projections with backward-compatible absence checks.
+- EXACT NEXT ACTION: inspect retained focused tests/spec files against the integration branch and add a unified integration-focused summary test covering all four domains together. Then inspect TypeScript/step-order risks in main.tsx and workflow contracts; run diagnostics if an execution-capable environment is available.
