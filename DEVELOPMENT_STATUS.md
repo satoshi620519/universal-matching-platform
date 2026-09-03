@@ -2395,3 +2395,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Two migration-integration failures remain intentionally untouched in this pass because they are database cleanup dependency-order failures (DROP authentication_identities blocked by password_credentials FK), a separate coherent issue to validate/fix after these four groups.
 - Validation status: PENDING.
 - Resume point if interrupted: inspect newest CI for d1a58b13. If the four groups clear, handle migration-integration cleanup ordering next; otherwise use exact diagnostics and do not revisit passed gates.
+
+
+## Checkpoint 2026-09-03 — FINAL TRANSACTION MOCK ARITY TYPECHECK FIX
+- CI run 1415 (head 8cdaf985) failed at Typecheck with exactly one remaining error: prisma-conversation.repository.test.ts line 36 TS2554.
+- The previous callback-signature correction covered only the first transaction mock; the second test still declared fn as zero-argument while invoking it with the transaction delegate.
+- Fixed only that remaining mock signature to (tx: unknown) => unknown.
+- Fix commit: 7d0adfc87a9429dbc35fdefdfba1212c15a7da23.
+- Validation status: PENDING CI. No Typecheck PASS claim until this commit is verified.
+- Resume point if interrupted: inspect CI for 7d0adfc87a9429dbc35fdefdfba1212c15a7da23. If Typecheck passes, continue to Lint then Test and address only newly exposed failures. Do not revisit migration gates or earlier fixed diagnostics.
