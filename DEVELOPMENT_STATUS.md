@@ -2747,3 +2747,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Preserved legacy categories fallback for Matching Categories and missing-metadata behavior for older immutable snapshots.
 - Unified summary now exposes: visible feature count/keys, terminology count/map, matching category total/enabled/keys, and matching rule total/enabled/keys alongside existing branding/localization/profile fields.
 - EXACT NEXT ACTION: consolidate apps/admin/src/main.tsx against the unified workflow ordering and summary model. First map each feature branch's UI blocks by domain and step number; then integrate domain blocks without wholesale replacement. After UI consolidation, inspect all focused tests for retention.
+
+
+## Configuration Engine — Integration shared Quick Launch UI consolidation (step blocks)
+- Continued from the immutable snapshot summary checkpoint and mapped domain-specific main.tsx blocks directly from Terminology, Matching Categories, and Matching Rules branch tips.
+- Integrated dedicated Matching Categories, Terminology, and Matching Rules purchaser UI blocks into feature/config-engine-integration without replacing the shared file wholesale (93e31797).
+- Aligned conditional steps with the unified workflow ordering: existing Profile fields at 2, Matching Categories at 3, Feature Visibility at 4, Terminology at 5, Matching Rules at 6, Onboarding at 7, Review & Publish at 8.
+- IMPORTANT OPEN ITEM: review/publication and history summary rendering in main.tsx still needs semantic consolidation for all four domains; the step blocks alone do not make the integration UI complete.
+- EXACT NEXT ACTION: consolidate review summary rows and Published/History inline summaries so Feature Visibility, Terminology, Matching Categories, and Matching Rules all render from the unified summary model; then inspect focused tests and compilation risks from the combined contract.
