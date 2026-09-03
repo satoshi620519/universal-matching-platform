@@ -15,7 +15,7 @@ describe.skipIf(!DATABASE_URL)('Prisma PostgreSQL migration executor', () => {
       await database.$executeRawUnsafe('DROP TABLE IF EXISTS migration_executor_probe');
       await database.$executeRawUnsafe('DROP TABLE IF EXISTS schema_migrations');
 
-      const executor = createMigrationExecutor(database as any);
+      const executor = createMigrationExecutor(database);
 
       await expect(executor.listAppliedVersions()).resolves.toEqual([]);
       await executor.apply({
