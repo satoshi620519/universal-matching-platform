@@ -67,4 +67,7 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - CI `33715396428` for HTTP/composition work completed SUCCESS.
 - CI `33715550436` exposed exactly one Typecheck error in the new raw-body Stripe signature path: `actual` was `string | null` before `Buffer.from`. Fixed by narrowing before conversion (`33dc6020beeb0401077866c644b7a9bad1b6d35e`).
 - Focused controller wiring test added (`ea384660152a90bfc1378f291d76bf679c46592b`).
-- Inspect fresh CI for commits through `ea384660`. If green, implement production-grade raw-body capture at the Fastify HTTP adapter boundary (not an arbitrary request header), then perform the final M7 roadmap/status audit.
+- Latest CI `33715702998` is in progress for the preceding typecheck fix and controller tests; do not assume result yet.
+- Production-grade raw-body capture has now been wired at the Fastify/Nest bootstrap with `{ rawBody: true }` (`44c21362110ef535d8b3c3527c58ffe53076f3cd`).
+- Webhook controller no longer accepts an arbitrary `x-raw-body` header; it reads the framework-captured `request.rawBody` (`ea317687cac43df2d88a14fa4a5edf34df366e78`) with focused captured-buffer tests (`53e7044911b7254f20a3e16885aa887d9e94304f`).
+- Inspect CI through `53e70449`. If green, perform final M7 roadmap/status audit; if a failure appears, fix only the exact newly exposed issue.
