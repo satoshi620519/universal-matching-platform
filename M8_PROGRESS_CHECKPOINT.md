@@ -149,3 +149,9 @@
 - UI commit: d83750fc5cfd48a734744a41ac1c6cc245fe65f9.
 - Verified preceding immutable publication CI run 33722967960 succeeded for commit 17873a5b0ba27d2ec576e644a5964f943df17963.
 - Exact next task: add snapshot-derived Profile Schema summary to Published/History, checkpoint completion, then begin Feature Visibility. Do not duplicate profile value editing or projection ownership.
+
+
+## Configuration Engine checkpoint — Profile Schema complete
+- Summary commits: d16dcd1308594847eeb8c3ec46b7fdf73fd21f68 and 23cf8bbe8f2d3906520851691dbe5362f5b6124e.
+- Profile Schema complete through contract, validation, lifecycle, immutable publication, purchaser editor, Review & Publish and Published/History summary.
+- Exact next task: inspect existing feature flags/capabilities/entitlement ownership and begin Feature Visibility Configuration. Do not duplicate runtime authorization or permission enforcement.
