@@ -12,6 +12,7 @@ export interface QuickLaunchDraftInput {
   supportedCountries: readonly string[];
   profileSchema?: { fields: readonly { key: string; label: string; type: 'text'|'number'|'boolean'|'date'|'select'; required?: boolean; visibility: 'public'|'authenticated'|'privileged'; options?: readonly string[] }[] };
   featureVisibility?: { features: readonly { key: string; enabled: boolean }[] };
+  terminology?: { terms: Partial<Record<'user'|'profile'|'discovery'|'match'|'matches'|'message'|'messages', string>> };
   categories: readonly { key: string; displayName: string }[];
   enabledFeatures: readonly string[];
   onboarding: readonly { field: string; required: boolean }[];
