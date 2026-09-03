@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, useEffect, useId, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type TextareaHTMLAttributes } from 'react';
+import { cloneElement, isValidElement, useEffect, useId, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement, type ReactNode, type RefObject, type TextareaHTMLAttributes } from 'react';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { loading?: boolean; loadingLabel?: string };
 
@@ -60,15 +60,7 @@ export function ListRow({ className = '', children, interactive = false, onActiv
   return (
     <li className={`ui-list-row${className ? ` ${className}` : ''}`} {...props}>
       {isInteractive ? (
-        <button
-          type="button"
-          className="ui-list-row-action"
-          onClick={onActivate}
-          disabled={disabled}
-          aria-label={activateLabel}
-        >
-          {children}
-        </button>
+        <button type="button" className="ui-list-row-action" onClick={onActivate} disabled={disabled} aria-label={activateLabel}>{children}</button>
       ) : children}
     </li>
   );
@@ -85,7 +77,7 @@ type OverlayProps = {
   className?: string;
 };
 
-function useOverlayAccessibility(open: boolean, onClose: () => void, panelRef: React.RefObject<HTMLElement | null>) {
+function useOverlayAccessibility(open: boolean, onClose: () => void, panelRef: RefObject<HTMLElement | null>) {
   const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -106,13 +98,8 @@ function useOverlayAccessibility(open: boolean, onClose: () => void, panelRef: R
       if (elements.length === 0) return;
       const first = elements[0];
       const last = elements[elements.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     };
     document.addEventListener('keydown', onKeyDown);
     return () => {
