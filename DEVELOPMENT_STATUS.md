@@ -2535,3 +2535,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Expanded the existing Regions step (not a duplicate step) with default locale, supported locale selection, optional IANA timezone input, and country→locale defaults constrained to selected supportedCountries (`2fff25fd7d3459a1a3b91c6dfbd9e2e0dfab7c3a`).
 - Review & Publish now shows locale and timezone choices through the existing workflow.
 - Exact next task: add compact Localization summaries to Published/History projections, then begin the next unfinished configuration domain (Profile Schema) only after recording Localization UI completion.
+
+
+## Configuration Engine — Localization Published/History completion
+- Continued from the exact recorded next task and did not repeat M8, Branding/Theme, Localization contract, or Regions UI work.
+- Latest observable aggregate CI `33721871818` completed successfully for the localization lifecycle checkpoint commit, providing a concrete green baseline before this continuation.
+- Extended the existing snapshot-derived configuration summary projection with default locale, supported locales, optional timezone and country→locale mapping (`76d815183f4f1c56862a1431146413270d80c3ca`).
+- Published and History UI now displays compact localization identity (Locale + TZ) alongside existing branding summaries without creating summary persistence (`7096b4545fac87f4b3d3fe09c4363fe7b3a2b198`).
+- Localization/Geography domain is now checkpoint-complete through contract, validation, lifecycle, purchaser UI, review, immutable publication and history summary.
+- Exact next task: begin Profile Schema Configuration by inspecting existing onboarding/profile contracts and defining a versioned purchaser-configurable schema extension without duplicating current onboarding field ownership.
