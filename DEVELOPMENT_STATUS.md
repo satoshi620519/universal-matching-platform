@@ -2604,3 +2604,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - The prior SnapshotLike repair addressed the summary projection error, but detailed diagnostics exposed the next concrete dependency: `QuickLaunchDraftInput` in `apps/admin/src/quick-launch-workflow.ts` did not declare `profileSchema`, while main.tsx purchaser UI already used it. This caused property-not-exist, state object excess-property, and downstream implicit-any errors.
 - Added the missing typed profileSchema input shape and aligned future featureVisibility input shape with the versioned configuration model (`0ec9ca320ec2c8a0c836448fa3663ab04296b596`). This is a focused type-boundary repair, not a duplicate Profile implementation.
 - No CI green status is inferred yet. Exact next task: inspect CI for `0ec9ca320ec2c8a0c836448fa3663ab04296b596`; if green, continue Feature Visibility purchaser UI, and if failure, address only the concrete reported error.
+
+
+## Configuration Engine — Feature Visibility purchaser UI continued
+- Continued from exact checkpoint after confirming QuickLaunchDraftInput now contains typed profileSchema/featureVisibility shapes in the repository; no duplicate contract or lifecycle work was created.
+- Latest CI runs for the recent type-boundary documentation commits were still in progress at inspection time, so no green result is inferred yet.
+- Added purchaser-facing Feature Visibility controls in the existing Features Quick Launch step (338f4bb95e00db56d8e8833bac6bdcbb51d53818). Controls explicitly write configuration visibility metadata while preserving enabledFeatures compatibility; runtime authorization and safety enforcement remain independent.
+- Review & Publish now distinguishes legacy enabled feature list from explicitly configured visible features.
+- Exact next task: inspect CI for current type-boundary and Feature Visibility UI commits. If green, add snapshot-derived Feature Visibility Published/History summaries and checkpoint domain completion; if failing, repair only concrete diagnostics.
