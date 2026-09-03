@@ -18,3 +18,10 @@
 3. Added Quick Launch persistence boundary (`c90dfbf9ec71fdf08cb752f62ddc55f3ba65870b`), draft-to-published lifecycle service (`ca7f6e4d9c6f554a692fccd812f41c78b5b69fbc`), and publication history test (`9aba6360336e69b49dbccb3ef1599ab28dcb79ef`).
 4. Exact next task: inspect CI, then implement the production persistence adapter and purchaser admin/API boundary. Do not recreate the existing generic ConfigurationVersion/ConfigurationPublication subsystem; integrate or adapt only where it adds value to the Quick Launch aggregate.
 5. Record every completed step here to prevent duplicate work.
+
+
+## Persistence implementation
+- Latest lifecycle checkpoint CI 33717665715 completed SUCCESS.
+- Added production Prisma adapter (8f927c6b1802c9aee615a5eacb9a8387743ba78b), Prisma schema model (fa78732dba87cad11248f861369bd8581e1068b3), and migration (245a409921edca3b2547563f72bb993b0541d61f).
+- The existing generic ConfigurationVersion subsystem was inspected and intentionally not duplicated; Quick Launch keeps its aggregate JSON snapshot because its purchaser-facing branding/categories/features/onboarding payload is structurally different from typed scalar configuration settings.
+- Exact next task: inspect CI/migration gate. If green, compose the Prisma repository and Quick Launch service into the API boundary, then add purchaser-facing admin workflow endpoints/UI.
