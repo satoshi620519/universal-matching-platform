@@ -25,3 +25,11 @@
 - Added production Prisma adapter (8f927c6b1802c9aee615a5eacb9a8387743ba78b), Prisma schema model (fa78732dba87cad11248f861369bd8581e1068b3), and migration (245a409921edca3b2547563f72bb993b0541d61f).
 - The existing generic ConfigurationVersion subsystem was inspected and intentionally not duplicated; Quick Launch keeps its aggregate JSON snapshot because its purchaser-facing branding/categories/features/onboarding payload is structurally different from typed scalar configuration settings.
 - Exact next task: inspect CI/migration gate. If green, compose the Prisma repository and Quick Launch service into the API boundary, then add purchaser-facing admin workflow endpoints/UI.
+
+
+## API composition
+- CI/migration gate was still running at the start of this continuation, so no speculative CI fixes were made.
+- Added administrator-only `manage-quick-launch` capability (e8b9ec650628f29b668708c5dac0079b4a08e492).
+- Added purchaser administration API workflow for create draft, save draft, publish, current published configuration and history (0d56322f3a5406545f9a108d5c107a667f0c61fe).
+- Composed Quick Launch controller/service/Prisma repository in AppModule (fc42ead5abaa4dbcdc3fd611cfdf5b5c396662b8).
+- Exact next task: inspect fresh CI for the persistence + API composition commits. If green, implement the apps/admin purchaser workflow UI against these endpoints; if CI fails, fix only the exact new failure.
