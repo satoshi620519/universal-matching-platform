@@ -2658,3 +2658,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added immutable snapshot summary projection for configured terminology, preserving absence for older snapshots without terminology metadata (eb80b62c).
 - No mobile work was resumed and no Feature Visibility implementation was duplicated.
 - EXACT NEXT ACTION: inspect the latest feature/config-terminology branch for UI integration consistency (main.tsx step numbering/step count and Published/History summary rendering), then add focused tests for terminology snapshot summaries. Record results before moving to another domain.
+
+
+## Configuration Engine — Terminology consistency and test checkpoint
+- Re-read latest status and inspected the actual feature/config-terminology branch before continuing.
+- Verified Quick Launch now has seven coherent steps and main.tsx step numbering is aligned: Terminology is step 4, Onboarding 5, Review & Publish 6.
+- Re-applied the terminology snapshot summary against the latest branch content after detecting that the earlier intended summary change was not present on the branch (38bc94e5).
+- Added focused tests for configured and legacy snapshot behavior (081026c8).
+- Added Published/History summary rendering for terminology metadata (5601c466).
+- EXACT NEXT ACTION: run/obtain concrete typecheck and test diagnostics for feature/config-terminology; repair only concrete failures. Then checkpoint Terminology domain completion and identify the next uncompleted Configuration Engine domain from roadmap/repository evidence.
