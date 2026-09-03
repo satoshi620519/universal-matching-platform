@@ -105,3 +105,10 @@
 - Exact failure was self-introduced test logic at `quick-launch-configuration.service.spec.ts:28`: `validateQuickLaunchDraft()` is a validation procedure and returned `undefined`; the test incorrectly asserted that it returns the draft object. This was not a production lifecycle defect.
 - Removed only the invalid return-value assertion and unused import (`9bfa4a026c1a75ffb79d0e74e58926d245503d81`), preserving all actual create/save/publish/current/history/supersession coverage.
 - Exact next task: inspect CI triggered by `9bfa4a026c1a75ffb79d0e74e58926d245503d81`. If full CI succeeds, formally close M8; otherwise fix only exact reported diagnostics.
+
+
+## M8 FORMALLY COMPLETE
+- Final required CI `33720009442` completed SUCCESS on head `9bfa4a026c1a75ffb79d0e74e58926d245503d81`.
+- M8 is formally closed. Full Quick Launch lifecycle and version/publication semantics are covered.
+- Do not revisit M8 without a concrete regression.
+- Next task: specification-first expansion of the Universal Configuration Engine, explicitly defining Quick Launch and Advanced Customization supported boundaries before new configuration implementation.
