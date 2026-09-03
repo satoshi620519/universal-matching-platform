@@ -104,9 +104,20 @@
 - PR #15 CI run `33742811375` completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #15 merged into `main` as merge commit `7c06738dc87b0516ecfe0bb41663767cf191a2a6`.
 
+## Conversation migration in progress
+
+- Re-read the progress record and inspected the active Dashboard/Conversation implementation before editing; completed primitive, authentication, dashboard shell, notification, and discovery work was not repeated.
+- Branch `feature/ux-conversation-migration` created from the PR #15 main checkpoint.
+- Conversation creation migrated to shared `Card`, `Field`, `TextInput`, `Button`, and `StatusMessage` primitives.
+- Active conversation migrated to shared `Card`, `List`, `ListRow`, `Field`, `TextArea`, and `Button` primitives.
+- Preserved existing backend contracts for conversation creation, message loading, sending, and realtime event refresh; no authorization or transport behavior was rewritten.
+- Added explicit field labels and a labelled message list while retaining the existing empty state and realtime status display.
+- Implementation commit: `0def314dd4131d88d57b1cd1e4de510e23d5c1e4`.
+- Next: verify shared primitive compatibility and type/API boundaries, then run repository CI before opening a PR.
+
 ## Next continuation point
 
-Discovery migration is complete. Next inspect and migrate Conversation as the remaining major screen slice, reusing existing shared primitives and preserving conversation authorization, message loading, sending, pagination, and real-time behavior. Do not repeat authentication, dashboard shell, notification, discovery, or primitive work. Validate the Conversation slice with CI before any final integration pass.
+Continue from the Conversation implementation above. Do not repeat completed migrations. After Conversation CI and integration, begin the final Phase 5 integration/quality pass.
 
 ## Interruption-safe rule
 
