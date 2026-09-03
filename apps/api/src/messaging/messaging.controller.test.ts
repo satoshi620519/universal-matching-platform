@@ -25,4 +25,18 @@ describe('MessagingController', () => {
     await controller.createMessage('c1', { body: 'hello' });
     expect(createForParticipant).toHaveBeenCalledWith({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
   });
+
+  it('observes a newly applied communication restriction on the next message immediately', async () => {
+    const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
+    let restriction: 'none' | 'communication-restricted' = 'none';
+    const safety = { resolveForAccount: vi.fn(async () => restriction) };
+    const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, safety as never);
+
+    await controller.createMessage('c1', { body: 'before restriction' });
+    restriction = 'communication-restricted';
+
+    await expect(controller.createMessage('c1', { body: 'after restriction' })).rejects.toThrow('account is restricted from communication');
+    expect(createForParticipant).toHaveBeenCalledTimes(1);
+    expect(safety.resolveForAccount).toHaveBeenCalledWith('a1', 'communication');
+  });
 });
