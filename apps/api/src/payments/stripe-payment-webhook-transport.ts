@@ -32,8 +32,9 @@ export class StripePaymentWebhookTransport extends VerifiedPaymentWebhookTranspo
     const actual = this.extractV1Signature(input.signature);
     const expected = createHmac('sha256', secret).update(input.rawBody).digest('hex');
     const expectedBuffer = Buffer.from(expected, 'utf8');
+    if (!actual) throw new UnauthorizedException('invalid Stripe webhook signature');
     const actualBuffer = Buffer.from(actual, 'utf8');
-    if (!actual || expectedBuffer.length !== actualBuffer.length || !timingSafeEqual(expectedBuffer, actualBuffer)) {
+    if (expectedBuffer.length !== actualBuffer.length || !timingSafeEqual(expectedBuffer, actualBuffer)) {
       throw new UnauthorizedException('invalid Stripe webhook signature');
     }
 
