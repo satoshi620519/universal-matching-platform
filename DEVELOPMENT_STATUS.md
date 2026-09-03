@@ -2470,3 +2470,6 @@ Inventory the existing API/controller routes and application capabilities, map t
 - M8 completion gate is satisfied: Quick Launch configuration domain, validation, draft persistence, immutable publication snapshots, publication supersession/history, administrator authorization, purchaser API, React administration UI, Save Draft/Publish operations, published/history retrieval, and focused frontend/backend lifecycle coverage are implemented.
 - M8 is formally complete. Do not repeat M8 implementation unless a concrete regression is later discovered.
 - Next active roadmap area: continue from the next unfinished commercial milestone, beginning with a documented Phase 4 configuration-system specification and supported Quick Launch vs Advanced Customization boundaries before expanding configuration scope.
+
+- Created `CONFIGURATION_SYSTEM_SPEC.md` to establish specification-first boundaries for the next Universal Configuration Engine expansion (`21d9ca3c313e4e39721ae49d5646adfe67914b2e`).
+- Exact next task: map the first new configuration domain (branding/theme or localization/geography) onto the existing M8 versioned aggregate and implement it end-to-end without creating a parallel configuration lifecycle.
