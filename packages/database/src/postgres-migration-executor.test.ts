@@ -14,7 +14,7 @@ describe('PostgresMigrationExecutor', () => {
     const query = vi
       .fn()
       .mockResolvedValueOnce(undefined)
-      .mockResolvedValueOnce([{ version: 1 }, { version: 4 }]);
+      .mockResolvedValueOnce({ rows: [{ version: 1 }, { version: 4 }] });
     const client = { query, transaction: vi.fn() };
     const executor = new PostgresMigrationExecutor(client as any);
 
