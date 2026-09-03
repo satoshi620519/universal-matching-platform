@@ -28,6 +28,10 @@ class InMemoryEntitlementRepository extends EntitlementRepository {
     return this.records.get(id) ?? null;
   }
 
+  async findByPaymentIntentId(paymentIntentId: string): Promise<EntitlementRecord | null> {
+    return [...this.records.values()].find((record) => record.paymentIntentId === paymentIntentId) ?? null;
+  }
+
   async findByPaymentIntent(
     accountId: string,
     entitlementKey: string,
@@ -95,6 +99,16 @@ describe('EntitlementService', () => {
     });
 
     expect(result.state).toBe('active');
+  });
+
+  it('revokes only the entitlement explicitly linked to a payment intent', async () => {
+    const repository = new InMemoryEntitlementRepository();
+    const service = new EntitlementService(repository);
+    const first = await service.grant({ accountId: 'account-1', entitlementKey: 'premium', paymentIntentId: 'intent-a', providerReference: 'ref-a' });
+    const second = await service.grant({ accountId: 'account-2', entitlementKey: 'premium', paymentIntentId: 'intent-b', providerReference: 'ref-b' });
+    const revoked = await service.revokeByPaymentIntent('intent-a');
+    expect(revoked?.id).toBe(first.id);
+    expect((await repository.findById(second.id))?.state).toBe('active');
   });
 
   it('revokes an active entitlement and rejects revocation after terminal state', async () => {
