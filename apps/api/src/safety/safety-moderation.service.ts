@@ -19,7 +19,7 @@ export class SafetyModerationService {
     if (!report) throw new NotFoundException('report not found');
     if (!canTransitionReportStatus(report.status, input.status)) throw new BadRequestException('invalid report status transition');
     const updated = await this.reports.transitionReport(report.id, input.status);
-    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `report.${input.status}`, targetId: report.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date() });
+    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `report.${input.status}`, targetId: report.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return updated;
   }
   async openCase(input: { actorId: string; reportId: string; correlationId?: string }) {
@@ -29,13 +29,13 @@ export class SafetyModerationService {
     const existing = await this.reports.findCaseByReportId(report.id);
     if (existing) return existing;
     const created = await this.reports.createCase(report.id);
-    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: 'case.open', targetId: created.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date() });
+    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: 'case.open', targetId: created.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return created;
   }
   async transitionCase(input: { actorId: string; caseId: string; status: ModerationCaseStatus; correlationId?: string }) {
     await this.admin.require(input.actorId, 'manage-moderation');
     const updated = await this.reports.transitionCase(input.caseId, input.status);
-    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `case.${input.status}`, targetId: updated.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date() });
+    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `case.${input.status}`, targetId: updated.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return updated;
   }
   async applyAction(input: { actorId: string; caseId: string; targetId: string; action: ModerationActionType; reasonCategory: string; expiresAt?: Date; correlationId?: string }) {
@@ -43,7 +43,7 @@ export class SafetyModerationService {
     if (!input.reasonCategory.trim()) throw new BadRequestException('reasonCategory is required');
     const restriction = restrictionForModerationAction(input.action);
     if (restriction !== 'none') await this.enforcement.create({ accountId: input.targetId, restriction, reasonCategory: input.reasonCategory.trim(), effectiveAt: new Date(), ...(input.expiresAt ? { expiresAt: input.expiresAt } : {}) });
-    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `action.${input.action}`, targetId: input.targetId, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date() });
+    await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `action.${input.action}`, targetId: input.targetId, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return { caseId: input.caseId, targetId: input.targetId, action: input.action, restriction };
   }
 }
