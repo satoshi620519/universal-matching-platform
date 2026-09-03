@@ -2107,3 +2107,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: focused contract coverage updated; full executable workspace/production PostgreSQL validation remains pending.
 - Remaining work: production migration preflight/build validation; broader release-readiness verification.
 - Exact next action: audit package scripts, Prisma migration state, CI workflows, and production startup assumptions; fix only concrete release blockers and record each verified gate without revisiting completed feature work.
+
+
+## Production readiness audit — MIGRATION ARTIFACT GATE VERIFIED + CONCRETE BLOCKER IDENTIFIED
+- Audited root/API/web/database package scripts, CI workflows, migration inventory, migration packaging scripts, and API startup entrypoint without revisiting completed feature work.
+- Confirmed CI already gates typecheck, lint, tests, PostgreSQL matching concurrency evidence, and build.
+- Confirmed @universal/database already contains a migration copy step and verify:migrations-build contract, but CI was not invoking that artifact verification. Added the CI gate before typechecking so packaged SQL drift is caught.
+- Audited migration inventory through 0017 and confirmed migration artifacts are centrally owned under packages/database/migrations while apps/api/prisma/migrations is empty.
+- Identified a concrete production blocker: migration README defines schema_migrations execution semantics, but no actual migration runner/application command is present. Packaging verification alone cannot initialize or upgrade a production database.
+- Documented this limitation explicitly rather than falsely marking migrations production-ready.
+- Commits: 79ff1d4432a7e17a0e178a00f8ad29d736a990ae, 4508885f920cb3a092c6b67c06d8b2f30a1c19dd.
+- Remaining release blocker: implement and test a concrete PostgreSQL migration runner with ordered discovery, duplicate-version rejection, schema_migrations tracking, transactional application where supported, and empty-database integration evidence. Then add a deploy-safe command and CI gate.
+- Exact next action: inspect existing database dependency boundaries and add the minimal migration runner in @universal/database (not the API), with focused tests for ordering/duplicate detection and a PostgreSQL integration path. Do not alter feature modules.
