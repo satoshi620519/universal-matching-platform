@@ -2625,3 +2625,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - CURRENT TASK: Verify current CI for type-boundary and Feature Visibility UI commits, then add snapshot-derived Published/History summaries only if the concrete diagnostics are clean.
 - STATUS: In progress
 - EXACT NEXT ACTION: Inspect the latest relevant CI evidence for the recorded Configuration Engine commits first; repair only concrete failures. Separately reconcile the mobile branch work into a documented roadmap checkpoint before resuming mobile implementation.
+
+
+## Configuration Engine — Feature Visibility snapshot summary continued
+- Resumed from the authoritative CURRENT TASK after checking DEVELOPMENT_STATUS.md and existing implementation, rather than repeating mobile work.
+- Commit-level workflow lookup for the recorded commits returned no PR-triggered runs through the available wrapper; absence of returned runs is explicitly NOT treated as a green CI result.
+- Completed the next non-duplicative Feature Visibility slice on branch `feature/config-feature-visibility-summary`: snapshot summary now projects explicit visible-feature count and keys from immutable `featureVisibility` metadata (`c57af226a60a100fe63b2b143c76f8eafc2ed6cd`).
+- Published and History UI now display that snapshot-derived visibility summary (`8c76621c85633ca316490027b788d014751b1612`).
+- Added explicit completion/boundary checkpoint documenting backward compatibility and the unresolved CI-evidence limitation (`8c8698bb4de1ec8e7d7e209a499aebab293c8b75`).
+- Exact next task: obtain concrete CI evidence for the current branch/commits using an available workflow run source; if a failure is found, repair only its concrete diagnostic. If clean, checkpoint Feature Visibility domain completion and then begin the next Configuration Engine domain. Do not resume mobile implementation until its branch work is reconciled into the authoritative roadmap/status.
