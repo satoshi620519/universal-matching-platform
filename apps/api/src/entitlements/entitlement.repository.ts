@@ -1,0 +1,37 @@
+import type { EntitlementState } from '@universal-matching-platform/domain';
+
+export interface EntitlementRecord {
+  readonly id: string;
+  readonly accountId: string;
+  readonly entitlementKey: string;
+  readonly state: EntitlementState;
+  readonly effectiveAt: Date;
+  readonly expiresAt: Date | null;
+  readonly providerReference: string | null;
+  readonly paymentIntentId: string | null;
+}
+
+export interface CreateEntitlementInput {
+  readonly id: string;
+  readonly accountId: string;
+  readonly entitlementKey: string;
+  readonly state: EntitlementState;
+  readonly effectiveAt: Date;
+  readonly expiresAt?: Date | null;
+  readonly providerReference?: string | null;
+  readonly paymentIntentId?: string | null;
+}
+
+export abstract class EntitlementRepository {
+  abstract create(input: CreateEntitlementInput): Promise<EntitlementRecord>;
+  abstract findByPaymentIntent(
+    accountId: string,
+    entitlementKey: string,
+    paymentIntentId: string,
+  ): Promise<EntitlementRecord | null>;
+  abstract transition(
+    id: string,
+    from: EntitlementState,
+    to: EntitlementState,
+  ): Promise<EntitlementRecord>;
+}
