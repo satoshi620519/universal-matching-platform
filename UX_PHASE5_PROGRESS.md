@@ -50,9 +50,18 @@
 - Identified the existing direct patterns that should be migrated rather than duplicated: raw `<nav>`/brand markup, raw form labels/inputs, raw primary buttons, and ad-hoc `role="status"` messages.
 - The migration must preserve existing authentication behavior, session storage, Terms/Privacy acknowledgement, verification flow, keyboard access, responsive layout, reduced-motion behavior, and buyer-customizable visual semantics.
 
+## Auth migration in progress
+
+- Dedicated branch `feature/ux-auth-screen-migration` created from the recorded main checkpoint.
+- Access/auth migration started without changing API calls, authentication flow, session storage, or verification behavior.
+- Sign-in, registration, and email verification forms migrated to shared `Field`, `TextInput`, `Button`, and `StatusMessage` primitives.
+- Added explicit access/verification navigation labels, form heading associations, and appropriate autocomplete hints.
+- Implementation commit: `aae5adb45ef2a9c7424aee03279de6ccb63fb814`.
+- Next: inspect focused test coverage, add only missing migration-specific tests, then run CI before opening a PR.
+
 ## Next continuation point
 
-Create a dedicated migration branch from current `main` and migrate the access/auth shell first. Reuse `HeaderNavigation`/`BottomNavigation` where the screen semantics fit, and reuse `Field`, `TextInput`, `Button`, `StatusMessage`, and the existing loading/empty/error primitives instead of introducing parallel controls. Keep the backend/API behavior unchanged. Add focused component/export or screen-level tests for the migrated states, then run the full repository CI and merge only when all required checks are green. After that, migrate the authenticated Dashboard shell and its Notification/Discovery/Conversation sections in separate coherent slices. Do not reimplement Quick Launch domains, PR #6, or any already-merged primitive layer.
+Continue from the implementation commit above; do not repeat the access-form migration.  Reuse `HeaderNavigation`/`BottomNavigation` where the screen semantics fit, and reuse `Field`, `TextInput`, `Button`, `StatusMessage`, and the existing loading/empty/error primitives instead of introducing parallel controls. Keep the backend/API behavior unchanged. Add focused component/export or screen-level tests for the migrated states, then run the full repository CI and merge only when all required checks are green. After that, migrate the authenticated Dashboard shell and its Notification/Discovery/Conversation sections in separate coherent slices. Do not reimplement Quick Launch domains, PR #6, or any already-merged primitive layer.
 
 ## Interruption-safe rule
 
