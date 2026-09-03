@@ -19,13 +19,27 @@ export class PrismaConversationRepository {
       include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
     });
     if (existing) return existing.conversation;
-    return this.database.$transaction(async (tx) => {
-      const raced = await tx.directConversationPair.findUnique({ where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } }, include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } } });
-      if (raced) return raced.conversation;
-      const conversation = await tx.conversation.create({ data: { participants: { create: [{ accountId: low }, { accountId: high }] } }, include: { participants: { orderBy: { joinedAt: 'asc' } } } });
-      await tx.directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
-      return conversation;
-    });
+    try {
+      return await this.database.$transaction(async (tx) => {
+        const raced = await tx.directConversationPair.findUnique({ where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } }, include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } } });
+        if (raced) return raced.conversation;
+        const conversation = await tx.conversation.create({ data: { participants: { create: [{ accountId: low }, { accountId: high }] } }, include: { participants: { orderBy: { joinedAt: 'asc' } } } });
+        await tx.directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
+        return conversation;
+      });
+    } catch (error) {
+      if (!this.isUniqueConflict(error)) throw error;
+      const winner = await this.database.directConversationPair.findUnique({
+        where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
+        include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
+      });
+      if (winner) return winner.conversation;
+      throw error;
+    }
+  }
+
+  private isUniqueConflict(error: unknown): boolean {
+    return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: unknown }).code === 'P2002';
   }
 
   async create(participantAccountIds: string[]): Promise<ConversationRecord> {
