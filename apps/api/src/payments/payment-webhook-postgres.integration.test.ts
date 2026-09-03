@@ -14,6 +14,8 @@ describe.skipIf(!process.env.DATABASE_URL)('payment webhook PostgreSQL integrati
 
   beforeAll(async () => {
     await database.$connect();
+    await database.$executeRawUnsafe('CREATE SCHEMA IF NOT EXISTS public');
+    await database.$executeRawUnsafe('SET search_path TO public');
     await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS payment_webhook_idempotency (event_id TEXT PRIMARY KEY, received_at TIMESTAMPTZ NOT NULL DEFAULT NOW())');
     await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS entitlements (id UUID PRIMARY KEY, account_id UUID NOT NULL, entitlement_key TEXT NOT NULL, state TEXT NOT NULL, effective_at TIMESTAMPTZ NOT NULL, expires_at TIMESTAMPTZ NULL, provider_reference TEXT NULL, payment_intent_id TEXT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP)');
     // Accounts gained required lifecycle columns after the original M7 fixture was introduced.
