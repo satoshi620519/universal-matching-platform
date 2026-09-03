@@ -2480,3 +2480,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added `BrandingThemeConfiguration` domain contract with secondary/accent colors and typography extension points (`0e250e7495e21b1e3ce84eb0dc883f812a43eefd`).
 - Added focused contract tests (`92cf6e408573d704e407de07e8bbd13dbd5c1e5c`) and exported the domain API (`260b7b7dc1c208a54603b09c945e2a3275816bca`).
 - Exact next task: integrate Branding/Theme into the existing versioned Quick Launch draft/publication lifecycle, preserving backward compatibility with existing `primaryColor`/`logoUrl` fields.
+
+
+## Configuration Engine — Branding/Theme lifecycle integration
+- Integrated the BrandingThemeConfiguration extension into the existing QuickLaunchDraft aggregate (`1554eec28586b2b0be56343712c6938e2e8b77aa`).
+- Quick Launch validation now invokes the Branding/Theme contract when present (`67ba3083fb60af1dd35a3870ade7f054babaf7ed`).
+- Published snapshots deep-freeze branding/theme values so richer purchaser configuration follows the existing immutable version/history semantics (`1554eec28586b2b0be56343712c6938e2e8b77aa`).
+- Added lifecycle coverage proving legacy fields and richer branding/theme values publish together (`82695762959893d6b6041a64f04fc28084ff64f0`).
+- Exact next task: expose secondary/accent/typography controls in the purchaser Admin UI and include them in the review/published display, without changing API endpoints or creating a parallel persistence model.
