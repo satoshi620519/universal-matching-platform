@@ -2650,3 +2650,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added a dedicated purchaser-facing Terminology step and Review summary on the same branch (7c22189c).
 - Detected a concurrent-update conflict while updating quickLaunchSteps (409). Did not force overwrite; latest repository content must be re-read before retrying that isolated change.
 - EXACT NEXT ACTION: re-fetch the latest apps/admin/src/quick-launch-workflow.ts, verify whether Terminology step was added by concurrent work, then apply only the missing step update. Afterward add immutable snapshot summary support and tests, recording each coherent checkpoint.
+
+
+## Configuration Engine — Terminology workflow continuation
+- Re-read latest DEVELOPMENT_STATUS.md and the exact next action before continuing.
+- Re-fetched the conflicting workflow file instead of forcing an overwrite. On feature/config-terminology, terminology draft metadata was already present; only the missing quickLaunchSteps entry was added (013f224a).
+- Added immutable snapshot summary projection for configured terminology, preserving absence for older snapshots without terminology metadata (eb80b62c).
+- No mobile work was resumed and no Feature Visibility implementation was duplicated.
+- EXACT NEXT ACTION: inspect the latest feature/config-terminology branch for UI integration consistency (main.tsx step numbering/step count and Published/History summary rendering), then add focused tests for terminology snapshot summaries. Record results before moving to another domain.
