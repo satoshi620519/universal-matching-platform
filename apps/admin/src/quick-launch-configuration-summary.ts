@@ -2,6 +2,7 @@ import type { QuickLaunchPublishedRecord } from './quick-launch-history';
 
 type SnapshotLike = {
   applicationName?: unknown;
+  profileSchema?: { fields?: unknown[] };
   primaryColor?: unknown;
   localization?: { defaultLocale?: unknown; supportedLocales?: unknown; defaultTimezone?: unknown; countryLocales?: unknown };
   brandingTheme?: {
