@@ -29,6 +29,9 @@ export interface QuickLaunchConfigurationSummary {
   supportedLocales?: readonly string[];
   defaultTimezone?: string;
   countryLocales?: Readonly<Record<string,string>>;
+  profileFieldCount?: number;
+  requiredProfileFieldCount?: number;
+  profileFieldKeys?: readonly string[];
 }
 
 export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRecord): QuickLaunchConfigurationSummary {
@@ -46,6 +49,9 @@ export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRe
     defaultLocale: typeof snapshot.localization?.defaultLocale === 'string' ? snapshot.localization.defaultLocale : undefined,
     supportedLocales: Array.isArray(snapshot.localization?.supportedLocales) && snapshot.localization.supportedLocales.every((value): value is string => typeof value === 'string') ? snapshot.localization.supportedLocales : undefined,
     defaultTimezone: typeof snapshot.localization?.defaultTimezone === 'string' ? snapshot.localization.defaultTimezone : undefined,
+    profileFieldCount: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.length : undefined,
+    requiredProfileFieldCount: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.filter(field => field && typeof field === 'object' && (field as { required?: unknown }).required === true).length : undefined,
+    profileFieldKeys: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.map(field => field && typeof field === 'object' && typeof (field as { key?: unknown }).key === 'string' ? (field as { key: string }).key : undefined).filter((key): key is string => key !== undefined) : undefined,
     countryLocales: snapshot.localization?.countryLocales && typeof snapshot.localization.countryLocales === 'object' && !Array.isArray(snapshot.localization.countryLocales) ? Object.fromEntries(Object.entries(snapshot.localization.countryLocales as Record<string, unknown>).filter((entry): entry is [string,string] => typeof entry[1] === 'string')) : undefined,
   };
 }
