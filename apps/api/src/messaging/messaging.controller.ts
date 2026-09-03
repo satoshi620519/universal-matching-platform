@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Get, Headers, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Headers, HttpStatus, Optional, Param, Post } from '@nestjs/common';
 import { blocksCapability } from '@universal/domain';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { PrismaConversationRepository } from './prisma-conversation.repository.js';
@@ -10,13 +10,12 @@ import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-re
 
 @Controller('conversations')
 export class MessagingController {
-  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, private readonly safety: EffectiveSafetyRestrictionService) {}
+  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly safety?: EffectiveSafetyRestrictionService) {}
 
   @Post()
   async createConversation(@Body() body: { participantAccountIds?: string[] }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'conversation-create' });
-    const restriction = await this.safety.resolveForAccount(principal.accountId, 'communication');
-    if (blocksCapability(restriction, 'communication')) throw new ForbiddenException('account is restricted from communication');
+    await this.assertCommunicationAllowed(principal.accountId);
     const participantAccountIds = [...(body.participantAccountIds ?? []), principal.accountId];
     return this.conversations.create(participantAccountIds);
   }
@@ -24,8 +23,7 @@ export class MessagingController {
   @Post('from-mutual-match')
   async createConversationFromMutualMatch(@Body() body: { targetAccountId?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'conversation-mutual-match' });
-    const restriction = await this.safety.resolveForAccount(principal.accountId, 'communication');
-    if (blocksCapability(restriction, 'communication')) throw new ForbiddenException('account is restricted from communication');
+    await this.assertCommunicationAllowed(principal.accountId);
     const targetAccountId = body.targetAccountId?.trim() ?? '';
     if (!targetAccountId || !(await this.matches.isMutualMatch(principal.accountId, targetAccountId))) return { statusCode: HttpStatus.NOT_FOUND };
     return this.conversations.createOrFindDirect(principal.accountId, targetAccountId);
@@ -42,8 +40,7 @@ export class MessagingController {
   @Post(':conversationId/messages')
   async createMessage(@Param('conversationId') conversationId: string, @Body() body: { body?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'message-create' });
-    const restriction = await this.safety.resolveForAccount(principal.accountId, 'communication');
-    if (blocksCapability(restriction, 'communication')) throw new ForbiddenException('account is restricted from communication');
+    await this.assertCommunicationAllowed(principal.accountId);
     const created = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
     if (!created) return { statusCode: HttpStatus.NOT_FOUND };
     await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
@@ -62,5 +59,11 @@ export class MessagingController {
     const updated = await this.notifications.markReadForAccount(notificationId, principal.accountId);
     if (!updated) return { statusCode: HttpStatus.NOT_FOUND };
     return { updated: true };
+  }
+
+  private async assertCommunicationAllowed(accountId: string): Promise<void> {
+    if (!this.safety) return;
+    const restriction = await this.safety.resolveForAccount(accountId, 'communication');
+    if (blocksCapability(restriction, 'communication')) throw new ForbiddenException('account is restricted from communication');
   }
 }
