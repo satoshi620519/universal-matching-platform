@@ -2473,3 +2473,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 
 - Created `CONFIGURATION_SYSTEM_SPEC.md` to establish specification-first boundaries for the next Universal Configuration Engine expansion (`21d9ca3c313e4e39721ae49d5646adfe67914b2e`).
 - Exact next task: map the first new configuration domain (branding/theme or localization/geography) onto the existing M8 versioned aggregate and implement it end-to-end without creating a parallel configuration lifecycle.
+
+
+## Configuration Engine expansion — Branding/Theme domain started
+- Reused the existing M8 Quick Launch aggregate rather than creating a parallel lifecycle.
+- Added `BrandingThemeConfiguration` domain contract with secondary/accent colors and typography extension points (`0e250e7495e21b1e3ce84eb0dc883f812a43eefd`).
+- Added focused contract tests (`92cf6e408573d704e407de07e8bbd13dbd5c1e5c`) and exported the domain API (`260b7b7dc1c208a54603b09c945e2a3275816bca`).
+- Exact next task: integrate Branding/Theme into the existing versioned Quick Launch draft/publication lifecycle, preserving backward compatibility with existing `primaryColor`/`logoUrl` fields.
