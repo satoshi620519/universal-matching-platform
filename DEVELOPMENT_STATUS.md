@@ -2416,3 +2416,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: 90183e5e95bf8a6eccdc10f00d04995de6a7855e, d6ac3295015b7d4c765b1b1f32502944ae79f06d, fde6160a88231e8c47776f77a82d5badffa1ff1a, e79682f155f5c3b970297db9196ea49bcf68443f.
 - Validation status: PENDING CI.
 - Resume point if interrupted: inspect CI for latest fix commits. If these four groups clear, continue from the next exact test diagnostic only; do not revisit passing migration/typecheck/lint gates.
+
+
+## Checkpoint 2026-09-03 — TEST GATE 288 PASS / 6 FAIL: ROOT CONTRACT FIXES APPLIED
+- CI 1421/1422 confirmed Migration gates, Typecheck, and Lint PASS; Test failed with 288 passed, 6 failed.
+- Diagnostics showed the two Prisma migration integration groups and filesystem migration path share one root cause: PrismaSqlMigrationClient.query returned a bare array for SELECT, while PostgresMigrationExecutor's SqlMigrationQueryClient contract consumes { rows }. Fixed the adapter once at the production boundary instead of repeating test-specific casts/mocks.
+- Conversation no-winner race test still invoked conversation.id before throwing its intended unique conflict; completed that mock with a minimal id-bearing result.
+- Migration cleanup still failed because the full current schema contains many account FK dependents beyond authentication tables; test isolation now drops accounts with CASCADE.
+- Fix commits: ac5a7c5117a1fba7107360d277b118e55fcd451d, acfbb87dc13f2c7106a33b47cf8d4785ea8a04bc, 78f892969e352dc102152805c4187c14c788fc0d.
+- Validation status: PENDING CI.
+- Resume point if interrupted: inspect newest CI for these fixes. If Test passes, continue to Matching concurrency integration/gate then Build. If not, address only exact remaining diagnostics and do not revisit already-passed gates.
