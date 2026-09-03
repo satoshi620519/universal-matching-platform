@@ -45,7 +45,7 @@ describe.skipIf(!DATABASE_URL)(
 
         const source = new FilesystemMigrationArtifactSource(migrationDirectory);
         const executor = new PostgresMigrationExecutor(
-          new PrismaSqlMigrationClient(database),
+          new PrismaSqlMigrationClient(database) as any,
         );
 
         await expect(runMigrations(source, executor)).resolves.toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
