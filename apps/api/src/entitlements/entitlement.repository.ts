@@ -24,6 +24,7 @@ export interface CreateEntitlementInput {
 
 export abstract class EntitlementRepository {
   abstract create(input: CreateEntitlementInput): Promise<EntitlementRecord>;
+  abstract findById(id: string): Promise<EntitlementRecord | null>;
   abstract findByPaymentIntent(
     accountId: string,
     entitlementKey: string,
