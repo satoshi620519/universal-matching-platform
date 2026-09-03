@@ -2454,3 +2454,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 7501782661e620a068bd267c874718e7def3965a.
 - Validation status: PENDING CI.
 - Resume point: inspect CI for 7501782661e620a068bd267c874718e7def3965a. If Test passes, continue to Matching concurrency integration, concurrency gate verification, then Build. Do not revisit passed gates.
+
+
+## Checkpoint 2026-09-03 — TEST GATE STALE EXPECTATION UPDATED FOR MIGRATION 0017
+- CI 1431/1432: Migration verification, PostgreSQL migration integration, Typecheck, and Lint PASS; Test still had exactly 1 failure (293 passed / 1 failed).
+- Exact artifact diagnostic showed no runtime migration failure: expected applied versions ended at 16, while repository now contains 0017_add_direct_conversation_pair.sql and executor correctly applied version 17.
+- Updated both expected version lists in filesystem-postgres-migration.integration.test.ts to include 17. This is a stale test expectation, not a production defect.
+- Fix commit: c590570421b5ec1f92499d8476c04f1ef0505055.
+- Validation status: PENDING CI.
+- Resume point: inspect CI for this commit. If Test passes, proceed to Matching concurrency integration, concurrency gate verification, then Build. Do not revisit passed gates.
