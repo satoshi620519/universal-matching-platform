@@ -2275,3 +2275,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: b7cc05938be9ac61412173dbb1d24418133d9eaf.
 - Validation status: PENDING until the newly triggered concurrency gate completes. No claim is made about reciprocal transition correctness because assertions have not yet been reached in the failing run.
 - Exact next action: inspect the new independent concurrency gate and then reconcile its result with the main CI's first remaining typecheck failure without revisiting passed migration packaging work.
+
+
+## Checkpoint 2026-09-03 — CONCURRENCY ASSERTION BLOCKER FIXED + CONTINUITY RECORD
+- Continuity rule reaffirmed: DEVELOPMENT_STATUS.md is updated after each concrete investigation/fix so work can resume exactly from the latest checkpoint after interruption.
+- Independent Matching Concurrency Gate run 91 completed and its exact log was inspected.
+- Migration application now succeeds and the test suite reaches the reciprocal-like assertion, proving the previous Prisma { rows } adapter blocker is resolved.
+- New first failure: integration tests instantiate PrismaMatchTransitionRepository with only DatabaseService, but the repository now requires NotificationRealtimePublicationService and calls publishCreated on a mutual match.
+- Added an explicit no-op publishCreated dependency stub to all affected integration-test repository constructions. This preserves production behavior while making the integration harness satisfy the current constructor contract.
+- Fix commit: 457cf9caeffc0e6b7fc1e6c65382d1b7f223f931.
+- Validation status: PENDING for the newly triggered CI/concurrency runs.
+- Resume point if interrupted: FIRST inspect Matching Concurrency Gate triggered by 457cf9caeffc0e6b7fc1e6c65382d1b7f223f931. If it passes, mark reciprocal PostgreSQL evidence PASS; if it fails, fetch its exact log and fix only the earliest failure. In parallel, inspect Main CI run 1384+ for the earliest remaining typecheck gate result. Do not revisit already-passing migration artifact or PostgreSQL migration integration gates.
