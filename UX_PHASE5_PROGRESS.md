@@ -82,7 +82,9 @@
 - Added explicit section/list labels and accessible activation labels for unread notifications.
 - Loading, empty, error, read, and unread states are now structurally separated while preserving the existing backend contract.
 - Implementation commit: `c24e9f9fa9f4af173d49ce3ac96c30e847c6c66b`.
-- Next: verify primitive compatibility, then validate with repository CI before opening a PR.
+- Shared primitive compatibility verified; notification state tightened from `any[]` to an explicit notification item shape.
+- Compatibility/type-safety fix commit: `ca4adbef3c73b804947b31119ba5ee3a9f4bd7f4`.
+- Next: open PR and validate with repository CI before merge.
 
 ## Next continuation point
 
