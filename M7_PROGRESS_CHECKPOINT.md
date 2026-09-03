@@ -31,6 +31,7 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Fresh CI `33713276148` failed at Typecheck (not migration): two webhook-flow test fixtures omitted required `accountId`/`idempotencyKey`, and the verified transport imported a removed controller export. Both issues were fixed in `bbbf50e63ad263f426a69055abd4d924f8bf9a75` and `ce5a7e32d71f8ff59be63f362160eed656d7aad1`; await the resulting CI before further feature work.
 
 ## CI
+- CI `33714013547` reached Test and exposed that the ordinary test command uses a fresh PostgreSQL without the focused M7 tables. The integration test now provisions only its required focused schema (`payment_webhook_idempotency`, `entitlements`, and minimal `accounts`) inside setup, keeping migration-command integration separate. Fix: `e75a1516b3c9e7b6477dd3e9da85a4bb946384ee`; await fresh CI.
 - CI `33713820387` exposed a real PostgreSQL integration fixture gap: the focused M7 migration setup does not create `accounts`, while entitlements retain an FK to it. Fixed by creating only the minimal `accounts(id UUID PRIMARY KEY)` FK fixture inside the integration test (`eb6c4f62d8caa0033b3eb824d0c8dd39bd48c5a1`); await fresh CI.
 
 ## Newly completed
