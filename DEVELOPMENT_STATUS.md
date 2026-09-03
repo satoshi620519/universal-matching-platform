@@ -2827,3 +2827,4 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added a dedicated Legal & Support Quick Launch step and shifted downstream step indices to preserve one UI section per workflow step.
 - Added review display plus summary projection and legacy snapshot compatibility tests.
 - EXACT NEXT ACTION: inspect branch diff for accidental scope expansion, then open PR and use full GitHub CI as the validation gate; fix only evidence-backed failures.
+- Diff review caught an implementation regression before PR: the workflow array contained Legal & Support but the corresponding UI block had not been inserted because the step-index shift changed the insertion marker. Fixed before opening the PR; this confirms each declared workflow step now has a dedicated rendered section.
