@@ -25,6 +25,13 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Recent commits: `962e31baa268c84ff02f849a9216467ded2bc6a3`, `1c9ecbd95e3e584900b0f9ff7d063895743b3b77`, `42ed0a02e001a18bf099b0aa3464289449aa8273`, `296f69696bba9c3a39da96b0be20627ca3f100be`, `a661affa4eb7977414d9da776df23936b268d52d`, `f04820b21e5a72780e89f6201e5641fecb0c47e2`, `3b82f48d87d0c1e5edcbf210d1e863293fd08c34`, `8782efee878954cfd476eb106e0f075048993cff`.
 
 ## CI
+- CI `33714389959` completed successfully after the final PostgreSQL fixture alignment: migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all passed.
+
+## Provider adapter progress
+- Stripe provider-specific adapter added behind the existing `PaymentProvider` contract; no SDK types leak into domain code (`a64addf92bbc8e02d4b647e7f9a7d2955b919d29`) with contract tests (`c14badbf6fb8a8f9eac3e08ed299796d5c0dee8e`).
+- Stripe signed webhook transport added behind `VerifiedPaymentWebhookTransport`; verifies signature before projecting provider event + signed metadata into neutral context (`49ab6efc3292c6e7f2e3ac7f082c8c56b566fca9`) with tamper/context rejection tests (`5cea0034c7f11e8ba1f74457f2e595880c0e4f85`).
+
+## CI
 - Fresh CI `33713568044` completed successfully after the contract fixes: migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all passed.
 - CI `33711702877` for persistent webhook idempotency commit `962e31baa268c84ff02f849a9216467ded2bc6a3`: completed successfully; baseline setup, migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all succeeded.
 - Matching Concurrency Gate `33711702842`: completed successfully; isolated PostgreSQL concurrency evidence, attestation, and evidence upload succeeded.
@@ -39,4 +46,4 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Explicit entitlement lookup and revocation by payment-intent linkage; unrelated entitlements are not guessed or revoked.
 - Revocation isolation test covering multiple payment intents.
 - Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Next exact task
-Inspect CI for the new real-PostgreSQL webhook integration test. If green, move to provider-specific production adapters while preserving the existing provider-neutral contracts; do not replace completed local/test adapters.
+Inspect fresh CI for the Stripe adapter commits. If green, add production composition/configuration for explicit provider selection and secret injection without replacing local/test adapters; then add adapter failure-mode tests for malformed provider responses.
