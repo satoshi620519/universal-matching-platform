@@ -2454,3 +2454,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 7501782661e620a068bd267c874718e7def3965a.
 - Validation status: PENDING CI.
 - Resume point: inspect CI for 7501782661e620a068bd267c874718e7def3965a. If Test passes, continue to Matching concurrency integration, concurrency gate verification, then Build. Do not revisit passed gates.
+
+
+## Checkpoint 2026-09-03 — M7 FORMALLY COMPLETED; M8 STARTED
+- CI `33716775963` (head `14224497561b04abe6b87ecc60db7cd037dbe114`) completed SUCCESS. The baseline job passed after the final entitlement authorization test-double fix.
+- M7 completion gate is now satisfied: duplicate webhook safety, domain projection secret boundary, entitlement grant/revocation behavior, verification failure states, and authoritative entitlement authorization integration are implemented and covered by the successful CI baseline.
+- M7 is formally complete. No M7 implementation should be repeated unless a later concrete regression is discovered.
+- M8 is the active milestone: Purchaser administration and Quick Launch.
+- Initial M8 repository inspection confirms `apps/admin` exists only as a TypeScript baseline; no commercial administration/configuration model has been implemented there yet.
+- Next exact task: establish the smallest testable M8 configuration domain (branding, geography/category/feature/onboarding controls plus immutable publication workflow) before adding presentation UI.
