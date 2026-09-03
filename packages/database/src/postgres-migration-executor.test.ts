@@ -48,6 +48,19 @@ describe('PostgresMigrationExecutor', () => {
     expect(rootQuery).not.toHaveBeenCalled();
   });
 
+  it('preserves semicolons inside PostgreSQL function bodies instead of naively splitting SQL', async () => {
+    const txQuery = vi.fn(queryStub());
+    const client: SqlMigrationClient = {
+      query: vi.fn(queryStub()) as SqlMigrationQueryClient['query'],
+      transaction: async <T>(operation: (tx: SqlMigrationQueryClient) => Promise<T>) =>
+        operation({ query: txQuery as SqlMigrationQueryClient['query'] }),
+    };
+    const sql = "CREATE FUNCTION demo() RETURNS void AS $ BEGIN PERFORM 1; PERFORM 2; END; $ LANGUAGE plpgsql;";
+    await new PostgresMigrationExecutor(client).apply({ version: 6, filename: '0006_demo.sql', sql });
+    expect(txQuery).toHaveBeenNthCalledWith(1, sql);
+    expect(txQuery).toHaveBeenLastCalledWith('INSERT INTO schema_migrations (version) VALUES ($1)', [6]);
+  });
+
   it('applies SQL and records the version through the transaction-scoped client', async () => {
     const events: string[] = [];
     const rootQuery = vi.fn(queryStub());
