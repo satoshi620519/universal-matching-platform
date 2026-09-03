@@ -29,5 +29,8 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Matching Concurrency Gate `33711702842`: completed successfully; isolated PostgreSQL concurrency evidence, attestation, and evidence upload succeeded.
 - The entitlement commits added after `33711702877` require fresh CI verification; no green result is inferred until that execution is observed.
 
-## Newly completed\n- Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Next exact task
-Run fresh CI for the entitlement slice and inspect failures before making further changes. If green, connect `payment.succeeded` to entitlement grant through an explicit payment-intent lookup boundary (so webhook events do not trust provider payloads for account identity), then add the minimum integration tests for duplicate webhook delivery and entitlement grant/revocation. Do not treat payment failure/cancellation as revocation of an unrelated active entitlement without explicit intent linkage.
+## Newly completed
+- Explicit entitlement lookup and revocation by payment-intent linkage; unrelated entitlements are not guessed or revoked.
+- Revocation isolation test covering multiple payment intents.
+- Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Next exact task
+Run fresh CI for all accumulated M7 changes and inspect failures before further implementation. If green, add the minimum real-PostgreSQL integration coverage for payment-intent-linked revocation and webhook idempotency, then move to provider-specific production adapters without replacing the provider-neutral contracts.
