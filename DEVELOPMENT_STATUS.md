@@ -2579,3 +2579,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Published and History UI now shows compact Profile field counts from immutable snapshots without introducing profile-value persistence (`23cf8bbe8f2d3906520851691dbe5362f5b6124e`).
 - Profile Schema domain is checkpoint-complete through ownership review, contract, validation, immutable lifecycle, purchaser UI, Review & Publish and snapshot-derived Published/History summaries.
 - Exact next task: begin Feature Visibility Configuration by inspecting existing feature flags/capabilities and entitlement ownership, then define a versioned purchaser-facing visibility contract without duplicating runtime authorization.
+
+
+## Configuration Engine — Feature Visibility domain started + CI regression discovered
+- Followed the recorded next boundary: inspected existing role/account ownership and searched for feature flag/capability/entitlement implementations before creating configuration. No existing entitlement/capability store was found, while AdministrativeRoleAssignment is clearly a runtime authorization concern.
+- Defined FeatureVisibilityConfiguration as a configuration-level visibility contract only (`03a3ce0e27703aae35b7105d4f18f780b616569d`), with stable unique keys and explicit enabled state; unknown keys default visible for backward-compatible purchaser upgrades.
+- Added boundary tests (`15746bf3d8f085791839e8de5e2e15842882427c`) and exported the contract (`db401ea454210d49025bcb0a0ad59ac3195d662d`). Runtime authorization is explicitly excluded.
+- Important CI correction: inspected concrete CI run `33723831628` for Profile Schema summary commit `d16dcd1308594847eeb8c3ec46b7fdf73fd21f68`; it FAILED at Admin Typecheck. Logs identify `SnapshotLike` missing `profileSchema` and implicit-any callbacks in quick-launch-configuration-summary.ts. Do not treat that earlier Profile Schema summary checkpoint as green.
+- Applied focused type correction by adding optional profileSchema snapshot shape (`c71f0fcbee91c581ccbd1e4790bebd7821f57100`); follow-up CI must verify this repair before advancing UI work.
+- Exact next task: inspect CI for the type-fix commit when available. If green, integrate FeatureVisibilityConfiguration into QuickLaunch lifecycle; if failing, fix only the concrete reported issue first. Do not implement feature authorization or duplicate AdministrativeRoleAssignment.
