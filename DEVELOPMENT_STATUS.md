@@ -2676,3 +2676,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - This chat environment currently has repository metadata access but no connected execution workspace capable of running pnpm/turbo locally; diagnostics therefore remain unverified rather than fabricated.
 - Terminology code checkpoint remains complete pending concrete typecheck/test evidence.
 - EXACT NEXT ACTION: when an execution-capable environment is available, run pnpm --filter admin typecheck and pnpm --filter admin test (or equivalent repository scripts), repair only concrete diagnostics, then checkpoint Terminology as verified. Meanwhile inspect roadmap for the next domain only for planning; do not mark Terminology CI green.
+
+
+## Configuration Engine — Next domain planning and Matching Categories start
+- Re-read the latest status and roadmap before continuing. Terminology remains code-complete but diagnostics-unverified; it is not falsely marked CI-green.
+- Searched repository evidence for existing matching-category, matching-rule, onboarding-flow, and legal/support-link configuration before creating new work. No equivalent matching-category configuration domain was found.
+- Started the next roadmap-listed Configuration Engine domain, Matching Categories, on branch feature/config-matching-categories.
+- Added a stable purchaser-configurable category model with normalization, duplicate/blank rejection, enabled state, focused tests, and explicit domain boundaries (9a5b225c, 0b85dcc1, fef0f2dc).
+- Categories are intentionally separated from matching algorithms/rules so a buyer can change contexts without changing scoring logic.
+- EXACT NEXT ACTION: inspect the latest Quick Launch lifecycle contracts before integrating categories; add only missing optional metadata, then purchaser UI and immutable snapshot summary. Keep Terminology diagnostics as a separate open verification item.
