@@ -25,6 +25,12 @@ describe('Quick Launch configuration', () => {
     expect(Object.isFrozen(published.profileSchema?.fields)).toBe(true);
   });
 
+  it('publishes feature visibility as immutable configuration without authorization ownership', () => {
+    const published = publishQuickLaunchConfiguration({ ...draft, featureVisibility: { features: [{ key: 'matching', enabled: true }, { key: 'verification', enabled: false }] } }, 3, '2026-09-03T00:00:00.000Z');
+    expect(published.featureVisibility?.features).toEqual([{ key: 'matching', enabled: true }, { key: 'verification', enabled: false }]);
+    expect(Object.isFrozen(published.featureVisibility?.features)).toBe(true);
+  });
+
   it('rejects incomplete or ambiguous launch settings', () => {
     expect(() => validateQuickLaunchDraft({ ...draft, applicationName: ' ' })).toThrow('applicationName');
     expect(() => validateQuickLaunchDraft({ ...draft, supportedCountries: [] })).toThrow('country');
