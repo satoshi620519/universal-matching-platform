@@ -14,7 +14,7 @@
 - Primitive export contract test added.
 - PR #7 merged into `main` as merge commit `4279c30d339e9b2083fd25528dec9bd3ce3fd798`.
 - PR #7 CI run `33737131703` (run #1961) completed successfully across typecheck, lint, tests, matching concurrency, concurrency gate, and build.
-- Phase 5 collection primitives implemented on `feature/ux-accessible-collection-primitives`: `Card`, `List`, and keyboard-accessible `ListRow`.
+- Phase 5 collection primitives implemented: `Card`, `List`, and keyboard-accessible `ListRow`.
 - Collection primitive styling added using semantic tokens, including hover and disabled states without changing interaction semantics.
 - Collection primitive export contract test extended to cover `Card`, `List`, and `ListRow`.
 - PR #8 merged into `main` as merge commit `b0fba507ed1c03ed84bba3edd21cc4c5fea17b64`.
@@ -22,24 +22,24 @@
 - Phase 5 Dialog and Drawer primitives implemented with accessible naming/description, modal semantics, Escape handling, focus entry/restoration, Tab containment, busy-state close protection, responsive behavior, and reduced-motion support.
 - PR #9 merged into `main` as merge commit `5fcf66ba0c064791b0dd234877eb2a5f4728d400`.
 - PR #9 CI run `33738057120` (run #1982) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
-- Phase 5 navigation primitives started on `feature/ux-navigation-primitives` from merge commit `5fcf66ba0c064791b0dd234877eb2a5f4728d400`.
 - Responsive `HeaderNavigation` and mobile `BottomNavigation` primitives added with semantic active-state, disabled-state, accessible navigation labels, safe-area padding, and keyboard-focus-compatible links.
 - Navigation primitive export contract tests added.
+- PR #10 merged into `main` as merge commit `5f4b85e6680ba6c66e6bd1e8adcd0179f2ce7e1b`.
+- PR #10 CI run `33738648734` (run #1991) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 
 ## Current branch
 
-`feature/ux-navigation-primitives`
+`main` (after PR #10 merge)
 
 ## Latest commits
 
-- `e4887f8e12dc2abc7954c8b6f63418ada07128cb` — add navigation primitive contract test.
-- `9dbbf49c5d0c7ee2c877e450900b4369456dac43` — cover navigation exports in shared primitive test.
-- `e406809526060007383a743c3ecfa49bf27dbf5a` — style responsive header and bottom navigation.
-- `dd5a30e3208cf6fb2bca5262baa72daf5f8d54b5` — add responsive navigation primitives.
+- `5f4b85e6680ba6c66e6bd1e8adcd0179f2ce7e1b` — merge PR #10, accessible navigation primitives.
+- `41a311821838ab48867650dc1ba86977209fb8b1` — PR #10 navigation implementation head.
+- `5fcf66ba0c064791b0dd234877eb2a5f4728d400` — merge PR #9, dialog/drawer primitives.
 
 ## Next continuation point
 
-Run repository CI for `feature/ux-navigation-primitives`. Merge only after all required checks are green, then record the exact merge commit and CI run here. After navigation is integrated, continue Phase 5 with loading/empty states, then systematic migration of existing screens. Preserve semantic navigation meaning, keyboard accessibility, visible focus, mobile safe-area behavior, reduced-motion semantics, and buyer customization boundaries. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or already-merged primitive layers.
+Continue Phase 5 with loading and empty-state primitives. Before implementation, inspect the current `main` component files, tests, styles, and this progress record to avoid overlap. Define reusable loading/empty/error presentation that preserves accessible status semantics, reduced-motion behavior, responsive layout, and buyer customization boundaries. After implementation, run repository CI and merge only after all required checks are green. Then begin systematic migration of existing screens. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or already-merged primitive layers.
 
 ## Interruption-safe rule
 
