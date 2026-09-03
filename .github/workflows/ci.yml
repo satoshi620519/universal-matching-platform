@@ -33,6 +33,8 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - name: Verify packaged database migrations
         run: pnpm --filter @universal/database verify:migrations-build
+      - name: PostgreSQL migration command integration
+        run: DATABASE_URL="$DATABASE_URL" pnpm --filter @universal/database migrate
       - name: Typecheck
         run: set -o pipefail; pnpm typecheck 2>&1 | tee typecheck.log
       - name: Upload typecheck diagnostics
