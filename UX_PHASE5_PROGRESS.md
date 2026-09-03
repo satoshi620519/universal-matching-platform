@@ -41,10 +41,19 @@
 - `58b81c66435534bbe09c74f1a06ff4a94509c0ba` — PR #11 implementation head.
 - `5f4b85e6680ba6c66e6bd1e8adcd0179f2ce7e1b` — merge PR #10, accessible navigation primitives.
 
+## Screen migration inspection checkpoint
+
+- Re-read the Phase 5 progress record before continuing and confirmed that PRs #6–#11 are already integrated; no primitive layer was reimplemented.
+- Inspected the current Web source structure: `apps/web/src/main.tsx` remains the active screen composition point, with `styles.css` as the main screen stylesheet and `components/AccessiblePrimitives.tsx`, `NavigationPrimitives.tsx`, and the loading/empty/error primitives available for reuse.
+- Confirmed the current Web UI is still largely composed directly in `main.tsx`: `Home`, `AccessForm`, `VerifyEmail`, `Dashboard`, `NotificationInbox`, and `Discovery` are present as screen-level components rather than separate route files.
+- Confirmed the highest-value smallest migration slice is the shared authenticated/access shell plus the sign-in/register/verification journey, because these screens repeat navigation, form controls, loading/error feedback, and responsive layout patterns and can adopt the existing primitives without changing backend contracts.
+- Identified the existing direct patterns that should be migrated rather than duplicated: raw `<nav>`/brand markup, raw form labels/inputs, raw primary buttons, and ad-hoc `role="status"` messages.
+- The migration must preserve existing authentication behavior, session storage, Terms/Privacy acknowledgement, verification flow, keyboard access, responsive layout, reduced-motion behavior, and buyer-customizable visual semantics.
+
 ## Next continuation point
 
-Begin systematic migration of existing screens, prioritizing the shared application shell and core matching journeys. First inspect the current `apps/web` screens/routes/components and identify the smallest high-value migration slice. Reuse the already-merged design tokens and accessible primitives instead of creating parallel UI patterns. Preserve accessible status semantics, responsive behavior, reduced-motion semantics, keyboard navigation, safety affordances, and buyer customization boundaries. After each coherent migration slice, add focused tests, run repository CI, merge only when all required checks are green, and record the exact commit SHA, CI run, merge commit, and next continuation point here. Do not reimplement Quick Launch domains, PR #6, or already-merged primitive layers.
+Create a dedicated migration branch from current `main` and migrate the access/auth shell first. Reuse `HeaderNavigation`/`BottomNavigation` where the screen semantics fit, and reuse `Field`, `TextInput`, `Button`, `StatusMessage`, and the existing loading/empty/error primitives instead of introducing parallel controls. Keep the backend/API behavior unchanged. Add focused component/export or screen-level tests for the migrated states, then run the full repository CI and merge only when all required checks are green. After that, migrate the authenticated Dashboard shell and its Notification/Discovery/Conversation sections in separate coherent slices. Do not reimplement Quick Launch domains, PR #6, or any already-merged primitive layer.
 
 ## Interruption-safe rule
 
-Before starting new implementation, re-read this file and inspect the current branch/files. Only continue from the latest listed commit/state; do not repeat completed token or primitive work. Keep this file updated with each integrated milestone, exact commit SHA, CI run, and the next continuation point.
+Before starting new implementation, re-read this file and inspect the current branch/files. Only continue from the latest listed commit/state; do not repeat completed token or primitive work. Keep this file updated with each integrated milestone, exact commit SHA, CI run, merge commit, and next continuation point.
