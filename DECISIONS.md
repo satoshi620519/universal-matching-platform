@@ -115,3 +115,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 59. CI repair evidence must be tied to the exact declaration actually compiled. A patch that targets a similarly named or assumed interface is not considered a repair until the affected compiled declaration is inspected and a subsequent CI run confirms it. Feature Visibility may share QuickLaunch immutable lifecycle but remains metadata-only and cannot grant authorization.
 
 60. Quick Launch admin input types must evolve in lockstep with published configuration extensions. Purchaser UI may not introduce ad-hoc untyped configuration properties; new schema/visibility metadata must be explicitly represented at the workflow input boundary so CI can verify the aggregate end-to-end.
+
+60. Purchaser Feature Visibility UI writes only FeatureVisibilityConfiguration metadata. For compatibility, the existing enabledFeatures list may be synchronized as a product capability list, but neither UI state is authorization and runtime role/safety enforcement remains authoritative.
