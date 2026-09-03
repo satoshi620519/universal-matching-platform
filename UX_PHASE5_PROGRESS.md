@@ -98,7 +98,10 @@
 - Implementation commit: `b83f2ec9d46e0a1b4993e309101911b2107b4967`.
 - Shared primitive compatibility reviewed against the actual component APIs. No Discovery UI rewrite was needed; `Button`, `Field`, `TextInput`, `TextArea`, `Card`, and `StatusMessage` usage matches existing contracts.
 - Review checkpoint commit: `08cd418c621112392478d699d6154b5fc61a604b`.
-- Next: open PR and validate with repository CI before merge.
+- PR #15 CI run `33742602217` failed at web typecheck. Root cause was two explicit type-contract gaps introduced by the Discovery refactor: `unknown` field state did not match the profile API value union, and the match-decision API wrapper lacked its `{ mutual: boolean }` response type.
+- Fixed only those contracts: Discovery field state now uses the existing API value union and `decideMatch` now has an explicit response type. No behavioral rewrite was made.
+- Fix commits: `68583d2c7ad25b061199ba90ba28ba0674f4e47e`, `0e42b498383315d4903183be2d45f8ed69e8e6b3`.
+- Next: rerun/trigger repository CI on the corrected PR #15 head, then merge only after all required checks pass.
 
 ## Next continuation point
 
