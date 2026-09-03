@@ -2702,3 +2702,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added both Published and History rendering for total/enabled category counts and stable category keys (d41b72f3).
 - Matching Categories is now code-complete through model, normalization, purchaser controls, review, immutable snapshot summary, legacy compatibility, focused summary tests, and publication/history rendering.
 - EXACT NEXT ACTION: obtain concrete typecheck/test diagnostics when an execution-capable environment is available; do not infer CI success. In parallel, inspect roadmap/repository evidence for the next uncompleted Configuration Engine domain before starting it, while keeping diagnostics as an explicit verification item.
+
+
+## Configuration Engine — Matching Rules domain started
+- Re-read the latest status and Phase 4 roadmap before continuing. Matching Categories remains code-complete with diagnostics explicitly unverified; no false CI-green claim was made.
+- Searched repository evidence for existing matching-rule, onboarding-flow, and legal/support-link configuration. No equivalent matching-rules domain was found.
+- Started the next roadmap-listed domain, Matching Rules, on branch feature/config-matching-rules.
+- Added a typed rule model with stable keys, target field, constrained operators, typed values, enabled state, optional non-negative weights, normalization, focused tests, and explicit domain boundaries (3925c17d, 901d0b8e, c908e305).
+- Rules remain configuration inputs only; matching engine interpretation and authorization remain separate responsibilities.
+- EXACT NEXT ACTION: inspect the latest Quick Launch lifecycle contract before integration, then add only missing optional matchingRules metadata, purchaser controls, review/publish immutable snapshot summary, and focused compatibility tests. Keep prior-domain diagnostics as explicit open verification items.
