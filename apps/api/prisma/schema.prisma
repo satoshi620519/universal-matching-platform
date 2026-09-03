@@ -8,326 +8,47 @@ datasource db {
 }
 
 model Account {
-  id                       String                   @id @default(uuid()) @db.Uuid
-  status                   String
-  createdAt                DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt                DateTime                 @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id String @id @default(uuid()) @db.Uuid
+  status String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
   authenticationIdentities AuthenticationIdentity[]
-  verificationRequests      VerificationRequest[]
-  safetyEnforcements        SafetyEnforcement[]
-  safetyReports             SafetyReport[]
-  authenticationSessions    AuthenticationSession[]
-  emailVerificationTokens   EmailVerificationToken[]
-  emailOutboxMessages       EmailOutboxMessage[]
-  roleAssignments           RoleAssignment[]
-  assignedRoleAssignments   RoleAssignment[] @relation("RoleAssignmentAssigner")
-  auditRecords              AuditRecord[]
-  profiles                  Profile[]
-  sentMatchInteractions     MatchInteraction[] @relation("MatchInteractionActor")
+  verificationRequests VerificationRequest[]
+  safetyEnforcements SafetyEnforcement[]
+  safetyReports SafetyReport[]
+  authenticationSessions AuthenticationSession[]
+  emailVerificationTokens EmailVerificationToken[]
+  emailOutboxMessages EmailOutboxMessage[]
+  roleAssignments RoleAssignment[]
+  assignedRoleAssignments RoleAssignment[] @relation("RoleAssignmentAssigner")
+  auditRecords AuditRecord[]
+  profiles Profile[]
+  sentMatchInteractions MatchInteraction[] @relation("MatchInteractionActor")
   receivedMatchInteractions MatchInteraction[] @relation("MatchInteractionTarget")
   conversationParticipants ConversationParticipant[]
   sentMessages Message[] @relation("MessageSender")
   notifications Notification[]
   @@map("accounts")
 }
-
-model AuthenticationIdentity {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  providerType String @map("provider_type")
-  providerSubject String @map("provider_subject")
-  status String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id])
-  passwordCredential PasswordCredential?
-  @@unique([providerType, providerSubject])
-  @@index([accountId])
-  @@map("authentication_identities")
-}
-
-model VerificationRequest {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  requestedLevel Int @map("requested_level")
-  workflowReference String @map("workflow_reference")
-  status String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
-  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id])
-  outcomes VerificationOutcome[]
-  @@index([accountId, status])
-  @@map("verification_requests")
-}
-
-model VerificationOutcome {
-  id String @id @default(uuid()) @db.Uuid
-  verificationRequestId String @map("verification_request_id") @db.Uuid
-  level Int
-  status String
-  decidedAt DateTime? @map("decided_at") @db.Timestamptz(6)
-  reasonCategory String? @map("reason_category")
-  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  verificationRequest VerificationRequest @relation(fields: [verificationRequestId], references: [id])
-  @@index([verificationRequestId])
-  @@map("verification_outcomes")
-}
-
-model SafetyEnforcement {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  restriction String
-  reasonCategory String @map("reason_category")
-  status String
-  effectiveAt DateTime @map("effective_at") @db.Timestamptz(6)
-  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
-  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id])
-  @@index([accountId, status, effectiveAt])
-  @@map("safety_enforcements")
-}
-
-model SafetyReport {
-  id String @id @default(uuid()) @db.Uuid
-  reporterId String @map("reporter_id") @db.Uuid
-  targetId String @map("target_id") @db.Uuid
-  targetType String @map("target_type")
-  reason String
-  status String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  reporter Account @relation(fields: [reporterId], references: [id], onDelete: Cascade)
-  moderationCase ModerationCase?
-  @@index([reporterId, createdAt])
-  @@index([status, createdAt])
-  @@map("safety_reports")
-}
-
-model ModerationCase {
-  id String @id @default(uuid()) @db.Uuid
-  reportId String @unique @map("report_id") @db.Uuid
-  status String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  report SafetyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
-  @@index([status, createdAt])
-  @@map("moderation_cases")
-}
-
-model PasswordCredential {
-  authenticationIdentityId String @id @map("authentication_identity_id") @db.Uuid
-  passwordHash String @map("password_hash")
-  status String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  authenticationIdentity AuthenticationIdentity @relation(fields: [authenticationIdentityId], references: [id], onDelete: Cascade)
-  @@map("password_credentials")
-}
-
-model AuthenticationSession {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  authenticationMethod String @map("authentication_method")
-  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
-  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
-  credentialHash String @unique @map("credential_hash")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  @@index([accountId, expiresAt])
-  @@index([expiresAt])
-  @@map("authentication_sessions")
-}
-
-model EmailVerificationToken {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  tokenHash String @unique @map("token_hash")
-  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
-  consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  @@index([accountId, expiresAt])
-  @@map("email_verification_tokens")
-}
-
-model EmailOutboxMessage {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  emailAddress String @map("email_address")
-  kind String
-  status String
-  attempts Int @default(0)
-  availableAt DateTime @default(now()) @map("available_at") @db.Timestamptz(6)
-  lockedAt DateTime? @map("locked_at") @db.Timestamptz(6)
-  deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(6)
-  failedAt DateTime? @map("failed_at") @db.Timestamptz(6)
-  lastError String? @map("last_error")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  @@index([status, availableAt])
-  @@index([status, failedAt])
-  @@index([accountId, createdAt])
-  @@map("email_outbox_messages")
-}
-
-model Role {
-  id String @id @default(uuid()) @map("role_id") @db.Uuid
-  key String @unique @map("role_key")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  assignments RoleAssignment[]
-  @@map("roles")
-}
-
-model RoleAssignment {
-  id String @id @default(uuid()) @map("role_assignment_id") @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  roleId String @map("role_id") @db.Uuid
-  effectiveAt DateTime @map("effective_at") @db.Timestamptz(6)
-  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
-  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
-  assignedByAccountId String? @map("assigned_by_account_id") @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id])
-  role Role @relation(fields: [roleId], references: [id])
-  assignedBy Account? @relation("RoleAssignmentAssigner", fields: [assignedByAccountId], references: [id])
-  @@index([accountId, effectiveAt])
-  @@index([roleId, effectiveAt])
-  @@map("role_assignments")
-}
-
-model AuditRecord {
-  id String @id @default(uuid()) @map("audit_record_id") @db.Uuid
-  actorId String @map("actor_account_id") @db.Uuid
-  area String
-  action String
-  targetId String? @map("target_id")
-  correlationId String? @map("correlation_id")
-  occurredAt DateTime @map("occurred_at") @db.Timestamptz(6)
-  actor Account @relation(fields: [actorId], references: [id])
-  @@index([actorId, occurredAt])
-  @@index([action, occurredAt])
-  @@map("audit_records")
-}
-
-model ConfigurationVersion {
-  id String @id @default(uuid()) @map("configuration_version_id") @db.Uuid
-  scope String
-  status String
-  versionNumber BigInt @map("version_number")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  publishedAt DateTime? @map("published_at") @db.Timestamptz(6)
-  supersededAt DateTime? @map("superseded_at") @db.Timestamptz(6)
-  values ConfigurationValue[]
-  @@unique([scope, versionNumber])
-  @@index([scope, status, createdAt])
-  @@map("configuration_versions")
-}
-
-model ConfigurationValue {
-  id String @id @default(uuid()) @map("configuration_value_id") @db.Uuid
-  configurationVersionId String @map("configuration_version_id") @db.Uuid
-  settingKey String @map("setting_key")
-  valueType String @map("value_type")
-  booleanValue Boolean? @map("boolean_value")
-  integerValue BigInt? @map("integer_value")
-  decimalValue Decimal? @map("decimal_value") @db.Decimal
-  textValue String? @map("text_value")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  version ConfigurationVersion @relation(fields: [configurationVersionId], references: [id], onDelete: Restrict)
-  @@unique([configurationVersionId, settingKey])
-  @@index([configurationVersionId, settingKey])
-  @@map("configuration_values")
-}
-
-model Category {
-  id String @id @default(uuid()) @db.Uuid
-  key String @unique
-  displayName String @map("display_name")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  profiles Profile[]
-  @@map("categories")
-}
-
-model Profile {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  categoryId String @map("category_id") @db.Uuid
-  fields Json @default("{}")
-  scopeKind String @map("scope_kind")
-  countryCode String? @map("country_code")
-  regionCode String? @map("region_code")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  @@unique([accountId])
-  @@index([accountId, categoryId])
-  @@index([scopeKind, countryCode, regionCode])
-  @@map("profiles")
-}
-
-model MatchInteraction {
-  id String @id @default(uuid()) @db.Uuid
-  actorAccountId String @map("actor_account_id") @db.Uuid
-  targetAccountId String @map("target_account_id") @db.Uuid
-  decision String
-  idempotencyKey String @map("idempotency_key")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  actor Account @relation("MatchInteractionActor", fields: [actorAccountId], references: [id], onDelete: Cascade)
-  target Account @relation("MatchInteractionTarget", fields: [targetAccountId], references: [id], onDelete: Cascade)
-  @@unique([actorAccountId, idempotencyKey])
-  @@unique([actorAccountId, targetAccountId])
-  @@index([targetAccountId, actorAccountId])
-  @@map("match_interactions")
-}
-
-model Conversation {
-  id String @id @default(uuid()) @map("conversation_id") @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  participants ConversationParticipant[]
-  messages Message[]
-  @@map("conversations")
-}
-
-model ConversationParticipant {
-  conversationId String @map("conversation_id") @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  joinedAt DateTime @default(now()) @map("joined_at") @db.Timestamptz(6)
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  @@id([conversationId, accountId])
-  @@index([accountId, joinedAt])
-  @@map("conversation_participants")
-}
-
-model Message {
-  id String @id @default(uuid()) @map("message_id") @db.Uuid
-  conversationId String @map("conversation_id") @db.Uuid
-  senderAccountId String @map("sender_account_id") @db.Uuid
-  body String
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender Account @relation("MessageSender", fields: [senderAccountId], references: [id], onDelete: Restrict)
-  @@index([conversationId, createdAt, id])
-  @@index([senderAccountId, createdAt])
-  @@map("messages")
-}
-
-model Notification {
-  id String @id @default(uuid()) @db.Uuid
-  accountId String @map("account_id") @db.Uuid
-  kind String
-  payload Json @default("{}")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  readAt DateTime? @map("read_at") @db.Timestamptz(6)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  @@index([accountId, createdAt, id])
-  @@map("notifications")
-}
+model AuthenticationIdentity { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid providerType String @map("provider_type") providerSubject String @map("provider_subject") status String createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id]) passwordCredential PasswordCredential? @@unique([providerType, providerSubject]) @@index([accountId]) @@map("authentication_identities") }
+model VerificationRequest { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid requestedLevel Int @map("requested_level") workflowReference String @map("workflow_reference") status String createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) completedAt DateTime? @map("completed_at") @db.Timestamptz(6) expiresAt DateTime? @map("expires_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id]) outcomes VerificationOutcome[] @@index([accountId, status]) @@map("verification_requests") }
+model VerificationOutcome { id String @id @default(uuid()) @db.Uuid verificationRequestId String @map("verification_request_id") @db.Uuid level Int status String decidedAt DateTime? @map("decided_at") @db.Timestamptz(6) reasonCategory String? @map("reason_category") expiresAt DateTime? @map("expires_at") @db.Timestamptz(6) createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) verificationRequest VerificationRequest @relation(fields: [verificationRequestId], references: [id]) @@index([verificationRequestId]) @@map("verification_outcomes") }
+model SafetyEnforcement { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid restriction String reasonCategory String @map("reason_category") status String effectiveAt DateTime @map("effective_at") @db.Timestamptz(6) expiresAt DateTime? @map("expires_at") @db.Timestamptz(6) revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6) createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id]) @@index([accountId, status, effectiveAt]) @@map("safety_enforcements") }
+model SafetyReport { id String @id @default(uuid()) @db.Uuid reporterId String @map("reporter_id") @db.Uuid targetId String @map("target_id") targetType String @map("target_type") reason String status String createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) reporter Account @relation(fields: [reporterId], references: [id], onDelete: Cascade) moderationCase ModerationCase? @@index([reporterId, createdAt]) @@index([status, createdAt]) @@map("safety_reports") }
+model ModerationCase { id String @id @default(uuid()) @db.Uuid reportId String @unique @map("report_id") @db.Uuid status String createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) report SafetyReport @relation(fields: [reportId], references: [id], onDelete: Cascade) @@index([status, createdAt]) @@map("moderation_cases") }
+model PasswordCredential { authenticationIdentityId String @id @map("authentication_identity_id") @db.Uuid passwordHash String @map("password_hash") status String createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) authenticationIdentity AuthenticationIdentity @relation(fields: [authenticationIdentityId], references: [id], onDelete: Cascade) @@map("password_credentials") }
+model AuthenticationSession { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid authenticationMethod String @map("authentication_method") expiresAt DateTime @map("expires_at") @db.Timestamptz(6) revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6) credentialHash String @unique @map("credential_hash") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) @@index([accountId, expiresAt]) @@index([expiresAt]) @@map("authentication_sessions") }
+model EmailVerificationToken { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid tokenHash String @unique @map("token_hash") expiresAt DateTime @map("expires_at") @db.Timestamptz(6) consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6) createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) @@index([accountId, expiresAt]) @@map("email_verification_tokens") }
+model EmailOutboxMessage { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid emailAddress String @map("email_address") kind String status String attempts Int @default(0) availableAt DateTime @default(now()) @map("available_at") @db.Timestamptz(6) lockedAt DateTime? @map("locked_at") @db.Timestamptz(6) deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(6) failedAt DateTime? @map("failed_at") @db.Timestamptz(6) lastError String? @map("last_error") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) @@index([status, availableAt]) @@index([status, failedAt]) @@index([accountId, createdAt]) @@map("email_outbox_messages") }
+model Role { id String @id @default(uuid()) @map("role_id") @db.Uuid key String @unique @map("role_key") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) assignments RoleAssignment[] @@map("roles") }
+model RoleAssignment { id String @id @default(uuid()) @map("role_assignment_id") @db.Uuid accountId String @map("account_id") @db.Uuid roleId String @map("role_id") @db.Uuid effectiveAt DateTime @map("effective_at") @db.Timestamptz(6) expiresAt DateTime? @map("expires_at") @db.Timestamptz(6) revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6) assignedByAccountId String? @map("assigned_by_account_id") @db.Uuid createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id]) role Role @relation(fields: [roleId], references: [id]) assignedBy Account? @relation("RoleAssignmentAssigner", fields: [assignedByAccountId], references: [id]) @@index([accountId, effectiveAt]) @@index([roleId, effectiveAt]) @@map("role_assignments") }
+model AuditRecord { id String @id @default(uuid()) @map("audit_record_id") @db.Uuid actorId String @map("actor_account_id") @db.Uuid area String action String targetId String? @map("target_id") correlationId String? @map("correlation_id") occurredAt DateTime @map("occurred_at") @db.Timestamptz(6) actor Account @relation(fields: [actorId], references: [id]) @@index([actorId, occurredAt]) @@index([action, occurredAt]) @@map("audit_records") }
+model ConfigurationVersion { id String @id @default(uuid()) @map("configuration_version_id") @db.Uuid scope String status String versionNumber BigInt @map("version_number") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) publishedAt DateTime? @map("published_at") @db.Timestamptz(6) supersededAt DateTime? @map("superseded_at") @db.Timestamptz(6) values ConfigurationValue[] @@unique([scope, versionNumber]) @@index([scope, status, createdAt]) @@map("configuration_versions") }
+model ConfigurationValue { id String @id @default(uuid()) @map("configuration_value_id") @db.Uuid configurationVersionId String @map("configuration_version_id") @db.Uuid settingKey String @map("setting_key") valueType String @map("value_type") booleanValue Boolean? @map("boolean_value") integerValue BigInt? @map("integer_value") decimalValue Decimal? @map("decimal_value") @db.Decimal textValue String? @map("text_value") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) version ConfigurationVersion @relation(fields: [configurationVersionId], references: [id], onDelete: Restrict) @@unique([configurationVersionId, settingKey]) @@index([configurationVersionId, settingKey]) @@map("configuration_values") }
+model Category { id String @id @default(uuid()) @db.Uuid key String @unique displayName String @map("display_name") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) profiles Profile[] @@map("categories") }
+model Profile { id String @id @default(uuid()) @db.Uuid accountId String @map("account_id") @db.Uuid categoryId String @map("category_id") @db.Uuid fields Json @default("{}") scopeKind String @map("scope_kind") countryCode String? @map("country_code") regionCode String? @map("region_code") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict) @@unique([accountId]) @@index([accountId, categoryId]) @@index([scopeKind, countryCode, regionCode]) @@map("profiles") }
+model MatchInteraction { id String @id @default(uuid()) @db.Uuid actorAccountId String @map("actor_account_id") @db.Uuid targetAccountId String @map("target_account_id") @db.Uuid decision String idempotencyKey String @map("idempotency_key") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) actor Account @relation("MatchInteractionActor", fields: [actorAccountId], references: [id], onDelete: Cascade) target Account @relation("MatchInteractionTarget", fields: [targetAccountId], references: [id], onDelete: Cascade) @@unique([actorAccountId, idempotencyKey]) @@unique([actorAccountId, targetAccountId]) @@index([targetAccountId, actorAccountId]) @@map("match_interactions") }
+model Conversation { id String @id @default(uuid()) @map("conversation_id") @db.Uuid createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) participants ConversationParticipant[] messages Message[] @@map("conversations") }
+model ConversationParticipant { conversationId String @map("conversation_id") @db.Uuid accountId String @map("account_id") @db.Uuid joinedAt DateTime @default(now()) @map("joined_at") @db.Timestamptz(6) conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) @@id([conversationId, accountId]) @@index([accountId, joinedAt]) @@map("conversation_participants") }
+model Message { id String @id @default(uuid()) @map("message_id") @db.Uuid conversationId String @map("conversation_id") @db.Uuid senderAccountId String @map("sender_account_id") @db.Uuid body String createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade) sender Account @relation("MessageSender", fields: [senderAccountId], references: [id], onDelete: Restrict) @@index([conversationId, createdAt, id]) @@index([senderAccountId, createdAt]) @@map("messages") }
+model Notification { id String @id @default(uuid()) @map("notification_id") @db.Uuid accountId String @map("account_id") @db.Uuid kind String payload Json @default("{}") createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6) readAt DateTime? @map("read_at") @db.Timestamptz(6) account Account @relation(fields: [accountId], references: [id], onDelete: Cascade) @@index([accountId, createdAt, id]) @@map("notifications") }
