@@ -25,8 +25,13 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Recent commits: `962e31baa268c84ff02f849a9216467ded2bc6a3`, `1c9ecbd95e3e584900b0f9ff7d063895743b3b77`, `42ed0a02e001a18bf099b0aa3464289449aa8273`, `296f69696bba9c3a39da96b0be20627ca3f100be`, `a661affa4eb7977414d9da776df23936b268d52d`, `f04820b21e5a72780e89f6201e5641fecb0c47e2`, `3b82f48d87d0c1e5edcbf210d1e863293fd08c34`, `8782efee878954cfd476eb106e0f075048993cff`.
 
 ## CI
+- CI `33714851556` completed successfully after Stripe webhook payload narrowing: baseline checks passed, including migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build.
 - CI `33714714076` failed at Typecheck in the new Stripe webhook adapter because nested `data.object` remained inferred as `{}` after narrowing. Fixed with explicit record narrowing before field projection (`fa0085060f8b7874d126ebd95a98ab2da3c17627`); await fresh CI before composition work.
 - CI `33714389959` completed successfully after the final PostgreSQL fixture alignment: migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all passed.
+
+## Provider composition progress
+- Explicit provider selection config added: `PAYMENT_PROVIDER=local|stripe`; Stripe mode fails closed unless both `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` are present (`3c63c21bcc8f780bdd9c7be576baca4e9734d7d7`) with configuration failure tests (`62d7a6ce2a2052257db471e0c774908b2f0520c5`).
+- Environment-backed Stripe webhook secret boundary added (`67b2878fda6f5045192f05cbc8dfeb57cfcc5d2e`).
 
 ## Provider adapter progress
 - Stripe provider-specific adapter added behind the existing `PaymentProvider` contract; no SDK types leak into domain code (`a64addf92bbc8e02d4b647e7f9a7d2955b919d29`) with contract tests (`c14badbf6fb8a8f9eac3e08ed299796d5c0dee8e`).
@@ -47,4 +52,4 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Explicit entitlement lookup and revocation by payment-intent linkage; unrelated entitlements are not guessed or revoked.
 - Revocation isolation test covering multiple payment intents.
 - Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Next exact task
-Inspect fresh CI for the Stripe adapter commits. If green, add production composition/configuration for explicit provider selection and secret injection without replacing local/test adapters; then add adapter failure-mode tests for malformed provider responses.
+Inspect fresh CI for provider selection/config commits. If green, wire explicit Nest composition so local remains default and Stripe is selected only by validated configuration; add HTTP client boundary and failure-mode tests without introducing a Stripe SDK dependency.
