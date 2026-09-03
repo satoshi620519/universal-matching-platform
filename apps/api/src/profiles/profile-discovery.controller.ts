@@ -64,7 +64,7 @@ export class ProfileDiscoveryController {
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
   }
 
-  private async schemaFor(categoryId: string): Promise<ProfileFieldSchema> {
+  private async schemaFor(categoryId?: string): Promise<ProfileFieldSchema> {
     const category = (await this.categories.list()).find(item => item.id === categoryId);
     if (!category) return DEFAULT_FIELD_SCHEMA;
     return this.schemas.schemaFor(category.key);
