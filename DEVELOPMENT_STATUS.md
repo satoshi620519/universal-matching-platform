@@ -2570,3 +2570,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added purchaser schema-only field editor to Quick Launch (`d83750fc5cfd48a734744a41ac1c6cc245fe65f9`): add/remove fields, stable key, label, type, visibility, required flag, and comma-delimited select options.
 - Editor explicitly configures definitions only and does not edit or persist actual user Profile.fields values; Review & Publish shows configured field count.
 - Exact next task: add snapshot-derived Profile Schema summary to Published/History, then checkpoint Profile Schema completion before moving to Feature Visibility.
+
+
+## Configuration Engine — Profile Schema Published/History completion
+- Continued from the exact recorded Profile Schema summary task; no field-editor, lifecycle, Localization or prior domain work was repeated.
+- Confirmed preceding aggregate CI run `33723017456` completed successfully for checkpoint commit `8c966bd82ca8ecd14d0269b1a4ed8beb3ac8f9d6` before continuing.
+- Extended existing snapshot-derived configuration summary with profile field count, required field count and stable field-key list (`d16dcd1308594847eeb8c3ec46b7fdf73fd21f68`).
+- Published and History UI now shows compact Profile field counts from immutable snapshots without introducing profile-value persistence (`23cf8bbe8f2d3906520851691dbe5362f5b6124e`).
+- Profile Schema domain is checkpoint-complete through ownership review, contract, validation, immutable lifecycle, purchaser UI, Review & Publish and snapshot-derived Published/History summaries.
+- Exact next task: begin Feature Visibility Configuration by inspecting existing feature flags/capabilities and entitlement ownership, then define a versioned purchaser-facing visibility contract without duplicating runtime authorization.
