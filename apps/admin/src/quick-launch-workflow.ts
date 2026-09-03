@@ -40,6 +40,7 @@ export const quickLaunchSteps = [
   'Regions',
   'Categories',
   'Features',
+  'Terminology',
   'Onboarding',
   'Review & Publish',
 ] as const;
