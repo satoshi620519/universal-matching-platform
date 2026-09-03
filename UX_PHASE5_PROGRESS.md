@@ -28,22 +28,22 @@
 - PR #10 CI run `33738648734` (run #1991) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - Loading, empty, and error state primitives implemented on `feature/ux-loading-empty-states` with accessible status/alert semantics, unique heading IDs, retry/action slots, semantic-token styling, and reduced-motion behavior.
 - Loading/empty/error state export contract test added.
+- PR #11 merged into `main` as merge commit `6ca33cb94afbcf6b9ecf261baeea582165be6935`.
+- PR #11 CI run `33739249281` (run #2000) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 
 ## Current branch
 
-`feature/ux-loading-empty-states`
+`main` (after PR #11 merge)
 
 ## Latest commits
 
-- `0b3d178d9f8b19ad1074e60c584fb82b638561f0` — cover loading, empty, and error state exports.
-- `43e578a1375b3261fd654d85537b5a7e82b46f38` — add semantic loading, empty, and error state styling.
-- `5ea80a2d9ead7550d494e5b7202e5652b5fc5764` — give async state headings unique IDs.
-- `cc2e0f0cd93378f404b6ebf7094b0903e91e2f02` — add loading, empty, and error state primitives.
-- `4d6a27afef1fc7e31d87470292638793109a0c85` — main progress update after PR #10 merge.
+- `6ca33cb94afbcf6b9ecf261baeea582165be6935` — merge PR #11, loading/empty/error state primitives.
+- `58b81c66435534bbe09c74f1a06ff4a94509c0ba` — PR #11 implementation head.
+- `5f4b85e6680ba6c66e6bd1e8adcd0179f2ce7e1b` — merge PR #10, accessible navigation primitives.
 
 ## Next continuation point
 
-Run repository CI for `feature/ux-loading-empty-states`. Merge only after all required checks are green, then record the exact merge commit and CI run here. After loading/empty states are integrated, begin systematic migration of existing screens, prioritizing shared shells and core matching journeys. Preserve accessible status semantics, responsive behavior, reduced-motion semantics, and buyer customization boundaries. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or already-merged primitive layers.
+Begin systematic migration of existing screens, prioritizing the shared application shell and core matching journeys. First inspect the current `apps/web` screens/routes/components and identify the smallest high-value migration slice. Reuse the already-merged design tokens and accessible primitives instead of creating parallel UI patterns. Preserve accessible status semantics, responsive behavior, reduced-motion semantics, keyboard navigation, safety affordances, and buyer customization boundaries. After each coherent migration slice, add focused tests, run repository CI, merge only when all required checks are green, and record the exact commit SHA, CI run, merge commit, and next continuation point here. Do not reimplement Quick Launch domains, PR #6, or already-merged primitive layers.
 
 ## Interruption-safe rule
 
