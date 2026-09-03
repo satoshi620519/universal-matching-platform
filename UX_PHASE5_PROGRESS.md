@@ -63,7 +63,7 @@
 - Implementation commit: `aae5adb45ef2a9c7424aee03279de6ccb63fb814`.
 - Validation completed via repository CI run #2007; all required checks passed before merge.
 
-## Dashboard shell migration in progress
+## Dashboard shell migration completed
 
 - Branch `feature/ux-dashboard-shell-migration` created from the PR #12 main checkpoint.
 - Authenticated Dashboard shell migrated to shared `HeaderNavigation` rather than duplicating raw navigation markup.
@@ -72,11 +72,12 @@
 - Implementation commit: `2386d9d62fd2eb34a62b912306e5b9d55274c860`.
 - Shared primitive compatibility checked; dashboard sign-out action corrected to use the existing `Button` API without inventing a new variant prop.
 - Compatibility fix commit: `43646eaa6fd85b856be27b1446c8b8ec372ba18d`.
-- Next: run repository CI and open a PR only after required checks are available.
+- PR #13 CI run `33741216778` (run #2015) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
+- PR #13 merged into `main` as merge commit `7e1a2822570db12bd2bfda66b5ef659087156636`.
 
 ## Next continuation point
 
-Continue from the dashboard shell implementation above. Do not repeat the authentication migration or primitive layers. Keep Notification, Discovery, and Conversation behavioral changes for separate coherent slices after the shell is validated.
+Dashboard shell migration is complete. Next inspect the Notification section and migrate it as the smallest coherent slice, reusing existing `List`, `ListRow`, `Card`, and loading/empty/error primitives where appropriate. Do not repeat authentication, dashboard shell, or shared primitive work. Preserve backend/API and real-time behavior. After notification integration, validate with CI before moving to Discovery and Conversation.
 
 ## Interruption-safe rule
 
