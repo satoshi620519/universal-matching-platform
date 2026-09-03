@@ -2810,3 +2810,21 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Shifted subsequent UI step bindings accordingly and updated the workflow contract test.
 - Added focused immutable snapshot summary coverage for profile field count, required count, stable keys, and legacy snapshots without profile schema.
 - EXACT NEXT ACTION: inspect branch diff against main, run CI through GitHub PR, and fix only evidence-backed failures. If green, final review and merge this regression fix as the dedicated Profile Schema Quick Launch integration completion.
+
+## Legal and Support Links Quick Launch — selection checkpoint
+- Re-read latest main status, roadmap, product requirements, configuration specification, architecture, decisions, repository tree, and open PR inventory after PR #4 merge.
+- Avoided reopening already-completed Configuration Engine/Profile Schema work.
+- Selected the explicitly required but not yet integrated Quick Launch domain: Legal and Support Links (privacy policy, terms, support destination/contact).
+- Created branch feature/legal-support-quick-launch from current main.
+- Added LEGAL_SUPPORT_QUICK_LAUNCH_SPEC.md and Decision 62 to lock the metadata-only boundary before implementation.
+- EXACT NEXT ACTION: inspect QuickLaunch domain aggregate, API draft input, immutable snapshot summary, and admin workflow to determine whether any partial implementation already exists; implement only missing end-to-end pieces.
+
+## Legal and Support Links Quick Launch — implementation checkpoint
+- Inspected current QuickLaunch domain, API lifecycle, admin workflow, immutable summary, and existing tests before implementation; no partial Legal/Support domain existed, so implementation is additive rather than a duplicate rewrite.
+- Added metadata-only legalSupport domain: privacyPolicyUrl, termsOfServiceUrl, supportUrl, supportEmail.
+- Added http/https URL validation, email validation, empty normalization, lowercase normalized email, and immutable published snapshot handling.
+- Reused the existing draft/save/publish/history API lifecycle with no new endpoint or authorization path.
+- Added a dedicated Legal & Support Quick Launch step and shifted downstream step indices to preserve one UI section per workflow step.
+- Added review display plus summary projection and legacy snapshot compatibility tests.
+- EXACT NEXT ACTION: inspect branch diff for accidental scope expansion, then open PR and use full GitHub CI as the validation gate; fix only evidence-backed failures.
+- Diff review caught an implementation regression before PR: the workflow array contained Legal & Support but the corresponding UI block had not been inserted because the step-index shift changed the insertion marker. Fixed before opening the PR; this confirms each declared workflow step now has a dedicated rendered section.

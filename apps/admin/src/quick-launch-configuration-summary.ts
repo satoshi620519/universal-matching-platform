@@ -4,6 +4,7 @@ type SnapshotLike = {
   applicationName?: unknown;
   profileSchema?: { fields?: unknown[] };
   featureVisibility?: { features?: unknown[] };
+  legalSupport?: { privacyPolicyUrl?: unknown; termsOfServiceUrl?: unknown; supportUrl?: unknown; supportEmail?: unknown };
   terminology?: { terms?: unknown };
   matchingCategories?: { categories?: unknown[] };
   categories?: unknown[];
@@ -39,6 +40,11 @@ export interface QuickLaunchConfigurationSummary {
   requiredProfileFieldCount?: number;
   profileFieldKeys?: readonly string[];
   visibleFeatureCount?: number;
+  privacyPolicyUrl?: string;
+  termsOfServiceUrl?: string;
+  supportUrl?: string;
+  supportEmail?: string;
+  legalSupportCount?: number;
   visibleFeatureKeys?: readonly string[];
   terminologyCount?: number;
   terminology?: Readonly<Record<string,string>>;
@@ -59,6 +65,8 @@ export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRe
   const configuredCategories = Array.isArray(snapshot.matchingCategories?.categories) ? snapshot.matchingCategories.categories : Array.isArray(snapshot.categories) ? snapshot.categories : undefined;
   const normalizedCategories = configuredCategories?.flatMap((category)=>category && typeof category === 'object' && typeof (category as { key?: unknown }).key === 'string' ? [{key:(category as {key:string}).key,enabled:(category as {enabled?:unknown}).enabled!==false}] : []);
   const normalizedRules = Array.isArray(snapshot.matchingRules?.rules) ? snapshot.matchingRules.rules.flatMap((rule)=>rule && typeof rule === 'object' && typeof (rule as { key?: unknown }).key === 'string' ? [{key:(rule as {key:string}).key,enabled:(rule as {enabled?:unknown}).enabled!==false}] : []) : undefined;
+  const legalSupport = snapshot.legalSupport;
+  const legalValues = [legalSupport?.privacyPolicyUrl, legalSupport?.termsOfServiceUrl, legalSupport?.supportUrl, legalSupport?.supportEmail].filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
   return {
     applicationName: typeof snapshot.applicationName === 'string' ? snapshot.applicationName : 'Unnamed configuration',
     primaryColor: typeof snapshot.primaryColor === 'string' ? snapshot.primaryColor : typeof theme?.primaryColor === 'string' ? theme.primaryColor : 'Default',
@@ -74,6 +82,11 @@ export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRe
     requiredProfileFieldCount: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.filter(field => field && typeof field === 'object' && (field as { required?: unknown }).required === true).length : undefined,
     profileFieldKeys: Array.isArray(snapshot.profileSchema?.fields) ? snapshot.profileSchema.fields.map(field => field && typeof field === 'object' && typeof (field as { key?: unknown }).key === 'string' ? (field as { key: string }).key : undefined).filter((key): key is string => key !== undefined) : undefined,
     visibleFeatureCount: visibleFeatureKeys?.length,
+    privacyPolicyUrl: typeof legalSupport?.privacyPolicyUrl === 'string' ? legalSupport.privacyPolicyUrl : undefined,
+    termsOfServiceUrl: typeof legalSupport?.termsOfServiceUrl === 'string' ? legalSupport.termsOfServiceUrl : undefined,
+    supportUrl: typeof legalSupport?.supportUrl === 'string' ? legalSupport.supportUrl : undefined,
+    supportEmail: typeof legalSupport?.supportEmail === 'string' ? legalSupport.supportEmail : undefined,
+    legalSupportCount: legalValues.length || undefined,
     visibleFeatureKeys,
     terminologyCount: terminology ? Object.keys(terminology).length : undefined,
     terminology,

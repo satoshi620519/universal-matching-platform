@@ -119,3 +119,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 60. Purchaser Feature Visibility UI writes only FeatureVisibilityConfiguration metadata. For compatibility, the existing enabledFeatures list may be synchronized as a product capability list, but neither UI state is authorization and runtime role/safety enforcement remains authoritative.
 
 61. Profile Schema Quick Launch integration must reuse the existing optional profileSchema extension and immutable QuickLaunch lifecycle; purchaser controls edit only field metadata (key, label, type, required, visibility, select options). Actual Profile.fields values and ProfileProjectionPolicy runtime ownership remain outside Quick Launch configuration.
+
+62. Legal and support links are a purchaser-facing Quick Launch metadata domain. They may configure public navigation destinations only and must not control authorization, moderation, retention, verification, or other protected policy.
