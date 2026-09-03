@@ -7,14 +7,15 @@ import {
   type MatchTransitionResult,
 } from '@universal/domain';
 import { DatabaseService } from '../database/database.service.js';
+import { NotificationRealtimePublicationService } from '../messaging/notification-realtime-publication.service.js';
 
 @Injectable()
 export class PrismaMatchTransitionRepository implements MatchTransitionRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: DatabaseService, private readonly notificationRealtime: NotificationRealtimePublicationService) {}
 
   async transition(input: MatchTransitionCommand): Promise<MatchTransitionResult> {
     const command = createMatchTransitionCommand(input);
-    return this.database.$transaction(async (tx) => {
+    const outcome = await this.database.$transaction(async (tx) => {
       await this.lockPair(tx, command.actorAccountId, command.targetAccountId);
       await this.lockIdempotency(tx, command.actorAccountId, command.idempotencyKey);
       const existing = await tx.matchInteraction.findUnique({
@@ -31,16 +32,21 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
         },
       });
       const result = await this.resultFor(interaction, false, tx);
-      if (result.mutual) {
-        await tx.notification.createMany({
-          data: [
-            { accountId: interaction.actorAccountId, kind: 'match.mutual', payload: { targetAccountId: interaction.targetAccountId } },
-            { accountId: interaction.targetAccountId, kind: 'match.mutual', payload: { targetAccountId: interaction.actorAccountId } },
-          ],
-        });
-      }
-      return result;
+      const notifications = result.mutual
+        ? await Promise.all([
+            tx.notification.create({ data: { accountId: interaction.actorAccountId, kind: 'match.mutual', payload: { targetAccountId: interaction.targetAccountId } } }),
+            tx.notification.create({ data: { accountId: interaction.targetAccountId, kind: 'match.mutual', payload: { targetAccountId: interaction.actorAccountId } } }),
+          ])
+        : [];
+      return { result, notifications };
     });
+    if (outcome.notifications.length) {
+      void this.notificationRealtime.publishCreated({
+        notificationIds: outcome.notifications.map(notification => notification.id),
+        recipientAccountIds: outcome.notifications.map(notification => notification.accountId),
+      }).catch(() => undefined);
+    }
+    return outcome.result;
   }
 
   async isMutualMatch(firstAccountId: string, secondAccountId: string): Promise<boolean> {
@@ -71,7 +77,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
   private async resultFor(
     interaction: { decision: string; actorAccountId: string; targetAccountId: string },
     replayed: boolean,
-    tx: Pick<DatabaseService, 'matchInteraction' | 'notification'>,
+    tx: Pick<DatabaseService, 'matchInteraction'>,
   ): Promise<MatchTransitionResult> {
     const reciprocal = await tx.matchInteraction.findUnique({
       where: {
