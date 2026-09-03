@@ -45,6 +45,11 @@ export class EntitlementService {
     });
   }
 
+  async revokeByPaymentIntent(paymentIntentId: string): Promise<EntitlementRecord | null> {
+    const record = await this.repository.findByPaymentIntentId(paymentIntentId);
+    return record ? this.transition(record, 'revoked') : null;
+  }
+
   async revoke(id: string): Promise<EntitlementRecord> {
     const record = await this.repository.findById(id);
     if (!record) throw new Error(`entitlement not found: ${id}`);
