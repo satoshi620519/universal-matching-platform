@@ -29,7 +29,7 @@ const executeStatements = async (client, sql, params = []) => {
   for (const statement of sql.split(';').map((value) => value.trim()).filter(Boolean)) {
     lastResult = await client.$queryRawUnsafe(statement);
   }
-  return lastResult;
+  return { rows: Array.isArray(lastResult) ? lastResult : [] };
 };
 
 const sqlClient = {
