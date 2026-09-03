@@ -13,10 +13,13 @@ Track only execution-verification fixes for M6. Do not repeat the completed M6 i
 ## Latest execution verification
 - Added `apps/api/src/safety/prisma-safety-report.repository.test.ts` to verify `listForReporter` scopes reads by `reporterId`, preventing a reporter from reading another account's reports through the repository path.
 - Test committed to `main` in commit `fc4a83bed7f02c89ee88c7931e33727841d03fc3`.
+- CI run `33708968189` (#1484) for `fc4a83bed7f02c89ee88c7931e33727841d03fc3` completed successfully: migration verification, typecheck, lint, tests, matching concurrency integration/verification, and build all passed.
+- Added `apps/api/src/safety/safety-moderation.service.test.ts` covering denial of all four privileged moderation operations (`transitionReport`, `openCase`, `transitionCase`, `applyAction`) when `manage-moderation` is not granted. The test also verifies no moderation repository, enforcement, or audit side effects occur after authorization denial.
+- Authorization-denial test committed to `main` in commit `fa0e4e4d8118c45597fde2200fb970dadd729dfd`; current-main CI verification is pending.
 
 ## Verification gates still required
-- Cross-account report read denial: test added; must be verified by current-main CI.
-- Privileged moderation authorization denial.
+- Cross-account report read denial: verified by CI #1484.
+- Privileged moderation authorization denial: test added; must be verified by current-main CI for `fa0e4e4d8118c45597fde2200fb970dadd729dfd`.
 - Immediate enforcement effect on matching, messaging, and discovery.
 - Audit persistence for privileged moderation actions.
 - Migration count reconciliation (0018 and 0019 included): verified by green CI.
@@ -26,4 +29,4 @@ Track only execution-verification fixes for M6. Do not repeat the completed M6 i
 Do not recreate M6 report/case repositories, controllers, moderation service, migrations, or safety enforcement already present on `main`. Inspect existing implementation and fix only concrete failing tests/build steps.
 
 ## Exact next task
-Verify CI triggered by commit `fc4a83bed7f02c89ee88c7931e33727841d03fc3`. If green, implement only the next missing M6 verification gate: privileged moderation authorization denial. If red, fix only the newly failing step. Do not start M7 before M6 is verified.
+Verify CI triggered by commit `fa0e4e4d8118c45597fde2200fb970dadd729dfd`. If green, continue with the next missing M6 verification gate: immediate enforcement effect on matching, messaging, and discovery. If red, fix only the newly failing step. Do not start M7 before M6 is verified.
