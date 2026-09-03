@@ -2213,3 +2213,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: fb6ae6419f8c7258061709f0d4a0820da7435cb4, cc987daa2e7a67e805cad6ac6cce5ea56bfa0711.
 - Validation status: PENDING; new main CI and concurrency-gate runs are required. No claim is made that the underlying reciprocal transition assertions have passed yet because execution previously stopped before reaching them.
 - Exact next action: inspect the runs triggered by this dist-entrypoint fix. Record independently whether migration verification, PostgreSQL migration command, and concurrency evidence pass, then address only the earliest observable remaining failure.
+
+
+## CI PostgreSQL migration integration — REAL DRIVER RESULT SHAPE FIXED
+- Continued from the latest completed CI run 1371; did not repeat earlier migration-artifact or package-entrypoint work.
+- First gate now passes: Verify packaged database migrations = PASS. The next concrete failure is PostgreSQL migration command integration.
+- Fetched the exact job log. Real PostgreSQL connected successfully, but listAppliedVersions treated the pg driver's QueryResult object as an array and called result.map(...), causing TypeError.
+- Corrected the executor contract to read result.rows and added a small internal SqlQueryResult shape. Updated the existing executor test stub to model the same driver result shape.
+- Fix commits: 6cd80abb921fa7eddebf219e51ff0f4de24f2338, c479ea5c68c476886d232500978f593783a84c50.
+- Validation status: PENDING until CI for these exact commits completes. Downstream typecheck/lint/test/build gates remain untouched because they have not yet executed in this run sequence.
+- Exact next action: inspect the CI triggered by this fix. If PostgreSQL migration integration passes, proceed only to the next observable failed gate.
