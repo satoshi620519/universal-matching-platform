@@ -87,9 +87,25 @@
 - PR #14 CI rerun completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #14 merged into `main` as merge commit `4adcf8db105376163c2356266bc5b005a5b4e7dc`.
 
+## Discovery migration in progress
+
+- Re-read the progress record and inspected the current Discovery implementation before editing; completed auth, dashboard shell, notification, and primitive work was not repeated.
+- Branch `feature/ux-discovery-migration` created from the PR #14 main checkpoint.
+- Discovery profile editing migrated to shared `Card`, `Field`, `TextInput`, `TextArea`, `Button`, and `StatusMessage` primitives.
+- Discovery result cards and match decisions migrated to shared `Card` and `Button` primitives.
+- Added explicit Discovery heading association and live feedback while preserving category loading, profile create/update, pagination, discovery, pass/like, idempotency, and mutual-match conversation authorization behavior.
+- Local field state tightened from `any` to `unknown`-based handling at the UI boundary.
+- Implementation commit: `b83f2ec9d46e0a1b4993e309101911b2107b4967`.
+- Shared primitive compatibility reviewed against the actual component APIs. No Discovery UI rewrite was needed; `Button`, `Field`, `TextInput`, `TextArea`, `Card`, and `StatusMessage` usage matches existing contracts.
+- Review checkpoint commit: `08cd418c621112392478d699d6154b5fc61a604b`.
+- PR #15 CI run `33742602217` failed at web typecheck. Root cause was two explicit type-contract gaps introduced by the Discovery refactor: `unknown` field state did not match the profile API value union, and the match-decision API wrapper lacked its `{ mutual: boolean }` response type.
+- Fixed only those contracts: Discovery field state now uses the existing API value union and `decideMatch` now has an explicit response type. No behavioral rewrite was made.
+- Fix commits: `68583d2c7ad25b061199ba90ba28ba0674f4e47e`, `0e42b498383315d4903183be2d45f8ed69e8e6b3`.
+- Next: rerun/trigger repository CI on the corrected PR #15 head, then merge only after all required checks pass.
+
 ## Next continuation point
 
-Notification migration is complete. Next inspect and migrate Discovery as the smallest coherent slice, reusing existing shared primitives and preserving discovery API/filter/matching behavior. Do not repeat authentication, dashboard shell, notification, or primitive work. Validate the Discovery slice with CI before moving to Conversation.
+Continue from the Discovery implementation above. Do not repeat completed migrations. After Discovery CI and integration, move to Conversation as the remaining major screen slice.
 
 ## Interruption-safe rule
 
