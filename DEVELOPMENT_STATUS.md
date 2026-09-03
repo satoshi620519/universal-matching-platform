@@ -2083,3 +2083,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commit: d84920f88a543d11ad7cdfdddfe158ed05924b74.
 - Remaining work: notification.created publication is not yet wired into the existing realtime publisher; production migration preflight/build validation and broader release-readiness verification remain.
 - Exact next action: inspect the existing post-commit message publication seam and introduce a minimal post-commit notification publication seam only for already-persisted notifications. Do not create a second SSE transport or publish before the database transaction commits.
+
+
+## Phase B notification realtime publication seam — SERVICE + TEST COVERAGE ADDED
+- Audited existing realtime infrastructure and deliberately reused RealtimePublisher rather than adding another transport.
+- Added NotificationRealtimePublicationService for account-scoped notification.created events, with notification id as the authoritative resource/payload reference.
+- Added input alignment guard so notification IDs cannot accidentally be published to shifted recipients.
+- Registered the service in AppModule and added focused account-scoping tests.
+- Commits: a370aa1f45b621ecbd9a6e47097b5b9381458278, 4a8370489cb94c90802fe656a26fb09ced6d7de1, 7859d3790abe387c2dedf5f889c786f0bbf264f4.
+- Important remaining integration: match.mutual notifications are currently persisted with createMany inside the transaction, which does not expose committed notification IDs and must not publish from inside the transaction. The publication service is intentionally not called yet to avoid pre-commit ghost events.
+- Exact next action: refactor only the match.mutual notification persistence seam so the transaction returns committed notification records/IDs as post-commit metadata, then invoke NotificationRealtimePublicationService after transaction success with best-effort failure isolation. Add replay/no-precommit tests before release validation.
