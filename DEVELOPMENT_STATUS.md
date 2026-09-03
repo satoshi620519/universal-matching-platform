@@ -2693,3 +2693,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Replaced the single-category purchaser control with multi-category key/label/description/enabled controls and added Review rendering (3bbce309).
 - Added immutable snapshot summary projection for total/enabled category counts and stable keys, with fallback to legacy categories snapshots (3099d648).
 - EXACT NEXT ACTION: add focused tests for matching-category snapshot summaries and inspect Published/History rendering for the new summary fields. Then obtain concrete diagnostics when an execution environment is available; do not claim CI green without evidence.
+
+
+## Configuration Engine — Matching Categories summary verification slice
+- Re-read the exact next action and latest branch state before continuing; no existing focused matching-category summary tests were found.
+- Added focused immutable snapshot summary tests for configured enabled/disabled categories, legacy categories fallback, and snapshots with no category metadata (5defda62).
+- Inspected actual Published and History rendering and found category summary fields were not yet displayed despite the summary model existing.
+- Added both Published and History rendering for total/enabled category counts and stable category keys (d41b72f3).
+- Matching Categories is now code-complete through model, normalization, purchaser controls, review, immutable snapshot summary, legacy compatibility, focused summary tests, and publication/history rendering.
+- EXACT NEXT ACTION: obtain concrete typecheck/test diagnostics when an execution-capable environment is available; do not infer CI success. In parallel, inspect roadmap/repository evidence for the next uncompleted Configuration Engine domain before starting it, while keeping diagnostics as an explicit verification item.
