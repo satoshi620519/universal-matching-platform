@@ -14,17 +14,14 @@ describe.skipIf(!process.env.DATABASE_URL)('payment webhook PostgreSQL integrati
 
   beforeAll(async () => {
     await database.$connect();
-    // Unit-test CI starts a fresh PostgreSQL without the focused M7 schema.
     await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS payment_webhook_idempotency (event_id TEXT PRIMARY KEY, received_at TIMESTAMPTZ NOT NULL DEFAULT NOW())');
     await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS entitlements (id UUID PRIMARY KEY, account_id UUID NOT NULL, entitlement_key TEXT NOT NULL, state TEXT NOT NULL, effective_at TIMESTAMPTZ NOT NULL, expires_at TIMESTAMPTZ NULL, provider_reference TEXT NULL, payment_intent_id TEXT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP)');
-    // The CI migration integration intentionally applies only the M7 slice; create the minimal FK fixture here.
-    await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY)');
-    await database.$executeRawUnsafe("INSERT INTO accounts (id) VALUES ('" + accountId + "')");
+    // Accounts gained required lifecycle columns after the original M7 fixture was introduced.
+    await database.$executeRawUnsafe("CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY, status TEXT NOT NULL DEFAULT 'active', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
+    await database.$executeRawUnsafe("INSERT INTO accounts (id, status) VALUES ('" + accountId + "', 'active')");
   });
 
-  afterAll(async () => {
-    await database.$disconnect();
-  });
+  afterAll(async () => { await database.$disconnect(); });
 
   it('atomically claims duplicate webhook deliveries only once', async () => {
     const eventId = 'evt-pg-' + randomUUID();
