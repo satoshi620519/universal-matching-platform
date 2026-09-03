@@ -2527,3 +2527,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added lifecycle coverage proving localization publishes with the single supportedCountries source (`d3e3fb105b83fec036def1558714658c8906c2a8`).
 - CI status at start of this continuation: runs were still in progress, so no false green claim was recorded.
 - Exact next task: add purchaser Admin UI controls for default locale, supported locales and optional timezone/country→locale defaults, reusing the existing Regions step and supportedCountries selection.
+
+
+## Configuration Engine — Localization purchaser UI expansion
+- Verified concrete execution evidence for commit `110d745bec7c50c06625c2f3507b806730a42dfd`: Matching Concurrency Gate run `33721715225` completed successfully, including isolated PostgreSQL evidence, explicit attestation and mandatory artifact upload.
+- Continued from the recorded Localization exact next task without repeating M8 or Branding/Theme work.
+- Expanded the existing Regions step (not a duplicate step) with default locale, supported locale selection, optional IANA timezone input, and country→locale defaults constrained to selected supportedCountries (`2fff25fd7d3459a1a3b91c6dfbd9e2e0dfab7c3a`).
+- Review & Publish now shows locale and timezone choices through the existing workflow.
+- Exact next task: add compact Localization summaries to Published/History projections, then begin the next unfinished configuration domain (Profile Schema) only after recording Localization UI completion.
