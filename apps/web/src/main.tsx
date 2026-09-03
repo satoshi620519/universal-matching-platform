@@ -8,6 +8,7 @@ import { HeaderNavigation } from './components/NavigationPrimitives';
 type Feature = { icon: string; title: string; text: string };
 type Screen = 'home' | 'signin' | 'register' | 'verify' | 'dashboard';
 type AccessStatus = 'idle' | 'loading' | 'success' | 'error';
+type NotificationItem = { id: string; kind: string; createdAt: string; readAt?: string | null };
 
 const features: Feature[] = [
   { icon: '✦', title: 'Meaningful connections', text: 'A thoughtful space designed around real conversations.' },
@@ -58,7 +59,7 @@ function Dashboard({ account, loading, error, onSignOut }: { account: Account | 
  {conversationId&&<div className="chatPanel"><div className="chatHeader"><span>SECURE CONVERSATION · REALTIME {realtimeStatus}</span><code>{conversationId}</code></div><div className="messageList">{messages.length?messages.map(m=><article key={m.id} className="message"><p>{m.body}</p><small>{new Date(m.createdAt).toLocaleString()}</small></article>):<p className="empty">No messages yet. Start the conversation.</p>}</div><form className="sendForm" onSubmit={submitMessage}><input value={body} onChange={e=>setBody(e.target.value)} placeholder="Write a message…" required/><button className="primary">Send →</button></form></div>}</section></main>;
 }
 function NotificationInbox(){
- const [items,setItems]=useState<any[]>([]);const [status,setStatus]=useState('');const [loading,setLoading]=useState(true);
+ const [items,setItems]=useState<NotificationItem[]>([]);const [status,setStatus]=useState('');const [loading,setLoading]=useState(true);
  const load=async()=>{setLoading(true);try{const r=await listNotifications();setItems(r.notifications);setStatus('');}catch(e){setStatus(e instanceof Error?e.message:'Notifications unavailable.');}finally{setLoading(false);}};
  useEffect(()=>{void load();const interval=window.setInterval(()=>void load(),30000);const refresh=()=>void load();window.addEventListener('focus',refresh);return()=>{window.clearInterval(interval);window.removeEventListener('focus',refresh);};},[]);
  async function read(id:string){try{const r=await markNotificationRead(id);if(r.updated)setItems(xs=>xs.map(x=>x.id===id?{...x,readAt:new Date().toISOString()}:x));}catch(e){setStatus(e instanceof Error?e.message:'Unable to mark notification read.');}}
