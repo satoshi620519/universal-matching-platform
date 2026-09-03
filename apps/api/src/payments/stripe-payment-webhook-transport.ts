@@ -34,7 +34,8 @@ export class StripePaymentWebhookTransport extends VerifiedPaymentWebhookTranspo
     }
 
     const root = input.payload as Record<string, unknown>;
-    const object = root.data && typeof root.data === 'object' ? (root.data as Record<string, unknown>).object : undefined;
+    const data = root.data && typeof root.data === 'object' ? root.data as Record<string, unknown> : undefined;
+    const object = data && data.object && typeof data.object === 'object' ? data.object as Record<string, unknown> : undefined;
     if (!object || typeof root.id !== 'string' || typeof root.type !== 'string' || typeof object.id !== 'string' || typeof object.created !== 'number') {
       throw new UnauthorizedException('invalid Stripe webhook payload');
     }
