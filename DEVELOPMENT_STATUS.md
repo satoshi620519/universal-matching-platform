@@ -2324,3 +2324,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: PENDING.
 - Remaining visible diagnostics not yet changed: messaging controller tests (6 vs 5 constructor args), profile discovery tests (7 vs 6 constructor args plus unknown typing), realtime reconciliation tests (6 vs 5 constructor args).
 - Resume point if interrupted: inspect CI for 7658100530f242e867567add8e495266734768a4. If matching test diagnostics clear, address the next earliest diagnostic group without revisiting passed migration/concurrency evidence or prior production fixes.
+
+
+## Checkpoint 2026-09-03 — TYPECHECK: REMAINING MATCH INTEGRATION CONSTRUCTOR ARITY FIX
+- CI run 1393 (head 2ba8f867) completed FAILURE at Typecheck; packaged migration verification and PostgreSQL migration command integration remained PASS.
+- Matching Concurrency Gate run 93 (head 76581005) completed SUCCESS, confirming the recent matching test-harness changes did not regress reciprocal PostgreSQL evidence.
+- Exact typecheck diagnostics show the unit-test matching constructor errors were reduced, but two integration-test constructors still passed only one argument to PrismaMatchTransitionRepository.
+- Updated only those two remaining integration constructions to provide the no-op NotificationRealtime dependency required by the current repository constructor.
+- Fix commit: f5986590634dcdb8f0c325601ed2998c6d0c9a00.
+- Remaining visible diagnostics after this checkpoint: messaging controller tests (six constructor-arity errors), profile discovery tests (constructor arity plus two unknown-type assertions), realtime reconciliation tests (two constructor-arity errors).
+- Resume point if interrupted: inspect CI for f5986590634dcdb8f0c325601ed2998c6d0c9a00. If these two matching integration diagnostics clear, process the next earliest diagnostic group (messaging controller tests) only. Do not revisit PASS migration gates or Concurrency Gate #93.
