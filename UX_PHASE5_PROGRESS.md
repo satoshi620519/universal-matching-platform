@@ -75,9 +75,18 @@
 - PR #13 CI run `33741216778` (run #2015) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #13 merged into `main` as merge commit `7e1a2822570db12bd2bfda66b5ef659087156636`.
 
+## Notification migration in progress
+
+- Branch `feature/ux-notification-migration` created from the PR #13 main checkpoint.
+- Notification inbox migrated to existing shared `Card`, `List`, `ListRow`, and `StatusMessage` primitives without changing notification API polling or read behavior.
+- Added explicit section/list labels and accessible activation labels for unread notifications.
+- Loading, empty, error, read, and unread states are now structurally separated while preserving the existing backend contract.
+- Implementation commit: `c24e9f9fa9f4af173d49ce3ac96c30e847c6c66b`.
+- Next: verify primitive compatibility, then validate with repository CI before opening a PR.
+
 ## Next continuation point
 
-Dashboard shell migration is complete. Next inspect the Notification section and migrate it as the smallest coherent slice, reusing existing `List`, `ListRow`, `Card`, and loading/empty/error primitives where appropriate. Do not repeat authentication, dashboard shell, or shared primitive work. Preserve backend/API and real-time behavior. After notification integration, validate with CI before moving to Discovery and Conversation.
+Continue from the notification implementation above. Do not repeat dashboard/authentication or shared primitive work. After Notification is integrated, move to Discovery as a separate coherent slice.
 
 ## Interruption-safe rule
 
