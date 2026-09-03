@@ -2772,3 +2772,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Performed static contract inspection: main.tsx contains steps 0 through 8, workflow ordering is Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish, all four domain bindings are present, and all four summary projection keys exist.
 - NOTE: two expected older summary spec filenames were not present on the integration branch; this is recorded as a test coverage gap rather than falsely claiming full focused-test retention.
 - EXACT NEXT ACTION: inspect package manifests/test scripts and repository workflow to identify executable diagnostics. Then add focused summary coverage for Feature Visibility, Terminology, and Matching Categories if absent, and run available diagnostics in an execution-capable environment before considering the integration branch ready for review.
+
+
+## Configuration Engine — Diagnostics preparation and focused summary coverage checkpoint
+- Continued from unified integration verification and inspected root/workspace/package manifests.
+- Confirmed executable diagnostics are defined through pnpm + Turbo: pnpm test, pnpm typecheck, pnpm lint, pnpm build; admin and config packages expose Vitest/tsc scripts.
+- Added missing focused immutable snapshot summary coverage for Feature Visibility (976d3a6a), Terminology (695e449d), and Matching Categories including legacy categories fallback (5d5f6b7a).
+- Existing Matching Rules focused summary coverage and unified four-domain integration coverage remain retained.
+- Static inspection is not a substitute for execution; no diagnostic command was falsely claimed as run because this GitHub editing context does not provide a package execution shell.
+- EXACT NEXT ACTION: use an execution-capable repository environment (Codex/cloud or local checkout) on feature/config-engine-integration, install dependencies if needed, then run pnpm test, pnpm typecheck, pnpm lint, and pnpm build. Fix any failures before merge/review readiness. After diagnostics, perform final branch diff review against main and create a single integration PR.
