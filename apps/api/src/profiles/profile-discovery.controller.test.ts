@@ -35,7 +35,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
     await c.discover('cat-1','global',undefined,'10',undefined,'Bearer test');
     expect(discover.mock.calls[0][0] as any).toMatchObject({ subjectAccountId:'viewer-1', categoryId:'cat-1', limit:10 });
-    expect(discover.mock.calls[0][0].projectionPolicy).toEqual({ displayName:'public', headline:'public', bio:'public' });
+    expect((discover.mock.calls[0][0] as any).projectionPolicy).toEqual({ displayName:'public', headline:'public', bio:'public' });
   });
 
   it('uses authenticated account as match actor', async () => {
