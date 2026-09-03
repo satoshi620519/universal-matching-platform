@@ -71,7 +71,6 @@ describe('EntitlementService', () => {
 
     expect(first.id).toBe(duplicate.id);
     expect(duplicate.state).toBe('active');
-    expect(repository.records).toHaveLength?.(1);
     expect(repository.records.size).toBe(1);
   });
 
