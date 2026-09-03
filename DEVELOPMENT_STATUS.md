@@ -2685,3 +2685,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added a stable purchaser-configurable category model with normalization, duplicate/blank rejection, enabled state, focused tests, and explicit domain boundaries (9a5b225c, 0b85dcc1, fef0f2dc).
 - Categories are intentionally separated from matching algorithms/rules so a buyer can change contexts without changing scoring logic.
 - EXACT NEXT ACTION: inspect the latest Quick Launch lifecycle contracts before integrating categories; add only missing optional metadata, then purchaser UI and immutable snapshot summary. Keep Terminology diagnostics as a separate open verification item.
+
+
+## Configuration Engine — Matching Categories Quick Launch integration
+- Re-read the latest status and inspected feature/config-matching-categories before continuing; existing legacy categories support was preserved rather than replaced blindly.
+- Added optional matchingCategories metadata to QuickLaunchDraftInput while retaining the existing categories contract for compatibility (bf25a180).
+- Replaced the single-category purchaser control with multi-category key/label/description/enabled controls and added Review rendering (3bbce309).
+- Added immutable snapshot summary projection for total/enabled category counts and stable keys, with fallback to legacy categories snapshots (3099d648).
+- EXACT NEXT ACTION: add focused tests for matching-category snapshot summaries and inspect Published/History rendering for the new summary fields. Then obtain concrete diagnostics when an execution environment is available; do not claim CI green without evidence.
