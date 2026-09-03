@@ -96,7 +96,9 @@
 - Added explicit Discovery heading association and live feedback while preserving category loading, profile create/update, pagination, discovery, pass/like, idempotency, and mutual-match conversation authorization behavior.
 - Local field state tightened from `any` to `unknown`-based handling at the UI boundary.
 - Implementation commit: `b83f2ec9d46e0a1b4993e309101911b2107b4967`.
-- Next: verify primitive/API compatibility, record any minimal fix, then run repository CI before opening a PR.
+- Shared primitive compatibility reviewed against the actual component APIs. No Discovery UI rewrite was needed; `Button`, `Field`, `TextInput`, `TextArea`, `Card`, and `StatusMessage` usage matches existing contracts.
+- Review checkpoint commit: `08cd418c621112392478d699d6154b5fc61a604b`.
+- Next: open PR and validate with repository CI before merge.
 
 ## Next continuation point
 
