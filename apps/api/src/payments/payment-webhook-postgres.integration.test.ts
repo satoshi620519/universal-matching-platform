@@ -16,7 +16,7 @@ describe.skipIf(!process.env.DATABASE_URL)('payment webhook PostgreSQL integrati
     await database.$connect();
     // Unit-test CI starts a fresh PostgreSQL without the focused M7 schema.
     await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS payment_webhook_idempotency (event_id TEXT PRIMARY KEY, received_at TIMESTAMPTZ NOT NULL DEFAULT NOW())');
-    await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS entitlements (id UUID PRIMARY KEY, account_id UUID NOT NULL, entitlement_key TEXT NOT NULL, state TEXT NOT NULL, effective_at TIMESTAMPTZ NOT NULL, expires_at TIMESTAMPTZ NULL, provider_reference TEXT NULL, payment_intent_id TEXT NULL)');
+    await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS entitlements (id UUID PRIMARY KEY, account_id UUID NOT NULL, entitlement_key TEXT NOT NULL, state TEXT NOT NULL, effective_at TIMESTAMPTZ NOT NULL, expires_at TIMESTAMPTZ NULL, provider_reference TEXT NULL, payment_intent_id TEXT NULL, updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP)');
     // The CI migration integration intentionally applies only the M7 slice; create the minimal FK fixture here.
     await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY)');
     await database.$executeRawUnsafe("INSERT INTO accounts (id) VALUES ('" + accountId + "')");
