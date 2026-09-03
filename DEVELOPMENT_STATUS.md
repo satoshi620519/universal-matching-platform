@@ -2436,3 +2436,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 1f3e850fcace262257717cacc448223ee1f590b1.
 - Validation status: PENDING CI.
 - Resume point if interrupted: inspect CI for 1f3e850fcace262257717cacc448223ee1f590b1. If Test passes, proceed immediately to Matching concurrency integration, concurrency gate verification, then Build. Do not revisit passed gates.
+
+
+## Checkpoint 2026-09-03 — CI TYPECHECK REGRESSION REPAIRED
+- CI 1427/1428 failed at Typecheck before Test due to a syntax corruption introduced in the multi-statement SQL splitter insertion (unterminated string / malformed function body).
+- Retrieved exact artifact diagnostics and inspected the committed file rather than guessing.
+- Replaced the corrupted adapter file with one clean implementation: quote/comment/dollar-quote aware splitter plus statement-by-statement parameterless execution, preserving the existing SELECT { rows } contract and transaction behavior.
+- Fix commit: 6d26df71ab6f5471df986173d028752f74ac0181.
+- Validation status: PENDING CI.
+- Resume point: verify Typecheck first; then resume Test gate (previously 293 passed / 1 failed). Do not redo passed migration/lint work.
