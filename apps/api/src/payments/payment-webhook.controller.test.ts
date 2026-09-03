@@ -33,7 +33,7 @@ describe('PaymentWebhookController', () => {
     const transport = { verifyAndParse: async () => ({ event, context: { accountId: 'account-1', entitlementKey: 'premium' } }) } as unknown as VerifiedPaymentWebhookTransport;
     const processor = { process: async (actualEvent: unknown, context: unknown) => { received = actualEvent === event && (context as { accountId: string }).accountId === 'account-1'; return true; } } as unknown as PaymentWebhookProcessor;
     const controller = new PaymentWebhookController(transport, processor);
-    await expect(controller.receive({ ignored: true }, 'valid')).resolves.toEqual({ accepted: true, processed: true });
+    await expect(controller.receive({ ignored: true }, 'valid', undefined, { rawBody: Buffer.from('{\"ignored\":true}') } as never)).resolves.toEqual({ accepted: true, processed: true });
     expect(received).toBe(true);
   });
 });
