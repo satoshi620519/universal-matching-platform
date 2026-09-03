@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { getAuthenticatedAccount, register, signIn, verifyEmail, createConversation, listMessages, sendMessage, API_BASE_URL, listProfileCategories, createMyProfile, discoverProfiles, decideMatch, createConversationFromMutualMatch, listNotifications, markNotificationRead, getMyProfile, updateMyProfile, type Account, type Message, type RealtimeEvent, type ProfileCategory, type DiscoveryProfile } from './api';
 import './styles.css';
+import { Button, Field, StatusMessage, TextInput } from './components/AccessiblePrimitives';
 
 type Feature = { icon: string; title: string; text: string };
 type Screen = 'home' | 'signin' | 'register' | 'verify' | 'dashboard';
@@ -18,34 +19,27 @@ function AccessForm({ screen, onBack, onSignedIn }: { screen: 'signin' | 'regist
   const [status, setStatus] = useState<AccessStatus>('idle'); const [message, setMessage] = useState('');
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setStatus('loading'); setMessage('');
-    try {
-      if (screen === 'signin') {
-        const body = await signIn(email, password);
-        if (!body.credential) throw new Error('Invalid email or password');
-        sessionStorage.setItem('connect.credential', body.credential);
-        setStatus('success'); setMessage('Signed in successfully. Loading your account…');
-        onSignedIn();
-      } else {
-        await register(email, password);
-        setStatus('success'); setMessage('Registration received. Please check your email for the verification step.');
-      }
-    } catch (error) { setStatus('error'); setMessage(error instanceof Error ? error.message : 'Something went wrong. Please try again.'); }
+    try { if (screen === 'signin') { const body = await signIn(email, password); if (!body.credential) throw new Error('Invalid email or password'); sessionStorage.setItem('connect.credential', body.credential); setStatus('success'); setMessage('Signed in successfully. Loading your account…'); onSignedIn(); } else { await register(email, password); setStatus('success'); setMessage('Registration received. Please check your email for the verification step.'); } }
+    catch (error) { setStatus('error'); setMessage(error instanceof Error ? error.message : 'Something went wrong. Please try again.'); }
   }
   const title = screen === 'signin' ? 'Welcome back.' : 'Start your journey.';
-  return <main className="accessPage"><nav><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</button><button className="textButton" onClick={onBack}>← Back</button></nav>
-    <section className="accessCard"><div className="eyebrow">{screen === 'signin' ? 'WELCOME BACK' : 'CREATE YOUR ACCOUNT'}</div><h1>{title}</h1><p>{screen === 'signin' ? 'Sign in to continue your conversations and connections.' : 'Create your account and discover a more thoughtful way to connect.'}</p>
-      <form onSubmit={submit}><label>Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@example.com" required /></label><label>Password<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="At least 8 characters" minLength={8} required /></label>
-      {screen === 'register' && <label className="check"><input type="checkbox" required /> <span>I agree to the Terms and Privacy Policy.</span></label>}
-      <button className="primary wide" type="submit" disabled={status === 'loading'}>{status === 'loading' ? 'Please wait…' : screen === 'signin' ? 'Sign in →' : 'Create account →'}</button>
-      {status !== 'idle' && <div className={'accessMessage ' + status} role="status">{message}</div>}
-      {screen === 'register' && status === 'success' && <a className="textButton verifyLink" href="#verify">Already have a token? Verify email →</a>}
+  const tone = status === 'error' ? 'error' : 'success';
+  return <main className="accessPage"><nav aria-label="Access navigation"><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</button><button className="textButton" onClick={onBack}>← Back</button></nav>
+    <section className="accessCard" aria-labelledby="access-title"><div className="eyebrow">{screen === 'signin' ? 'WELCOME BACK' : 'CREATE YOUR ACCOUNT'}</div><h1 id="access-title">{title}</h1><p>{screen === 'signin' ? 'Sign in to continue your conversations and connections.' : 'Create your account and discover a more thoughtful way to connect.'}</p>
+      <form onSubmit={submit}>
+        <Field label="Email" id="access-email" required><TextInput value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@example.com" required autoComplete="email" /></Field>
+        <Field label="Password" id="access-password" required><TextInput value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="At least 8 characters" minLength={8} required autoComplete={screen === 'signin' ? 'current-password' : 'new-password'} /></Field>
+        {screen === 'register' && <label className="check"><input type="checkbox" required /> <span>I agree to the Terms and Privacy Policy.</span></label>}
+        <Button className="primary wide" type="submit" loading={status === 'loading'} loadingLabel="Please wait…">{screen === 'signin' ? 'Sign in →' : 'Create account →'}</Button>
+        {status !== 'idle' && <StatusMessage tone={tone}>{message}</StatusMessage>}
+        {screen === 'register' && status === 'success' && <a className="textButton verifyLink" href="#verify">Already have a token? Verify email →</a>}
       </form></section></main>;
 }
 
 function VerifyEmail({ onBack }: { onBack: () => void }) {
  const [token,setToken]=useState(''); const [status,setStatus]=useState<AccessStatus>('idle'); const [message,setMessage]=useState('');
  async function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault();setStatus('loading');setMessage('');try{const body=await verifyEmail(token);if(!body.verified)throw new Error('This verification link is invalid or has expired.');setStatus('success');setMessage('Email verified successfully. You can now sign in.');}catch(error){setStatus('error');setMessage(error instanceof Error?error.message:'Verification failed.');}}
- return <main className="accessPage"><nav><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</button><button className="textButton" onClick={onBack}>← Back</button></nav><section className="accessCard"><div className="eyebrow">VERIFY YOUR EMAIL</div><h1>One last step.</h1><p>Paste the verification token from your email to activate your account.</p><form onSubmit={submit}><label>Verification token<input value={token} onChange={(e)=>setToken(e.target.value)} placeholder="Paste your secure token" required /></label><button className="primary wide" disabled={status==='loading'} type="submit">{status==='loading'?'Verifying…':'Verify email →'}</button>{status!=='idle'&&<div className={'accessMessage '+status} role="status">{message}</div>}</form></section></main>;
+ return <main className="accessPage"><nav aria-label="Verification navigation"><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</button><button className="textButton" onClick={onBack}>← Back</button></nav><section className="accessCard" aria-labelledby="verify-title"><div className="eyebrow">VERIFY YOUR EMAIL</div><h1 id="verify-title">One last step.</h1><p>Paste the verification token from your email to activate your account.</p><form onSubmit={submit}><Field label="Verification token" id="verification-token" required><TextInput value={token} onChange={(e)=>setToken(e.target.value)} placeholder="Paste your secure token" required autoComplete="one-time-code" /></Field><Button className="primary wide" loading={status==='loading'} loadingLabel="Verifying…" type="submit">Verify email →</Button>{status!=='idle'&&<StatusMessage tone={status==='error'?'error':'success'}>{message}</StatusMessage>}</form></section></main>;
 }
 
 function Dashboard({ account, loading, error, onSignOut }: { account: Account | null; loading: boolean; error: string; onSignOut: () => void }) {
