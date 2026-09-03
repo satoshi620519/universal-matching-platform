@@ -9,6 +9,38 @@ describe('PrismaConversationRepository', () => {
     expect(findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { accountLowId_accountHighId: { accountLowId:'a-account', accountHighId:'z-account' } } }));
   });
 
+  it('recovers outside an aborted transaction when a concurrent pair insert wins', async () => {
+    const conflict = Object.assign(new Error('unique'), { code: 'P2002' });
+    const winner = { conversation: { id: 'c-winner', participants: [] } };
+    const directConversationPair = {
+      findUnique: vi.fn().mockResolvedValueOnce(null).mockResolvedValueOnce(winner),
+    };
+    const database = {
+      directConversationPair,
+      $transaction: vi.fn(async (fn: () => unknown) => {
+        await fn();
+        throw conflict;
+      }),
+    };
+    const repository = new PrismaConversationRepository(database as never);
+    await expect(repository.createOrFindDirect('a1', 'a2')).resolves.toEqual(winner.conversation);
+    expect(directConversationPair.findUnique).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not mask a unique conflict when no winning pair can be found', async () => {
+    const conflict = Object.assign(new Error('unique'), { code: 'P2002' });
+    const directConversationPair = { findUnique: vi.fn().mockResolvedValue(null) };
+    const database = {
+      directConversationPair,
+      $transaction: vi.fn(async (fn: () => unknown) => {
+        await fn();
+        throw conflict;
+      }),
+    };
+    const repository = new PrismaConversationRepository(database as never);
+    await expect(repository.createOrFindDirect('a1', 'a2')).rejects.toBe(conflict);
+  });
+
   it('creates one participant record per distinct account', async () => {
     const create = vi.fn().mockResolvedValue({ id: 'c1', createdAt: new Date(), participants: [] });
     const repository = new PrismaConversationRepository({ conversation: { create } } as never);
