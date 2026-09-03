@@ -20,6 +20,6 @@ describe('Quick Launch admin workflow', () => {
       { path: '/administration/quick-launch/drafts/1', method: 'POST' },
       { path: '/administration/quick-launch/drafts/1/publish', method: 'POST' },
     ]);
-    expect(quickLaunchSteps).toEqual(['Branding','Regions','Categories','Profile Schema','Matching Categories','Features','Terminology','Matching Rules','Onboarding','Review & Publish']);
+    expect(quickLaunchSteps).toEqual(['Branding','Regions','Categories','Profile Schema','Matching Categories','Features','Legal & Support','Terminology','Matching Rules','Onboarding','Review & Publish']);
   });
 });
