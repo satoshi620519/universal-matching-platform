@@ -2781,3 +2781,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Existing Matching Rules focused summary coverage and unified four-domain integration coverage remain retained.
 - Static inspection is not a substitute for execution; no diagnostic command was falsely claimed as run because this GitHub editing context does not provide a package execution shell.
 - EXACT NEXT ACTION: use an execution-capable repository environment (Codex/cloud or local checkout) on feature/config-engine-integration, install dependencies if needed, then run pnpm test, pnpm typecheck, pnpm lint, and pnpm build. Fix any failures before merge/review readiness. After diagnostics, perform final branch diff review against main and create a single integration PR.
+
+## Configuration Engine — clean-main reconstruction checkpoint
+- Reconstructed the integration change set on feature/config-engine-integration-rebased, which starts from current main, to eliminate the historical merge conflict.
+- Verified PR #3 now contains every Configuration Engine file from PR #1 except the intentionally excluded historical DEVELOPMENT_STATUS.md conflict file: 19 changed files, no missing implementation/test/documentation files.
+- GitHub reports PR #3 mergeable=true. Current mergeable_state=unstable pending CI/check recomputation after the latest carried changes.
+- PR #2 and PR #3 remain Draft during synchronization; do not merge either until CI is green and final diff review is complete.
+- EXACT NEXT ACTION: inspect PR #3 workflow runs/checks after the latest head settles. If CI fails, diagnose from logs and apply minimal fixes on the rebased branch; if green, reconcile this progress checkpoint into the branch, perform final diff review, mark PR #3 ready, and merge only after mergeability is clean.
