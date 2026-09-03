@@ -30,7 +30,16 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
           idempotencyKey: command.idempotencyKey,
         },
       });
-      return this.resultFor(interaction, false, tx);
+      const result = await this.resultFor(interaction, false, tx);
+      if (result.mutual) {
+        await tx.notification.createMany({
+          data: [
+            { accountId: interaction.actorAccountId, kind: 'match.mutual', payload: { targetAccountId: interaction.targetAccountId } },
+            { accountId: interaction.targetAccountId, kind: 'match.mutual', payload: { targetAccountId: interaction.actorAccountId } },
+          ],
+        });
+      }
+      return result;
     });
   }
 
@@ -62,7 +71,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
   private async resultFor(
     interaction: { decision: string; actorAccountId: string; targetAccountId: string },
     replayed: boolean,
-    tx: Pick<DatabaseService, 'matchInteraction'>,
+    tx: Pick<DatabaseService, 'matchInteraction' | 'notification'>,
   ): Promise<MatchTransitionResult> {
     const reciprocal = await tx.matchInteraction.findUnique({
       where: {
