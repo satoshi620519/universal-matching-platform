@@ -27,7 +27,7 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 ## CI
 - CI `33711702877` for persistent webhook idempotency commit `962e31baa268c84ff02f849a9216467ded2bc6a3`: completed successfully; baseline setup, migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all succeeded.
 - Matching Concurrency Gate `33711702842`: completed successfully; isolated PostgreSQL concurrency evidence, attestation, and evidence upload succeeded.
-- The entitlement commits added after `33711702877` require fresh CI verification; no green result is inferred until that execution is observed.
+- Fresh CI `33713276148` failed at Typecheck (not migration): two webhook-flow test fixtures omitted required `accountId`/`idempotencyKey`, and the verified transport imported a removed controller export. Both issues were fixed in `bbbf50e63ad263f426a69055abd4d924f8bf9a75` and `ce5a7e32d71f8ff59be63f362160eed656d7aad1`; await the resulting CI before further feature work.
 
 ## Newly completed
 - Explicit entitlement lookup and revocation by payment-intent linkage; unrelated entitlements are not guessed or revoked.
