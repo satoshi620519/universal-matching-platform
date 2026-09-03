@@ -137,3 +137,9 @@
 - Existing ownership inspected: profile.ts owns primitive profile values; profile-projection.ts owns runtime viewer projection.
 - New domain contract commits: 8d6198e1129a1d206070d9a66ca558403d9b897b, 50f07a8541fb5af3acf0057aa2595e361f165bd2, 1350c3ea8692c87790e7340963c7b09e65f87f30.
 - Exact next task: integrate ProfileSchemaConfiguration into QuickLaunchDraft/versioned immutable lifecycle, then purchaser UI. Do not duplicate Profile.fields, ProfileProjectionPolicy, onboarding ownership, or publication persistence.
+
+
+## Configuration Engine checkpoint — Profile Schema lifecycle integrated
+- Commits: 2c82c8a13652f7d714e0beb1498d6fb0f6702d6e and 17873a5b0ba27d2ec576e644a5964f943df17963.
+- Exact next task: purchaser Quick Launch UI for profile field definitions, followed by Review & Publish summary.
+- Do not duplicate Profile.fields value editing, ProfileProjectionPolicy runtime controls, or immutable publication lifecycle.
