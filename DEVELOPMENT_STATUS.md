@@ -2255,3 +2255,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 010bd295960b47786ef6faa94b26b59f843a9c7e.
 - Validation status: PENDING until CI for this exact commit completes. Lint/test/concurrency/build remain untouched.
 - Exact next action: inspect the new CI run and proceed only from the first observable failed gate.
+
+
+## CI typecheck follow-up — MATCH TRANSACTION OUTCOME UNION FIXED
+- Continued from completed CI run 1379 using the downloaded typecheck diagnostics; did not revisit any passing migration gates or prior web fixes.
+- The previous web callback error is no longer the blocker. Typecheck now reaches @universal/api and reports multiple accumulated API errors.
+- Addressed the first production-source error in PrismaMatchTransitionRepository: the transaction callback returned MatchTransitionResult on idempotent replay but { result, notifications } on the create path, producing an incompatible union and downstream missing-property errors.
+- Normalized the replay branch to the same { result, notifications: [] } outcome shape. This is a behavior-preserving structural fix and allows notification handling to use one transaction outcome contract.
+- Fix commit: 40a919785bb7bb5142090892680abc0b872c490f.
+- Validation status: PENDING. Additional API typecheck errors remain visible in diagnostics and will be handled in dependency order from the next CI result rather than changing all unrelated files at once.
+- Exact next action: inspect CI for this commit; continue from the first remaining concrete typecheck failure without redoing completed fixes.
