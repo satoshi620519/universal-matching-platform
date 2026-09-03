@@ -10,6 +10,7 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   const accountA = '11111111-1111-4111-8111-111111111111';
   const accountB = '22222222-2222-4222-8222-222222222222';
   const accountC = '33333333-3333-4333-8333-333333333333';
+  // Explicit no-restriction fixture for isolated concurrency evidence.
   const safety = { resolveForAccount: async () => 'none' as const };
 
   beforeEach(async () => {
