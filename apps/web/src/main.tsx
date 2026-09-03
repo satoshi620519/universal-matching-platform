@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { getAuthenticatedAccount, register, signIn, verifyEmail, createConversation, listMessages, sendMessage, API_BASE_URL, listProfileCategories, createMyProfile, discoverProfiles, decideMatch, createConversationFromMutualMatch, listNotifications, markNotificationRead, getMyProfile, updateMyProfile, type Account, type Message, type RealtimeEvent, type ProfileCategory, type DiscoveryProfile } from './api';
 import './styles.css';
-import { Button, Field, StatusMessage, TextInput } from './components/AccessiblePrimitives';
+import { Button, Card, Field, List, ListRow, StatusMessage, TextInput } from './components/AccessiblePrimitives';
 import { HeaderNavigation } from './components/NavigationPrimitives';
 
 type Feature = { icon: string; title: string; text: string };
@@ -58,11 +58,11 @@ function Dashboard({ account, loading, error, onSignOut }: { account: Account | 
  {conversationId&&<div className="chatPanel"><div className="chatHeader"><span>SECURE CONVERSATION · REALTIME {realtimeStatus}</span><code>{conversationId}</code></div><div className="messageList">{messages.length?messages.map(m=><article key={m.id} className="message"><p>{m.body}</p><small>{new Date(m.createdAt).toLocaleString()}</small></article>):<p className="empty">No messages yet. Start the conversation.</p>}</div><form className="sendForm" onSubmit={submitMessage}><input value={body} onChange={e=>setBody(e.target.value)} placeholder="Write a message…" required/><button className="primary">Send →</button></form></div>}</section></main>;
 }
 function NotificationInbox(){
- const [items,setItems]=useState<any[]>([]);const [status,setStatus]=useState('');
- const load=async()=>{try{const r=await listNotifications();setItems(r.notifications);setStatus('');}catch(e){setStatus(e instanceof Error?e.message:'Notifications unavailable.')}};
+ const [items,setItems]=useState<any[]>([]);const [status,setStatus]=useState('');const [loading,setLoading]=useState(true);
+ const load=async()=>{setLoading(true);try{const r=await listNotifications();setItems(r.notifications);setStatus('');}catch(e){setStatus(e instanceof Error?e.message:'Notifications unavailable.');}finally{setLoading(false);}};
  useEffect(()=>{void load();const interval=window.setInterval(()=>void load(),30000);const refresh=()=>void load();window.addEventListener('focus',refresh);return()=>{window.clearInterval(interval);window.removeEventListener('focus',refresh);};},[]);
  async function read(id:string){try{const r=await markNotificationRead(id);if(r.updated)setItems(xs=>xs.map(x=>x.id===id?{...x,readAt:new Date().toISOString()}:x));}catch(e){setStatus(e instanceof Error?e.message:'Unable to mark notification read.');}}
- return <section className="notificationSection"><div><span className="eyebrow">ACTIVITY</span><h2>Stay in the loop.</h2><p>Important activity from your account, securely scoped to you.</p></div><div className="notificationList">{status&&<p className="messageStatus">{status}</p>}{items.length===0?<p className="emptyActivity">You're all caught up.</p>:items.map(item=><button key={item.id} className={'notificationItem '+(item.readAt?'isRead':'')} onClick={()=>!item.readAt&&read(item.id)}><span className="notificationDot"/><span><strong>{item.kind.replaceAll('.',' ')}</strong><small>{new Date(item.createdAt).toLocaleString()}</small></span>{!item.readAt&&<em>NEW</em>}</button>)}</div></section>;
+ return <section className="notificationSection" aria-labelledby="notification-title"><div><span className="eyebrow">ACTIVITY</span><h2 id="notification-title">Stay in the loop.</h2><p>Important activity from your account, securely scoped to you.</p></div><Card className="notificationList" aria-live="polite">{status&&<StatusMessage tone="error">{status}</StatusMessage>}{loading?<p className="emptyActivity" role="status">Loading activity…</p>:items.length===0?<p className="emptyActivity">You're all caught up.</p>:<List aria-label="Account activity">{items.map(item=><ListRow key={item.id} interactive={!item.readAt} disabled={Boolean(item.readAt)} onActivate={()=>!item.readAt&&void read(item.id)} activateLabel={!item.readAt?`Mark ${item.kind.replaceAll('.',' ')} notification as read`:undefined} className={'notificationItem '+(item.readAt?'isRead':'')}><span className="notificationDot" aria-hidden="true"/><span><strong>{item.kind.replaceAll('.',' ')}</strong><small>{new Date(item.createdAt).toLocaleString()}</small></span>{!item.readAt&&<em>NEW</em>}</ListRow>)}</List>}</Card></section>;
 }
 
 function Discovery({ onMessageTarget }: { onMessageTarget: (id:string)=>void }) {
