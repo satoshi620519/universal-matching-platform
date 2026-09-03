@@ -2,6 +2,7 @@ export interface QuickLaunchDraftInput {
   applicationName: string;
   logoUrl?: string;
   primaryColor: string;
+  localization?: { defaultLocale: string; supportedLocales: readonly string[]; defaultTimezone?: string; countryLocales?: Readonly<Record<string,string>> };
   brandingTheme?: {
     primaryColor: string;
     secondaryColor?: string;
