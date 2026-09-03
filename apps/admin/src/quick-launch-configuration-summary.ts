@@ -3,6 +3,7 @@ import type { QuickLaunchPublishedRecord } from './quick-launch-history';
 type SnapshotLike = {
   applicationName?: unknown;
   primaryColor?: unknown;
+  localization?: { defaultLocale?: unknown; supportedLocales?: unknown; defaultTimezone?: unknown; countryLocales?: unknown };
   brandingTheme?: {
     primaryColor?: unknown;
     secondaryColor?: unknown;
@@ -24,6 +25,10 @@ export interface QuickLaunchConfigurationSummary {
   fontFamily?: string;
   headingFontFamily?: string;
   borderRadius?: string;
+  defaultLocale?: string;
+  supportedLocales?: readonly string[];
+  defaultTimezone?: string;
+  countryLocales?: Readonly<Record<string,string>>;
 }
 
 export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRecord): QuickLaunchConfigurationSummary {
@@ -38,5 +43,9 @@ export function summarizeQuickLaunchConfiguration(record: QuickLaunchPublishedRe
     fontFamily: typeof typography?.fontFamily === 'string' ? typography.fontFamily : undefined,
     headingFontFamily: typeof typography?.headingFontFamily === 'string' ? typography.headingFontFamily : undefined,
     borderRadius: typeof typography?.borderRadius === 'string' ? typography.borderRadius : undefined,
+    defaultLocale: typeof snapshot.localization?.defaultLocale === 'string' ? snapshot.localization.defaultLocale : undefined,
+    supportedLocales: Array.isArray(snapshot.localization?.supportedLocales) && snapshot.localization.supportedLocales.every((value): value is string => typeof value === 'string') ? snapshot.localization.supportedLocales : undefined,
+    defaultTimezone: typeof snapshot.localization?.defaultTimezone === 'string' ? snapshot.localization.defaultTimezone : undefined,
+    countryLocales: snapshot.localization?.countryLocales && typeof snapshot.localization.countryLocales === 'object' && !Array.isArray(snapshot.localization.countryLocales) ? Object.fromEntries(Object.entries(snapshot.localization.countryLocales as Record<string, unknown>).filter((entry): entry is [string,string] => typeof entry[1] === 'string')) : undefined,
   };
 }
