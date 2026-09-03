@@ -2194,3 +2194,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 627dec28d478a970b1f18f7b91ca0c85cb0bde3e.
 - Validation status: PENDING until the CI run for this exact commit completes; no release-green claim is made.
 - Exact next action: inspect the new CI run. If the migration gate remains red, obtain the precise command error/log before making another change; if it passes, proceed only to the next concrete failed gate.
+
+
+## CI migration gate follow-up — PRECISE RUNTIME IMPORT ERROR FIXED
+- Continued from run 1366 and fetched the actual failed GitHub Actions job log before changing code.
+- The migration build itself completed; the failure was not TypeScript rootDir or pnpm working-directory resolution. The exact runtime error was: verify-migrations-build.mjs imported fileURLToPath from node:path, which does not export it.
+- Fixed only that import by taking fileURLToPath from node:url, matching the existing copy-migrations script pattern.
+- Fix commit: 5d8e8e9dfed9bb4d25e05c1bf561f332ae3ff8d4.
+- Validation status: PENDING until CI for this exact commit completes. Downstream gates remain intentionally untouched.
+- Exact next action: inspect the new CI run and proceed only from its first observable failure, or record gate results if it reaches completion.
