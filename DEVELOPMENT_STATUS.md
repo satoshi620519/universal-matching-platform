@@ -2745,3 +2745,10 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Applied a minimal compatibility fix: legacy category fallback projections now include description: undefined, preserving the unified category shape and existing runtime behavior (3f97cf54).
 - An earlier no-op commit (0059a147) was created while attempting a state declaration fix; it changes no file content and should not be treated as a functional fix.
 - EXACT NEXT ACTION: wait for/inspect the new PR CI run triggered by 3f97cf54. If typecheck passes, continue through lint, tests, matching concurrency integration, and build; fix subsequent failures individually. Do not merge until the full CI gate is green.
+
+
+## Configuration Engine — CI test failure diagnosis and workflow contract fix checkpoint
+- Inspected the completed post-typecheck CI run. Migration verification, PostgreSQL migration integration, Typecheck, and Lint all passed.
+- Test gate failed only in apps/admin/src/quick-launch-workflow.spec.ts: the pre-integration assertion still expected 6 steps while the unified workflow intentionally contains 9.
+- Updated the test from a fragile count assertion to an exact ordered workflow contract assertion covering Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish (77d0591c).
+- EXACT NEXT ACTION: inspect the CI run triggered by 77d0591c. Confirm prior green gates remain green and continue to Matching concurrency integration and Build. Fix any subsequent failure from actual logs only; do not merge until every CI gate is green.
