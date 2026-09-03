@@ -2517,3 +2517,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added LocalizationConfiguration contract with default locale, supported locales, ISO country boundaries, optional timezone and country→locale mapping (`44dbca92ed20a8aeaca087394552b55692495c79`).
 - Added focused domain boundary tests (`101a0c2efd6388c8b072cc36619f8734dc93668c`) and exported the contract (`939b22e07934b2947af678b53bf4a1b6442e6b78`).
 - Exact next task: after current CI settles, integrate LocalizationConfiguration into the existing QuickLaunchDraft versioned lifecycle and reuse supportedCountries instead of creating duplicate country storage.
+
+
+## Configuration Engine — Localization lifecycle integration
+- Continued from the recorded exact next task; no M8 or Branding/Theme work was repeated.
+- Integrated optional localization into QuickLaunchDraft while deriving its country boundary exclusively from existing `supportedCountries` (`110d745bec7c50c06625c2f3507b806730a42dfd`).
+- Publication snapshots deep-freeze localization arrays/maps, preserving existing immutable version/history semantics without a second repository or country table (`110d745bec7c50c06625c2f3507b806730a42dfd`).
+- Extended purchaser workflow input to carry localization through existing endpoints (`ff78a9f775bd4db71d0e42fc172ca9aaba1aa597`).
+- Added lifecycle coverage proving localization publishes with the single supportedCountries source (`d3e3fb105b83fec036def1558714658c8906c2a8`).
+- CI status at start of this continuation: runs were still in progress, so no false green claim was recorded.
+- Exact next task: add purchaser Admin UI controls for default locale, supported locales and optional timezone/country→locale defaults, reusing the existing Regions step and supportedCountries selection.
