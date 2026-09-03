@@ -112,3 +112,9 @@
 - M8 is formally closed. Full Quick Launch lifecycle and version/publication semantics are covered.
 - Do not revisit M8 without a concrete regression.
 - Next task: specification-first expansion of the Universal Configuration Engine, explicitly defining Quick Launch and Advanced Customization supported boundaries before new configuration implementation.
+
+
+## Post-M8 configuration expansion CI correction
+- Branding/Theme UI checkpoint CI `33720882376` failed only in a pre-existing PostgreSQL payment integration fixture because the test connection had no active schema for unqualified raw CREATE TABLE statements. Typecheck and Lint passed; 342 tests passed.
+- Added explicit `public` schema/search_path setup (`a40467237b5d9fdad0ca626629db5bdeb1dc0793`).
+- Exact next task: inspect this correction's CI before advancing Published/History summaries. M8 remains closed; do not reopen or repeat it.
