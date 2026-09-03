@@ -1,0 +1,72 @@
+import { createHmac, timingSafeEqual } from 'node:crypto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { VerifiedPaymentWebhookTransport, type VerifiedPaymentWebhook } from './payment-webhook-transport.js';
+
+export interface StripeWebhookSecretProvider {
+  getSecret(): string | undefined;
+}
+
+/**
+ * Minimal Stripe event transport: authenticates the raw serialized event before
+ * projecting it into the provider-neutral webhook shape. Account context is read
+ * only from signed provider metadata.
+ */
+@Injectable()
+export class StripePaymentWebhookTransport extends VerifiedPaymentWebhookTransport {
+  constructor(private readonly secrets: StripeWebhookSecretProvider) {
+    super();
+  }
+
+  async verifyAndParse(input: { readonly signature?: string; readonly payload: unknown }): Promise<VerifiedPaymentWebhook> {
+    if (!input.signature || typeof input.payload !== 'object' || !input.payload) {
+      throw new UnauthorizedException('invalid Stripe webhook');
+    }
+
+    const secret = this.secrets.getSecret();
+    if (!secret) throw new UnauthorizedException('Stripe webhook secret is not configured');
+
+    const expected = createHmac('sha256', secret).update(JSON.stringify(input.payload)).digest('hex');
+    const actual = input.signature;
+    const expectedBuffer = Buffer.from(expected, 'utf8');
+    const actualBuffer = Buffer.from(actual, 'utf8');
+    if (expectedBuffer.length !== actualBuffer.length || !timingSafeEqual(expectedBuffer, actualBuffer)) {
+      throw new UnauthorizedException('invalid Stripe webhook signature');
+    }
+
+    const root = input.payload as Record<string, unknown>;
+    const object = root.data && typeof root.data === 'object' ? (root.data as Record<string, unknown>).object : undefined;
+    if (!object || typeof root.id !== 'string' || typeof root.type !== 'string' || typeof object.id !== 'string' || typeof object.created !== 'number') {
+      throw new UnauthorizedException('invalid Stripe webhook payload');
+    }
+
+    const metadata = object.metadata && typeof object.metadata === 'object' ? object.metadata as Record<string, unknown> : {};
+    const accountId = metadata.account_id;
+    const intentId = metadata.intent_id;
+    if (typeof accountId !== 'string' || typeof intentId !== 'string') {
+      throw new UnauthorizedException('missing Stripe payment metadata');
+    }
+
+    const type = root.type === 'payment_intent.succeeded'
+      ? 'payment.succeeded'
+      : root.type === 'payment_intent.payment_failed'
+        ? 'payment.failed'
+        : root.type === 'payment_intent.canceled'
+          ? 'payment.cancelled'
+          : null;
+    if (!type) throw new UnauthorizedException('unsupported Stripe webhook event');
+
+    return {
+      event: {
+        eventId: root.id,
+        type,
+        providerReference: object.id,
+        intentId,
+        occurredAt: new Date(object.created * 1000),
+      },
+      context: {
+        accountId,
+        ...(typeof metadata.entitlement_key === 'string' ? { entitlementKey: metadata.entitlement_key } : {}),
+      },
+    };
+  }
+}
