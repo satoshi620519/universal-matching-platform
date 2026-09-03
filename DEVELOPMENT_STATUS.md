@@ -2174,3 +2174,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: ${u.result.commit_sha}.
 - Validation status: a new CI run is required for this commit; no release-green claim is made yet.
 - Exact next action: inspect the CI run triggered by this commit. If the migration artifact gate passes, continue through the first actual downstream failure only; do not preemptively modify unrelated code.
+
+
+## CI migration gate follow-up — BUILD ROOT BOUNDARY FIXED
+- Did not repeat the previous CI audit; inspected only the newest completed runs after commit f2b74525.
+- Both runs still failed at the same earliest gate, so downstream checks remain unexecuted and were not modified.
+- Re-audited the exact migration-build path and identified the remaining package boundary defect: database tsconfig had rootDir=src while the package build workflow includes runtime scripts under scripts/. The production package needs a package-level root for emitted runtime support files.
+- Changed only rootDir from src to .; test exclusions remain in place, so Vitest files are still excluded from production compilation.
+- Fix commit: 39c6b7712e548d696729421629be56b5e953d86b.
+- Validation status remains PENDING until the CI run for this exact fix completes.
+- Exact next action: inspect the newly triggered run; if Verify packaged database migrations passes, follow the next concrete failed gate only.
