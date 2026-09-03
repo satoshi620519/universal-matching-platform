@@ -2763,3 +2763,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Review now exposes enabled visible-feature count, custom terminology, configured matching categories, and enabled matching rules.
 - Published and History summaries now render all unified immutable summary projections with backward-compatible absence checks.
 - EXACT NEXT ACTION: inspect retained focused tests/spec files against the integration branch and add a unified integration-focused summary test covering all four domains together. Then inspect TypeScript/step-order risks in main.tsx and workflow contracts; run diagnostics if an execution-capable environment is available.
+
+
+## Configuration Engine — Unified integration verification checkpoint
+- Re-read the exact next action and inspected retained focused specs on feature/config-engine-integration.
+- Confirmed domain configuration specs are retained for Terminology, Matching Categories, and Matching Rules, plus the focused Matching Rules snapshot summary spec.
+- Added a unified integration-focused immutable snapshot summary test exercising Feature Visibility, Terminology, Matching Categories, and Matching Rules together, including legacy absence behavior (8c2c705d).
+- Performed static contract inspection: main.tsx contains steps 0 through 8, workflow ordering is Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish, all four domain bindings are present, and all four summary projection keys exist.
+- NOTE: two expected older summary spec filenames were not present on the integration branch; this is recorded as a test coverage gap rather than falsely claiming full focused-test retention.
+- EXACT NEXT ACTION: inspect package manifests/test scripts and repository workflow to identify executable diagnostics. Then add focused summary coverage for Feature Visibility, Terminology, and Matching Categories if absent, and run available diagnostics in an execution-capable environment before considering the integration branch ready for review.
