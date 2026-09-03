@@ -14,9 +14,9 @@ describe.skipIf(!process.env.DATABASE_URL)('payment webhook PostgreSQL integrati
 
   beforeAll(async () => {
     await database.$connect();
-    await database.$executeRawUnsafe(
-      "INSERT INTO accounts (id, email, password_hash, status) VALUES ('" + accountId + "', 'm7-" + accountId + "@example.test', 'test', 'active')",
-    );
+    // The CI migration integration intentionally applies only the M7 slice; create the minimal FK fixture here.
+    await database.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY)');
+    await database.$executeRawUnsafe("INSERT INTO accounts (id) VALUES ('" + accountId + "')");
   });
 
   afterAll(async () => {
