@@ -2344,3 +2344,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: 07be3a1c98593630e697365bf9bd96030099c80d, 8b22226b1d0306a4f814e3da1f1e8156fedd3f6b, 28e1f682f123ed5774942ae914a88846167be5bb.
 - Validation status: PENDING. Remaining visible diagnostics are ProfileDiscoveryController tests (constructor arity + unknown typing) and RealtimeReconciliation tests (constructor arity).
 - Resume point if interrupted: inspect CI for the latest messaging-test fix commit. If messaging diagnostics clear, process ProfileDiscoveryController test diagnostics next, one coherent group at a time. Do not revisit PASS migration gates or previously verified concurrency evidence.
+
+
+## Checkpoint 2026-09-03 — TYPECHECK: FINAL MESSAGING TEST CONSTRUCTOR FIX
+- CI run 1399 (head 73c1dfc7) completed FAILURE at Typecheck; both migration gates remained PASS.
+- Downloaded exact diagnostics rather than relying on stale earlier lists.
+- The prior messaging fixes cleared most of that group. One remaining MessagingController construction in messaging.controller.test.ts (message-write case) still supplied 5 dependencies instead of the current 6.
+- Added the missing inert matches dependency stub to that single construction.
+- Fix commit: 682037b95f817efe229b0342ee67ef0f6dbecfd0.
+- Remaining diagnostics after this checkpoint: ProfileDiscoveryController tests (two constructor arity + two unknown-type assertions) and RealtimeReconciliation tests (two constructor arity errors).
+- Resume point if interrupted: inspect CI triggered by 682037b95f817efe229b0342ee67ef0f6dbecfd0. If the final messaging diagnostic clears, process ProfileDiscoveryController test diagnostics as the next coherent group. Do not revisit passing migration gates or concurrency evidence.
