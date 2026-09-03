@@ -76,3 +76,5 @@ export * from './conversation.js';
 export * from './quick-launch-configuration.js';
 
 export * from './branding-theme-configuration.js';
+
+export * from './localization-configuration.js';
