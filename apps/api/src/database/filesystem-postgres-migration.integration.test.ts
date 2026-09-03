@@ -39,14 +39,15 @@ describe.skipIf(!DATABASE_URL)(
         const executor = new PostgresMigrationExecutor(
           new PrismaSqlMigrationClient(database as any),
         );
+        const expectedMigrations = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
-        await expect(runMigrations(source, executor)).resolves.toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+        await expect(runMigrations(source, executor)).resolves.toEqual(expectedMigrations);
         await expect(runMigrations(source, executor)).resolves.toEqual([]);
 
         const rows = await database.$queryRawUnsafe<Array<{ version: number }>>(
           'SELECT version FROM schema_migrations ORDER BY version',
         );
-        expect(rows.map(({ version }) => Number(version))).toEqual([1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
+        expect(rows.map(({ version }) => Number(version))).toEqual(expectedMigrations);
 
         const tables = await database.$queryRawUnsafe<Array<{ table_name: string }>>(
           `SELECT table_name FROM information_schema.tables
@@ -57,6 +58,8 @@ describe.skipIf(!DATABASE_URL)(
                'verification_requests',
                'verification_outcomes',
                'safety_enforcements',
+               'safety_reports',
+               'moderation_cases',
                'schema_migrations'
              )
            ORDER BY table_name`,
@@ -64,7 +67,9 @@ describe.skipIf(!DATABASE_URL)(
         expect(tables.map(({ table_name }) => table_name)).toEqual([
           'accounts',
           'authentication_identities',
+          'moderation_cases',
           'safety_enforcements',
+          'safety_reports',
           'schema_migrations',
           'verification_outcomes',
           'verification_requests',
