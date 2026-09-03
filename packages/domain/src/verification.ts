@@ -7,6 +7,22 @@ export interface VerificationRecord {
   readonly expiresAt?: string;
 }
 
+const verificationTransitions: Record<VerificationStatus, readonly VerificationStatus[]> = {
+  'not-started': ['pending'],
+  pending: ['verified', 'failed', 'expired', 'revoked'],
+  verified: ['expired', 'revoked'],
+  failed: [],
+  expired: [],
+  revoked: [],
+};
+
+export function canTransitionVerificationStatus(
+  from: VerificationStatus,
+  to: VerificationStatus,
+): boolean {
+  return verificationTransitions[from].includes(to);
+}
+
 export function isVerificationUsable(record: VerificationRecord, now: string): boolean {
   if (record.status !== 'verified') return false;
   if (record.expiresAt === undefined) return true;
