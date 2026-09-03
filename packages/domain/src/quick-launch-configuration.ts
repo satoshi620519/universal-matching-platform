@@ -15,6 +15,8 @@ export interface QuickLaunchDraft {
   readonly profileSchema?: ProfileSchemaConfiguration;
   /** Purchaser presentation visibility only; runtime authorization remains independent. */
   readonly featureVisibility?: FeatureVisibilityConfiguration;
+  /** Public legal/support destinations; protected operational policies remain independent. */
+  readonly legalSupport?: { readonly privacyPolicyUrl?: string; readonly termsOfServiceUrl?: string; readonly supportUrl?: string; readonly supportEmail?: string };
   readonly supportedCountries: readonly string[];
   readonly categories: readonly { readonly key: string; readonly displayName: string }[];
   readonly enabledFeatures: readonly string[];
@@ -37,6 +39,13 @@ export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   if (draft.localization) validateLocalizationConfiguration({ ...draft.localization, supportedCountries: draft.supportedCountries });
   if (draft.profileSchema) validateProfileSchemaConfiguration(draft.profileSchema);
   if (draft.featureVisibility) validateFeatureVisibilityConfiguration(draft.featureVisibility);
+  if (draft.legalSupport) {
+    const normalized = (value?: string) => value?.trim() || undefined;
+    const urls = [normalized(draft.legalSupport.privacyPolicyUrl), normalized(draft.legalSupport.termsOfServiceUrl), normalized(draft.legalSupport.supportUrl)].filter((value): value is string => Boolean(value));
+    for (const value of urls) { let parsed: URL; try { parsed = new URL(value); } catch { throw new Error('legalSupport URL must be valid'); } if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') throw new Error('legalSupport URL must use http or https'); }
+    const email = normalized(draft.legalSupport.supportEmail);
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('legalSupport supportEmail must be valid');
+  }
   if (!draft.supportedCountries.length) throw new Error('at least one supported country is required');
   if (new Set(draft.supportedCountries).size !== draft.supportedCountries.length) throw new Error('supportedCountries must be unique');
   if (!draft.categories.length) throw new Error('at least one category is required');
@@ -60,6 +69,7 @@ export function publishQuickLaunchConfiguration(
   if (Number.isNaN(date.getTime())) throw new Error('publishedAt must be a valid instant');
   return Object.freeze({
     ...draft,
+    ...(draft.legalSupport ? (() => { const privacyPolicyUrl=draft.legalSupport.privacyPolicyUrl?.trim()||undefined, termsOfServiceUrl=draft.legalSupport.termsOfServiceUrl?.trim()||undefined, supportUrl=draft.legalSupport.supportUrl?.trim()||undefined, supportEmail=draft.legalSupport.supportEmail?.trim().toLowerCase()||undefined; return privacyPolicyUrl||termsOfServiceUrl||supportUrl||supportEmail ? { legalSupport: Object.freeze({ ...(privacyPolicyUrl?{privacyPolicyUrl}:{}), ...(termsOfServiceUrl?{termsOfServiceUrl}:{}), ...(supportUrl?{supportUrl}:{}), ...(supportEmail?{supportEmail}:{}) }) } : {}; })() : {}),
     ...(draft.featureVisibility ? { featureVisibility: Object.freeze({ features: Object.freeze(draft.featureVisibility.features.map(feature => Object.freeze({ ...feature }))) }) } : {}),
     ...(draft.profileSchema ? { profileSchema: Object.freeze({ fields: Object.freeze(draft.profileSchema.fields.map(field => Object.freeze({ ...field, ...(field.options ? { options: Object.freeze([...field.options]) } : {}) }))) }) } : {}),
     ...(draft.localization ? { localization: Object.freeze({ ...draft.localization, supportedLocales: Object.freeze([...draft.localization.supportedLocales]), ...(draft.localization.countryLocales ? { countryLocales: Object.freeze({ ...draft.localization.countryLocales }) } : {}) }) } : {}),
