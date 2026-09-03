@@ -63,7 +63,13 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Focused tests cover versioned signature acceptance, tampering, missing raw-body rejection, and missing signed context (`1cf00105e32f3005debf40bdd44775105ce1eb2c`).
 - Controller forwards provider signature and raw-body capability (`24c4169e5b915ddc1f8409102b1033da0e375132`).
 
-## Next exact task
+## Completion audit checkpoint
+- CI `33716122829` completed SUCCESS for the raw-body/controller fixes. Baseline gates passed: migration verification, PostgreSQL migration command integration, Typecheck, Lint, Test, matching concurrency integration/gate verification, and Build.
+- M7 final audit against IMPLEMENTATION_MILESTONES.md confirms verification lifecycle/provider boundary, payment adapter boundary, entitlement model, webhook/idempotency, and grant/revocation tests are implemented.
+- Audit also found one milestone deliverable that must be explicitly evidenced before M7 can be declared complete: **entitlement authorization integration**. Do not falsely mark M7 complete until a protected capability can authoritatively consume entitlement state and grant/revoke behavior is covered at that boundary.
+- Exact next task: inspect the existing authorization/access service and entitlement service contracts, add the smallest provider-neutral entitlement authorization integration and focused tests, then run CI. If green, update DEVELOPMENT_STATUS.md and mark M7 complete before moving to M8.
+
+## Historical completion trail
 - CI `33715396428` for HTTP/composition work completed SUCCESS.
 - CI `33715550436` exposed exactly one Typecheck error in the new raw-body Stripe signature path: `actual` was `string | null` before `Buffer.from`. Fixed by narrowing before conversion (`33dc6020beeb0401077866c644b7a9bad1b6d35e`).
 - Focused controller wiring test added (`ea384660152a90bfc1378f291d76bf679c46592b`).
