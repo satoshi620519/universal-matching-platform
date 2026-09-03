@@ -17,20 +17,22 @@
 - Phase 5 collection primitives implemented on `feature/ux-accessible-collection-primitives`: `Card`, `List`, and keyboard-accessible `ListRow`.
 - Collection primitive styling added using semantic tokens, including hover and disabled states without changing interaction semantics.
 - Collection primitive export contract test extended to cover `Card`, `List`, and `ListRow`.
+- PR #8 merged into `main` as merge commit `b0fba507ed1c03ed84bba3edd21cc4c5fea17b64`.
+- PR #8 CI run `33737574486` (run #1973) completed successfully: migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, build, and diagnostics all passed.
 
 ## Current branch
 
-`feature/ux-accessible-collection-primitives`
+`main` (after PR #8 merge)
 
 ## Latest commits
 
-- `12026701492ce8d673e58590b9dbe8c07ddcf216` — add accessible card and list row primitives.
-- `e1fb50ba71f73f87a10dcfd9eb78287cebef6d86` — add semantic card and list row styles.
+- `b0fba507ed1c03ed84bba3edd21cc4c5fea17b64` — merge PR #8, accessible collection primitives.
+- `b2bfdbbb7387fa043f91b33c3340a304556dd50c` — collection primitive progress branch head before merge.
 - `16ceee9ee3c7f0c1c908d5a7ec603f02e2ae7bba` — cover card and list row primitive exports.
 
 ## Next continuation point
 
-Open the Phase 5 collection-primitives PR and validate it with the repository CI. If green, merge it and record the exact merge commit and CI result here. Then continue with dialogs/drawers, followed by navigation, loading/empty states, and systematic migration of existing screens. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or the already-merged `Button`, `Field`, `TextInput`, `TextArea`, and `StatusMessage` primitives.
+Continue Phase 5 UX implementation with dialogs/drawers. Before implementation, inspect the current `main` component files, tests, styles, and this progress record to avoid overlap. The next layer must preserve accessible naming/description, keyboard and Escape behavior, focus visibility/management, responsive mobile drawer behavior, destructive confirmation patterns, loading/disabled mutation safety, and reduced-motion semantics. After implementation, run repository CI, merge only after all required checks are green, and record the exact merge commit, CI run, and next continuation point here. Then proceed to navigation, loading/empty states, and systematic migration of existing screens. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or the already-merged primitive layers.
 
 ## Interruption-safe rule
 
