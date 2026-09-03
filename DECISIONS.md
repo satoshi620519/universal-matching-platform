@@ -103,3 +103,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 53. Localization Published/History information is derived from immutable snapshots through the existing configuration summary projection. UI shows compact identity fields (default locale and timezone); detailed locale/country mappings remain available in the underlying snapshot rather than being redundantly persisted.
 
 54. Profile Schema Configuration defines allowed field metadata, while `Profile.fields` remains the sole owner of submitted field values and `ProfileProjectionPolicy` remains the existing runtime visibility mechanism. Configuration may reference visibility semantics but must not create a parallel profile-value store or replace projection ownership.
+
+55. Profile Schema is an optional versioned QuickLaunch aggregate extension. Publication snapshots freeze field definitions/options only; actual `Profile.fields` values are never embedded into configuration snapshots, and runtime ProfileProjectionPolicy ownership remains unchanged.
