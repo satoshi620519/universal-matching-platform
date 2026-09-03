@@ -70,3 +70,10 @@
 - Added normalized publication/history view models (`a647d9c0a7cf1258eb79aa110fb9718f5dd4406c`).
 - Added purchaser Admin retrieval action and publication status/history panel (`b7f05aad2668c839528fc2754695ff802e62dba2`) plus styling (`33309b1fcbafce3ada4a2be62a689b1500f8c650`).
 - Exact next task: inspect latest CI. If green, perform focused end-to-end lifecycle contract verification for create → save → publish → published → history, including failure behavior. Only after that may M8 be marked complete.
+
+
+## Lifecycle verification gate
+- Latest CI run `33719014562` was inspected by exact job/log. Typecheck and lint passed; failure was an unrelated stale payment PostgreSQL test fixture inserting into `accounts` without newly required `status` lifecycle data, not a Quick Launch failure.
+- Updated only that fixture to match the current schema (`df13e15b41ec1d884ecdf96f6940111e1d7115b1`).
+- Added focused purchaser lifecycle contract test covering create → save → publish → published → history endpoint sequencing (`3b76c598ce52204be2bde49e4bdac608edb57371`).
+- Exact next task: inspect CI for both corrections. If green, verify backend lifecycle behavior and close M8 formally with final completion criteria; if CI fails, fix only the reported failure.
