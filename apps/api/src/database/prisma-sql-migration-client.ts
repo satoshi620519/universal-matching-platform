@@ -15,7 +15,8 @@ class PrismaSqlMigrationQueryClient implements SqlMigrationQueryClient {
   ): Promise<T> {
     const trimmed = sql.trimStart().toUpperCase();
     if (trimmed.startsWith('SELECT')) {
-      return this.client.$queryRawUnsafe<T>(sql, ...params);
+      const rows = await this.client.$queryRawUnsafe<T[]>(sql, ...params);
+      return { rows } as T;
     }
 
     return this.client.$executeRawUnsafe(sql, ...params) as Promise<T>;
