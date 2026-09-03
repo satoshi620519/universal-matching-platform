@@ -1,0 +1,89 @@
+:root {
+  color-scheme: light;
+
+  /* Semantic color contract from UX_SPEC.md. */
+  --color-background: #f4f1e9;
+  --color-surface: #fffdfa;
+  --color-surface-elevated: #ffffff;
+  --color-text-primary: #172016;
+  --color-text-secondary: #5c655b;
+  --color-text-muted: #7b8578;
+  --color-border: #d8d5cc;
+  --color-brand-primary: #2e5c45;
+  --color-brand-secondary: #dce4d4;
+  --color-brand-accent: #b2c5a0;
+  --color-success: #315b30;
+  --color-warning: #765d18;
+  --color-danger: #873d32;
+  --color-focus: #2e5c45;
+
+  /* Typography contract. Buyers may override --font-family-sans. */
+  --font-family-sans: "DM Sans", Arial, sans-serif;
+  --font-family-display: "Playfair Display", Georgia, serif;
+  --font-family-mono: "DM Mono", monospace;
+
+  --font-size-display: clamp(3.5rem, 8vw, 7.375rem);
+  --font-size-h1: clamp(2.75rem, 5vw, 4.75rem);
+  --font-size-h2: clamp(2.25rem, 5vw, 4.0625rem);
+  --font-size-h3: 1.25rem;
+  --font-size-body: 1rem;
+  --font-size-body-small: 0.875rem;
+  --font-size-label: 0.8125rem;
+  --font-size-caption: 0.6875rem;
+  --font-size-button: 0.9375rem;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  --radius-none: 0;
+  --radius-small: 0.25rem;
+  --radius-medium: 0.75rem;
+  --radius-large: 1.5rem;
+  --radius-pill: 999px;
+
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--color-focus) 28%, transparent);
+  --transition-fast: 140ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-background: #111711;
+  --color-surface: #182018;
+  --color-surface-elevated: #202a20;
+  --color-text-primary: #edf2eb;
+  --color-text-secondary: #c4cdc1;
+  --color-text-muted: #9ca99a;
+  --color-border: #3a4639;
+  --color-brand-primary: #8db89b;
+  --color-brand-secondary: #27382b;
+  --color-brand-accent: #91ab80;
+  --color-success: #9bd198;
+  --color-warning: #e4c875;
+  --color-danger: #ef9d91;
+  --color-focus: #a9d3b4;
+}
+
+:where(button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
+}
+
+:where(button, input, select, textarea) {
+  font-family: var(--font-family-sans);
+}
