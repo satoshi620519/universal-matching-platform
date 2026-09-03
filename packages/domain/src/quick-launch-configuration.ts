@@ -1,7 +1,11 @@
+import type { BrandingThemeConfiguration } from './branding-theme-configuration.js';
+
 export interface QuickLaunchDraft {
   readonly applicationName: string;
   readonly logoUrl?: string;
   readonly primaryColor: string;
+  /** Optional richer branding/theme extension; legacy primaryColor/logoUrl remain supported. */
+  readonly brandingTheme?: BrandingThemeConfiguration;
   readonly supportedCountries: readonly string[];
   readonly categories: readonly { readonly key: string; readonly displayName: string }[];
   readonly enabledFeatures: readonly string[];
@@ -43,6 +47,7 @@ export function publishQuickLaunchConfiguration(
   if (Number.isNaN(date.getTime())) throw new Error('publishedAt must be a valid instant');
   return Object.freeze({
     ...draft,
+    ...(draft.brandingTheme ? { brandingTheme: Object.freeze({ ...draft.brandingTheme, ...(draft.brandingTheme.typography ? { typography: Object.freeze({ ...draft.brandingTheme.typography }) } : {}) }) } : {}),
     applicationName: draft.applicationName.trim(),
     primaryColor: draft.primaryColor.toUpperCase(),
     supportedCountries: Object.freeze([...draft.supportedCountries]),
