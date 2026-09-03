@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isVerificationUsable } from './verification.js';
+import { canTransitionVerificationStatus, isVerificationUsable } from './verification.js';
 
 describe('verification lifecycle', () => {
   it('accepts an active verification without expiry', () => {
@@ -27,5 +27,17 @@ describe('verification lifecycle', () => {
   it('rejects non-verified statuses', () => {
     expect(isVerificationUsable({ level: 2, status: 'pending' }, '2026-01-01T00:00:00.000Z')).toBe(false);
     expect(isVerificationUsable({ level: 2, status: 'revoked' }, '2026-01-01T00:00:00.000Z')).toBe(false);
+  });
+
+  it('allows only the defined forward verification lifecycle transitions', () => {
+    expect(canTransitionVerificationStatus('not-started', 'pending')).toBe(true);
+    expect(canTransitionVerificationStatus('pending', 'verified')).toBe(true);
+    expect(canTransitionVerificationStatus('pending', 'failed')).toBe(true);
+    expect(canTransitionVerificationStatus('pending', 'expired')).toBe(true);
+    expect(canTransitionVerificationStatus('verified', 'expired')).toBe(true);
+    expect(canTransitionVerificationStatus('verified', 'revoked')).toBe(true);
+    expect(canTransitionVerificationStatus('failed', 'pending')).toBe(false);
+    expect(canTransitionVerificationStatus('revoked', 'verified')).toBe(false);
+    expect(canTransitionVerificationStatus('expired', 'verified')).toBe(false);
   });
 });
