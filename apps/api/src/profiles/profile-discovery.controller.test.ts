@@ -10,7 +10,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       principalResolver as never,
       ({ list: vi.fn().mockResolvedValue([{ id:'cat-1' }]) } as never),
       ({ schemaFor: vi.fn().mockReturnValue({}) } as never),
-      ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }) } as never),
+      ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }), update: vi.fn().mockResolvedValue({ id:'profile-1' }) } as never),
       ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
@@ -46,7 +46,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('propagates authentication failure before accessing services', async () => {
     const resolver={ requireAuthenticated: vi.fn().mockRejectedValue(new UnauthorizedException()) };
-    const c=new ProfileDiscoveryController(resolver as never, {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
+    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never);
     await expect(c.listCategories()).resolves.toBeDefined();
     await expect(c.getMyProfile()).rejects.toBeInstanceOf(UnauthorizedException);
   });
