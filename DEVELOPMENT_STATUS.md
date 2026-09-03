@@ -2303,3 +2303,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 98b29e12f60d078ede8a588c6d0652711801b859.
 - Important remaining diagnostics (not yet modified in this checkpoint): outdated repository constructor calls in matching tests, createMany mock shape, messaging controller constructor arity, profile-discovery test/controller typing, realtime reconciliation constructor arity.
 - Resume point if interrupted: inspect CI triggered by 98b29e12f60d078ede8a588c6d0652711801b859. If directConversationPair errors clear, address the earliest remaining typecheck diagnostic next; do not bulk-edit all listed errors at once.
+
+
+## Checkpoint 2026-09-03 — TYPECHECK PROGRESS: PROFILE SCHEMA OPTIONAL ID FIX
+- CI run 1388 (head 98b29e12) completed at Typecheck; migration gates remained PASS.
+- Exact diagnostics confirm directConversationPair delegate errors are cleared from the reported error list, so the previous narrow typing fix removed that blocker.
+- Remaining diagnostics are now constructor-arity/mocks in tests plus one production-source error in ProfileDiscoveryController: createMyProfile passes body.categoryId (string | undefined) into schemaFor(categoryId: string).
+- Fixed the production source contract by allowing schemaFor(categoryId?: string); absent IDs already naturally fall back to DEFAULT_FIELD_SCHEMA, so runtime behavior is preserved and the signature matches its caller.
+- Fix commit: 600fbd3f1084fe2a7bc0eaae78a4fb3c17026963.
+- Remaining visible diagnostics after this checkpoint (not bulk-fixed): matching repository test constructor arity/createMany mock, messaging controller test constructor arity, profile discovery test constructor/unknown typing, realtime reconciliation test constructor arity.
+- Resume point if interrupted: inspect CI for 600fbd3f1084fe2a7bc0eaae78a4fb3c17026963; if the profile production error clears, handle the earliest remaining typecheck diagnostic next. Keep completed migration and concurrency evidence untouched.
