@@ -2553,3 +2553,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added schema-to-existing-profile-value validation plus focused boundary tests (`50f07a8541fb5af3acf0057aa2595e361f165bd2`) and exported the contract (`1350c3ea8692c87790e7340963c7b09e65f87f30`).
 - CI note: latest observable CI `33722524739` for the Localization summary projection was in progress when inspected; no green conclusion is inferred for this new Profile Schema work.
 - Exact next task: integrate ProfileSchemaConfiguration as an optional extension of the existing versioned QuickLaunchDraft lifecycle, then add purchaser controls without duplicating Profile.fields or ProfileProjectionPolicy.
+
+
+## Configuration Engine — Profile Schema lifecycle integration
+- Continued from the exact Profile Schema checkpoint after reviewing the existing QuickLaunch aggregate and tests; no Localization or prior Profile contract work was repeated.
+- Latest observable CI `33722773640` for the Profile Schema export was still in progress at inspection time, so no green result was inferred.
+- Integrated optional `profileSchema` into the existing QuickLaunchDraft aggregate and validation path (`2c82c8a13652f7d714e0beb1498d6fb0f6702d6e`).
+- Published snapshots deep-freeze schema field definitions and select options, preserving immutable version/history semantics without storing actual Profile.fields values or replacing ProfileProjectionPolicy.
+- Added aggregate-level publication coverage (`17873a5b0ba27d2ec576e644a5964f943df17963`).
+- Exact next task: extend the existing purchaser Quick Launch workflow/admin UI with profile field definitions (add/remove/select options/required/visibility), then Review & Publish; do not create a second profile value editor or duplicate runtime projection controls.
