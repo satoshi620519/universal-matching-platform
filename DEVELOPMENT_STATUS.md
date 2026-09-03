@@ -2093,3 +2093,17 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commits: a370aa1f45b621ecbd9a6e47097b5b9381458278, 4a8370489cb94c90802fe656a26fb09ced6d7de1, 7859d3790abe387c2dedf5f889c786f0bbf264f4.
 - Important remaining integration: match.mutual notifications are currently persisted with createMany inside the transaction, which does not expose committed notification IDs and must not publish from inside the transaction. The publication service is intentionally not called yet to avoid pre-commit ghost events.
 - Exact next action: refactor only the match.mutual notification persistence seam so the transaction returns committed notification records/IDs as post-commit metadata, then invoke NotificationRealtimePublicationService after transaction success with best-effort failure isolation. Add replay/no-precommit tests before release validation.
+
+
+## Phase B committed notification realtime integration — IMPLEMENTED
+- Reconfirmed current repository state before editing and changed only the missing post-commit seam.
+- Replaced match.mutual notification createMany with record-returning creates inside the existing transaction so authoritative notification IDs and owning account IDs are available.
+- The transaction returns result plus committed notification metadata; only after successful transaction completion is notification.created handed to NotificationRealtimePublicationService.
+- Publication is best-effort and isolated: realtime failure cannot roll back or change a successful match result.
+- Idempotency replays return before notification creation and therefore publish nothing.
+- Added focused coverage for committed-ID publication, recipient mapping, replay suppression, and publication-failure isolation.
+- Commits: 85af512802e915bf2778a1f2d642edf7bbfecaa5, ac80e763eff52416e93d95dadd4c1712f007f397.
+- Note: an accidental controller dependency edit was immediately reverted in commit 94723a72ed3345ba9c8c80ecd5cc9c03b10696f3; no redundant dependency remains.
+- Validation status: focused contract coverage updated; full executable workspace/production PostgreSQL validation remains pending.
+- Remaining work: production migration preflight/build validation; broader release-readiness verification.
+- Exact next action: audit package scripts, Prisma migration state, CI workflows, and production startup assumptions; fix only concrete release blockers and record each verified gate without revisiting completed feature work.
