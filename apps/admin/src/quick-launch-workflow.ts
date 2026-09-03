@@ -41,6 +41,7 @@ export const quickLaunchSteps = [
   'Branding',
   'Regions',
   'Categories',
+  'Profile Schema',
   'Matching Categories',
   'Features',
   'Terminology',

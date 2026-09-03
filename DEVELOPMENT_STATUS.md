@@ -2794,3 +2794,19 @@ Inventory the existing API/controller routes and application capabilities, map t
 - GitHub now reports mergeable=true and mergeable_state=clean for PR #3.
 - Final changed-file inventory reviewed: 20 files / +360 -2, covering the three configuration engines, Quick Launch workflow and immutable summary integration, focused tests, integration contract tests, documentation, and the current progress checkpoint.
 - EXACT NEXT ACTION: perform one final source-level diff sanity review of the two modified pre-existing admin files (main.tsx and quick-launch-workflow.spec.ts) plus workflow/summary contracts; if no regression is found, mark PR #3 ready for review and merge it. Do not merge the older conflicted PR #1 or temporary synchronization PR #2.
+
+## Profile Schema Quick Launch Integration — specification checkpoint
+- Configuration Engine Integration is merged into main at 054a77ab after final CI success.
+- Re-read roadmap, decisions, current domain contracts, API lifecycle, and admin workflow to select the next uncompleted configuration integration without duplicating prior work.
+- Selected Profile Schema Quick Launch integration: the domain contract and immutable lifecycle already exist, but the purchaser-facing workflow/summary integration is not yet represented as a dedicated completed checkpoint.
+- Created branch feature/profile-schema-quick-launch-integration from current main.
+- Added PROFILE_SCHEMA_QUICK_LAUNCH_SPEC.md and recorded Decision 61 to lock ownership boundaries before implementation.
+- EXACT NEXT ACTION: inspect main.tsx Quick Launch state and existing step blocks, then add Profile Schema editing inside the existing Onboarding step and connect it to QuickLaunchDraftInput without introducing a parallel profile-value store.
+
+## Profile Schema Quick Launch Integration — implementation correction checkpoint
+- During implementation inspection, discovered the ProfileSchema domain/API/snapshot/summary integration was already present on main; the earlier status assumption that purchaser-facing integration was absent was incorrect, so no duplicate parallel implementation was created.
+- Found and fixed the actual integration regression: Profile fields and Categories were both rendered at step index 2 while the workflow omitted a dedicated Profile Schema step.
+- Added explicit workflow order: Branding → Regions → Categories → Profile Schema → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish.
+- Shifted subsequent UI step bindings accordingly and updated the workflow contract test.
+- Added focused immutable snapshot summary coverage for profile field count, required count, stable keys, and legacy snapshots without profile schema.
+- EXACT NEXT ACTION: inspect branch diff against main, run CI through GitHub PR, and fix only evidence-backed failures. If green, final review and merge this regression fix as the dedicated Profile Schema Quick Launch integration completion.
