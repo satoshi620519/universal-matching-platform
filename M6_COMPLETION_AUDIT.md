@@ -1,7 +1,7 @@
 # Milestone 6 Completion Audit
 
 ## Status
-IN PROGRESS — implementation gap identified on `main` at commit `91f6e7c9871a3274625df796b431b442c2621aed`.
+IN PROGRESS — implementation gap identified and first persistence slice added on `main`.
 
 ## Required gate
 Milestone 6 requires:
@@ -18,25 +18,31 @@ Milestone 6 requires:
 - Request rate-limit baseline exists.
 - Audit-record infrastructure exists.
 - Discovery exclusion already has a safety-aware policy boundary.
+- PostgreSQL persistence now exists for safety reports and moderation cases.
 
-### Concrete missing operational slice
-The current API source tree has no operational report/block/moderation controller or application service, and the database migration set has no persisted report or moderation-case tables. Therefore the domain contracts alone cannot satisfy the M6 completion gate.
+### Concrete implementation progress
+Added migration `0018_create_safety_reports_and_moderation_cases.sql` on `main`:
+- `safety_reports` stores reporter ownership, target type/id, reason, status and timestamps;
+- reporter and status indexes support scoped retrieval and moderation queues;
+- `moderation_cases` references exactly one report and persists the moderation lifecycle;
+- status values are constrained to the existing domain state machines.
+
+Commit: `47a980f76341145ae954d93b6c244807da47bad2`.
+
+### Remaining operational slice
+The API source tree still needs the application/controller layer that uses these tables. Required next pieces remain:
+1. authenticated report submission and reporter-scoped report reads;
+2. creation/transition of moderation cases behind privileged authorization;
+3. persistence of enforcement actions through the existing safety-enforcement boundary;
+4. communication/matching/discovery authorization checks against effective enforcement;
+5. audit records for privileged moderation actions;
+6. integration/unit tests for cross-account report denial, immediate enforcement effect, blocked interaction prevention, and audited privileged action.
 
 ## Decision
-Do not mark M6 complete and do not infer completion from domain-only tests.
-
-## Next exact implementation task
-Build the smallest production vertical slice required by the existing contracts:
-1. persist safety reports with reporter ownership and status lifecycle;
-2. expose authenticated report submission and reporter-scoped report reads;
-3. create/transition moderation cases behind privileged authorization;
-4. persist enforcement actions through the existing safety-enforcement boundary;
-5. ensure communication/matching/discovery authorization consults effective enforcement;
-6. emit audit records for privileged moderation actions;
-7. add integration/unit tests for cross-account report denial, immediate enforcement effect, blocked interaction prevention, and audited privileged action.
+Do not mark M6 complete and do not infer completion from domain-only tests or migration presence alone.
 
 ## Non-duplication rule
 Reuse the existing domain contracts, authorization/capability services, safety-enforcement repository, audit service, and discovery exclusion policy. Do not recreate those layers.
 
 ## Evidence boundary
-This audit is implementation evidence only. CI execution against the current `main` commit is still required before claiming execution-verified completion.
+This audit is implementation evidence only. CI execution against the current `main` commit is still required before claiming execution-verified completion. Migration count/test expectations must also be reconciled with the newly added migration before CI verification.
