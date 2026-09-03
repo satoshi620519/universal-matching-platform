@@ -2730,3 +2730,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Queried repository branches and compared each Configuration Engine feature branch against main. Terminology, Matching Categories, Matching Rules, and Feature Visibility all independently modify shared files (apps/admin/src/main.tsx, quick-launch-configuration-summary.ts, and/or quick-launch-workflow.ts).
 - Therefore automatic branch merging is deliberately deferred: a naive merge would create overlapping UI/summary conflicts and risks losing another domain's changes.
 - EXACT NEXT ACTION: create a dedicated integration baseline and perform file-level consolidation of the four domains from current branch tips, resolving shared-file changes semantically (not by choosing one branch wholesale). Preserve all domain-specific tests/docs. Run concrete diagnostics when an execution-capable environment becomes available.
+
+
+## Configuration Engine — Integration shared workflow contract
+- Continued from the dedicated feature/config-engine-integration baseline and re-read the exact prior checkpoint before editing.
+- Compared quick-launch-workflow.ts across main, Terminology, Matching Categories, and Matching Rules branch tips instead of selecting one branch wholesale.
+- Semantically consolidated all optional configuration contracts into the integration baseline: terminology, matchingCategories, and matchingRules, while preserving existing featureVisibility and legacy categories.
+- Consolidated Quick Launch step ordering explicitly: Branding → Regions → Categories → Matching Categories → Features → Terminology → Matching Rules → Onboarding → Review & Publish.
+- Commit: e158c40e.
+- EXACT NEXT ACTION: consolidate quick-launch-configuration-summary.ts across Feature Visibility, Terminology, Matching Categories, and Matching Rules, preserving all backward-compatible fallbacks; then consolidate main.tsx against the unified workflow step ordering. Do not merge shared files wholesale.
