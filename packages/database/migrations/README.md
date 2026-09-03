@@ -35,10 +35,22 @@ Each successfully applied migration records its numeric version and completion t
 
 A migration failure is a deployment/database failure, not an application-level validation error. The runner must return a non-success result and preserve the database in the strongest rollback state supported by the database engine.
 
-## Current release gate limitation
+## Integrity and immutability policy
 
-The repository currently verifies that migration artifacts are packaged into `@universal/database/dist/migrations`, but it does not yet contain a concrete production migration runner that applies the `schema_migrations` contract to an empty PostgreSQL database. Therefore artifact packaging is a CI gate, while actual migration execution must be supplied before production deployment.
+Migration artifacts are append-only release inputs. Once a version has been deployed, its SQL content must not be edited, renamed, or reused for different semantics. A database version record proves application of a version, not the identity of arbitrary replacement content; operational integrity therefore relies on immutable source/release artifacts and code review. Any correction must be delivered as a new, higher-numbered migration.
+
+The runner intentionally executes the packaged artifact set selected by the deployed build. Do not mix migration files from different releases.
+
+## Deployment command
+
+The production-facing command is:
+
+`DATABASE_URL=postgresql://... pnpm --filter @universal/database migrate`
+
+It builds the database package, verifies the packaged migration directory is used, discovers ordered pending migrations, and applies each migration transactionally through PostgreSQL before recording its version in `schema_migrations`. The command is idempotent for already-recorded versions.
+
+CI also runs this same deploy-facing command against its PostgreSQL service. A successful source-level review is not a substitute for checking the resulting CI execution before release tagging.
 
 ## Scope
 
-This contract defines artifact discovery, ordering, tracking and application semantics. It does not prescribe a particular PostgreSQL driver or command-line framework. The concrete runner must use the repository's selected database access technology and must be covered by an empty-database integration test before the migration gate is considered complete.
+This contract defines artifact discovery, ordering, tracking, immutability and application semantics. The concrete PostgreSQL runner lives in `packages/database/scripts/migrate-postgres.mjs`.
