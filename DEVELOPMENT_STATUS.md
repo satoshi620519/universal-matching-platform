@@ -2426,3 +2426,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commits: ac5a7c5117a1fba7107360d277b118e55fcd451d, acfbb87dc13f2c7106a33b47cf8d4785ea8a04bc, 78f892969e352dc102152805c4187c14c788fc0d.
 - Validation status: PENDING CI.
 - Resume point if interrupted: inspect newest CI for these fixes. If Test passes, continue to Matching concurrency integration/gate then Build. If not, address only exact remaining diagnostics and do not revisit already-passed gates.
+
+
+## Checkpoint 2026-09-03 — TEST GATE DOWN TO 1 FAILURE; PRISMA MULTI-STATEMENT MIGRATION FIX
+- CI 1426 confirmed Migration verification, PostgreSQL migration integration, Typecheck, and Lint PASS.
+- Test improved to 293 passed / 1 failed. The sole failure is filesystem migration integration.
+- Root cause: Prisma $executeRawUnsafe uses prepared statements and PostgreSQL rejects a migration artifact containing multiple SQL commands in one prepared statement.
+- Fixed the Prisma SQL migration adapter at the execution boundary: parameterless migration artifacts are split with quote/comment/dollar-quote awareness and executed statement-by-statement; parameterized queries remain single statements.
+- Fix commit: 1f3e850fcace262257717cacc448223ee1f590b1.
+- Validation status: PENDING CI.
+- Resume point if interrupted: inspect CI for 1f3e850fcace262257717cacc448223ee1f590b1. If Test passes, proceed immediately to Matching concurrency integration, concurrency gate verification, then Build. Do not revisit passed gates.
