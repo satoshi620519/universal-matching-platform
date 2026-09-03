@@ -14,6 +14,7 @@
 
 ## Exact next task
 1. Inspect CI for the new M8 foundation.
-2. If green, add persistence/repository and draft-to-published lifecycle without mutating historical published snapshots.
-3. Then expose the workflow through the purchaser admin application/API boundary.
-4. Record every completed step here to prevent duplicate work.
+2. CI 33717291122 completed SUCCESS for the M8 domain foundation.
+3. Added Quick Launch persistence boundary (`c90dfbf9ec71fdf08cb752f62ddc55f3ba65870b`), draft-to-published lifecycle service (`ca7f6e4d9c6f554a692fccd812f41c78b5b69fbc`), and publication history test (`9aba6360336e69b49dbccb3ef1599ab28dcb79ef`).
+4. Exact next task: inspect CI, then implement the production persistence adapter and purchaser admin/API boundary. Do not recreate the existing generic ConfigurationVersion/ConfigurationPublication subsystem; integrate or adapt only where it adds value to the Quick Launch aggregate.
+5. Record every completed step here to prevent duplicate work.
