@@ -29,9 +29,10 @@ export class PostgresMigrationExecutor implements MigrationExecutor {
 
   async apply(migration: MigrationArtifact): Promise<void> {
     await this.client.transaction(async (tx) => {
-      for (const statement of migration.sql.split(';').map((value) => value.trim()).filter(Boolean)) {
-        await tx.query(statement);
-      }
+      // PostgreSQL SQL may legally contain semicolons inside function bodies, strings,
+      // comments, or dollar-quoted blocks. Do not implement an incomplete SQL parser here;
+      // send the immutable migration artifact to the PostgreSQL driver as authored.
+      if (migration.sql.trim()) await tx.query(migration.sql);
       await tx.query(
         'INSERT INTO schema_migrations (version) VALUES ($1)',
         [migration.version],
