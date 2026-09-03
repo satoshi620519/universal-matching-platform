@@ -2634,3 +2634,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Published and History UI now display that snapshot-derived visibility summary (`8c76621c85633ca316490027b788d014751b1612`).
 - Added explicit completion/boundary checkpoint documenting backward compatibility and the unresolved CI-evidence limitation (`8c8698bb4de1ec8e7d7e209a499aebab293c8b75`).
 - Exact next task: obtain concrete CI evidence for the current branch/commits using an available workflow run source; if a failure is found, repair only its concrete diagnostic. If clean, checkpoint Feature Visibility domain completion and then begin the next Configuration Engine domain. Do not resume mobile implementation until its branch work is reconciled into the authoritative roadmap/status.
+
+
+## Configuration Engine — Terminology domain started
+- Before implementation, re-read the latest DEVELOPMENT_STATUS.md and MASTER_DEVELOPMENT_ROADMAP.md, then searched repository evidence for existing terminology/matching-rule configuration to avoid duplicating an existing domain.
+- Confirmed the active Feature Visibility work is checkpointed but CI remains an open verification item; no unsupported green-CI claim was made.
+- Started the next clearly listed Phase 4 configuration area: terminology. Added a stable-key terminology configuration model, normalization/fallback behavior, tests, and domain boundary documentation on branch feature/config-terminology (34e8fbce, 9e1e9708, 2ee144df).
+- Terminology customizes presentation labels only and explicitly does not rename persistence/API/security identifiers.
+- EXACT NEXT ACTION: inspect existing Quick Launch configuration lifecycle types and add optional terminology metadata only if no existing equivalent contract exists; then add purchaser UI and immutable snapshot summary coverage. Record progress immediately after each coherent slice.
