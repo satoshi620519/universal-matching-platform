@@ -45,6 +45,10 @@ export class EntitlementService {
     });
   }
 
+  async findUsable(accountId: string, entitlementKey: string, now = new Date()): Promise<EntitlementRecord | null> {
+    return this.repository.findUsableForAccount(accountId, entitlementKey, now);
+  }
+
   async revokeByPaymentIntent(paymentIntentId: string): Promise<EntitlementRecord | null> {
     const record = await this.repository.findByPaymentIntentId(paymentIntentId);
     return record ? this.transition(record, 'revoked') : null;
