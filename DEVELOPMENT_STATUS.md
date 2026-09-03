@@ -2184,3 +2184,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 39c6b7712e548d696729421629be56b5e953d86b.
 - Validation status remains PENDING until the CI run for this exact fix completes.
 - Exact next action: inspect the newly triggered run; if Verify packaged database migrations passes, follow the next concrete failed gate only.
+
+
+## CI migration gate follow-up — PACKAGE SCRIPT CWD FIXED
+- Continued from the latest recorded CI checkpoint and inspected only run 1364 (commit b03ec54d); did not repeat earlier audits or touch skipped downstream gates.
+- Run 1364 still failed at Verify packaged database migrations. The previous rootDir change was therefore insufficient.
+- Rechecked the exact filtered pnpm command boundary and identified a concrete path-resolution defect: database package scripts invoked node scripts/... without an explicit package-relative prefix. Under filtered/workspace execution this can resolve from an unexpected working directory.
+- Changed only the three runtime script invocations to explicit ./scripts/... paths; migration logic, artifact verification, TypeScript boundaries, and feature code remain unchanged.
+- Fix commit: 627dec28d478a970b1f18f7b91ca0c85cb0bde3e.
+- Validation status: PENDING until the CI run for this exact commit completes; no release-green claim is made.
+- Exact next action: inspect the new CI run. If the migration gate remains red, obtain the precise command error/log before making another change; if it passes, proceed only to the next concrete failed gate.
