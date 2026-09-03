@@ -1,5 +1,6 @@
 import { validateBrandingThemeConfiguration, type BrandingThemeConfiguration } from './branding-theme-configuration.js';
 import { validateLocalizationConfiguration, type LocalizationConfiguration } from './localization-configuration.js';
+import { validateProfileSchemaConfiguration, type ProfileSchemaConfiguration } from './profile-schema-configuration.js';
 
 export interface QuickLaunchDraft {
   readonly applicationName: string;
@@ -9,6 +10,8 @@ export interface QuickLaunchDraft {
   readonly brandingTheme?: BrandingThemeConfiguration;
   /** Localization extends the existing supportedCountries source of truth. */
   readonly localization?: Omit<LocalizationConfiguration, 'supportedCountries'>;
+  /** Defines allowed profile fields; Profile.fields remains the value owner. */
+  readonly profileSchema?: ProfileSchemaConfiguration;
   readonly supportedCountries: readonly string[];
   readonly categories: readonly { readonly key: string; readonly displayName: string }[];
   readonly enabledFeatures: readonly string[];
@@ -29,6 +32,7 @@ export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   if (!/^#[0-9A-Fa-f]{6}$/.test(draft.primaryColor)) throw new Error('primaryColor must be a #RRGGBB value');
   if (draft.brandingTheme) validateBrandingThemeConfiguration(draft.brandingTheme);
   if (draft.localization) validateLocalizationConfiguration({ ...draft.localization, supportedCountries: draft.supportedCountries });
+  if (draft.profileSchema) validateProfileSchemaConfiguration(draft.profileSchema);
   if (!draft.supportedCountries.length) throw new Error('at least one supported country is required');
   if (new Set(draft.supportedCountries).size !== draft.supportedCountries.length) throw new Error('supportedCountries must be unique');
   if (!draft.categories.length) throw new Error('at least one category is required');
@@ -52,6 +56,7 @@ export function publishQuickLaunchConfiguration(
   if (Number.isNaN(date.getTime())) throw new Error('publishedAt must be a valid instant');
   return Object.freeze({
     ...draft,
+    ...(draft.profileSchema ? { profileSchema: Object.freeze({ fields: Object.freeze(draft.profileSchema.fields.map(field => Object.freeze({ ...field, ...(field.options ? { options: Object.freeze([...field.options]) } : {}) }))) }) } : {}),
     ...(draft.localization ? { localization: Object.freeze({ ...draft.localization, supportedLocales: Object.freeze([...draft.localization.supportedLocales]), ...(draft.localization.countryLocales ? { countryLocales: Object.freeze({ ...draft.localization.countryLocales }) } : {}) }) } : {}),
     ...(draft.brandingTheme ? { brandingTheme: Object.freeze({ ...draft.brandingTheme, ...(draft.brandingTheme.typography ? { typography: Object.freeze({ ...draft.brandingTheme.typography }) } : {}) }) } : {}),
     applicationName: draft.applicationName.trim(),
