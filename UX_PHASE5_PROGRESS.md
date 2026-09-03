@@ -19,20 +19,27 @@
 - Collection primitive export contract test extended to cover `Card`, `List`, and `ListRow`.
 - PR #8 merged into `main` as merge commit `b0fba507ed1c03ed84bba3edd21cc4c5fea17b64`.
 - PR #8 CI run `33737574486` (run #1973) completed successfully: migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, build, and diagnostics all passed.
+- Phase 5 Dialog and Drawer primitives implemented with accessible naming/description, modal semantics, Escape handling, focus entry/restoration, Tab containment, busy-state close protection, responsive behavior, and reduced-motion support.
+- PR #9 merged into `main` as merge commit `5fcf66ba0c064791b0dd234877eb2a5f4728d400`.
+- PR #9 CI run `33738057120` (run #1982) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
+- Phase 5 navigation primitives started on `feature/ux-navigation-primitives` from merge commit `5fcf66ba0c064791b0dd234877eb2a5f4728d400`.
+- Responsive `HeaderNavigation` and mobile `BottomNavigation` primitives added with semantic active-state, disabled-state, accessible navigation labels, safe-area padding, and keyboard-focus-compatible links.
+- Navigation primitive export contract tests added.
 
 ## Current branch
 
-`main` (after PR #8 merge)
+`feature/ux-navigation-primitives`
 
 ## Latest commits
 
-- `b0fba507ed1c03ed84bba3edd21cc4c5fea17b64` — merge PR #8, accessible collection primitives.
-- `b2bfdbbb7387fa043f91b33c3340a304556dd50c` — collection primitive progress branch head before merge.
-- `16ceee9ee3c7f0c1c908d5a7ec603f02e2ae7bba` — cover card and list row primitive exports.
+- `e4887f8e12dc2abc7954c8b6f63418ada07128cb` — add navigation primitive contract test.
+- `9dbbf49c5d0c7ee2c877e450900b4369456dac43` — cover navigation exports in shared primitive test.
+- `e406809526060007383a743c3ecfa49bf27dbf5a` — style responsive header and bottom navigation.
+- `dd5a30e3208cf6fb2bca5262baa72daf5f8d54b5` — add responsive navigation primitives.
 
 ## Next continuation point
 
-Continue Phase 5 UX implementation with dialogs/drawers. Before implementation, inspect the current `main` component files, tests, styles, and this progress record to avoid overlap. The next layer must preserve accessible naming/description, keyboard and Escape behavior, focus visibility/management, responsive mobile drawer behavior, destructive confirmation patterns, loading/disabled mutation safety, and reduced-motion semantics. After implementation, run repository CI, merge only after all required checks are green, and record the exact merge commit, CI run, and next continuation point here. Then proceed to navigation, loading/empty states, and systematic migration of existing screens. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or the already-merged primitive layers.
+Run repository CI for `feature/ux-navigation-primitives`. Merge only after all required checks are green, then record the exact merge commit and CI run here. After navigation is integrated, continue Phase 5 with loading/empty states, then systematic migration of existing screens. Preserve semantic navigation meaning, keyboard accessibility, visible focus, mobile safe-area behavior, reduced-motion semantics, and buyer customization boundaries. Do not reimplement Quick Launch domains, PR #6, the semantic design-token foundation, or already-merged primitive layers.
 
 ## Interruption-safe rule
 
