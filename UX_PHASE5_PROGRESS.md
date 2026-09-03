@@ -30,13 +30,17 @@
 - Loading/empty/error state export contract test added.
 - PR #11 merged into `main` as merge commit `6ca33cb94afbcf6b9ecf261baeea582165be6935`.
 - PR #11 CI run `33739249281` (run #2000) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
+- PR #12 migrated sign-in, registration, and email verification screens to shared `Field`, `TextInput`, `Button`, and `StatusMessage` primitives while preserving API/session/verification behavior.
+- PR #12 merged into `main` as merge commit `ab2e1371cb62d1e48f0188205a65c9e6e67b4d28`.
+- PR #12 CI run `33740619301` (run #2007) completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 
 ## Current branch
 
-`main` (after PR #11 merge)
+`main` (after PR #12 merge)
 
 ## Latest commits
 
+- `ab2e1371cb62d1e48f0188205a65c9e6e67b4d28` — merge PR #12, authentication screen UX migration.
 - `6ca33cb94afbcf6b9ecf261baeea582165be6935` — merge PR #11, loading/empty/error state primitives.
 - `58b81c66435534bbe09c74f1a06ff4a94509c0ba` — PR #11 implementation head.
 - `5f4b85e6680ba6c66e6bd1e8adcd0179f2ce7e1b` — merge PR #10, accessible navigation primitives.
@@ -50,18 +54,18 @@
 - Identified the existing direct patterns that should be migrated rather than duplicated: raw `<nav>`/brand markup, raw form labels/inputs, raw primary buttons, and ad-hoc `role="status"` messages.
 - The migration must preserve existing authentication behavior, session storage, Terms/Privacy acknowledgement, verification flow, keyboard access, responsive layout, reduced-motion behavior, and buyer-customizable visual semantics.
 
-## Auth migration in progress
+## Auth migration completed
 
 - Dedicated branch `feature/ux-auth-screen-migration` created from the recorded main checkpoint.
 - Access/auth migration started without changing API calls, authentication flow, session storage, or verification behavior.
 - Sign-in, registration, and email verification forms migrated to shared `Field`, `TextInput`, `Button`, and `StatusMessage` primitives.
 - Added explicit access/verification navigation labels, form heading associations, and appropriate autocomplete hints.
 - Implementation commit: `aae5adb45ef2a9c7424aee03279de6ccb63fb814`.
-- Next: inspect focused test coverage, add only missing migration-specific tests, then run CI before opening a PR.
+- Validation completed via repository CI run #2007; all required checks passed before merge.
 
 ## Next continuation point
 
-Continue from the implementation commit above; do not repeat the access-form migration.  Reuse `HeaderNavigation`/`BottomNavigation` where the screen semantics fit, and reuse `Field`, `TextInput`, `Button`, `StatusMessage`, and the existing loading/empty/error primitives instead of introducing parallel controls. Keep the backend/API behavior unchanged. Add focused component/export or screen-level tests for the migrated states, then run the full repository CI and merge only when all required checks are green. After that, migrate the authenticated Dashboard shell and its Notification/Discovery/Conversation sections in separate coherent slices. Do not reimplement Quick Launch domains, PR #6, or any already-merged primitive layer.
+PR #12 is merged. Begin the next smallest coherent migration slice: inspect and migrate the authenticated Dashboard shell first, then handle Notification/Discovery/Conversation sections as separate slices. Reuse `HeaderNavigation`/`BottomNavigation`, `Card`/`List`, and loading/empty/error primitives where semantics fit. Keep backend/API behavior unchanged and do not repeat the completed authentication migration or primitive work.
 
 ## Interruption-safe rule
 
