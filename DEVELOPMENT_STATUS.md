@@ -2060,3 +2060,15 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Validation status: focused source/test contract coverage added; full runtime execution remains pending executable workspace environment.
 - Remaining work: direct-pair true concurrent first-insert recovery; notification realtime refresh/polling UX; production migration preflight/build validation.
 - Exact next action: inspect direct_conversation_pairs insertion behavior under Prisma unique conflict and implement safe recovery outside an aborted transaction, with focused concurrency/error-path tests. Do not revisit completed discovery or notification event work.
+
+
+## Phase B direct conversation concurrency recovery — IMPLEMENTED
+- Inspected the current canonical direct-pair implementation instead of rewriting the already completed normal path.
+- Identified the remaining race: another transaction can win the unique directConversationPair insert after the second in-transaction existence check.
+- Added Prisma P2002 recovery outside the aborted transaction boundary, then re-queries the canonical pair and returns the winner's conversation.
+- Non-unique failures continue to propagate, and a unique conflict without a visible winner is not silently swallowed.
+- Added focused tests for successful winner recovery and failure preservation.
+- Commits: 37724149b98fbe225713950def99bdcaf2786421, 2d1e7c2634efe0c2e6c7a218ae56febd13f29f6f.
+- Validation status: focused source/test contract coverage added; full PostgreSQL runtime concurrency execution remains pending executable workspace environment.
+- Remaining work: notification realtime refresh/polling UX; production migration preflight/build validation; broader release-readiness verification.
+- Exact next action: inspect the web notification UX and realtime event stream to add account-scoped refresh behavior for notification events without duplicating message realtime delivery.
