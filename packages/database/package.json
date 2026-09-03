@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
-    "verify:migrations-build": "pnpm run build && node scripts/verify-migrations-build.mjs"
+    "verify:migrations-build": "pnpm run build && node scripts/verify-migrations-build.mjs",
+    "migrate": "pnpm run build && node scripts/migrate-postgres.mjs"
   },
   "devDependencies": {
     "typescript": "^5.7.2",
@@ -24,5 +25,8 @@
   "files": [
     "dist/**",
     "migrations/**"
-  ]
+  ],
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
 }
