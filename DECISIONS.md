@@ -91,3 +91,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 47. Branding/Theme values are embedded in the existing versioned QuickLaunchDraft aggregate for the current commercial configuration model. They inherit the established draft → validate → immutable publish → supersede → history lifecycle; no separate endpoint, repository, or version counter is introduced.
 
 48. Purchaser-facing branding/theme customization is exposed inside the existing Quick Launch Branding step and Review & Publish step. The workflow sends the richer contract through the existing create/save endpoints and preserves the single M8 publication lifecycle.
+
+49. Published/history views use compact projections derived from immutable snapshots rather than duplicating full configuration state into separate summary persistence. Each configuration domain contributes display-safe summary fields only.
