@@ -36,7 +36,8 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   });
 
   it('serializes the same actor idempotency key even when conflicting targets race', async () => {
-    const repository = new PrismaMatchTransitionRepository(prisma as never);
+    const notificationRealtime = { publishCreated: async () => undefined };
+    const repository = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never);
     const first = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'shared-key' };
     const conflicting = { ...first, targetAccountId: accountC };
     const results = await Promise.allSettled([repository.transition(first), repository.transition(conflicting)]);
@@ -48,7 +49,8 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   });
 
   it('rejects a second directed interaction with a different idempotency key', async () => {
-    const repository = new PrismaMatchTransitionRepository(prisma as never);
+    const notificationRealtime = { publishCreated: async () => undefined };
+    const repository = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never);
     await repository.transition({
       actorAccountId: accountA,
       targetAccountId: accountB,
