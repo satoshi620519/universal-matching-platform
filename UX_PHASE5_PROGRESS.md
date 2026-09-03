@@ -87,9 +87,20 @@
 - PR #14 CI rerun completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #14 merged into `main` as merge commit `4adcf8db105376163c2356266bc5b005a5b4e7dc`.
 
+## Discovery migration in progress
+
+- Re-read the progress record and inspected the current Discovery implementation before editing; completed auth, dashboard shell, notification, and primitive work was not repeated.
+- Branch `feature/ux-discovery-migration` created from the PR #14 main checkpoint.
+- Discovery profile editing migrated to shared `Card`, `Field`, `TextInput`, `TextArea`, `Button`, and `StatusMessage` primitives.
+- Discovery result cards and match decisions migrated to shared `Card` and `Button` primitives.
+- Added explicit Discovery heading association and live feedback while preserving category loading, profile create/update, pagination, discovery, pass/like, idempotency, and mutual-match conversation authorization behavior.
+- Local field state tightened from `any` to `unknown`-based handling at the UI boundary.
+- Implementation commit: `b83f2ec9d46e0a1b4993e309101911b2107b4967`.
+- Next: verify primitive/API compatibility, record any minimal fix, then run repository CI before opening a PR.
+
 ## Next continuation point
 
-Notification migration is complete. Next inspect and migrate Discovery as the smallest coherent slice, reusing existing shared primitives and preserving discovery API/filter/matching behavior. Do not repeat authentication, dashboard shell, notification, or primitive work. Validate the Discovery slice with CI before moving to Conversation.
+Continue from the Discovery implementation above. Do not repeat completed migrations. After Discovery CI and integration, move to Conversation as the remaining major screen slice.
 
 ## Interruption-safe rule
 
