@@ -60,6 +60,21 @@ export class PrismaEntitlementRepository extends EntitlementRepository {
     return rows[0] ? this.toRecord(rows[0]) : null;
   }
 
+  async findUsableForAccount(accountId: string, entitlementKey: string, now: Date): Promise<EntitlementRecord | null> {
+    const rows = await this.database.$queryRaw<EntitlementRow[]>(Prisma.sql`
+      SELECT id, account_id, entitlement_key, state, effective_at, expires_at, provider_reference, payment_intent_id
+      FROM entitlements
+      WHERE account_id = ${accountId}::uuid
+        AND entitlement_key = ${entitlementKey}
+        AND state IN ('active', 'scheduled-expiration')
+        AND effective_at <= ${now}
+        AND (expires_at IS NULL OR expires_at > ${now})
+      ORDER BY effective_at DESC
+      LIMIT 1
+    `);
+    return rows[0] ? this.toRecord(rows[0]) : null;
+  }
+
   async transition(id: string, from: EntitlementState, to: EntitlementState): Promise<EntitlementRecord> {
     const rows = await this.database.$queryRaw<EntitlementRow[]>(Prisma.sql`
       UPDATE entitlements SET state = ${to}, updated_at = CURRENT_TIMESTAMP
