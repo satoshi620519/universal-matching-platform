@@ -31,6 +31,12 @@ export abstract class EntitlementRepository {
     entitlementKey: string,
     paymentIntentId: string,
   ): Promise<EntitlementRecord | null>;
+  /** Authoritative account capability lookup; callers must not trust client-supplied entitlement state. */
+  abstract findUsableForAccount(
+    accountId: string,
+    entitlementKey: string,
+    now: Date,
+  ): Promise<EntitlementRecord | null>;
   abstract transition(
     id: string,
     from: EntitlementState,
