@@ -4,6 +4,8 @@ import { classifyEmailDeliveryFailure } from './email-delivery-failure.js';
 import { EmailOutboxRepository } from './email-outbox.repository.js';
 import { EmailVerificationDeliveryService } from './email-verification-delivery.service.js';
 
+const MAX_DELIVERY_ATTEMPTS = 5;
+
 @Injectable()
 export class EmailOutboxDispatchService {
   constructor(
@@ -32,7 +34,7 @@ export class EmailOutboxDispatchService {
       const failure = classifyEmailDeliveryFailure(error);
       const failureError = failure.kind + ': ' + failure.message;
 
-      if (failure.kind === 'permanent') {
+      if (failure.kind === 'permanent' || message.attempts >= MAX_DELIVERY_ATTEMPTS) {
         await this.outbox.markFailed(message.id, {
           failedAt: new Date(),
           error: failureError,
