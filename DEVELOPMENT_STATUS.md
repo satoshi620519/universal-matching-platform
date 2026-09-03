@@ -2721,3 +2721,12 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Added immutable snapshot summary projection for total/enabled rule counts and stable keys (fec69332).
 - NOTE: this branch was based on main and does not contain later Terminology/Matching Categories branch integrations; those are not overwritten or duplicated here. Cross-branch consolidation must be handled deliberately.
 - EXACT NEXT ACTION: add focused tests for matching-rule snapshot summaries, inspect Published/History rendering, then plan safe branch consolidation or rebase against the integration baseline before declaring cross-domain UI completeness.
+
+
+## Configuration Engine — Matching Rules verification and consolidation planning checkpoint
+- Re-read exact next action and inspected feature/config-matching-rules before continuing.
+- Added focused snapshot summary tests for configured enabled/disabled rules and older snapshots without rule metadata (beb3dfd7).
+- Inspected Published/History rendering and found matching-rule summary fields were not rendered despite existing summary projection; added total/enabled counts and stable keys to publication/history summaries (36f21f76).
+- Queried repository branches and compared each Configuration Engine feature branch against main. Terminology, Matching Categories, Matching Rules, and Feature Visibility all independently modify shared files (apps/admin/src/main.tsx, quick-launch-configuration-summary.ts, and/or quick-launch-workflow.ts).
+- Therefore automatic branch merging is deliberately deferred: a naive merge would create overlapping UI/summary conflicts and risks losing another domain's changes.
+- EXACT NEXT ACTION: create a dedicated integration baseline and perform file-level consolidation of the four domains from current branch tips, resolving shared-file changes semantically (not by choosing one branch wholesale). Preserve all domain-specific tests/docs. Run concrete diagnostics when an execution-capable environment becomes available.
