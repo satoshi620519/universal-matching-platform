@@ -1,5 +1,6 @@
 import { access, readdir } from 'node:fs/promises';
-import { dirname, fileURLToPath, join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const source = join(packageRoot, 'migrations');
