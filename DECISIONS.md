@@ -101,3 +101,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 52. Localization purchaser controls belong inside the existing Regions step. Country selection remains owned by supportedCountries; country→locale controls are generated only for currently selected countries and may only choose supported locales.
 
 53. Localization Published/History information is derived from immutable snapshots through the existing configuration summary projection. UI shows compact identity fields (default locale and timezone); detailed locale/country mappings remain available in the underlying snapshot rather than being redundantly persisted.
+
+54. Profile Schema Configuration defines allowed field metadata, while `Profile.fields` remains the sole owner of submitted field values and `ProfileProjectionPolicy` remains the existing runtime visibility mechanism. Configuration may reference visibility semantics but must not create a parallel profile-value store or replace projection ownership.
