@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { validateQuickLaunchDraft } from '@universal/domain';
 import type { PublishedQuickLaunchConfiguration, QuickLaunchDraft } from '@universal/domain';
 import { QuickLaunchConfigurationService } from './quick-launch-configuration.service.js';
 import { QuickLaunchConfigurationRepository, type QuickLaunchConfigurationRecord } from './quick-launch-configuration.repository.js';
@@ -23,6 +24,9 @@ class MemoryRepository extends QuickLaunchConfigurationRepository {
 }
 
 describe('Quick Launch configuration lifecycle', () => {
+  it('validates the persisted draft through the production domain contract', () => {
+    expect(validateQuickLaunchDraft(draft)).toEqual(draft);
+  });
   it('creates, saves, publishes, retrieves current configuration and preserves history', async () => {
     const repository = new MemoryRepository();
     const service = new QuickLaunchConfigurationService(repository);
@@ -32,6 +36,17 @@ describe('Quick Launch configuration lifecycle', () => {
     expect(published.status).toBe('published');
     expect((await service.findPublished())?.version).toBe(created.version);
     expect((await service.listHistory()).map(x => x.version)).toEqual([created.version]);
+  });
+
+  it('supersedes the previous publication while preserving immutable history', async () => {
+    const repository = new MemoryRepository();
+    const service = new QuickLaunchConfigurationService(repository);
+    const first = await service.createDraft(draft);
+    await service.publish(first.version, new Date('2026-01-01T00:00:00.000Z'));
+    const second = await service.createDraft({ ...draft, applicationName: 'Second Launch' });
+    await service.publish(second.version, new Date('2026-01-02T00:00:00.000Z'));
+    expect((await service.findPublished())?.version).toBe(second.version);
+    expect((await service.listHistory()).map(x => [x.version, x.status])).toEqual([[first.version, 'superseded'], [second.version, 'published']]);
   });
 
   it('rejects publishing a missing or non-draft version', async () => {
