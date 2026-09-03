@@ -70,7 +70,9 @@
 - Added stable in-page navigation targets for Dashboard, Discover, Activity, and Conversations without changing backend/API behavior.
 - Dashboard hero and conversations sections now have explicit heading associations; account feedback uses accessible live/status semantics.
 - Implementation commit: `2386d9d62fd2eb34a62b912306e5b9d55274c860`.
-- Next: inspect TypeScript compatibility and shared primitive props, add only necessary focused fixes/tests, then run repository CI before opening a PR.
+- Shared primitive compatibility checked; dashboard sign-out action corrected to use the existing `Button` API without inventing a new variant prop.
+- Compatibility fix commit: `43646eaa6fd85b856be27b1446c8b8ec372ba18d`.
+- Next: run repository CI and open a PR only after required checks are available.
 
 ## Next continuation point
 
