@@ -162,3 +162,10 @@
 - Feature Visibility contract commits: 03a3ce0e27703aae35b7105d4f18f780b616569d, 15746bf3d8f085791839e8de5e2e15842882427c, db401ea454210d49025bcb0a0ad59ac3195d662d.
 - CI regression discovered from run 33723831628 (commit d16dcd13): Admin Typecheck failed because SnapshotLike lacked profileSchema. Focused repair commit: c71f0fcbee91c581ccbd1e4790bebd7821f57100.
 - Exact next task: verify CI for c71f0fcbee91c581ccbd1e4790bebd7821f57100; only after a concrete green result continue Feature Visibility lifecycle integration. If CI fails, repair the reported failure without speculative domain work.
+
+
+## Configuration Engine checkpoint — Feature Visibility lifecycle integrated / CI verification pending
+- Exact failed repair CI: run 33724063973 for c71f0fc, Admin Typecheck failure. Root cause confirmed from logs: private type SnapshotLike lacked profileSchema; earlier patch targeted the wrong anchor.
+- Correct declaration repair: 97fb8f235190fde4fd6ae8eff02cbf08da5fae59.
+- Feature lifecycle commits: e228c1c7e86d151e131b402b11c1f13f46430310 and dfda8a40a5787c568e61b75be7ae3d30fc628ecf.
+- Exact next task: verify CI for 97fb8f23/current commits. Only after concrete green continue Feature Visibility purchaser UI; otherwise fix only reported failures. Runtime authorization remains out of scope.
