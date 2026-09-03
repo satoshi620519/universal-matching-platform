@@ -2119,3 +2119,14 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Commits: 79ff1d4432a7e17a0e178a00f8ad29d736a990ae, 4508885f920cb3a092c6b67c06d8b2f30a1c19dd.
 - Remaining release blocker: implement and test a concrete PostgreSQL migration runner with ordered discovery, duplicate-version rejection, schema_migrations tracking, transactional application where supported, and empty-database integration evidence. Then add a deploy-safe command and CI gate.
 - Exact next action: inspect existing database dependency boundaries and add the minimal migration runner in @universal/database (not the API), with focused tests for ordering/duplicate detection and a PostgreSQL integration path. Do not alter feature modules.
+
+
+## Production migration runner audit — EXISTING IMPLEMENTATION VERIFIED + SQL EXECUTION HARDENED
+- Resumed from the recorded migration-runner blocker, but first re-audited the latest repository state to avoid duplicating work.
+- Found that migration infrastructure had already been added since the previous audit: filesystem artifact source, ordering/validation, pending migration executor, PostgreSQL transactional executor, runner tests, and integration-style filesystem tests. Therefore no duplicate runner was created.
+- Identified one concrete correctness issue in the PostgreSQL executor: naive splitting on semicolons corrupts valid PostgreSQL function bodies, dollar-quoted SQL, strings, and other legal constructs.
+- Removed the ad-hoc SQL splitting and now submits each migration artifact exactly as authored within the transaction, followed by the schema_migrations tracking insert.
+- Added focused regression coverage for semicolons inside a PL/pgSQL function body.
+- Commits: 00977ccc24a2129887b8e1bcef484bada12ca75f, a2233d12f0cd42b5b22fea44b804d3ed87f24ce3.
+- Remaining release work: add a concrete deploy-facing PostgreSQL client/bootstrap command (DATABASE_URL contract) and run empty-database integration against a real PostgreSQL service; current executor abstraction and mock integration coverage are present but not yet a production CLI gate.
+- Exact next action: inspect repository dependency policy and CI service capabilities, then add the smallest production migration command without coupling feature modules or duplicating the runner/executor already present.
