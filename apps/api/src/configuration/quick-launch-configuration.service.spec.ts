@@ -23,6 +23,15 @@ class MemoryRepository extends QuickLaunchConfigurationRepository {
 }
 
 describe('Quick Launch configuration lifecycle', () => {
+  it('publishes localization using the existing supportedCountries source without duplicate country storage', async () => {
+    const repository = new MemoryRepository();
+    const service = new QuickLaunchConfigurationService(repository);
+    const created = await service.createDraft({ ...draft, supportedCountries: ['JP', 'US'], localization: { defaultLocale: 'en', supportedLocales: ['en', 'ja-JP'], countryLocales: { JP: 'ja-JP', US: 'en' } } });
+    const published = await service.publish(created.version, new Date('2026-01-01T00:00:00.000Z'));
+    expect(published.published?.supportedCountries).toEqual(['JP', 'US']);
+    expect(published.published?.localization).toMatchObject({ defaultLocale: 'en', countryLocales: { JP: 'ja-JP' } });
+  });
+
   it('publishes branding/theme extensions as immutable snapshots while retaining legacy fields', async () => {
     const repository = new MemoryRepository();
     const service = new QuickLaunchConfigurationService(repository);
