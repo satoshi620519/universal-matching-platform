@@ -40,3 +40,11 @@
 - Added framework-neutral purchaser workflow client with the six explicit launch steps: Branding, Regions, Categories, Features, Onboarding, Review & Publish (`236605f217879f45a1ca0ceb7931ca25726502a7`).
 - Added focused workflow/API mapping test (`fd070527f23c94d2dc20c1298bddfaac8114e3dd`) and public export (`ed8950ecd25aff59fec55136bae15a27c425f392`).
 - Exact next task: inspect CI for API + admin workflow changes. If green, determine the repository's intended web/admin rendering strategy from architecture/docs before introducing a UI framework, then implement the actual Quick Launch presentation layer without duplicating a frontend stack.
+
+
+## Admin UI architecture and presentation layer
+- CI was still running for the prior checkpoint, so no speculative regression fix was attempted.
+- Architecture inspection found `apps/web` already uses React 19 + Vite. `apps/admin` was intentionally aligned with that existing frontend stack rather than introducing another framework (`15ca96563d4f6d17f7bae58679dae18956a7102a`, `2af51b98e4d2d556e8a8aaeeb28b4808f8a63fd7`, `1bb5cbea9769b1e8375d54955fb206e1309f209b`, `e6932e22a4fb91493287d9eafb469081a714aab5`).
+- Implemented actual six-step purchaser Quick Launch presentation layer (`7ba33289f7023d893b05374bc4d8857215560223`) and responsive admin styling (`ba6c2311769989f430a6d19931f4e947718acec2`).
+- Current UI is intentionally local-state presentation first; existing workflow client/API boundary remains separate and is ready for wiring after CI validates the React app baseline.
+- Exact next task: inspect CI for the admin React conversion. If green, wire Save Draft / Publish / History to the authorized API with authenticated transport and add success/error/loading states. Then M8 can be closed only after an end-to-end Quick Launch path is tested.
