@@ -30,6 +30,9 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - CI `33714389959` completed successfully after the final PostgreSQL fixture alignment: migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, and build all passed.
 
 ## Provider composition progress
+- CI `33715122185` completed successfully for provider selection/configuration: baseline checks passed across migration integration, typecheck, lint, tests, concurrency verification, and build.
+- Fetch-based Stripe HTTP infrastructure boundary added without introducing a Stripe SDK (`30b14d434261ae19ca006cb425b1ff9e3d5facab`) with non-2xx and malformed-JSON failure tests (`d9427fd8765b7c6c63c8f16037679df0c9fb7b51`).
+- Nest composition now selects local adapters by default or Stripe adapters only when validated `PAYMENT_PROVIDER=stripe` configuration is present (`560eae4fe238575987e06264ed44f5292a09b40e`), with composition contract tests (`8ae7690ff4c211ab12cc6abd30b97fbe361b1d0c`).
 - Explicit provider selection config added: `PAYMENT_PROVIDER=local|stripe`; Stripe mode fails closed unless both `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` are present (`3c63c21bcc8f780bdd9c7be576baca4e9734d7d7`) with configuration failure tests (`62d7a6ce2a2052257db471e0c774908b2f0520c5`).
 - Environment-backed Stripe webhook secret boundary added (`67b2878fda6f5045192f05cbc8dfeb57cfcc5d2e`).
 
@@ -52,4 +55,4 @@ Track M7 only. Inspect this checkpoint and current `main` before every change to
 - Explicit entitlement lookup and revocation by payment-intent linkage; unrelated entitlements are not guessed or revoked.
 - Revocation isolation test covering multiple payment intents.
 - Controller trust-boundary tests for unsigned and verified webhook handling.\n- End-to-end in-memory payment webhook flow tests for duplicate success delivery and provider-state mismatch.\n\n## Next exact task
-Inspect fresh CI for provider selection/config commits. If green, wire explicit Nest composition so local remains default and Stripe is selected only by validated configuration; add HTTP client boundary and failure-mode tests without introducing a Stripe SDK dependency.
+Inspect fresh CI for Stripe HTTP/composition commits. If green, audit the Stripe webhook signature implementation against raw-body requirements and replace the simplified test signature scheme if necessary; then add focused production wiring tests without touching completed provider-neutral contracts.
