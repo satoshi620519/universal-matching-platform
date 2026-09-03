@@ -73,3 +73,81 @@ export function ListRow({ className = '', children, interactive = false, onActiv
     </li>
   );
 }
+
+type DialogProps = {
+  open: boolean;
+  title: string;
+  description?: string;
+  onClose: () => void;
+  closeLabel?: string;
+  children: ReactNode;
+  busy?: boolean;
+  className?: string;
+};
+
+export function Dialog({ open, title, description, onClose, closeLabel = 'Close', children, busy = false, className = '' }: DialogProps) {
+  if (!open) return null;
+  const titleId = 'ui-dialog-title';
+  const descriptionId = description ? 'ui-dialog-description' : undefined;
+  return (
+    <div className="ui-dialog-layer" role="presentation">
+      <div className="ui-dialog-backdrop" aria-hidden="true" onClick={busy ? undefined : onClose} />
+      <section
+        className={`ui-dialog${className ? ` ${className}` : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        aria-busy={busy || undefined}
+      >
+        <header className="ui-dialog-header">
+          <div>
+            <h2 id={titleId}>{title}</h2>
+            {description ? <p id={descriptionId}>{description}</p> : null}
+          </div>
+          <button type="button" className="ui-dialog-close" onClick={onClose} disabled={busy} aria-label={closeLabel}>×</button>
+        </header>
+        <div className="ui-dialog-content">{children}</div>
+      </section>
+    </div>
+  );
+}
+
+type DrawerProps = {
+  open: boolean;
+  title: string;
+  description?: string;
+  onClose: () => void;
+  closeLabel?: string;
+  children: ReactNode;
+  busy?: boolean;
+  className?: string;
+};
+
+export function Drawer({ open, title, description, onClose, closeLabel = 'Close', children, busy = false, className = '' }: DrawerProps) {
+  if (!open) return null;
+  const titleId = 'ui-drawer-title';
+  const descriptionId = description ? 'ui-drawer-description' : undefined;
+  return (
+    <div className="ui-drawer-layer" role="presentation">
+      <div className="ui-drawer-backdrop" aria-hidden="true" onClick={busy ? undefined : onClose} />
+      <aside
+        className={`ui-drawer${className ? ` ${className}` : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        aria-busy={busy || undefined}
+      >
+        <header className="ui-drawer-header">
+          <div>
+            <h2 id={titleId}>{title}</h2>
+            {description ? <p id={descriptionId}>{description}</p> : null}
+          </div>
+          <button type="button" className="ui-drawer-close" onClick={onClose} disabled={busy} aria-label={closeLabel}>×</button>
+        </header>
+        <div className="ui-drawer-content">{children}</div>
+      </aside>
+    </div>
+  );
+}
