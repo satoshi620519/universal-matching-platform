@@ -2203,3 +2203,13 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 5d8e8e9dfed9bb4d25e05c1bf561f332ae3ff8d4.
 - Validation status: PENDING until CI for this exact commit completes. Downstream gates remain intentionally untouched.
 - Exact next action: inspect the new CI run and proceed only from its first observable failure, or record gate results if it reaches completion.
+
+
+## Independent concurrency CI evidence — DATABASE DIST ENTRYPOINT BLOCKER FIXED
+- While the main CI run 1368 was still in progress, inspected the separately triggered Matching Concurrency Gate for the same migration-verifier commit instead of repeating the main-CI audit.
+- Fetched the exact failed job log. PostgreSQL 16 started successfully and dependency install/build reached the concurrency script; failure was a concrete runtime module-resolution error, not a concurrency assertion failure: packages/database/dist/index.js was missing.
+- Root cause traced to the earlier necessary rootDir='.' change: TypeScript now emits source files under dist/src/, while package consumers import the declared dist/index.js entrypoint.
+- Added a minimal post-compile flatten step that moves dist/src/* to dist/*, preserving the package's existing public entrypoint contract without reverting the package-root compilation boundary. Migration copying remains unchanged.
+- Fix commits: fb6ae6419f8c7258061709f0d4a0820da7435cb4, cc987daa2e7a67e805cad6ac6cce5ea56bfa0711.
+- Validation status: PENDING; new main CI and concurrency-gate runs are required. No claim is made that the underlying reciprocal transition assertions have passed yet because execution previously stopped before reaching them.
+- Exact next action: inspect the runs triggered by this dist-entrypoint fix. Record independently whether migration verification, PostgreSQL migration command, and concurrency evidence pass, then address only the earliest observable remaining failure.
