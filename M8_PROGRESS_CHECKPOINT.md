@@ -155,3 +155,10 @@
 - Summary commits: d16dcd1308594847eeb8c3ec46b7fdf73fd21f68 and 23cf8bbe8f2d3906520851691dbe5362f5b6124e.
 - Profile Schema complete through contract, validation, lifecycle, immutable publication, purchaser editor, Review & Publish and Published/History summary.
 - Exact next task: inspect existing feature flags/capabilities/entitlement ownership and begin Feature Visibility Configuration. Do not duplicate runtime authorization or permission enforcement.
+
+
+## Configuration Engine checkpoint — Feature Visibility started / CI repair pending
+- Existing runtime ownership inspected: AdministrativeRoleAssignment and account state are not configuration visibility and must not be duplicated.
+- Feature Visibility contract commits: 03a3ce0e27703aae35b7105d4f18f780b616569d, 15746bf3d8f085791839e8de5e2e15842882427c, db401ea454210d49025bcb0a0ad59ac3195d662d.
+- CI regression discovered from run 33723831628 (commit d16dcd13): Admin Typecheck failed because SnapshotLike lacked profileSchema. Focused repair commit: c71f0fcbee91c581ccbd1e4790bebd7821f57100.
+- Exact next task: verify CI for c71f0fcbee91c581ccbd1e4790bebd7821f57100; only after a concrete green result continue Feature Visibility lifecycle integration. If CI fails, repair the reported failure without speculative domain work.
