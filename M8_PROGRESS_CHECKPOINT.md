@@ -33,3 +33,10 @@
 - Added purchaser administration API workflow for create draft, save draft, publish, current published configuration and history (0d56322f3a5406545f9a108d5c107a667f0c61fe).
 - Composed Quick Launch controller/service/Prisma repository in AppModule (fc42ead5abaa4dbcdc3fd611cfdf5b5c396662b8).
 - Exact next task: inspect fresh CI for the persistence + API composition commits. If green, implement the apps/admin purchaser workflow UI against these endpoints; if CI fails, fix only the exact new failure.
+
+
+## Purchaser admin workflow foundation
+- Existing `apps/admin` was confirmed to be a TypeScript baseline only (no UI framework). Avoided pretending a production UI already exists or introducing a duplicate framework prematurely.
+- Added framework-neutral purchaser workflow client with the six explicit launch steps: Branding, Regions, Categories, Features, Onboarding, Review & Publish (`236605f217879f45a1ca0ceb7931ca25726502a7`).
+- Added focused workflow/API mapping test (`fd070527f23c94d2dc20c1298bddfaac8114e3dd`) and public export (`ed8950ecd25aff59fec55136bae15a27c425f392`).
+- Exact next task: inspect CI for API + admin workflow changes. If green, determine the repository's intended web/admin rendering strategy from architecture/docs before introducing a UI framework, then implement the actual Quick Launch presentation layer without duplicating a frontend stack.
