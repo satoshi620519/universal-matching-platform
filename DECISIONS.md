@@ -107,3 +107,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 55. Profile Schema is an optional versioned QuickLaunch aggregate extension. Publication snapshots freeze field definitions/options only; actual `Profile.fields` values are never embedded into configuration snapshots, and runtime ProfileProjectionPolicy ownership remains unchanged.
 
 56. Purchaser Profile Schema editing is schema-only inside Quick Launch. Add/remove/type/required/visibility/options controls define future allowed field metadata and must never be presented as an editor for actual user `Profile.fields` values.
+
+57. Profile Schema Published/History summaries are snapshot-derived metadata only. Compact UI may show field counts and required counts; actual profile values remain outside configuration summaries and field definitions remain recoverable from immutable snapshots.
