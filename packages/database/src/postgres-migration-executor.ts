@@ -5,6 +5,10 @@ export interface SqlMigrationQueryClient {
   query<T = unknown>(sql: string, params?: readonly unknown[]): Promise<T>;
 }
 
+interface SqlQueryResult<Row = unknown> {
+  rows: readonly Row[];
+}
+
 export interface SqlMigrationClient extends SqlMigrationQueryClient {
   transaction<T>(operation: (tx: SqlMigrationQueryClient) => Promise<T>): Promise<T>;
 }
@@ -20,11 +24,11 @@ export class PostgresMigrationExecutor implements MigrationExecutor {
       )`,
     );
 
-    const result = await this.client.query<readonly { version: number }[]>(
+    const result = await this.client.query<SqlQueryResult<{ version: number }>>(
       'SELECT version FROM schema_migrations ORDER BY version ASC',
     );
 
-    return result.map((row) => row.version);
+    return result.rows.map((row) => row.version);
   }
 
   async apply(migration: MigrationArtifact): Promise<void> {
