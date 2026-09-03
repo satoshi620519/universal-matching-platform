@@ -2286,3 +2286,11 @@ Inventory the existing API/controller routes and application capabilities, map t
 - Fix commit: 457cf9caeffc0e6b7fc1e6c65382d1b7f223f931.
 - Validation status: PENDING for the newly triggered CI/concurrency runs.
 - Resume point if interrupted: FIRST inspect Matching Concurrency Gate triggered by 457cf9caeffc0e6b7fc1e6c65382d1b7f223f931. If it passes, mark reciprocal PostgreSQL evidence PASS; if it fails, fetch its exact log and fix only the earliest failure. In parallel, inspect Main CI run 1384+ for the earliest remaining typecheck gate result. Do not revisit already-passing migration artifact or PostgreSQL migration integration gates.
+
+
+## Checkpoint 2026-09-03 — CONCURRENCY EVIDENCE PASSED; MAIN CI TYPECHECK ACTIVE
+- Independent Matching Concurrency Gate run 92 (head 457cf9ca) completed SUCCESS. Reciprocal PostgreSQL transition/concurrency evidence is now verified PASS.
+- Main CI run 1386 (head 42da57c7) has also re-confirmed PASS for Verify packaged database migrations and PostgreSQL migration command integration.
+- At this checkpoint Main CI Typecheck is actively running; no new source changes are made while its result is unresolved, to preserve a clean causal boundary.
+- Completed evidence not to revisit unless a later regression directly implicates it: packaged migration verification, PostgreSQL migration command integration, Matching Concurrency Gate #92.
+- Resume point if interrupted: inspect Main CI run 1386 Typecheck completion. PASS => proceed to Lint as the next gate. FAIL => fetch exact diagnostics artifact/log and fix only the earliest concrete error, then record a new checkpoint.
