@@ -87,3 +87,5 @@ Deferral is intentional. These decisions require detailed architecture, deployme
 
 45. Branding/Theme is the first Universal Configuration Engine domain expansion. It extends existing Quick Launch configuration semantics and must reuse M8 draft/publish/history behavior rather than introducing another version lifecycle.
 46. Existing `primaryColor` and `logoUrl` remain backward-compatible launch-level fields while richer secondary/accent/typography values are introduced through the extensible BrandingThemeConfiguration contract.
+
+47. Branding/Theme values are embedded in the existing versioned QuickLaunchDraft aggregate for the current commercial configuration model. They inherit the established draft → validate → immutable publish → supersede → history lifecycle; no separate endpoint, repository, or version counter is introduced.
