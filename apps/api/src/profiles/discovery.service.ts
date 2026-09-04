@@ -16,6 +16,9 @@ import {
   matchesDiscoverySearch,
   type DiscoveryPreferences,
   type DiscoverySort,
+  rankDiscoveryCandidates,
+  type MatchingRulesConfiguration,
+  type Profile,
 } from '@universal/domain';
 
 @Injectable()
@@ -27,7 +30,7 @@ export class DiscoveryService {
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
-  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy; preferences?: DiscoveryPreferences; sort?: DiscoverySort; search?: { term: string; fields: readonly string[] } }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
+  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy; preferences?: DiscoveryPreferences; sort?: DiscoverySort; search?: { term: string; fields: readonly string[] }; matchingRules?: MatchingRulesConfiguration; subjectProfile?: Profile }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
     const query = createDiscoveryQuery(input);
     const page = await this.profiles.discover(query);
     const subjectCountryCode = input.geographicScope.kind === 'global' ? undefined : input.geographicScope.countryCode;
@@ -46,7 +49,11 @@ export class DiscoveryService {
       }
       return candidate;
     }));
-    const items = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null).map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy, {}, input.locationPolicy));
+    const candidates = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null);
+    const ordered = query.sort?.key === 'compatibilityScore' && input.subjectProfile && input.matchingRules
+      ? rankDiscoveryCandidates(input.subjectProfile, candidates, input.matchingRules, query.sort).map((entry) => entry.profile)
+      : candidates;
+    const items = ordered.map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy, {}, input.locationPolicy));
     return { items, ...(page.nextCursor ? { nextCursor: page.nextCursor } : {}) };
   }
 }
