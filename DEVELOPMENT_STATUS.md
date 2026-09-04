@@ -3867,3 +3867,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Replaced only has() with can(); require() remains used for moderation mutations.
 - Commit: 9c92737.
 - Next exact action: CI validation, then resume Phase 7 requirement audit.
+
+
+### 2026-09-04 — Phase 7 privileged projection test contract repair
+- During residual Phase 7 audit, found the regression test still mocked obsolete admin.has() after production moved to the authoritative can() API.
+- Updated the focused privileged-viewer test to use can(), keeping production and regression contracts aligned.
+- Commit: dcd6cb9.
+- Next exact action: CI validation of production + regression alignment, then continue remaining Phase 7 requirement audit.
