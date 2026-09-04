@@ -10,7 +10,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       principalResolver as never,
       ({ list: vi.fn().mockResolvedValue([{ id:'cat-1' }]) } as never),
       ({ schemaFor: vi.fn().mockReturnValue({}) } as never),
-      ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }), update: vi.fn().mockResolvedValue({ id:'profile-1' }) } as never),
+      ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }), update: vi.fn().mockResolvedValue({ id:'profile-1' }), completion: vi.fn().mockResolvedValue({ percentage: 50 }) } as never),
       ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
@@ -21,6 +21,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const create=vi.spyOn((c as any).profiles,'create');
     await c.createMyProfile({ categoryId:'cat-1', fields:{ displayName:'Satoshi' } }, 'Bearer test');
     expect((create.mock.calls[0][0] as any).accountId).toBe('viewer-1');
+  });
+
+  it('derives completion only for the authenticated profile', async () => {
+    const c=controller(); const completion=vi.spyOn((c as any).profiles,'completion');
+    await c.getMyProfileCompletion('Bearer test');
+    expect(completion).toHaveBeenCalledWith('profile-1',expect.objectContaining({ schema: expect.any(Object) }));
   });
 
   it('hydrates and updates only the authenticated account profile', async () => {
