@@ -37,6 +37,16 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ fields:{displayName:'Updated'}, biography:'New bio', verificationStatus:'verified' }));
   });
 
+  it('forwards Phase 7 metadata only through the authenticated profile path', async () => {
+    const c=controller(); const create=vi.spyOn((c as any).profiles,'create'); const update=vi.spyOn((c as any).profiles,'update');
+    const avatar={ id:'media-1', storageKey:'avatars/1', status:'active' as const };
+    const gallery=[{ id:'media-2', storageKey:'gallery/2', status:'pending' as const }];
+    await c.createMyProfile({ categoryId:'cat-1', avatar, gallery, biography:'Hello', verificationStatus:'pending' }, 'Bearer test');
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ avatar, gallery, biography:'Hello', verificationStatus:'pending', accountId:'viewer-1' }));
+    await c.updateMyProfile({ avatar:null, gallery, biography:'Updated', verificationStatus:'verified' }, 'Bearer test');
+    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ avatar:null, gallery, biography:'Updated', verificationStatus:'verified' }));
+  });
+
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
     await c.discover('cat-1','global',undefined,'10',undefined,'Bearer test');
