@@ -63,7 +63,7 @@ describe('ProfileService', () => {
   it('derives completion from current profile and configurable schema without persistence', async () => {
     const profile = {
       id: 'p1', accountId: 'a1', categoryId: 'c1',
-      fields: { displayName: 'Satoshi' }, geographicScope: scope,
+      fields: { display_name: 'Satoshi' }, geographicScope: scope,
       avatar: null, gallery: [], biography: null, verificationStatus: 'unverified',
     };
     const save = vi.fn();
