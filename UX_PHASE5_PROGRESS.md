@@ -104,7 +104,7 @@
 - PR #15 CI run `33742811375` completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #15 merged into `main` as merge commit `7c06738dc87b0516ecfe0bb41663767cf191a2a6`.
 
-## Conversation migration in progress
+## Conversation migration completed
 
 - Re-read the progress record and inspected the active Dashboard/Conversation implementation before editing; completed primitive, authentication, dashboard shell, notification, and discovery work was not repeated.
 - Branch `feature/ux-conversation-migration` created from the PR #15 main checkpoint.
@@ -115,13 +115,12 @@
 - Implementation commit: `0def314dd4131d88d57b1cd1e4de510e23d5c1e4`.
 - Shared primitive and existing API contracts reviewed against the actual Conversation implementation. `Field` correctly injects labels/ARIA attributes into `TextInput` and `TextArea`; `List`/`ListRow` preserve valid message list structure; `Button` defaults are explicitly overridden where form submission is required. Conversation authorization, message transport, loading order, and realtime refresh dependencies remain unchanged.
 - No compatibility rewrite was needed after review.
-- PR #16 opened for Conversation UX migration: https://github.com/satoshi620519/universal-matching-platform/pull/16.
-- CI run `33743268385` (run #2044) is in progress at interruption checkpoint: database migration verification, PostgreSQL integration, typecheck, and lint have passed; `Test` is currently running. Matching concurrency, concurrency gate, diagnostics, and build remain pending.
-- Stop point: do not make further code changes while CI is running. On resume, fetch the latest jobs for run `33743268385`; if all required checks pass, merge PR #16 and update this record with the merge commit. If a check fails, inspect only the failing diagnostic and apply the smallest targeted fix.
+- PR #16 CI run `33743268385` (run #2044) completed successfully across database migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
+- PR #16 merged into `main` as merge commit `633c1584c76e703c34a80b3b2b8b4f7284d4bec8`.
 
 ## Next continuation point
 
-Continue from the Conversation implementation above. Do not repeat completed migrations. After Conversation CI and integration, begin the final Phase 5 integration/quality pass.
+Conversation migration is complete and all major Phase 5 screen slices are integrated. Next begin the final Phase 5 integration/quality pass: inspect the integrated Web application for duplicated legacy UI patterns, semantic/accessibility consistency, responsive behavior, loading/empty/error state coverage, and cross-screen interaction regressions. Reuse existing primitives; do not reimplement completed screen migrations. Make only coherent, evidence-based fixes and validate each final slice with CI.
 
 ## Interruption-safe rule
 
