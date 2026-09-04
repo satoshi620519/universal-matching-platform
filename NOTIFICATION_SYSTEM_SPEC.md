@@ -21,6 +21,8 @@ Persistence is authoritative. Channel delivery failures must not erase the durab
 ## Preferences
 Preferences are normalized by event category and channel. Defaults are explicit and deployment-configurable.
 
+**Current safe defaults:** in-app is enabled by default; email and push require explicit policy enablement. Categories are match, message, account_security, and moderation. A future account-level preference store may override deployment defaults without changing event producers.
+
 ## Initial event categories
 - match
 - message
@@ -28,7 +30,7 @@ Preferences are normalized by event category and channel. Defaults are explicit 
 - moderation
 
 ## Localization
-Human-readable content is rendered at delivery using recipient locale. Durable event payloads store stable event identifiers/data, not one permanently localized sentence.
+Human-readable content is rendered at delivery using recipient locale. Durable event payloads store stable event identifiers/data, not one permanently localized sentence. Existing LocalizationConfiguration remains the deployment authority for supported/default locales; notification delivery must not invent a second locale configuration.
 
 ## Reliability
 - idempotent event identifiers
