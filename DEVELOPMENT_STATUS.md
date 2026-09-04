@@ -3890,3 +3890,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - This connects deployment-configurable custom fields and their privacy rules to the public transport projection without duplicating schema definitions.
 - Commit: 2db4ac3.
 - Next exact action: CI validation, then audit avatar/gallery lifecycle and verification-status integration for remaining Phase 7 gaps.
+
+
+### 2026-09-04 — Phase 7 discovery privacy policy reconciliation
+- While auditing avatar/gallery and verification integration, found a second transport path still bypassing category-configured field visibility: GET /discovery passed the hard-coded PUBLIC_PROJECTION.
+- Replaced it with the authoritative category field-schema visibility policy, matching the repaired public-profile projection path.
+- This prevents deployment-specific owner/privileged custom fields from leaking through discovery while preserving one schema authority.
+- Commit: 0913866.
+- Next exact action: CI validation of both projection paths, then finish avatar/gallery lifecycle and verification completion-policy audit.
