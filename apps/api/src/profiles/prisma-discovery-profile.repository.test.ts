@@ -24,4 +24,22 @@ describe('PrismaDiscoveryProfileRepository query contract', () => {
     expect(source).toContain("scopeKind: 'city'");
     expect(source).toContain('localityCode: scope.localityCode');
   });
+
+  it('loads private coordinates only for distance filtering and never projects them', () => {
+    expect(source).toContain('privateLatitude: true, privateLongitude: true');
+    expect(source).toContain('createPrivateLocation');
+    expect(source).toContain('isWithinDistance');
+    expect(source).toContain('candidate.privateLocation');
+  });
+
+  it('continues persistence pages until enough distance-eligible candidates are collected', () => {
+    expect(source).toContain('while (eligible.length <= query.limit && hasMore)');
+    expect(source).toContain('eligible.length === query.limit + 1');
+    expect(source).toContain("nextCursor: encodeCursor({ id: last.id })");
+  });
+
+  it('excludes candidates without private coordinates when distance filtering is enabled', () => {
+    expect(source).toContain('if (candidate.privateLocation && isWithinDistance');
+    expect(source).toContain('return { items: [] };');
+  });
 });
