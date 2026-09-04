@@ -83,10 +83,10 @@ export class ProfileDiscoveryController {
 
   @Get('profiles/:accountId')
   async getPublicProfile(@Param('accountId') accountId: string, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
-    await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-public' });
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-public' });
     const profile = await this.profileRepository.findByAccountId(accountId);
     if (!profile) throw new NotFoundException('profile not found');
-    return projectProfile(profile, { accountId: undefined }, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION);
+    return projectProfile(profile, { accountId: principal.accountId }, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION);
   }
 
   @Patch('profiles/me')
