@@ -23,6 +23,19 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect((create.mock.calls[0][0] as any).accountId).toBe('viewer-1');
   });
 
+  it('updates metadata through a dedicated authenticated ownership boundary', async () => {
+    const c=controller(); const update=vi.spyOn((c as any).profiles,'update');
+    await c.updateMyProfileMetadata({
+      avatar: { id:'media-1', storageKey:'avatars/1', status:'active' },
+      biography: 'Updated bio',
+    }, 'Bearer test');
+    expect(update).toHaveBeenCalledWith('profile-1', expect.objectContaining({
+      avatar: { id:'media-1', storageKey:'avatars/1', status:'active' },
+      biography: 'Updated bio',
+    }));
+    expect((update.mock.calls[0][1] as any).verificationStatus).toBeUndefined();
+  });
+
   it('derives completion only for the authenticated profile', async () => {
     const c=controller(); const completion=vi.spyOn((c as any).profiles,'completion');
     await c.getMyProfileCompletion('Bearer test');
