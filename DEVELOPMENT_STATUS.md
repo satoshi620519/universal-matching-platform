@@ -3758,3 +3758,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching Concurrency Gate #273: SUCCESS.
 - Owner-scoped missing-profile transport paths now consistently map to HTTP 404 rather than generic errors.
 - Next exact action: audit the roadmap and current ProfileService/repository contracts for the next genuinely uncovered Phase 7 capability; do not reopen verification authority, completion schema, or error-contract work.
+
+
+### 2026-09-04 — Phase 7 owner-scoped GET contract reconciliation
+- Audited the actual current Profile files from the branch tree before selecting new work, avoiding guessed paths and duplicate implementation.
+- Found one concrete remaining inconsistency after the prior error-contract slice: GET /profiles/me returned null/200 when the authenticated account had no profile, while completion, metadata update, and full update map absence to HTTP 404.
+- Normalized GET /profiles/me to the same NotFoundException contract and added a focused regression test.
+- Commits: 61fb32e (implementation), a8a17a5 (test).
+- Next exact action: validate CI for this isolated contract correction; do not reopen completed schema/completion/verification work.
