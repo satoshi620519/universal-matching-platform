@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Get, Headers, HttpStatus, Optional, Param, Post } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Delete, Get, Headers, HttpStatus, Optional, Param, Post } from '@nestjs/common';
 import { blocksCapability } from '@universal/domain';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { PrismaConversationRepository } from './prisma-conversation.repository.js';
@@ -45,6 +45,22 @@ export class MessagingController {
     if (!created) return { statusCode: HttpStatus.NOT_FOUND };
     await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
     return created.message;
+  }
+
+  @Post(':conversationId/read')
+  async markConversationRead(@Param('conversationId') conversationId: string, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'conversation-read' });
+    const updated = await this.messages.markReadForParticipant({ conversationId, accountId: principal.accountId });
+    if (!updated) return { statusCode: HttpStatus.NOT_FOUND };
+    return { updated: true };
+  }
+
+  @Delete(':conversationId/messages/:messageId')
+  async deleteMessage(@Param('conversationId') conversationId: string, @Param('messageId') messageId: string, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'message-delete' });
+    const message = await this.messages.softDeleteForSender({ messageId, senderAccountId: principal.accountId });
+    if (!message) return { statusCode: HttpStatus.NOT_FOUND };
+    return { deleted: true, conversationId, messageId };
   }
 
   @Get('/notifications')
