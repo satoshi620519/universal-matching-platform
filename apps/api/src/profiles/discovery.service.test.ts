@@ -80,4 +80,20 @@ describe('DiscoveryService', () => {
     expect(result.items.map((item) => item.id)).toEqual(['match']);
   });
 
+  it('applies search after eligibility without bypassing exclusions', async () => {
+    const discover = vi.fn().mockResolvedValue({
+      items: [
+        { id: 'self', accountId: 'a1', categoryId: 'dating', fields: { name: 'Alice' }, geographicScope: scope },
+        { id: 'hit', accountId: 'a2', categoryId: 'dating', fields: { name: 'Alice' }, geographicScope: scope },
+        { id: 'miss', accountId: 'a3', categoryId: 'dating', fields: { name: 'Bob' }, geographicScope: scope },
+      ],
+    });
+    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const result = await service.discover({
+      subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy,
+      search: { term: 'alice', fields: ['name'] },
+    });
+    expect(result.items.map((item) => item.id)).toEqual(['hit']);
+  });
+
 });
