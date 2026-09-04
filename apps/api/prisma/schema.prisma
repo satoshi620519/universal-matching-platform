@@ -280,6 +280,8 @@ model Profile {
   countryCode String? @map("country_code")
   regionCode String? @map("region_code")
   localityCode String? @map("locality_code")
+  privateLatitude Float? @map("private_latitude")
+  privateLongitude Float? @map("private_longitude")
   avatarId String? @map("avatar_id")
   avatarStorageKey String? @map("avatar_storage_key")
   avatarStatus String? @map("avatar_status")
@@ -343,7 +345,7 @@ model ConversationParticipant {
 }
 
 model Message {
-  id String @id @default(uuid()) @map("message_id") @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
   conversationId String @map("conversation_id") @db.Uuid
   senderAccountId String @map("sender_account_id") @db.Uuid
   body String
