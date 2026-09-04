@@ -4052,3 +4052,15 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Created NOTIFICATION_SYSTEM_SPEC.md before notification implementation.
 - Existing durable notification/realtime foundations will be audited first; only missing preference, channel adapter, localization, and reliability boundaries will be implemented.
 - Next exact task: audit existing notification entities/controllers/repositories against the Phase 11 specification and avoid duplicate notification delivery infrastructure.
+
+
+### 2026-09-04 — Phase 11 notification foundation audit
+- Existing notification infrastructure was found under messaging and retained: durable Notification records, account-scoped read state, SSE notification.created publication, and purchaser-facing presentation defaults.
+- No duplicate notification table or realtime transport was created.
+- Gap analysis identified missing explicit transport abstraction and unread retrieval contract.
+- Added NotificationChannelAdapter contract and NotificationChannelDispatchService so future email/push providers remain replaceable and cannot become the durable source of truth.
+- Added InAppNotificationChannelAdapter over the existing realtime publisher rather than creating another in-app delivery path.
+- Added bounded account-scoped unread notification retrieval and regression coverage.
+- Email infrastructure already exists as a separate durable outbox; it will be integrated through the new adapter boundary instead of creating a second email queue.
+- No push-device-token infrastructure exists yet, so only the push adapter contract is deferred; no fake push delivery implementation was added.
+- Next exact task: wire the existing durable notification creation flow to the channel dispatch boundary transaction-safely, then audit preferences/localization and event-category policy gaps.
