@@ -6,7 +6,8 @@ const source = readFileSync(resolve(__dirname, 'prisma-discovery-profile.reposit
 
 describe('PrismaDiscoveryProfileRepository query contract', () => {
   it('uses deterministic id ordering and limit-plus-one pagination', () => {
-    expect(source).toContain("orderBy: { id: 'asc' }");
+    expect(source).toContain("? { id: query.sort.direction }");
+    expect(source).toContain(": { id: 'asc' }");
     expect(source).toContain('take: query.limit + 1');
     expect(source).toContain('skip: 1');
   });
