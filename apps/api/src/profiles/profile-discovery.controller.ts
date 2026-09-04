@@ -87,7 +87,7 @@ export class ProfileDiscoveryController {
     await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-public' });
     const profile = await this.profileRepository.findByAccountId(accountId);
     if (!profile) throw new NotFoundException('profile not found');
-    return projectProfile(profile, {}, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION);
+    return projectProfile(profile, { accountId: undefined }, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION);
   }
 
   @Patch('profiles/me')
