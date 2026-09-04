@@ -153,9 +153,19 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect(completion).toHaveBeenCalledWith('p1', expect.objectContaining({ schema: expect.objectContaining({ fields: expect.arrayContaining([expect.objectContaining({ key:'skills', required:true })]) }) }));
   });
 
+  it('exposes city hierarchy and distance constraint through discovery transport', async () => {
+    const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
+    await c.discover('cat-1','city','JP','13','13101','10',undefined,'2500','Bearer test');
+    expect(discover.mock.calls[0][0] as any).toMatchObject({
+      categoryId:'cat-1',
+      geographicScope:{ kind:'city', countryCode:'JP', regionCode:'13', localityCode:'13101' },
+      distanceConstraint:{ maxDistanceMeters:2500 },
+    });
+  });
+
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
-    await c.discover('cat-1','global',undefined,'10',undefined,'Bearer test');
+    await c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,undefined,'Bearer test');
     expect(discover.mock.calls[0][0] as any).toMatchObject({ subjectAccountId:'viewer-1', categoryId:'cat-1', limit:10 });
     expect((discover.mock.calls[0][0] as any).projectionPolicy).toEqual({ displayName:'public', headline:'public', bio:'public' });
   });
