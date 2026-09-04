@@ -15,6 +15,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
       ({ require: vi.fn().mockResolvedValue(undefined), can: vi.fn().mockResolvedValue(false) } as never),
+      ({ resolve: vi.fn().mockResolvedValue({ supportedCountries:['JP','US'] }) } as never),
     );
   }
 
@@ -163,6 +164,11 @@ describe('ProfileDiscoveryController transport boundary', () => {
     });
   });
 
+  it('rejects discovery scoped to a country disabled by deployment localization configuration', async () => {
+    const c=controller();
+    await expect(c.discover('cat-1','country','FR',undefined,undefined,'10',undefined,undefined,'Bearer test')).rejects.toThrow('countryCode is not supported');
+  });
+
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
     await c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,undefined,'Bearer test');
@@ -178,7 +184,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('propagates authentication failure before accessing services', async () => {
     const resolver={ requireAuthenticated: vi.fn().mockRejectedValue(new UnauthorizedException()) };
-    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never);
+    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
     await expect(c.listCategories()).resolves.toBeDefined();
     await expect(c.getMyProfile()).rejects.toBeInstanceOf(UnauthorizedException);
   });
