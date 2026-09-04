@@ -3081,3 +3081,24 @@ Implement the smallest typed Quick Launch contract descriptor + focused tests, t
 - Phase 4 is closed.
 - Before implementation, reconcile MASTER_DEVELOPMENT_ROADMAP.md and current main to select the earliest incomplete dependency-ordered milestone after Phase 4.
 - Preserve completed Phase 4 domains and Phase 5 UX work; do not reopen them unless evidence identifies a defect.
+
+
+## Next dependency-ordered milestone — Phase 6 Authentication and Account System
+CURRENT PHASE: Phase 6
+CURRENT MILESTONE: Authentication and account system specification reconciliation
+STATUS: Ready for implementation planning
+
+EVIDENCE:
+- Phase 4 is closed on main after PR #21.
+- Phase 5 UX work is already documented as an existing completed platform contract and is explicitly excluded from reopening unless a defect is found.
+- The roadmap's next incomplete dependency-ordered implementation phase is Phase 6 Authentication and Account System.
+- Existing architecture decisions already establish provider-neutral, API-owned authentication with email/password, verification, and reset capabilities, but Phase 6 requires a coherent implementation specification before major feature coding.
+
+SCOPE BOUNDARY:
+- Start with specification reconciliation and existing-code inventory before creating auth runtime modules.
+- Cover email authentication, password reset, verification flows, session management, device/session security, account deletion, and privacy controls.
+- Preserve provider-neutral architecture and backend-authoritative security boundaries.
+- Record supported contracts and deferred provider selections before implementation.
+
+EXACT NEXT ACTION:
+Inventory existing authentication/account code and specifications, identify genuinely missing Phase 6 contracts, then add the smallest authoritative Authentication and Account System specification before runtime implementation.
