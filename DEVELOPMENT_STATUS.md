@@ -3996,3 +3996,8 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Phase 9 acceptance re-audit reconfirmed core discovery coverage: explicit card/list/grid boundary, normalized preferences/filters, field-whitelisted search, deterministic sorting, geographic constraints, compatibility scoring, published purchaser rule resolution, and replaceable strategy architecture.
 - Phase 9 completion is blocked only on fresh baseline CI evidence for the latest constructor-fixture repair. Marketplace-scale compatibility pagination remains explicitly recorded as a Phase 20 scale architecture concern, not a false Phase 9 acceptance claim.
 - Next exact task: inspect fresh CI after commit 64d0150, fix only concrete failures if any; if green, mark Phase 9 complete and begin Phase 10 specification before messaging implementation.
+
+- CI #2716: Matching Concurrency Gate #537 SUCCESS. Baseline CI passed migrations, PostgreSQL migration integration, Typecheck and Lint, then failed exactly one stale source-contract test in PrismaDiscoveryProfileRepository.
+- Runtime repository behavior was already correct: configurable id direction was introduced by Phase 9 sorting, but the old test still required the literal pre-sorting string orderBy: { id: 'asc' }.
+- Updated only the stale assertion to verify both configurable id direction and deterministic ascending fallback. No repository behavior was changed.
+- Fresh CI for commit 4cbe2ea is now the sole Phase 9 completion gate. If green, record Phase 9 complete and move to Phase 10 specification-first work; no Phase 10 messaging implementation begins before the specification audit.
