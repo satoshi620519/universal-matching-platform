@@ -49,6 +49,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     await expect(c.getMyProfileCompletion('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
   });
 
+  it('rejects profile creation for an unknown category instead of validating against the base schema', async () => {
+    const c=controller();
+    vi.spyOn((c as any).categories,'list').mockResolvedValue([]);
+    await expect(c.createMyProfile({ categoryId:'unknown', fields:{} }, 'Bearer test')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
   it('maps GET of a missing authenticated profile to HTTP 404', async () => {
     const c=controller();
     vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue(null);
