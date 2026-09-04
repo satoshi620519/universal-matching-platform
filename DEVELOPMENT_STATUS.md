@@ -3179,3 +3179,11 @@ Inventory existing authentication/account code and specifications, identify genu
 - VALIDATION GATE NEXT: run API Prisma generation, focused auth tests, and typecheck before adding recovery HTTP transport.
 - IMPLEMENTATION CHECKPOINT: 20a6922e8a496681ed6b8c9327599ed8ebb80c34.
 - EXACT NEXT ACTION: inspect current CI/workflow and package validation scripts, then run the narrowest available validation sequence for the Phase 6 branch and fix only demonstrated failures.
+
+
+## Phase 6 validation strategy checkpoint
+- CI inventory confirmed the repository's authoritative validation order: migration build verification -> PostgreSQL migration integration -> typecheck -> lint -> test -> matching concurrency integration -> build.
+- API package typecheck already performs Prisma generation first, so validation must not manually assume generated client state.
+- The Phase 6 branch currently has no dedicated pull request/workflow run surfaced through the connected GitHub context, so CI results cannot be truthfully inferred without opening/running a PR workflow.
+- Do not claim Phase 6 tests/typecheck passed yet. Next validation must obtain actual execution output.
+- EXACT NEXT ACTION: reconcile the Phase 6 branch against the current integration base and inspect changed-file/package consistency before opening a validation PR; then use actual CI diagnostics to fix only demonstrated failures.
