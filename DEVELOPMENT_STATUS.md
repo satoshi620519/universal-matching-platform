@@ -3774,3 +3774,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching Concurrency Gate #277: SUCCESS.
 - GET /profiles/me now shares the consistent HTTP 404 contract for absent authenticated profiles.
 - Error-contract reconciliation is complete; next action is roadmap-to-code gap audit for a genuinely uncovered Phase 7 capability.
+
+
+### 2026-09-04 — Phase 7 category/schema authority reconciliation
+- Audited actual CategoryService, CategoryFieldSchemaService, ProfileService, and profile transport after closing error-contract work.
+- Found a concrete mismatch: unknown category IDs at create/update transport silently fell back to DEFAULT_FIELD_SCHEMA, allowing validation to proceed under a schema unrelated to the requested category before service persistence rejected it.
+- Changed transport schema resolution to fail explicitly with HTTP 404 for unknown categories, preserving category configuration as the schema authority.
+- Added focused regression coverage for unknown-category profile creation.
+- Commits: 2076ea8 (implementation), bc384e9 (test).
+- Next exact action: validate this isolated category/schema contract correction in CI before selecting another Phase 7 gap.
