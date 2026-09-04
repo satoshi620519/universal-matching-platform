@@ -4064,3 +4064,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Email infrastructure already exists as a separate durable outbox; it will be integrated through the new adapter boundary instead of creating a second email queue.
 - No push-device-token infrastructure exists yet, so only the push adapter contract is deferred; no fake push delivery implementation was added.
 - Next exact task: wire the existing durable notification creation flow to the channel dispatch boundary transaction-safely, then audit preferences/localization and event-category policy gaps.
+
+- Phase 11 preference/localization audit found no existing delivery preference policy, while LocalizationConfiguration already provides the authoritative supported/default locale boundary.
+- Added domain-level notification delivery categories (match, message, account_security, moderation) and channels (in_app, email, push) with validation and explicit safe defaults: in_app enabled, email/push disabled until policy enables them.
+- This is a policy contract only; no duplicate account preference persistence was invented before the authoritative account settings model exists.
+- Notification localization now explicitly reuses LocalizationConfiguration rather than introducing a second locale registry; durable payloads remain stable data rather than permanently localized sentences.
+- Existing email outbox is currently typed only for email verification, so notification email delivery cannot safely be wired into it without first generalizing its message contract. Deferred rather than abusing the verification pipeline.
+- Next exact task: inspect module/provider composition and existing notification producers, then integrate channel dispatch only where durable notification creation can be made atomic/idempotent without crossing the verification-email boundary.
