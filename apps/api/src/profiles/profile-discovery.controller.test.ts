@@ -25,6 +25,11 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect((create.mock.calls[0][0] as any).accountId).toBe('viewer-1');
   });
 
+  it('rejects profile creation in a country disabled by deployment localization configuration', async () => {
+    const c=controller();
+    await expect(c.createMyProfile({ categoryId:'cat-1', geographicScope:{ kind:'country', countryCode:'FR' } }, 'Bearer test')).rejects.toThrow('countryCode is not supported');
+  });
+
   it('updates metadata through a dedicated authenticated ownership boundary', async () => {
     const c=controller(); const update=vi.spyOn((c as any).profiles,'update');
     await c.updateMyProfileMetadata({
@@ -67,6 +72,11 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller();
     vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue(null);
     await expect(c.getMyProfile('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('rejects profile geography updates in a country disabled by deployment localization configuration', async () => {
+    const c=controller();
+    await expect(c.updateMyProfile({ geographicScope:{ kind:'region', countryCode:'FR', regionCode:'IDF' } }, 'Bearer test')).rejects.toThrow('countryCode is not supported');
   });
 
   it('validates existing fields against the new category schema on a category-only change', async () => {
