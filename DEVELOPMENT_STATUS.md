@@ -3651,3 +3651,54 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - Remove or constrain verificationStatus from generic self-service PATCH DTO, then add focused tests and CI validation for the final Phase 7 authority boundary.
+
+
+## HANDOFF CHECKPOINT — 2026-09-03 Phase 7
+### Last fully validated checkpoint
+- CI #2250: PASS all stages.
+- Matching Concurrency Gate #242: PASS.
+- HTTP GET /profiles/me/completion is implemented and fully CI-validated.
+- Phase 7 completion transport is closed.
+
+### Completed work (do not repeat)
+1. Profile domain foundation and configurable completion engine.
+2. Privacy/projection foundations.
+3. Profile persistence and Prisma migration ownership reconciliation.
+4. Profile metadata persistence model (avatar/gallery/biography/verification fields).
+5. ProfileService.completion() derived-read integration.
+6. GET /profiles/me/completion authenticated transport endpoint.
+7. Focused service and transport tests for completion.
+8. CI validation through #2250 / Concurrency Gate #242.
+
+### Important architecture decisions
+- Two migration streams exist; executable Profile schema changes belong to apps/api/prisma/migrations. packages/database migration 0022 is a non-DDL release marker and must not be turned back into Profile DDL.
+- Completion is derived from current Profile + configurable schema/policy; never persist a mutable completion percentage.
+- Transport ownership must come from authenticated principal, never request-supplied account/profile ownership identifiers.
+- Domain ProfileFieldVisibility vocabulary is exactly: public | owner | privileged. Do not introduce 'private'.
+- Validate DB/Prisma string media statuses at repository boundaries before mapping into closed domain unions.
+
+### Current exact state
+- Branch: phase7-profile-system-foundation
+- PR: #23
+- Last validated HEAD: 8ec970390ee5291820e0fb3c9d52f13c8716ed9f
+- CI #2250: SUCCESS
+- Concurrency Gate #242: SUCCESS
+
+### Work currently NOT started
+- Avatar metadata write transport
+- Gallery metadata write transport
+- Biography update transport
+- Verification update transport
+- Final Phase 7 end-to-end integration
+
+### Exact next action — start here in the next chat
+1. Read PROJECT_MASTER.md, MASTER_DEVELOPMENT_ROADMAP.md, DEVELOPMENT_STATUS.md, DECISIONS.md and CONTINUITY_PROTOCOL.md.
+2. Confirm branch/PR/head and latest CI before changing code.
+3. Inspect existing ProfileService, ProfileDiscoveryController, PrismaProfileRepository and existing DTO/controller conventions.
+4. Implement the next smallest isolated slice: profile metadata write reconciliation, starting with service/repository contract analysis before adding HTTP endpoints.
+5. Do not duplicate existing create/update behavior. Prefer extending the established Profile update path.
+6. Add focused tests.
+7. Commit the smallest coherent change and wait for full CI green before starting the next metadata slice.
+
+### Efficiency rule
+Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do not redo any completed CI diagnosis, migration reconciliation, completion engine, service completion integration, or completion HTTP transport work.
