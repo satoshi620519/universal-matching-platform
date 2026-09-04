@@ -33,7 +33,7 @@ function canProject(
     || (visibility === 'privileged' && viewer.privileged === true);
 }
 
-function activeMedia(media: ProfileMedia | null): ProfileMedia | undefined {
+function activeMedia(media: ProfileMedia | null | undefined): ProfileMedia | undefined {
   return media?.status === 'active' ? media : undefined;
 }
 
@@ -64,9 +64,9 @@ export function projectProfile(
   };
   const avatar = activeMedia(profile.avatar);
   if (avatar && canProject(corePolicy.avatar, viewer, isOwner)) projected.avatar = avatar;
-  const gallery = profile.gallery.filter(media => media.status === 'active');
+  const gallery = (profile.gallery ?? []).filter(media => media.status === 'active');
   if (gallery.length && canProject(corePolicy.gallery, viewer, isOwner)) projected.gallery = gallery;
-  if (profile.biography !== null && canProject(corePolicy.biography, viewer, isOwner)) projected.biography = profile.biography;
-  if (canProject(corePolicy.verificationStatus, viewer, isOwner)) projected.verificationStatus = profile.verificationStatus;
+  if (profile.biography != null && canProject(corePolicy.biography, viewer, isOwner)) projected.biography = profile.biography;
+  if (profile.verificationStatus !== undefined && canProject(corePolicy.verificationStatus, viewer, isOwner)) projected.verificationStatus = profile.verificationStatus;
   return projected;
 }
