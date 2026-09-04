@@ -107,11 +107,16 @@ export class PrismaProfileRepository implements ProfileRepository {
       fields: row.fields as Record<string, string | number | boolean | null>,
       geographicScope: scope,
       avatar,
-      gallery: row.galleryMedia.map((media) => ({
-        id: media.mediaId,
-        storageKey: media.storageKey,
-        status: media.status,
-      })),
+      gallery: row.galleryMedia.map((media) => {
+        if (!this.isMediaStatus(media.status)) {
+          throw new Error('Persisted profile gallery media status is invalid');
+        }
+        return {
+          id: media.mediaId,
+          storageKey: media.storageKey,
+          status: media.status,
+        };
+      }),
       biography: row.biography,
       verificationStatus: this.mapVerificationStatus(row.verificationStatus),
     });
