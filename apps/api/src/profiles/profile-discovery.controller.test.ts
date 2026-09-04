@@ -8,7 +8,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
   function controller(overrides: Record<string, unknown> = {}) {
     return new ProfileDiscoveryController(
       principalResolver as never,
-      ({ list: vi.fn().mockResolvedValue([{ id:'cat-1' }]) } as never),
+      ({ list: vi.fn().mockResolvedValue([{ id:'cat-1', key:'freelance' }, { id:'dating', key:'dating' }]) } as never),
       ({ schemaFor: vi.fn().mockReturnValue({}) } as never),
       ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }), update: vi.fn().mockResolvedValue({ id:'profile-1' }), completion: vi.fn().mockResolvedValue({ percentage: 50 }) } as never),
       ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
