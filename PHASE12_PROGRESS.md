@@ -40,3 +40,39 @@
 CI #2855 and Matching Concurrency Gate #596 are green. Persistent User Block is now wired into Discovery through an explicit named policy pair, keeping the existing safety policy independent. Block enforcement is now also applied at matching transitions and conversation creation boundaries (including mutual-match conversation creation). Next action: add authenticated HTTP block/unblock surface and focused tests.
 
 Do not implement ban, evidence/context, rate/spam controls, or moderation queue UI until the User Block persistence/enforcement boundary is established.
+
+
+## Session checkpoint — 2026-09-04
+
+### Completed in this session
+- Verified CI #2855 and Matching Concurrency Gate #596 as successful before continuing integration.
+- Wired persistent User Block into Discovery using an explicit block/safety exclusion-policy pair.
+- Registered UserBlockRepository -> PrismaUserBlockRepository in the application module.
+- Applied bidirectional block checks at Matching transition boundaries.
+- Applied bidirectional block checks at Messaging conversation-creation boundaries, including mutual-match direct conversation creation.
+- Kept the pre-existing Safety Restriction / Moderation architecture canonical; no duplicate safety subsystem was introduced.
+
+### Current exact state
+User Block is implemented across: domain contract, PostgreSQL persistence, repository, Discovery exclusion, Matching rejection, and Messaging/conversation rejection.
+
+### Not yet completed (do next, in this order)
+1. Inspect current authenticated controller conventions and add authenticated Block / Unblock HTTP API.
+2. Add focused tests: duplicate block idempotency, directed unblock semantics, self-block rejection, and bidirectional enforcement in discovery/matching/messaging.
+3. Run CI and fix only concrete failures.
+4. Add audit coverage where the existing canonical audit mechanism supports User Block actions.
+
+### Important continuation rules
+- Continue on branch: phase12-safety-core
+- Existing PR: #25
+- Do NOT recreate existing SafetyModeration, SafetyReport, SafetyEnforcement, or EffectiveSafetyRestriction infrastructure.
+- Do NOT start Ban, Evidence/Context, Rate Limit/Spam, or Moderation Queue UI before User Block is fully verified.
+- Prefer existing repository/controller/auth/audit patterns.
+- Inspect current file state before implementation.
+
+### Latest commits for this session
+- e5915fccc371c59be5be4407c48300c7dc488c2d — matching block enforcement
+- 4400fa93153b966f980878b57d5345ee827153e5 — messaging block enforcement
+- 45f5e4cdef55af0c137c2a84e5756cd0a8d80ede — progress update
+
+### Exact first action tomorrow
+Inspect authenticated controller conventions, then implement the minimal Block / Unblock API on top of the existing UserBlockRepository. Do not modify Discovery/Matching/Messaging again unless tests expose a concrete defect.
