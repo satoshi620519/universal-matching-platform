@@ -3262,3 +3262,45 @@ Inventory existing authentication/account code and specifications, identify genu
 - Matching Concurrency Gate run 188 PASSED completely on the same latest validation cycle.
 - No code changes made while validation is active.
 - EXACT NEXT ACTION: obtain CI 2162 completion. If Typecheck and subsequent gates pass, final-review PR #22 and merge; otherwise fix only exact reported failures.
+
+
+## Phase 7 profile system foundation — active checkpoint
+CURRENT PHASE: Phase 7 — Profile System
+CURRENT MILESTONE: Profile contract reconciliation and specification
+CURRENT TASK: Reconcile existing Profile aggregate, ProfileSchemaConfiguration, ProfileProjectionPolicy, Quick Launch ownership and Prisma persistence before extending runtime behavior.
+STATUS: In progress
+
+COMPLETED:
+- Phase 6 authentication/password recovery merged to main as e327e152b2e2bcc0fd5e7f91de0469450fd266d4 after full CI and concurrency validation.
+- Inventoried existing profile surface before writing new code: Profile, ProfileRepository, ProfileProjectionPolicy, ProfileSchemaConfiguration, ProfileService, category schema defaults, Prisma Profile persistence and prior profile migrations already exist.
+- Confirmed missing Phase 7 capabilities: first-class avatar/gallery contracts, biography metadata, provider-neutral profile verification status, deterministic completion progress, and runtime reconciliation between configurable profile schema and existing category defaults.
+- Added PROFILE_SYSTEM_SPEC.md defining ownership boundaries and acceptance criteria without duplicating Profile.fields, ProfileProjectionPolicy or Quick Launch lifecycle.
+- Active branch: phase7-profile-system-foundation.
+
+IN PROGRESS:
+- Domain contract design for profile media, verification presentation and completion calculation.
+
+NOT STARTED:
+- Phase 7 persistence migration/Prisma mapping.
+- ProfileService runtime reconciliation.
+- HTTP adapters.
+- Full Phase 7 validation and merge.
+
+FILES CHANGED:
+- PROFILE_SYSTEM_SPEC.md
+- DEVELOPMENT_STATUS.md
+
+DECISIONS MADE:
+- Phase 7 extends existing profile ownership rather than replacing the aggregate.
+- Completion progress is derived, not stored as mutable truth.
+- Profile verification status is provider-neutral presentation state and not an authorization source.
+- Quick Launch continues to own field definitions only, never user profile values.
+
+KNOWN ISSUES:
+- DEVELOPMENT_STATUS.md contains extensive historical checkpoints; Phase 7 checkpoint above is the current continuation anchor.
+
+TEST RESULTS:
+- No Phase 7 implementation tests run yet; specification checkpoint only.
+
+EXACT NEXT ACTION:
+- Inspect existing domain exports/tests around profile field schema and projection, then implement the smallest first-class Phase 7 domain contracts (media, verification status, deterministic completion) with focused tests before touching Prisma persistence.
