@@ -102,6 +102,15 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect((c as any).profileRepository.findByAccountId).toHaveBeenCalledWith('target');
   });
 
+  it('passes privileged viewer capability into domain privacy projection', async () => {
+    const c=controller();
+    const admin=(c as any).admin;
+    vi.spyOn(admin,'has').mockResolvedValue(true);
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ id:'p1', accountId:'target', categoryId:'dating', fields:{ moderationNote:'internal' }, geographicScope:{kind:'global'} });
+    await c.getPublicProfile('target','Bearer moderator');
+    expect(admin.has).toHaveBeenCalledWith('viewer-1','manage-moderation');
+  });
+
   it('projects only public fields when viewing another account profile', async () => {
     const c=controller();
     vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible', secret:'Hidden' } });
