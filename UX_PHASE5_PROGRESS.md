@@ -133,7 +133,9 @@
 - Fix commit: `74bee9dd5dc94998e3a1aef5f9575c4b1fa6a533`.
 - Responsive coverage review: existing breakpoints cover the major Home, Access, Dashboard, Conversation, Discovery, and Notification grid collapses. No evidence-based layout rewrite is needed in this slice.
 - State coverage review: authentication has loading/success/error feedback; account has loading/error states; notifications has loading/empty/error; discovery has loading/empty/error feedback; conversation has ready/error/empty/realtime state. No missing state requires a speculative redesign.
-- Next: run repository CI on the final quality-pass branch. If successful, open one final Phase 5 PR; if it fails, inspect only the reported diagnostic and apply the smallest targeted fix.
+- Final Phase 5 PR #17 opened: https://github.com/satoshi620519/universal-matching-platform/pull/17.
+- CI must be treated as the next gate. Do not make speculative changes while checks are pending.
+- Resume procedure: fetch workflow runs for PR #17 head `5fb08ebb4d4ccfb9357f6869b5100d7c167f4e1b`; if all required checks pass, merge PR #17 and update this record. If a check fails, inspect only that diagnostic, apply the smallest targeted fix, then rerun CI.
 
 ## Next continuation point
 
