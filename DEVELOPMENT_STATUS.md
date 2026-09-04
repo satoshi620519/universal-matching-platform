@@ -2914,3 +2914,17 @@ EXACT NEXT ACTION:
 - PR #18 opened: https://github.com/satoshi620519/universal-matching-platform/pull/18
 - HEAD CHECKPOINT: 6f00efed1672ef74b0c030f4fc195022b4594880
 - EXACT NEXT ACTION: wait for/fetch PR #18 CI. If all required checks pass, merge and update DEVELOPMENT_STATUS.md with the merge checkpoint. If any check fails, inspect only the failing diagnostic and apply the smallest targeted fix.
+
+
+## Quick Launch Matching Rules — COMPLETE
+- PR #18 merged into main after CI run 33821661017 and Matching Concurrency Gate run 33821661010 both completed successfully.
+- Merge commit: c203a41e8e045bba88d7e49fced7498627bb574a.
+- Added typed purchaser-facing matching rule metadata to Quick Launch without changing runtime matching-engine ownership.
+- Validation covers normalized unique keys, target fields, supported operators, scalar values, finite numeric values, and non-negative finite weights.
+- Published snapshots deep-freeze matching rule metadata and preserve compatibility with older snapshots that omit the optional field.
+- Existing draft/save/publish/history lifecycle was reused; no duplicate configuration endpoints or persistence models were introduced.
+
+## Exact next action
+1. Reconcile the next dependency-ordered unfinished configuration milestone from current main source and Phase 4 specifications.
+2. Do not revisit completed matchingRules, legal/support, or Phase 5 UX work.
+3. Prefer the smallest missing integration with an existing aggregate contract, validate it through CI, and record the continuation checkpoint.
