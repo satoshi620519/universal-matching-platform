@@ -3742,3 +3742,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Began normalizing the profile transport boundary to return HTTP 404 for absent profiles; added focused completion endpoint coverage.
 - Latest implementation commits: `8e472c2`, `fd02976`.
 - Next action: validate latest CI and continue the same error-contract normalization only where owner-scoped endpoints still expose generic missing-profile errors; do not reopen completed schema/verification work.
+
+
+### 2026-09-04 — Phase 7 profile error-contract correction after CI
+- CI #2308 failed only in the new focused profile completion test: implementation still contained generic `Error('profile not found')` in completion (and another owner-scoped verification path), so the earlier narrow replacement did not cover all occurrences.
+- Corrected all remaining exact generic missing-profile throws in the controller to `NotFoundException` for consistent HTTP transport semantics.
+- Matching Concurrency Gate #271 remained SUCCESS; migration, Typecheck, and Lint also passed before the focused test failure.
+- Latest fix commit: `7694ab6`.
+- Next action: validate CI on `7694ab6`; if green, record the error-contract slice complete and audit only genuinely distinct remaining Phase 7 gaps.
