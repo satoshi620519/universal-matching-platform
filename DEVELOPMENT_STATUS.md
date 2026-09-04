@@ -3817,3 +3817,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added regression coverage proving non-public fields are excluded from public profile responses.
 - Commits: 7bf6d0a (implementation), 54a1fbe (test).
 - Next exact action: validate CI, then continue remaining Phase 7 completion audit.
+
+
+### 2026-09-04 — Phase 7 privacy projection authority reconciliation
+- CI #2342 and Matching Concurrency Gate #288 for the preceding category-only schema change are fully SUCCESS.
+- During public-profile implementation review, found duplicate transport-level projection logic that bypassed the richer domain projectProfile policy (core metadata, active-media filtering, fail-closed behavior).
+- Rewired GET /profiles/:accountId to the domain privacy projection authority with explicit public core policy; owner GET remains full owner view.
+- Added regression coverage for active-only avatar/gallery and public biography/verification projection.
+- Commits: 2bae7e0 (implementation), 7f0a323 (test).
+- Next exact action: validate the consolidated privacy implementation in CI, then continue the remaining Phase 7 completion audit.
