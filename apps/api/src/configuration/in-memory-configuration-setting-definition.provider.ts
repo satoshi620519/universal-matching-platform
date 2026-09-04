@@ -6,6 +6,7 @@ const DEFAULT_DEFINITIONS: readonly DraftConfigurationSettingDefinition[] = [
   { key: 'localization.configuration', valueType: 'text', allowedScopes: ['deployment'] },
   { key: 'location.precision', valueType: 'text', allowedScopes: ['deployment'] },
   { key: 'distance.presentation', valueType: 'text', allowedScopes: ['deployment'] },
+  { key: 'distance.matching.enabled', valueType: 'boolean', allowedScopes: ['deployment'] },
 ];
 
 @Injectable()
