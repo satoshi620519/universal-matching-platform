@@ -3167,3 +3167,15 @@ Inventory existing authentication/account code and specifications, identify genu
 - Focused tests assert successful ordered completion and zero side effects for consumed recovery.
 - IMPLEMENTATION CHECKPOINT: 5b8cfda2b7bd761593d3ee23b3f0f0b2e72e6001.
 - EXACT NEXT ACTION: reconcile dependency injection/module wiring and database migration runtime support for newly added Phase 6 recovery/session contracts, then run focused tests/typecheck before expanding HTTP endpoints.
+
+
+## Phase 6 runtime wiring and persistence reconciliation — checkpoint
+- Direct AppModule inventory found Phase 6 runtime wiring is centralized in AppModule rather than a separate auth module.
+- Existing PasswordCredentialRepository was not explicitly bound in DI; Phase 6 recovery/reset wiring exposed and corrected this missing binding.
+- Added PrismaPasswordRecoveryRepository and registered PasswordRecoveryRepository + PasswordResetCompletionService in AppModule.
+- Added PasswordRecoveryRequest mapping to the existing Prisma schema and linked it to AuthenticationIdentity.
+- Migration artifacts are append-only and the database package already has ordered transactional execution support; new recovery migration remains versioned as 0021.
+- IMPORTANT: repository contains overlapping historical authentication-session migration artifacts/contracts from earlier work; do not add another session migration. Existing Prisma runtime is authoritative for current API persistence wiring.
+- VALIDATION GATE NEXT: run API Prisma generation, focused auth tests, and typecheck before adding recovery HTTP transport.
+- IMPLEMENTATION CHECKPOINT: 20a6922e8a496681ed6b8c9327599ed8ebb80c34.
+- EXACT NEXT ACTION: inspect current CI/workflow and package validation scripts, then run the narrowest available validation sequence for the Phase 6 branch and fix only demonstrated failures.
