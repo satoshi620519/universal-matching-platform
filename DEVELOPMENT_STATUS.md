@@ -3156,3 +3156,14 @@ Inventory existing authentication/account code and specifications, identify genu
 - Focused tests cover successful issuance, invalid credential rejection, and disabled-credential short-circuiting.
 - IMPLEMENTATION CHECKPOINT: 7dcbebfed1c92806dbb9f42c70eb7d7e3bf270ca.
 - EXACT NEXT ACTION: inventory password reset runtime/service support against PasswordRecoveryRecord and existing session revocation infrastructure; implement only the missing recovery completion orchestration, including credential replacement and revoke-all-sessions boundary.
+
+
+## Phase 6 password reset completion reconciliation — implementation checkpoint
+- Existing runtime already provided password credential replacement and individual session revocation, but lacked password recovery repository runtime and account-wide session revocation.
+- Added only the missing recovery completion orchestration: validate usable recovery -> resolve identity/account -> hash replacement password through injected boundary -> replace credential -> consume recovery -> revoke all active account sessions.
+- Added PasswordRecoveryRepository runtime contract without exposing raw recovery secrets.
+- Extended existing SessionRepository/PrismaSessionRepository with revokeAllForAccount rather than creating a parallel session system.
+- Completion performs no side effects for unusable recovery records.
+- Focused tests assert successful ordered completion and zero side effects for consumed recovery.
+- IMPLEMENTATION CHECKPOINT: 5b8cfda2b7bd761593d3ee23b3f0f0b2e72e6001.
+- EXACT NEXT ACTION: reconcile dependency injection/module wiring and database migration runtime support for newly added Phase 6 recovery/session contracts, then run focused tests/typecheck before expanding HTTP endpoints.
