@@ -104,9 +104,24 @@
 - PR #15 CI run `33742811375` completed successfully across migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #15 merged into `main` as merge commit `7c06738dc87b0516ecfe0bb41663767cf191a2a6`.
 
+## Conversation migration in progress
+
+- Re-read the progress record and inspected the active Dashboard/Conversation implementation before editing; completed primitive, authentication, dashboard shell, notification, and discovery work was not repeated.
+- Branch `feature/ux-conversation-migration` created from the PR #15 main checkpoint.
+- Conversation creation migrated to shared `Card`, `Field`, `TextInput`, `Button`, and `StatusMessage` primitives.
+- Active conversation migrated to shared `Card`, `List`, `ListRow`, `Field`, `TextArea`, and `Button` primitives.
+- Preserved existing backend contracts for conversation creation, message loading, sending, and realtime event refresh; no authorization or transport behavior was rewritten.
+- Added explicit field labels and a labelled message list while retaining the existing empty state and realtime status display.
+- Implementation commit: `0def314dd4131d88d57b1cd1e4de510e23d5c1e4`.
+- Shared primitive and existing API contracts reviewed against the actual Conversation implementation. `Field` correctly injects labels/ARIA attributes into `TextInput` and `TextArea`; `List`/`ListRow` preserve valid message list structure; `Button` defaults are explicitly overridden where form submission is required. Conversation authorization, message transport, loading order, and realtime refresh dependencies remain unchanged.
+- No compatibility rewrite was needed after review.
+- PR #16 opened for Conversation UX migration: https://github.com/satoshi620519/universal-matching-platform/pull/16.
+- CI run `33743268385` (run #2044) is in progress at interruption checkpoint: database migration verification, PostgreSQL integration, typecheck, and lint have passed; `Test` is currently running. Matching concurrency, concurrency gate, diagnostics, and build remain pending.
+- Stop point: do not make further code changes while CI is running. On resume, fetch the latest jobs for run `33743268385`; if all required checks pass, merge PR #16 and update this record with the merge commit. If a check fails, inspect only the failing diagnostic and apply the smallest targeted fix.
+
 ## Next continuation point
 
-Discovery migration is complete. Next inspect and migrate Conversation as the remaining major screen slice, reusing existing shared primitives and preserving conversation authorization, message loading, sending, pagination, and real-time behavior. Do not repeat authentication, dashboard shell, notification, discovery, or primitive work. Validate the Conversation slice with CI before any final integration pass.
+Continue from the Conversation implementation above. Do not repeat completed migrations. After Conversation CI and integration, begin the final Phase 5 integration/quality pass.
 
 ## Interruption-safe rule
 
