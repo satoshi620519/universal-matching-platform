@@ -3951,3 +3951,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused adapter regression coverage.
 - Matching Concurrency Gate #476 remains in progress at this checkpoint; CI must be revalidated after the compile repair and strategy adapter commits.
 - Next exact task: inspect fresh CI results, fix only concrete failures if present, then connect strategy selection to purchaser configuration without touching existing match persistence.
+
+- Fresh CI #2636 and Matching Concurrency Gate #485 are running; baseline migration, PostgreSQL migration integration, and Typecheck have already passed at the checkpoint, with Lint/Test/Build still pending.
+- Audited purchaser configuration and found matchingRules already persisted/versioned, but no purchaser-facing strategy selector existed.
+- Added a minimal validated MatchStrategyConfiguration with the current stable rule-based key, then integrated it into immutable QuickLaunch published snapshots and regression coverage.
+- This config selects an existing registry strategy by key; it does not duplicate strategy implementations, scoring, discovery, or match persistence.
+- Next exact task: inspect fresh CI completion. If green, perform final Phase 9 acceptance audit (preferences, filters, sorting, compatibility scoring, replaceable algorithms) before declaring the phase complete.
