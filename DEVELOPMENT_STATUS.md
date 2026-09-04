@@ -3932,3 +3932,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added validated deterministic discovery sorting metadata with stable default id ordering and explicit direction.
 - Repository applies persisted id sorting; compatibilityScore remains a reserved engine-level sort until scores are available before pagination (no fake DB ordering added).
 - Next exact action: verify CI for all Phase 9 commits, then implement candidate filtering/preferences as a normalized domain boundary without bypassing existing safety/geographic/distance exclusions.
+
+- Phase 9 compatibility foundation CI and matching concurrency gate both completed SUCCESS.
+- Added normalized typed discovery preferences only after confirming no equivalent preference boundary existed.
+- Preferences are applied after existing category/geographic eligibility and before privacy projection; block/safety exclusions remain authoritative and cannot be bypassed.
+- Added domain and integration regression coverage.
+- Next exact task: verify CI for Phase 9 sorting/preferences commits, then connect purchaser-configurable matching rules to an engine-level strategy selection path without duplicating MatchStrategy.
