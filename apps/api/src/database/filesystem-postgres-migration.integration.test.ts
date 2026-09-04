@@ -39,7 +39,7 @@ describe.skipIf(!DATABASE_URL)(
         const executor = new PostgresMigrationExecutor(
           new PrismaSqlMigrationClient(database as any),
         );
-        const expectedMigrations = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        const expectedMigrations = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
         await expect(runMigrations(source, executor)).resolves.toEqual(expectedMigrations);
         await expect(runMigrations(source, executor)).resolves.toEqual([]);
