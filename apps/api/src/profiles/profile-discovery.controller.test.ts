@@ -174,7 +174,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('exposes city hierarchy and distance constraint through discovery transport', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
-    await c.discover('cat-1','city','JP','13','13101','10',undefined,'2500',undefined,undefined,undefined,undefined,'Bearer test');
+    await c.discover('cat-1','city','JP','13','13101','10',undefined,'2500',undefined,undefined,undefined,undefined,undefined,undefined,'Bearer test');
     expect(discover.mock.calls[0][0] as any).toMatchObject({
       categoryId:'cat-1',
       geographicScope:{ kind:'city', countryCode:'JP', regionCode:'13', localityCode:'13101' },
