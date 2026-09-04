@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { blocksCapability, type SafetyRestriction } from '@universal/domain';
 import { DiscoveryExclusionPolicy } from './discovery-exclusion.policy.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
@@ -16,7 +16,7 @@ export type DiscoveryExclusionPolicies = Readonly<{ block: DiscoveryExclusionPol
 export class DiscoveryService {
   constructor(
     private readonly profiles: DiscoveryProfileRepository,
-    private readonly exclusions: DiscoveryExclusionPolicies,
+    @Inject('DISCOVERY_EXCLUSION_POLICIES') private readonly exclusions: DiscoveryExclusionPolicies,
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
