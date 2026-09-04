@@ -3466,3 +3466,25 @@ FIX APPLIED:
 
 EXACT NEXT ACTION:
 - Fetch CI for current head and verify full Test stage, then Build, before starting ProfileService reconciliation.
+
+
+## Phase 7 persistence validation complete — CI #2228
+FINAL VALIDATION:
+- CI #2228: PASS all stages (packaged migrations, PostgreSQL migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Independent Matching Concurrency Gate #231: PASS.
+- Phase 7 persistence slice is validated and closed.
+
+PROFILE SERVICE RECONCILIATION STARTED:
+- Added ProfileService.completion(id, { schema, policy }) as a derived read operation.
+- Completion is calculated from the current Profile + configurable schema + optional core policy and is never persisted as mutable percentage state.
+- Schema is validated at the service boundary before derivation.
+- Unknown profiles fail explicitly.
+- Added focused tests proving completion derivation does not call persistence save.
+
+CURRENT STATE:
+- Service completion integration implemented but not yet CI-validated.
+- Existing create/update behavior intentionally left unchanged.
+- HTTP transport/controller integration remains unstarted.
+
+EXACT NEXT ACTION:
+- Validate the new service reconciliation slice in CI. On green, inspect existing API transport architecture and add Phase 7 completion/profile metadata endpoints without duplicating another transport pattern.
