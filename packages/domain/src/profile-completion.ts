@@ -31,9 +31,9 @@ export function calculateProfileCompletion(
     if (field.required && !hasValue(profile.fields[field.key])) missing.push(`field:${field.key}`);
   }
   for (const requirement of policy.requiredCore ?? []) {
-    if (requirement === 'avatar' && (profile.avatar === null || profile.avatar.status !== 'active')) missing.push('core:avatar');
-    if (requirement === 'biography' && (profile.biography === null || profile.biography.trim() === '')) missing.push('core:biography');
-    if (requirement === 'verification' && profile.verificationStatus !== 'verified') missing.push('core:verification');
+    if (requirement === 'avatar' && (profile.avatar == null || profile.avatar.status !== 'active')) missing.push('core:avatar');
+    if (requirement === 'biography' && (profile.biography == null || profile.biography.trim() === '')) missing.push('core:biography');
+    if (requirement === 'verification' && (profile.verificationStatus ?? 'unverified') !== 'verified') missing.push('core:verification');
   }
   const totalRequiredCount = schema.fields.filter(field => field.required).length + (policy.requiredCore?.length ?? 0);
   const completedRequiredCount = totalRequiredCount - missing.length;
