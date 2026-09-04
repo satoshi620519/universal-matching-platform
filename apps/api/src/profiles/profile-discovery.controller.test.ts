@@ -9,12 +9,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     return new ProfileDiscoveryController(
       principalResolver as never,
       ({ list: vi.fn().mockResolvedValue([{ id:'cat-1', key:'freelance' }, { id:'dating', key:'dating' }]) } as never),
-      ({ schemaFor: vi.fn().mockReturnValue({}) } as never),
+      ({ schemaFor: vi.fn().mockReturnValue({ displayName:{ kind:'string', visibility:'public' }, headline:{ kind:'string', visibility:'public' }, bio:{ kind:'string', visibility:'public' } }) } as never),
       ({ create: vi.fn().mockResolvedValue({ id:'viewer-1' }), update: vi.fn().mockResolvedValue({ id:'profile-1' }), completion: vi.fn().mockResolvedValue({ percentage: 50 }) } as never),
       ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
-      ({ require: vi.fn().mockResolvedValue(undefined) } as never),
+      ({ require: vi.fn().mockResolvedValue(undefined), can: vi.fn().mockResolvedValue(false) } as never),
     );
   }
 
@@ -96,9 +96,8 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('passes the authenticated viewer identity to public profile projection', async () => {
     const c=controller();
-    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible' } });
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', categoryId:'cat-1', fields:{ displayName:'Visible' } });
     await c.getPublicProfile('target','Bearer test');
-    // Viewer-sensitive privacy rules must receive the authenticated principal rather than an anonymous placeholder.
     expect((c as any).profileRepository.findByAccountId).toHaveBeenCalledWith('target');
   });
 
@@ -113,7 +112,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('projects only public fields when viewing another account profile', async () => {
     const c=controller();
-    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible', secret:'Hidden' } });
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', categoryId:'cat-1', fields:{ displayName:'Visible', secret:'Hidden' } });
     await expect(c.getPublicProfile('target','Bearer test')).resolves.toEqual(expect.objectContaining({ fields:{ displayName:'Visible' } }));
   });
 
