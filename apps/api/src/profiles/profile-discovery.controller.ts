@@ -67,7 +67,9 @@ export class ProfileDiscoveryController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-completion' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new Error('profile not found');
-    return this.profiles.completion(existing.id, { schema: this.completionSchema(existing.fields) });
+    const category = (await this.categories.list()).find(item => item.id === existing.categoryId);
+    const fieldSchema = category ? this.schemas.schemaFor(category.key) : DEFAULT_FIELD_SCHEMA;
+    return this.profiles.completion(existing.id, { schema: this.completionSchema(fieldSchema) });
   }
 
   @Get('profiles/me')
@@ -97,13 +99,13 @@ export class ProfileDiscoveryController {
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
   }
 
-  private completionSchema(fields: Record<string, unknown>) {
+  private completionSchema(fieldSchema: ProfileFieldSchema) {
     return {
-      fields: Object.keys(fields).map(key => ({
+      fields: Object.entries(fieldSchema).map(([key, rule]) => ({
         key,
         label: key,
-        type: 'text' as const,
-        required: true,
+        type: rule.kind === 'number' ? 'number' as const : rule.kind === 'boolean' ? 'boolean' as const : 'text' as const,
+        required: rule.required === true,
         visibility: 'owner' as const,
       })),
     };
