@@ -24,6 +24,12 @@ describe('Phase 7 profile core contracts', () => {
     })) })).toThrow('Profile gallery must not exceed');
   });
 
+  it('rejects invalid media and verification status at the domain boundary', () => {
+    expect(() => profile({ avatar: { id: 'avatar-1', storageKey: 'avatars/1', status: 'invalid' as never } })).toThrow('Profile media status is invalid');
+    expect(() => profile({ gallery: [{ id: 'gallery-1', storageKey: 'gallery/1', status: 'invalid' as never }] })).toThrow('Profile media status is invalid');
+    expect(() => profile({ verificationStatus: 'invalid' as never })).toThrow('Profile verification status is invalid');
+  });
+
   it('calculates deterministic completion without persisted counters', () => {
     const schema = { fields: [
       { key: 'display_name', label: 'Display name', type: 'text' as const, required: true, visibility: 'public' as const },
