@@ -39,4 +39,18 @@ describe('MessagingController', () => {
     expect(createForParticipant).toHaveBeenCalledTimes(1);
     expect(safety.resolveForAccount).toHaveBeenCalledWith('a1', 'communication');
   });
+  it('uses authenticated participant identity for read state', async () => {
+    const markReadForParticipant = vi.fn().mockResolvedValue(true);
+    const controller = new MessagingController(principalResolver as never, {} as never, { markReadForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never);
+    await controller.markConversationRead('c1');
+    expect(markReadForParticipant).toHaveBeenCalledWith({ conversationId:'c1', accountId:'a1' });
+  });
+
+  it('allows deletion only through authenticated sender identity', async () => {
+    const softDeleteForSender = vi.fn().mockResolvedValue(true);
+    const controller = new MessagingController(principalResolver as never, {} as never, { softDeleteForSender } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never);
+    await controller.deleteMessage('c1','m1');
+    expect(softDeleteForSender).toHaveBeenCalledWith({ messageId:'m1', senderAccountId:'a1' });
+  });
+
 });
