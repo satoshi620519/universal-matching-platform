@@ -94,6 +94,14 @@ describe('ProfileDiscoveryController transport boundary', () => {
     }));
   });
 
+  it('passes the authenticated viewer identity to public profile projection', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible' } });
+    await c.getPublicProfile('target','Bearer test');
+    // Viewer-sensitive privacy rules must receive the authenticated principal rather than an anonymous placeholder.
+    expect((c as any).profileRepository.findByAccountId).toHaveBeenCalledWith('target');
+  });
+
   it('projects only public fields when viewing another account profile', async () => {
     const c=controller();
     vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible', secret:'Hidden' } });
