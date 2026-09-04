@@ -62,6 +62,7 @@ export {
 export * from './category.js';
 export * from './geographic-scope.js';
 export * from './profile.js';
+export * from './profile-completion.js';
 export * from './category-repository.js';
 export * from './profile-repository.js';
 export * from './profile-field-schema.js';
