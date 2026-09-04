@@ -11,9 +11,10 @@ export const defaultLocationPrecisionPolicy: LocationPrecisionPolicy = Object.fr
 });
 
 export function projectGeographicScope(
-  scope: GeographicScope,
+  scope: GeographicScope | null | undefined,
   policy: LocationPrecisionPolicy,
 ): GeographicScope | undefined {
+  if (!scope) return undefined;
   switch (policy.publicPrecision) {
     case 'none':
       return undefined;
