@@ -2979,3 +2979,43 @@ Implement the smallest typed category metadata extension on this branch, then so
 1. Reconcile remaining Phase 4 requirements against current main after PR #18 and #19.
 2. Do not repeat completed Quick Launch matching rules, category metadata, legal/support, or Phase 5 UX work.
 3. Select only the earliest genuinely missing dependency-ordered configuration integration, record its scope before implementation, then follow source review -> CI -> PR -> merge.
+
+
+## Phase 4 next milestone reconciliation — Notification presentation preferences
+CURRENT PHASE: Phase 4 configuration expansion
+CURRENT MILESTONE: Notification presentation preferences
+STATUS: Ready for scoped implementation
+
+EVIDENCE:
+- After PR #18 and PR #19, all explicitly listed Quick Launch areas in MASTER_DEVELOPMENT_ROADMAP.md are represented in the aggregate or supporting configuration domains: branding, localization/geography, profile schema/onboarding, categories, matching rules, feature visibility, and legal/support.
+- CONFIGURATION_SYSTEM_SPEC.md defines an additional configuration domain: notification presentation preferences.
+- Current QuickLaunchDraft has no notification presentation preference contract, making this the next clearly missing typed configuration domain without revisiting completed work.
+
+SCOPE BOUNDARY:
+- Add purchaser-facing notification presentation preferences only (visibility/presentation defaults), not provider credentials, delivery infrastructure, authorization, or user-owned notification choices.
+- Define typed schema + validation + default/normalization semantics + immutable publication + legacy compatibility tests.
+- Reuse existing aggregate and publication lifecycle.
+
+EXACT NEXT ACTION:
+Implement the smallest notification presentation configuration extension on this branch, then source-review, CI, PR, merge, and record completion.
+
+
+## Phase 4 Notification presentation preferences — implementation checkpoint
+- Added a dedicated typed purchaser-facing notification presentation contract without exposing delivery infrastructure, provider credentials, authorization, or user-owned consent choices.
+- Supported stable presentation keys: match, message, like, system.
+- Validation rejects invalid and duplicate keys.
+- Resolution supplies explicit default-enabled entries for omitted supported presentation types when the purchaser configures this domain.
+- Integrated optional notificationPresentation into QuickLaunchDraft and immutable published snapshots.
+- Legacy snapshots remain compatible because the new aggregate field is optional.
+- Added focused tests for default resolution, explicit false preservation, immutability, duplicate rejection, and legacy absence.
+- IMPLEMENTATION COMMITS: 502ec10541e311a733e50f840eeb3394e3c43dd3, ac048ab4e6d27e54bd24f01c9466d9363c9281de, e0f29019e7b2f74f6e334ec4fa273c78c70ef3de, 7f005cf3e6d7f8b7e6b9de9167c9d429a1560f3b.
+- EXACT NEXT ACTION: source-level sanity review, then PR + CI. Keep scope strictly to presentation defaults and do not broaden into notification delivery or user preference infrastructure.
+
+
+## Notification presentation preferences PR checkpoint
+- Source-level sanity review completed for typed contract, validation, default resolution, aggregate integration, immutable publication, and legacy compatibility.
+- Confirmed explicit enabled=false survives resolution and publication.
+- Confirmed no delivery infrastructure, provider secrets, authorization, consent, or user-owned preference concerns were introduced.
+- PR #20 opened: https://github.com/satoshi620519/universal-matching-platform/pull/20
+- HEAD CHECKPOINT: e7ec1a716da89b9dfdb5349f68018b0b149c0e88
+- EXACT NEXT ACTION: fetch PR #20 CI. If all required checks pass, merge and record completion; otherwise inspect only failing diagnostics and apply the smallest evidence-based fix.

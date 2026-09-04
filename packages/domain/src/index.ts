@@ -75,6 +75,7 @@ export * from './conversation.js';
 
 export * from './quick-launch-configuration.js';
 export * from './matching-rules-configuration.js';
+export * from './notification-presentation-preferences.js';
 
 export * from './branding-theme-configuration.js';
 
