@@ -1,4 +1,5 @@
 import type { GeographicScope } from './geographic-scope.js';
+import type { PrivateLocation } from './private-location.js';
 
 export type ProfileFieldValue = string | number | boolean | null;
 export type ProfileMediaStatus = 'pending' | 'active' | 'removed';
@@ -16,6 +17,7 @@ export type Profile = Readonly<{
   categoryId: string;
   fields: Readonly<Record<string, ProfileFieldValue>>;
   geographicScope: GeographicScope;
+  privateLocation?: PrivateLocation | null;
   avatar?: ProfileMedia | null;
   gallery?: readonly ProfileMedia[];
   biography?: string | null;
@@ -50,6 +52,7 @@ export function createProfile(input: Profile): Profile {
   }
   const gallery = input.gallery ?? [];
   const avatar = input.avatar ?? null;
+  const privateLocation = input.privateLocation ?? null;
   const biographyInput = input.biography ?? null;
   const verificationStatus = input.verificationStatus ?? 'unverified';
   if (!isVerificationStatus(verificationStatus)) throw new Error('Profile verification status is invalid');
@@ -65,6 +68,7 @@ export function createProfile(input: Profile): Profile {
     ...input,
     fields: { ...input.fields },
     geographicScope: { ...input.geographicScope } as GeographicScope,
+    privateLocation: privateLocation === null ? null : { ...privateLocation },
     avatar: avatar === null ? null : normalizeMedia(avatar),
     gallery: gallery.map(normalizeMedia),
     biography,
