@@ -3957,3 +3957,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added a minimal validated MatchStrategyConfiguration with the current stable rule-based key, then integrated it into immutable QuickLaunch published snapshots and regression coverage.
 - This config selects an existing registry strategy by key; it does not duplicate strategy implementations, scoring, discovery, or match persistence.
 - Next exact task: inspect fresh CI completion. If green, perform final Phase 9 acceptance audit (preferences, filters, sorting, compatibility scoring, replaceable algorithms) before declaring the phase complete.
+
+- Phase 9 acceptance audit found one concrete roadmap gap: explicit search criteria were absent despite filters/preferences and sorting being present.
+- Added a normalized, field-whitelisted discovery search contract (term + explicit searchable fields), query integration, service filtering, API parameters, and regression coverage.
+- Search is applied inside the existing eligibility pipeline and cannot bypass category/geographic/self/block/safety exclusions; no search provider or duplicate repository subsystem was introduced.
+- CI #2648 was still running at the checkpoint: migration, Typecheck, and Lint had passed; Test was active. Matching Concurrency Gate #496 completed SUCCESS.
+- Next exact task: inspect CI #2648 completion, then perform final Phase 9 acceptance audit including card/list/grid presentation boundary and compatibilityScore sorting behavior before declaring completion.
