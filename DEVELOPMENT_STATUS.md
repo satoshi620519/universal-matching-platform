@@ -3371,3 +3371,26 @@ CURRENT VALIDATION STATE:
 
 EXACT NEXT ACTION:
 - Fetch workflow status for head b18f62b6ab86dec9aae691482554f06d9d083126 and verify Typecheck before any Prisma work.
+
+
+## Phase 7 persistence checkpoint
+VALIDATION OF DOMAIN SLICE:
+- CI #2198: PASS all stages (migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Matching Concurrency Gate #211: PASS.
+- Domain/projection slice is therefore validated independently before persistence changes.
+
+PERSISTENCE IMPLEMENTED:
+- Added database migration 0022_extend_profiles_phase7.sql.
+- profiles now persists avatar reference columns, biography and provider-neutral verification status.
+- Added profile_gallery_media with ordered positions and cascade deletion.
+- Added database constraints for biography length, avatar column consistency, gallery position and media lifecycle status.
+- Updated Prisma schema mapping.
+- Updated PrismaProfileRepository to persist profile core metadata and replace ordered gallery inside one transaction.
+- Added focused repository persistence tests.
+
+CURRENT STATE:
+- Persistence implementation is complete but not yet CI-validated.
+- ProfileService schema reconciliation and HTTP transport remain unstarted.
+
+EXACT NEXT ACTION:
+- Validate the Phase 7 persistence slice against repository CI. Inspect exact diagnostics on failure and fix only demonstrated incompatibilities before touching ProfileService.
