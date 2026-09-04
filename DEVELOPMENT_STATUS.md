@@ -3826,3 +3826,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added regression coverage for active-only avatar/gallery and public biography/verification projection.
 - Commits: 2bae7e0 (implementation), 7f0a323 (test).
 - Next exact action: validate the consolidated privacy implementation in CI, then continue the remaining Phase 7 completion audit.
+
+
+### 2026-09-04 — Phase 7 privacy projection CI failure resolved
+- CI #2354 exposed a transport/domain integration error after privacy projection consolidation: the controller import/use did not match the actual exported profile-projection API.
+- Inspected packages/domain/src/profile-projection.ts and confirmed ProfileCoreProjectionPolicy and projectProfile are exported via the domain barrel; corrected the public projection invocation to the actual ProfileViewer contract.
+- Commit: 21dee68 (domain API alignment fix).
+- Next exact action: validate the corrected privacy projection compilation in CI before continuing Phase 7 completion audit.
