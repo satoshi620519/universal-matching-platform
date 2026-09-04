@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import {
   createProfile,
@@ -15,19 +15,21 @@ import {
   type ProfileCompletionPolicy,
   type ProfileSchemaConfiguration,
 } from '@universal/domain';
+import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 
 @Injectable()
 export class ProfileService {
   constructor(
     private readonly profiles: ProfileRepository,
     private readonly categories: CategoryRepository,
+    @Optional() private readonly categoryFieldSchemas?: CategoryFieldSchemaService,
   ) {}
 
   async create(input: {
     accountId: string;
     categoryId: string;
     fields: Record<string, ProfileFieldValue>;
-    fieldSchema: ProfileFieldSchema;
+    fieldSchema?: ProfileFieldSchema;
     geographicScope: GeographicScope;
     avatar?: Profile['avatar'];
     gallery?: Profile['gallery'];
@@ -37,7 +39,9 @@ export class ProfileService {
     const category = await this.categories.findById(input.categoryId);
     if (!category) throw new Error('profile category not found');
 
-    validateProfileFields(input.fieldSchema, input.fields);
+    const fieldSchema = input.fieldSchema ?? this.categoryFieldSchemas?.schemaFor(category.key);
+    if (!fieldSchema) throw new Error('profile field schema not configured');
+    validateProfileFields(fieldSchema, input.fields);
 
     const profile = createProfile({
       id: randomUUID(),
@@ -78,12 +82,21 @@ export class ProfileService {
     if (!existing) throw new Error('profile not found');
 
     const categoryId = input.categoryId ?? existing.categoryId;
-    if (categoryId !== existing.categoryId && !(await this.categories.findById(categoryId))) {
+    const needsFieldValidation = input.fields !== undefined || input.categoryId !== undefined;
+    const category = needsFieldValidation
+      ? await this.categories.findById(categoryId)
+      : undefined;
+    if (needsFieldValidation && !category) {
       throw new Error('profile category not found');
     }
 
     const fields = input.fields ?? existing.fields;
-    if (input.fieldSchema) validateProfileFields(input.fieldSchema, fields);
+    const fieldSchema = input.fieldSchema
+      ?? (category ? this.categoryFieldSchemas?.schemaFor(category.key) : undefined);
+    if (needsFieldValidation) {
+      if (!fieldSchema) throw new Error('profile field schema not configured');
+      validateProfileFields(fieldSchema, fields);
+    }
 
     const profile = createProfile({
       ...existing,
