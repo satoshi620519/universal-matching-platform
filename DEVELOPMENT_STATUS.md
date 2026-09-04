@@ -4071,3 +4071,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Notification localization now explicitly reuses LocalizationConfiguration rather than introducing a second locale registry; durable payloads remain stable data rather than permanently localized sentences.
 - Existing email outbox is currently typed only for email verification, so notification email delivery cannot safely be wired into it without first generalizing its message contract. Deferred rather than abusing the verification pipeline.
 - Next exact task: inspect module/provider composition and existing notification producers, then integrate channel dispatch only where durable notification creation can be made atomic/idempotent without crossing the verification-email boundary.
+
+- CI #2782 is healthy through migrations, PostgreSQL integration, Typecheck, Lint, Test, and matching concurrency integration; Build is the only remaining running step at this checkpoint. Matching Concurrency Gate #575 is SUCCESS.
+- Audited notification producers and found no authoritative generic NotificationCreationService yet; avoided wiring channel dispatch into guessed producers or creating duplicate notification events.
+- Exposed the already implemented bounded unread repository query through an authenticated unread endpoint with principal-scoping regression coverage.
+- Channel adapter/dispatch abstractions remain foundation contracts until an authoritative notification producer is introduced; they are not falsely treated as active delivery infrastructure.
+- Next exact task: confirm CI #2782 final Build result, then perform a focused Phase 11 acceptance audit covering durable creation ownership, event producers, adapter registration, retry/idempotency, and explicit deferred push/email/account-preference dependencies.
