@@ -3133,3 +3133,14 @@ Inventory existing authentication/account code and specifications, identify genu
 - Focused tests cover valid lifecycle, revocation/expiry inactivity, and issuance/expiry invariant.
 - IMPLEMENTATION CHECKPOINT: 0c66bc02edc4e79ff6d3f8acbc9af8494fd1a04c.
 - EXACT NEXT ACTION: reconcile password recovery/reset persistence and existing verification flow before implementing any reset runtime service.
+
+
+## Phase 6 password recovery reconciliation — implementation checkpoint
+- Inventory found verification_requests/outcomes are identity-level verification workflows and must not be repurposed as password-reset secrets.
+- No password recovery persistence or lifecycle contract existed.
+- Added password_recovery_requests as a dedicated, identity-linked, opaque-secret-hash lifecycle with active/consumed/expired/revoked states and expiry invariant.
+- Added typed PasswordRecoveryRecord/Repository boundary with consume and revoke-active-for-identity operations.
+- Recovery usability requires active + unconsumed + unrevoked + unexpired; raw secrets are intentionally outside persistence and API projections.
+- Focused tests cover valid use, consumed/revoked/expired rejection, missing secret hash, and invalid expiry ordering.
+- IMPLEMENTATION CHECKPOINT: 4fb255bb79ec807487cbeaf478f8f99159f2ffad.
+- EXACT NEXT ACTION: reconcile existing password sign-in/verification runtime services against the new credential and recovery boundaries, then implement only the smallest missing service contract before HTTP adapters.
