@@ -61,6 +61,10 @@ export class ProfileService {
     fields?: Record<string, ProfileFieldValue>;
     fieldSchema?: ProfileFieldSchema;
     geographicScope?: GeographicScope;
+    avatar?: Profile['avatar'];
+    gallery?: Profile['gallery'];
+    biography?: Profile['biography'];
+    verificationStatus?: Profile['verificationStatus'];
   }): Promise<Profile> {
     const existing = await this.profiles.findById(id);
     if (!existing) throw new Error('profile not found');
@@ -78,6 +82,10 @@ export class ProfileService {
       categoryId,
       fields,
       geographicScope: input.geographicScope ?? existing.geographicScope,
+      avatar: input.avatar === undefined ? existing.avatar : input.avatar,
+      gallery: input.gallery === undefined ? existing.gallery : input.gallery,
+      biography: input.biography === undefined ? existing.biography : input.biography,
+      verificationStatus: input.verificationStatus ?? existing.verificationStatus,
     });
     await this.profiles.save(profile);
     return profile;
