@@ -12,7 +12,7 @@ import { DatabaseService } from '../database/database.service.js';
 type PersistedGalleryMedia = Readonly<{
   mediaId: string;
   storageKey: string;
-  status: 'pending' | 'active' | 'removed';
+  status: string;
   position: number;
 }>;
 
@@ -127,7 +127,7 @@ export class PrismaProfileRepository implements ProfileRepository {
     return { id: row.avatarId, storageKey: row.avatarStorageKey, status: row.avatarStatus };
   }
 
-  private isMediaStatus(value: string | null): value is ProfileMedia['status'] {
+  private isMediaStatus(value: string | null): value is NonNullable<Profile['avatar']>['status'] {
     return value === 'pending' || value === 'active' || value === 'removed';
   }
 
