@@ -3102,3 +3102,13 @@ SCOPE BOUNDARY:
 
 EXACT NEXT ACTION:
 Inventory existing authentication/account code and specifications, identify genuinely missing Phase 6 contracts, then add the smallest authoritative Authentication and Account System specification before runtime implementation.
+
+
+## Phase 6 Authentication and Account System — specification reconciliation checkpoint
+- Repository inventory found substantial prior boundary documentation for identity, credential persistence planning, email/password implementation boundaries, verification separation, and account deletion lifecycle.
+- No single authoritative AUTHENTICATION_SYSTEM_SPEC.md existed to reconcile Phase 6 scope and prevent parallel implementations.
+- Added AUTHENTICATION_SYSTEM_SPEC.md as the Phase 6 authoritative capability and lifecycle contract.
+- Explicitly reuses existing account deletion and verification boundaries; does not select OAuth/OIDC providers, token formats, password hashing algorithms, or delivery providers.
+- Implementation order now requires credential persistence -> password verification/replacement -> recovery -> server-authoritative sessions -> verification integration -> deletion/privacy integration -> HTTP adapters.
+- IMPLEMENTATION CHECKPOINT: 5091ea2f55b84ac217513cbc20f64f322b9beb30.
+- EXACT NEXT ACTION: inspect actual authentication identity persistence/database implementation against the spec and identify the smallest genuinely missing credential/session contract; do not create parallel auth models.
