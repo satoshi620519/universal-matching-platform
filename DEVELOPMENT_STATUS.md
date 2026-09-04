@@ -3010,3 +3010,12 @@ Implement the smallest notification presentation configuration extension on this
 - Added focused tests for default resolution, explicit false preservation, immutability, duplicate rejection, and legacy absence.
 - IMPLEMENTATION COMMITS: 502ec10541e311a733e50f840eeb3394e3c43dd3, ac048ab4e6d27e54bd24f01c9466d9363c9281de, e0f29019e7b2f74f6e334ec4fa273c78c70ef3de, 7f005cf3e6d7f8b7e6b9de9167c9d429a1560f3b.
 - EXACT NEXT ACTION: source-level sanity review, then PR + CI. Keep scope strictly to presentation defaults and do not broaden into notification delivery or user preference infrastructure.
+
+
+## Notification presentation preferences PR checkpoint
+- Source-level sanity review completed for typed contract, validation, default resolution, aggregate integration, immutable publication, and legacy compatibility.
+- Confirmed explicit enabled=false survives resolution and publication.
+- Confirmed no delivery infrastructure, provider secrets, authorization, consent, or user-owned preference concerns were introduced.
+- PR #20 opened: https://github.com/satoshi620519/universal-matching-platform/pull/20
+- HEAD CHECKPOINT: e7ec1a716da89b9dfdb5349f68018b0b149c0e88
+- EXACT NEXT ACTION: fetch PR #20 CI. If all required checks pass, merge and record completion; otherwise inspect only failing diagnostics and apply the smallest evidence-based fix.
