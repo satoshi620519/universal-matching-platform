@@ -3,8 +3,7 @@ ALTER TABLE "profiles"
   ADD COLUMN "avatar_storage_key" TEXT,
   ADD COLUMN "avatar_status" TEXT,
   ADD COLUMN "biography" TEXT,
-  ADD COLUMN "verification_status" TEXT NOT NULL DEFAULT 'unverified',
-  ADD COLUMN "locality_code" TEXT;
+  ADD COLUMN "verification_status" TEXT NOT NULL DEFAULT 'unverified';
 
 ALTER TABLE "profiles"
   ADD CONSTRAINT "profiles_biography_length_check"
@@ -17,10 +16,6 @@ ALTER TABLE "profiles"
     OR
     ("avatar_id" IS NOT NULL AND "avatar_storage_key" IS NOT NULL AND "avatar_status" IS NOT NULL)
   );
-
-ALTER TABLE "profiles"
-  ADD CONSTRAINT "profiles_city_scope_locality_check"
-  CHECK (("scope_kind" = 'city') = ("locality_code" IS NOT NULL));
 
 CREATE TABLE "profile_gallery_media" (
   "profile_id" UUID NOT NULL,
