@@ -96,4 +96,15 @@ describe('DiscoveryService', () => {
     expect(result.items.map((item) => item.id)).toEqual(['hit']);
   });
 
+  it('ranks eligible candidates by compatibility score before projection', async () => {
+    const discover = vi.fn().mockResolvedValue({ items: [
+      { id:'low', accountId:'a2', categoryId:'dating', fields:{ role:'developer' }, geographicScope:scope },
+      { id:'high', accountId:'a3', categoryId:'dating', fields:{ role:'designer' }, geographicScope:scope },
+    ]});
+    const subject={ id:'subject', accountId:'a1', categoryId:'dating', fields:{ role:'designer' }, geographicScope:scope };
+    const service=new DiscoveryService({discover},{excludes:vi.fn().mockResolvedValue(false)},{excludes:vi.fn().mockResolvedValue(false)});
+    const result=await service.discover({subjectAccountId:'a1',categoryId:'dating',geographicScope:scope,limit:10,projectionPolicy:policy,subjectProfile:subject,matchingRules:{rules:[{key:'role',targetField:'role',operator:'equals',value:'designer',enabled:true}]},sort:{key:'compatibilityScore',direction:'desc'}});
+    expect(result.items.map(item=>item.id)).toEqual(['high','low']);
+  });
+
 });
