@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ProfileDiscoveryController } from './profile-discovery.controller.js';
 
 describe('ProfileDiscoveryController transport boundary', () => {
@@ -41,6 +41,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const completion=vi.spyOn((c as any).profiles,'completion');
     await c.getMyProfileCompletion('Bearer test');
     expect(completion).toHaveBeenCalledWith('profile-1',expect.objectContaining({ schema: expect.any(Object) }));
+  });
+
+  it('maps a missing authenticated profile to HTTP 404', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue(null);
+    await expect(c.getMyProfileCompletion('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
   });
 
   it('hydrates and updates only the authenticated account profile', async () => {
