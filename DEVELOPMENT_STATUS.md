@@ -3702,3 +3702,11 @@ EXACT NEXT ACTION:
 
 ### Efficiency rule
 Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do not redo any completed CI diagnosis, migration reconciliation, completion engine, service completion integration, or completion HTTP transport work.
+
+
+### 2026-09-04 — Phase 7 verification authority reconciliation
+- Removed request-controlled `verificationStatus` from profile create transport as well as self-update transport.
+- Verification transitions remain exclusively on the moderation capability boundary.
+- Added focused transport assertion preventing self-selected verification status during profile creation.
+- Validation pending on latest commits `a004e8e` / `65660b9`; prior HEAD `8d8ed380` had Typecheck/Lint/Test/Concurrency evidence progressing successfully.
+- Next action: confirm full CI on latest HEAD before any additional Phase 7 slice.
