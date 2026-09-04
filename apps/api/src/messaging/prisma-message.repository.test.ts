@@ -55,4 +55,17 @@ describe('PrismaMessageRepository', () => {
       ]),
     });
   });
+  it('marks read state only for an authorized participant row', async () => {
+    const updateMany = vi.fn().mockResolvedValue({ count: 1 });
+    const repository = new PrismaMessageRepository({ conversationParticipant: { updateMany } } as never);
+    await expect(repository.markReadForParticipant({ conversationId:'c1', accountId:'a1', at:new Date('2026-01-01T00:00:00Z') })).resolves.toBe(true);
+    expect(updateMany).toHaveBeenCalledWith(expect.objectContaining({ where:{ conversationId:'c1', accountId:'a1' } }));
+  });
+
+  it('soft deletes only the authenticated sender message once', async () => {
+    const updateMany = vi.fn().mockResolvedValue({ count: 1 });
+    const repository = new PrismaMessageRepository({ message: { updateMany } } as never);
+    await expect(repository.softDeleteForSender({ messageId:'m1', senderAccountId:'a1' })).resolves.toBe(true);
+    expect(updateMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ id:'m1', senderAccountId:'a1', deletedAt:null }) }));
+  });
 });
