@@ -88,7 +88,7 @@ export class PrismaMessageRepository {
     if (!participant) return null;
 
     const limit = Math.min(Math.max(input.limit ?? 50, 1), 100);
-    return this.database.message.findMany({
+    const records = await this.database.message.findMany({
       where: {
         conversationId: input.conversationId,
         ...(input.before
@@ -103,6 +103,7 @@ export class PrismaMessageRepository {
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: limit,
     });
+    return records.map((message: MessageRecord) => message.deletedAt ? { ...message, body: '' } : message);
   }
 
 
