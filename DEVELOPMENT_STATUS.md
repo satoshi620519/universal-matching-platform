@@ -2979,3 +2979,22 @@ Implement the smallest typed category metadata extension on this branch, then so
 1. Reconcile remaining Phase 4 requirements against current main after PR #18 and #19.
 2. Do not repeat completed Quick Launch matching rules, category metadata, legal/support, or Phase 5 UX work.
 3. Select only the earliest genuinely missing dependency-ordered configuration integration, record its scope before implementation, then follow source review -> CI -> PR -> merge.
+
+
+## Phase 4 next milestone reconciliation — Notification presentation preferences
+CURRENT PHASE: Phase 4 configuration expansion
+CURRENT MILESTONE: Notification presentation preferences
+STATUS: Ready for scoped implementation
+
+EVIDENCE:
+- After PR #18 and PR #19, all explicitly listed Quick Launch areas in MASTER_DEVELOPMENT_ROADMAP.md are represented in the aggregate or supporting configuration domains: branding, localization/geography, profile schema/onboarding, categories, matching rules, feature visibility, and legal/support.
+- CONFIGURATION_SYSTEM_SPEC.md defines an additional configuration domain: notification presentation preferences.
+- Current QuickLaunchDraft has no notification presentation preference contract, making this the next clearly missing typed configuration domain without revisiting completed work.
+
+SCOPE BOUNDARY:
+- Add purchaser-facing notification presentation preferences only (visibility/presentation defaults), not provider credentials, delivery infrastructure, authorization, or user-owned notification choices.
+- Define typed schema + validation + default/normalization semantics + immutable publication + legacy compatibility tests.
+- Reuse existing aggregate and publication lifecycle.
+
+EXACT NEXT ACTION:
+Implement the smallest notification presentation configuration extension on this branch, then source-review, CI, PR, merge, and record completion.
