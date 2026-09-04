@@ -34,7 +34,7 @@ export class ProfileDiscoveryController {
   @Post('profiles/me')
   async createMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null; verificationStatus?: 'unverified' | 'pending' | 'verified' | 'rejected' }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-create' });
-    return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope) });
+    return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope), avatar: body.avatar, gallery: body.gallery, biography: body.biography, verificationStatus: body.verificationStatus });
   }
 
   @Get('profiles/me/completion')
@@ -52,11 +52,11 @@ export class ProfileDiscoveryController {
   }
 
   @Patch('profiles/me')
-  async updateMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string } }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async updateMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null; verificationStatus?: 'unverified' | 'pending' | 'verified' | 'rejected' }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new Error('profile not found');
-    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined });
+    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined, avatar: body.avatar, gallery: body.gallery, biography: body.biography, verificationStatus: body.verificationStatus });
   }
 
   @Get('discovery')
