@@ -9,6 +9,7 @@ import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
 import { LocalizationConfigurationService } from '../configuration/localization-configuration.service.js';
+import { LocationPrecisionConfigurationService } from '../configuration/location-precision-configuration.service.js';
 import { createGeographicScope, projectProfile, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileCoreProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
@@ -31,6 +32,7 @@ export class ProfileDiscoveryController {
     private readonly matches: PrismaMatchTransitionRepository,
     private readonly admin: AdministrativeCapabilityAccessService,
     private readonly localization: LocalizationConfigurationService,
+    private readonly locationPrecision: LocationPrecisionConfigurationService,
   ) {}
 
   @Get('profile-categories')
@@ -99,6 +101,7 @@ export class ProfileDiscoveryController {
       { accountId: principal.accountId, privileged: await this.admin.can(principal.accountId, 'manage-moderation') },
       projectionPolicy,
       PUBLIC_CORE_PROJECTION,
+      await this.locationPrecision.resolve(),
     );
   }
 
@@ -130,6 +133,7 @@ export class ProfileDiscoveryController {
       cursor,
       distanceConstraint,
       projectionPolicy: Object.fromEntries(Object.entries(projectionPolicy).map(([key, rule]) => [key, rule.visibility ?? 'public'])),
+      locationPolicy: await this.locationPrecision.resolve(),
     });
   }
 
