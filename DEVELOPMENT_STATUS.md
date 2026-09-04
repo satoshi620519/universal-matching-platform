@@ -3634,3 +3634,20 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - CI-validate metadata write transport. On green, inspect existing moderation/safety patterns and design verification status transition authority rather than exposing direct arbitrary verification mutation.
+
+
+## Phase 7 verification authority reconciliation
+AUDIT FINDING:
+- Generic self-service profile update exposed verificationStatus, which conflicts with verification being a trust/moderation decision rather than arbitrary user metadata.
+- Existing safety architecture already provides AdministrativeCapabilityAccessService with manage-moderation capability checks and audit-oriented moderation patterns.
+
+FIX/APPLICATION:
+- Added moderation-only verification transition transport under POST /moderation/profiles/:accountId/verification.
+- Actor must be authenticated and possess manage-moderation capability.
+- Self-service dedicated metadata endpoint remains limited to avatar/gallery/biography.
+
+CURRENT STATE:
+- Verification authority path implemented; generic PATCH /profiles/me still requires final contract audit to ensure self-service mutation cannot bypass moderation authority.
+
+EXACT NEXT ACTION:
+- Remove or constrain verificationStatus from generic self-service PATCH DTO, then add focused tests and CI validation for the final Phase 7 authority boundary.
