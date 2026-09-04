@@ -80,6 +80,20 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect(update).toHaveBeenCalledWith('p1',expect.objectContaining({ categoryId:'cat-2', fieldSchema:expect.any(Object) }));
   });
 
+  it('projects only active public core metadata for another account', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({
+      id:'p1', accountId:'target', categoryId:'dating', fields:{ displayName:'Visible', secret:'Hidden' },
+      geographicScope:{ kind:'global' }, avatar:{ id:'a1', storageKey:'a', status:'active' },
+      gallery:[{ id:'g1', storageKey:'g1', status:'active' },{ id:'g2', storageKey:'g2', status:'pending' }],
+      biography:'About', verificationStatus:'verified'
+    });
+    await expect(c.getPublicProfile('target','Bearer test')).resolves.toEqual(expect.objectContaining({
+      fields:{ displayName:'Visible' }, avatar:expect.objectContaining({id:'a1'}), gallery:[expect.objectContaining({id:'g1'})],
+      biography:'About', verificationStatus:'verified'
+    }));
+  });
+
   it('projects only public fields when viewing another account profile', async () => {
     const c=controller();
     vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible', secret:'Hidden' } });
