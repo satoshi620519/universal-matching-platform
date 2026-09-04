@@ -54,7 +54,7 @@ model VerificationRequest {
   workflowReference String @map("workflow_reference")
   status String
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @map("completed_at") @db.Timestamptz(6)
   expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
   account Account @relation(fields: [accountId], references: [id])
   outcomes VerificationOutcome[]
@@ -137,7 +137,7 @@ model PasswordRecoveryRequest {
   status String
   requestedAt DateTime @map("requested_at") @db.Timestamptz(6)
   expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
-  consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6)
+  consumedAt DateTime? @map("consumed_at") @map("consumed_at")
   revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   authenticationIdentity AuthenticationIdentity @relation(fields:[authenticationIdentityId], references:[id], onDelete:Cascade)
@@ -178,13 +178,13 @@ model EmailOutboxMessage {
   kind String
   status String
   attempts Int @default(0)
-  availableAt DateTime @default(now()) @map("available_at") @db.Timestamptz(6)
-  lockedAt DateTime? @map("locked_at") @db.Timestamptz(6)
-  deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(6)
-  failedAt DateTime? @map("failed_at") @db.Timestamptz(6)
-  lastError String? @map("last_error")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  availableAt DateTime @default(now()) @map("available_at")
+  lockedAt DateTime? @map("locked_at")
+  deliveredAt DateTime? @map("delivered_at")
+  failedAt DateTime? @map("failed_at")
+  lastError String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
   @@index([status, availableAt])
   @@index([status, failedAt])
@@ -279,6 +279,7 @@ model Profile {
   scopeKind String @map("scope_kind")
   countryCode String? @map("country_code")
   regionCode String? @map("region_code")
+  localityCode String? @map("locality_code")
   avatarId String? @map("avatar_id")
   avatarStorageKey String? @map("avatar_storage_key")
   avatarStatus String? @map("avatar_status")
@@ -291,7 +292,7 @@ model Profile {
   category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   @@unique([accountId])
   @@index([accountId, categoryId])
-  @@index([scopeKind, countryCode, regionCode])
+  @@index([scopeKind, countryCode, regionCode, localityCode])
   @@map("profiles")
 }
 
