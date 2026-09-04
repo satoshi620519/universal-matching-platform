@@ -118,9 +118,22 @@
 - PR #16 CI run `33743268385` (run #2044) completed successfully across database migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #16 merged into `main` as merge commit `633c1584c76e703c34a80b3b2b8b4f7284d4bec8`.
 
+## Final Phase 5 quality pass in progress
+
+- Created branch `feature/ux-phase5-final-quality-pass` from the PR #16 main checkpoint.
+- Re-read the full Phase 5 progress record before inspection; no completed primitive or screen migration was repeated.
+- Inspected integrated `main.tsx` and shared styling for remaining legacy interaction patterns.
+- Found a small remaining coherent cleanup slice: Home and access navigation still contained raw interactive controls despite the shared `Button` primitive already being available.
+- Migrated remaining Home CTA/sign-in/get-started controls and access/verification navigation buttons to shared `Button`.
+- Changed the non-functional “How it works” button into a semantic anchor targeting the existing `#experience` section.
+- Added an explicit accessible label to the public main navigation.
+- No backend, authentication, discovery, notification, conversation, or realtime behavior was changed.
+- Implementation commit: `5f52920ed5fe754a68f6dcd751271124c24dd621`.
+- Next: inspect responsive and state-coverage consistency for the integrated screens, then record findings and run CI for this final coherent quality slice before opening a PR.
+
 ## Next continuation point
 
-Conversation migration is complete and all major Phase 5 screen slices are integrated. Next begin the final Phase 5 integration/quality pass: inspect the integrated Web application for duplicated legacy UI patterns, semantic/accessibility consistency, responsive behavior, loading/empty/error state coverage, and cross-screen interaction regressions. Reuse existing primitives; do not reimplement completed screen migrations. Make only coherent, evidence-based fixes and validate each final slice with CI.
+Continue from the final quality-pass checkpoint above. Do not revisit already migrated screen logic. Focus only on evidence-based integrated consistency issues; after completing the final coherent slice, validate with CI and open one final Phase 5 PR.
 
 ## Interruption-safe rule
 
