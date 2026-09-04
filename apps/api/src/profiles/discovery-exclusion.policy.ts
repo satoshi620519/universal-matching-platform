@@ -7,8 +7,3 @@ export class AllowAllDiscoveryExclusionPolicy extends DiscoveryExclusionPolicy {
     return false;
   }
 }
-
-export type DiscoveryExclusionPolicies = Readonly<{
-  block: DiscoveryExclusionPolicy;
-  safety: DiscoveryExclusionPolicy;
-}>;
