@@ -79,7 +79,7 @@ export class ProfileDiscoveryController {
         label: key,
         type: 'text' as const,
         required: true,
-        visibility: 'private' as const,
+        visibility: 'owner' as const,
       })),
     };
   }
