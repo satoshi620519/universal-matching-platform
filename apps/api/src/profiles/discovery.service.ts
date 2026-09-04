@@ -12,6 +12,8 @@ import {
   type ProfileProjectionPolicy,
   type ProjectedProfile,
   type LocationPrecisionPolicy,
+  matchesDiscoveryPreferences,
+  type DiscoveryPreferences,
 } from '@universal/domain';
 
 @Injectable()
@@ -23,7 +25,7 @@ export class DiscoveryService {
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
-  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
+  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy; preferences?: DiscoveryPreferences }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
     const query = createDiscoveryQuery(input);
     const page = await this.profiles.discover(query);
     const subjectCountryCode = input.geographicScope.kind === 'global' ? undefined : input.geographicScope.countryCode;
@@ -32,6 +34,7 @@ export class DiscoveryService {
 
     const eligible = await Promise.all(page.items.map(async (candidate) => {
       if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate, input.geographicScope).eligible) return null;
+      if (!matchesDiscoveryPreferences(candidate, query.preferences ?? { filters: [] })) return null;
       if (await this.blockExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (await this.safetyExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (this.effectiveSafety) {
