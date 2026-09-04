@@ -15,4 +15,13 @@ describe('PrismaDiscoveryProfileRepository query contract', () => {
     expect(source).toContain("toString('base64url')");
     expect(source).toContain("throw new Error('Discovery cursor is invalid')");
   });
+
+  it('pushes subject exclusion and hierarchical geographic filtering into persistence', () => {
+    expect(source).toContain('accountId: { not: query.subjectAccountId }');
+    expect(source).toContain("scopeKind: 'global'");
+    expect(source).toContain("scopeKind: 'country'");
+    expect(source).toContain("scopeKind: 'region'");
+    expect(source).toContain("scopeKind: 'city'");
+    expect(source).toContain('localityCode: scope.localityCode');
+  });
 });
