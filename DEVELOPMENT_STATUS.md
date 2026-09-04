@@ -3426,3 +3426,22 @@ FIX APPLIED:
 CURRENT STATE:
 - Latest persistence migration architecture now respects existing repository ownership boundaries.
 - EXACT NEXT ACTION: fetch CI for current head and verify packaged migration integration and Prisma migration path before Typecheck.
+
+
+## Phase 7 persistence CI diagnosis — Prisma enum boundary
+CI #2218 RESULT:
+- Packaged migration verification: PASS
+- PostgreSQL migration command integration: PASS
+- Typecheck: FAIL (diagnosed from compiler output)
+- Matching Concurrency Gate #226 was still running independently when diagnosis began.
+
+ROOT CAUSE:
+- Prisma schema exposes ProfileGalleryMedia.status as string, while the domain correctly uses the closed union 'pending' | 'active' | 'removed'. Repository mapping incorrectly claimed persisted rows were already narrowed to the domain union.
+
+FIX APPLIED:
+- Persisted row boundary now accepts status:string, matching Prisma output.
+- Repository validates each avatar/gallery status explicitly before constructing the domain Profile.
+- Invalid persisted status fails loudly instead of unsafe casting.
+
+EXACT NEXT ACTION:
+- Fetch CI for the current head after this type-boundary fix. Require Typecheck green before continuing to tests/service reconciliation.
