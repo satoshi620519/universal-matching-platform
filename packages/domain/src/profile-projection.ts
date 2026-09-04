@@ -1,4 +1,9 @@
 import type { GeographicScope } from './geographic-scope.js';
+import {
+  defaultLocationPrecisionPolicy,
+  projectGeographicScope,
+  type LocationPrecisionPolicy,
+} from './location-precision.js';
 import type { Profile, ProfileFieldValue, ProfileMedia } from './profile.js';
 import type { ProfileFieldVisibility } from './profile-field-schema.js';
 
@@ -16,7 +21,7 @@ export type ProjectedProfile = Readonly<{
   id: string;
   categoryId: string;
   fields: Readonly<Record<string, ProfileFieldValue>>;
-  geographicScope: GeographicScope;
+  geographicScope?: GeographicScope;
   avatar?: ProfileMedia;
   gallery?: readonly ProfileMedia[];
   biography?: string;
@@ -42,6 +47,7 @@ export function projectProfile(
   viewer: ProfileViewer,
   policy: ProfileProjectionPolicy,
   corePolicy: ProfileCoreProjectionPolicy = {},
+  locationPolicy: LocationPrecisionPolicy = defaultLocationPrecisionPolicy,
 ): ProjectedProfile {
   const isOwner = viewer.accountId === profile.accountId;
   const fields = Object.fromEntries(Object.entries(profile.fields).filter(([key]) =>
@@ -51,7 +57,7 @@ export function projectProfile(
     id: string;
     categoryId: string;
     fields: Readonly<Record<string, ProfileFieldValue>>;
-    geographicScope: GeographicScope;
+    geographicScope?: GeographicScope;
     avatar?: ProfileMedia;
     gallery?: readonly ProfileMedia[];
     biography?: string;
@@ -60,8 +66,9 @@ export function projectProfile(
     id: profile.id,
     categoryId: profile.categoryId,
     fields,
-    geographicScope: profile.geographicScope,
   };
+  const geographicScope = projectGeographicScope(profile.geographicScope, locationPolicy);
+  if (geographicScope) projected.geographicScope = geographicScope;
   const avatar = activeMedia(profile.avatar);
   if (avatar && canProject(corePolicy.avatar, viewer, isOwner)) projected.avatar = avatar;
   const gallery = (profile.gallery ?? []).filter(media => media.status === 'active');
