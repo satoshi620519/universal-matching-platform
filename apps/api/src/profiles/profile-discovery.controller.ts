@@ -34,9 +34,9 @@ export class ProfileDiscoveryController {
   async listCategories() { return { categories: (await this.categories.list()).map(category => ({ ...category, fieldSchema: this.schemas.schemaFor(category.key) })) }; }
 
   @Post('profiles/me')
-  async createMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null; verificationStatus?: 'unverified' | 'pending' | 'verified' | 'rejected' }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async createMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-create' });
-    return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope), avatar: body.avatar, gallery: body.gallery, biography: body.biography, verificationStatus: body.verificationStatus });
+    return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope), avatar: body.avatar, gallery: body.gallery, biography: body.biography });
   }
 
   @Patch('profiles/me/metadata')
