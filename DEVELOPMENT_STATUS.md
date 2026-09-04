@@ -3882,3 +3882,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - No duplicate implementation added; requirement marked implementation-present pending final Phase 7 completion evidence audit.
 - CI #2386 remains in progress for the latest privacy projection regression alignment.
 - Next exact action: inspect avatar/gallery and verification requirements for end-to-end gaps, then implement only unmet behavior.
+
+
+### 2026-09-04 — Phase 7 category-driven privacy projection repair
+- Continued Phase 7 end-to-end audit and found public profile projection still used a hard-coded DEFAULT_FIELD_SCHEMA/PUBLIC_PROJECTION, bypassing deployment/category-configured field visibility for arbitrary custom fields.
+- Replaced the hard-coded projection policy at GET /profiles/:accountId with a policy derived from the profile category's authoritative field schema visibility (defaulting unspecified visibility to public).
+- This connects deployment-configurable custom fields and their privacy rules to the public transport projection without duplicating schema definitions.
+- Commit: 2db4ac3.
+- Next exact action: CI validation, then audit avatar/gallery lifecycle and verification-status integration for remaining Phase 7 gaps.
