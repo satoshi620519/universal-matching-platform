@@ -68,8 +68,8 @@ export class ProfileDiscoveryController {
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new NotFoundException('profile not found');
     const category = (await this.categories.list()).find(item => item.id === existing.categoryId);
-    const fieldSchema = category ? this.schemas.schemaFor(category.key) : DEFAULT_FIELD_SCHEMA;
-    return this.profiles.completion(existing.id, { schema: this.completionSchema(fieldSchema) });
+    if (!category) throw new NotFoundException('profile category not found');
+    return this.profiles.completion(existing.id, { schema: this.completionSchema(this.schemas.schemaFor(category.key)) });
   }
 
   @Get('profiles/me')
