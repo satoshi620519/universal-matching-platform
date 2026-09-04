@@ -71,6 +71,7 @@ export * from './location-precision.js';
 export * from './private-location.js';
 export * from './distance-presentation.js';
 export * from './discovery-query.js';
+export * from './discovery-sorting.js';
 export * from './discovery-eligibility.js';
 export * from './match-strategy.js';
 export * from './match-compatibility.js';
