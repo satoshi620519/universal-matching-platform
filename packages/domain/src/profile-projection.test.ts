@@ -5,6 +5,13 @@ const profile = {
   id: 'p1', accountId: 'owner', categoryId: 'dating',
   fields: { displayName: 'Satoshi', phone: 'secret', moderationNote: 'internal' },
   geographicScope: { kind: 'country', countryCode: 'JP' } as const,
+  avatar: { id: 'a1', storageKey: 'avatar/1', status: 'active' as const },
+  gallery: [
+    { id: 'g1', storageKey: 'gallery/1', status: 'active' as const },
+    { id: 'g2', storageKey: 'gallery/2', status: 'pending' as const },
+  ],
+  biography: 'About me',
+  verificationStatus: 'verified' as const,
 };
 const policy = { displayName: 'public', phone: 'owner', moderationNote: 'privileged' } as const;
 
@@ -28,5 +35,23 @@ describe('privacy-aware profile projection', () => {
   it('fails closed for fields missing from the projection policy', () => {
     expect(projectProfile({ ...profile, fields: { ...profile.fields, unknown: 'hidden' } }, { accountId: 'other' }, policy).fields)
       .toEqual({ displayName: 'Satoshi' });
+  });
+
+  it('projects only active core media through explicit core policy', () => {
+    const projected = projectProfile(profile, {}, policy, {
+      avatar: 'public', gallery: 'public', verificationStatus: 'public',
+    });
+    expect(projected.avatar?.id).toBe('a1');
+    expect(projected.gallery).toEqual([{ id: 'g1', storageKey: 'gallery/1', status: 'active' }]);
+    expect(projected.verificationStatus).toBe('verified');
+    expect(projected).not.toHaveProperty('biography');
+  });
+
+  it('fails closed for core metadata missing from policy', () => {
+    const projected = projectProfile(profile, { accountId: 'other' }, policy);
+    expect(projected).not.toHaveProperty('avatar');
+    expect(projected).not.toHaveProperty('gallery');
+    expect(projected).not.toHaveProperty('biography');
+    expect(projected).not.toHaveProperty('verificationStatus');
   });
 });
