@@ -26,6 +26,19 @@ describe('ProfileService', () => {
     expect(save).toHaveBeenCalledWith(profile);
   });
 
+  it('uses the category schema when profile creation omits an explicit field schema', async () => {
+    const save = vi.fn();
+    const schemaFor = vi.fn().mockReturnValue(schema);
+    const service = new ProfileService(
+      { save, findById: vi.fn(), delete: vi.fn() },
+      { findById: vi.fn().mockResolvedValue(category), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+      { schemaFor } as never,
+    );
+    const profile = await service.create({ accountId: 'a1', categoryId: 'c1', fields: { displayName: 'Satoshi' }, geographicScope: scope });
+    expect(schemaFor).toHaveBeenCalledWith('dating');
+    expect(save).toHaveBeenCalledWith(profile);
+  });
+
   it('preserves private location when profile updates omit it', async () => {
     const privateLocation = { latitude: 36.5613, longitude: 136.6562 };
     const existing = {
