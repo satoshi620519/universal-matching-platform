@@ -8,6 +8,7 @@ import { AdministrativeCapabilityAccessService } from '../administration/adminis
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
+import { LocalizationConfigurationService } from '../configuration/localization-configuration.service.js';
 import { createGeographicScope, projectProfile, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileCoreProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
@@ -29,6 +30,7 @@ export class ProfileDiscoveryController {
     private readonly discovery: DiscoveryService,
     private readonly matches: PrismaMatchTransitionRepository,
     private readonly admin: AdministrativeCapabilityAccessService,
+    private readonly localization: LocalizationConfigurationService,
   ) {}
 
   @Get('profile-categories')
@@ -113,6 +115,7 @@ export class ProfileDiscoveryController {
   async discover(@Query('categoryId') categoryId: string, @Query('scope') scope = 'global', @Query('countryCode') countryCode: string | undefined, @Query('regionCode') regionCode: string | undefined, @Query('localityCode') localityCode: string | undefined, @Query('limit') limit = '20', @Query('cursor') cursor: string | undefined, @Query('maxDistanceMeters') maxDistanceMeters: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'discovery' });
     const geographicScope = this.scope({ kind: scope, countryCode, regionCode, localityCode });
+    await this.requireSupportedGeography(geographicScope);
     const projectionPolicy = await this.schemaFor(categoryId);
     const distanceConstraint = maxDistanceMeters === undefined ? undefined : { maxDistanceMeters: Number(maxDistanceMeters) };
     return this.discovery.discover({
@@ -130,6 +133,14 @@ export class ProfileDiscoveryController {
   async decide(@Body() body: { targetAccountId?: string; decision?: 'like' | 'pass'; idempotencyKey?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-decision' });
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
+  }
+
+  private async requireSupportedGeography(scope: ReturnType<typeof createGeographicScope>): Promise<void> {
+    if (scope.kind === 'global') return;
+    const configuration = await this.localization.resolve();
+    if (!configuration.supportedCountries.includes(scope.countryCode)) {
+      throw new BadRequestException('countryCode is not supported by deployment localization configuration');
+    }
   }
 
   private completionSchema(fieldSchema: ProfileFieldSchema) {
