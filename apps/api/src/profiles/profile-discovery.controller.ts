@@ -37,6 +37,18 @@ export class ProfileDiscoveryController {
     return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope), avatar: body.avatar, gallery: body.gallery, biography: body.biography, verificationStatus: body.verificationStatus });
   }
 
+  @Patch('profiles/me/metadata')
+  async updateMyProfileMetadata(@Body() body: { avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-metadata-update' });
+    const existing = await this.profileRepository.findByAccountId(principal.accountId);
+    if (!existing) throw new Error('profile not found');
+    return this.profiles.update(existing.id, {
+      avatar: body.avatar,
+      gallery: body.gallery,
+      biography: body.biography,
+    });
+  }
+
   @Get('profiles/me/completion')
   async getMyProfileCompletion(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-completion' });
