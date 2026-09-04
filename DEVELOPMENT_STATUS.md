@@ -3122,3 +3122,14 @@ Inventory existing authentication/account code and specifications, identify genu
 - Focused tests cover valid identity linkage, opaque-hash requirement, and disabled verification behavior.
 - IMPLEMENTATION CHECKPOINT: 320187ad90e4771322804596f5997185c0dfae4c.
 - EXACT NEXT ACTION: inventory existing session persistence/contracts before adding any session model; if persistence already exists, add only the smallest missing lifecycle contract.
+
+
+## Phase 6 authentication session reconciliation — implementation checkpoint
+- Repository inventory found no existing authentication_sessions persistence or SessionRepository contract, while authentication identities and password credentials already exist.
+- Added the smallest missing session persistence as migration 0020_create_authentication_sessions.sql linked to existing accounts and authentication_identities.
+- Session persistence stores lifecycle metadata and opaque server-side security context only; it does not select token signing, JWT, cookies, bearer formats, or client authorization claims.
+- Added typed AuthenticationSessionRecord/Repository lifecycle contract with create, active lookup/list, individual revoke, and revoke-all-for-account operations.
+- Active status is strictly derived from server-authoritative revocation and expiry state.
+- Focused tests cover valid lifecycle, revocation/expiry inactivity, and issuance/expiry invariant.
+- IMPLEMENTATION CHECKPOINT: 0c66bc02edc4e79ff6d3f8acbc9af8494fd1a04c.
+- EXACT NEXT ACTION: reconcile password recovery/reset persistence and existing verification flow before implementing any reset runtime service.
