@@ -3791,3 +3791,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching Concurrency Gate #281: SUCCESS.
 - Unknown categories no longer silently validate against DEFAULT_FIELD_SCHEMA; category lookup is now authoritative.
 - Next exact action: perform the next roadmap-to-code gap audit and select only a genuinely uncovered Phase 7 capability.
+
+
+### 2026-09-04 — Phase 7 completion/category authority reconciliation
+- After CI #2328 reached full green, continued the roadmap-to-code audit from the exact checkpoint.
+- Found a remaining authority inconsistency: completion lookup silently fell back to DEFAULT_FIELD_SCHEMA when a persisted profile referenced a category that no longer existed, unlike create/update which now reject unknown categories.
+- Removed the completion fallback and return HTTP 404 for a missing authoritative category; added focused regression coverage.
+- Commits: 88d27b0 (implementation), 0bead40 (test).
+- Next exact action: validate this isolated correction in CI before selecting another Phase 7 gap.
