@@ -16,6 +16,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
       ({ require: vi.fn().mockResolvedValue(undefined), can: vi.fn().mockResolvedValue(false) } as never),
       ({ resolve: vi.fn().mockResolvedValue({ supportedCountries:['JP','US'] }) } as never),
+      ({ resolve: vi.fn().mockResolvedValue({ publicPrecision:'country' }) } as never),
     );
   }
 
@@ -103,6 +104,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
       fields:{ displayName:'Visible' }, avatar:expect.objectContaining({id:'a1'}), gallery:[expect.objectContaining({id:'g1'})],
       biography:'About', verificationStatus:'verified'
     }));
+  });
+
+  it('applies deployment location precision to public profile projection', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ id:'p1', accountId:'target', categoryId:'cat-1', fields:{ displayName:'Visible' }, geographicScope:{ kind:'city', countryCode:'JP', regionCode:'13', localityCode:'13101' } });
+    await expect(c.getPublicProfile('target','Bearer test')).resolves.toEqual(expect.objectContaining({ geographicScope:{ kind:'country', countryCode:'JP' } }));
   });
 
   it('passes the authenticated viewer identity to public profile projection', async () => {
