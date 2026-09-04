@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   createGeographicScope,
+  createPrivateLocation,
   createProfile,
   type Profile,
   type ProfileMedia,
@@ -38,6 +39,7 @@ export class PrismaProfileRepository implements ProfileRepository {
 
   async save(profile: Profile): Promise<void> {
     const scope = profile.geographicScope;
+    const privateLocation = profile.privateLocation ?? null;
     const avatar = profile.avatar ?? null;
     const gallery = profile.gallery ?? [];
     await this.database.$transaction(async (tx) => {
@@ -49,6 +51,8 @@ export class PrismaProfileRepository implements ProfileRepository {
           countryCode: scope.kind === 'global' ? null : scope.countryCode,
           regionCode: scope.kind === 'region' || scope.kind === 'city' ? scope.regionCode : null,
           localityCode: scope.kind === 'city' ? scope.localityCode : null,
+          privateLatitude: privateLocation?.latitude ?? null,
+          privateLongitude: privateLocation?.longitude ?? null,
           avatarId: avatar?.id ?? null,
           avatarStorageKey: avatar?.storageKey ?? null,
           avatarStatus: avatar?.status ?? null,
@@ -60,6 +64,8 @@ export class PrismaProfileRepository implements ProfileRepository {
           countryCode: scope.kind === 'global' ? null : scope.countryCode,
           regionCode: scope.kind === 'region' || scope.kind === 'city' ? scope.regionCode : null,
           localityCode: scope.kind === 'city' ? scope.localityCode : null,
+          privateLatitude: privateLocation?.latitude ?? null,
+          privateLongitude: privateLocation?.longitude ?? null,
           avatarId: avatar?.id ?? null,
           avatarStorageKey: avatar?.storageKey ?? null,
           avatarStatus: avatar?.status ?? null,
@@ -89,6 +95,7 @@ export class PrismaProfileRepository implements ProfileRepository {
   private map(row: {
     id: string; accountId: string; categoryId: string; fields: unknown;
     scopeKind: string; countryCode: string | null; regionCode: string | null; localityCode: string | null;
+    privateLatitude: number | null; privateLongitude: number | null;
     avatarId: string | null; avatarStorageKey: string | null; avatarStatus: string | null;
     biography: string | null; verificationStatus: string;
     galleryMedia: readonly PersistedGalleryMedia[];
@@ -105,11 +112,17 @@ export class PrismaProfileRepository implements ProfileRepository {
           : row.scopeKind === 'city' && row.countryCode && row.regionCode && row.localityCode
             ? createGeographicScope({ kind: 'city', countryCode: row.countryCode, regionCode: row.regionCode, localityCode: row.localityCode })
             : (() => { throw new Error('Persisted profile geographic scope is invalid'); })();
+    const privateLocation = row.privateLatitude === null && row.privateLongitude === null
+      ? null
+      : row.privateLatitude !== null && row.privateLongitude !== null
+        ? createPrivateLocation({ latitude: row.privateLatitude, longitude: row.privateLongitude })
+        : (() => { throw new Error('Persisted profile private location is invalid'); })();
     const avatar = this.mapAvatar(row);
     return createProfile({
       id: row.id, accountId: row.accountId, categoryId: row.categoryId,
       fields: row.fields as Record<string, string | number | boolean | null>,
       geographicScope: scope,
+      privateLocation,
       avatar,
       gallery: row.galleryMedia.map((media) => {
         if (!this.isMediaStatus(media.status)) {
