@@ -60,6 +60,29 @@ describe('ProfileService', () => {
       .rejects.toThrow('too short');
     expect(save).not.toHaveBeenCalled();
   });
+  it('updates Phase 7 metadata without replacing unspecified existing metadata', async () => {
+    const existing = {
+      id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {}, geographicScope: scope,
+      avatar: { id: 'old-avatar', storageKey: 'old/key', status: 'active' },
+      gallery: [{ id: 'g1', storageKey: 'g/key', status: 'active' }],
+      biography: 'Old bio', verificationStatus: 'unverified',
+    };
+    const save = vi.fn();
+    const service = new ProfileService(
+      { save, findById: vi.fn().mockResolvedValue(existing), delete: vi.fn() },
+      { findById: vi.fn(), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+    );
+    const profile = await service.update('p1', {
+      biography: 'New bio',
+      verificationStatus: 'verified',
+    });
+    expect(profile).toMatchObject({
+      biography: 'New bio', verificationStatus: 'verified',
+      avatar: existing.avatar, gallery: existing.gallery,
+    });
+    expect(save).toHaveBeenCalledWith(profile);
+  });
+
   it('derives completion from current profile and configurable schema without persistence', async () => {
     const profile = {
       id: 'p1', accountId: 'a1', categoryId: 'c1',
