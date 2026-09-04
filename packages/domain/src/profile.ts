@@ -16,10 +16,10 @@ export type Profile = Readonly<{
   categoryId: string;
   fields: Readonly<Record<string, ProfileFieldValue>>;
   geographicScope: GeographicScope;
-  avatar: ProfileMedia | null;
-  gallery: readonly ProfileMedia[];
-  biography: string | null;
-  verificationStatus: ProfileVerificationStatus;
+  avatar?: ProfileMedia | null;
+  gallery?: readonly ProfileMedia[];
+  biography?: string | null;
+  verificationStatus?: ProfileVerificationStatus;
 }>;
 
 const MAX_GALLERY_ITEMS = 12;
@@ -39,21 +39,26 @@ export function createProfile(input: Profile): Profile {
     if (!key.trim()) throw new Error('Profile field key must not be empty');
     if (typeof value === 'object' && value !== null) throw new Error('Profile field values must be primitive');
   }
-  if (input.gallery.length > MAX_GALLERY_ITEMS) throw new Error(`Profile gallery must not exceed ${MAX_GALLERY_ITEMS} items`);
+  const gallery = input.gallery ?? [];
+  const avatar = input.avatar ?? null;
+  const biographyInput = input.biography ?? null;
+  const verificationStatus = input.verificationStatus ?? 'unverified';
+  if (gallery.length > MAX_GALLERY_ITEMS) throw new Error(`Profile gallery must not exceed ${MAX_GALLERY_ITEMS} items`);
   const galleryIds = new Set<string>();
-  for (const media of input.gallery) {
+  for (const media of gallery) {
     if (galleryIds.has(media.id)) throw new Error('Profile gallery media ids must be unique');
     galleryIds.add(media.id);
   }
-  const biography = input.biography === null ? null : input.biography.trim();
+  const biography = biographyInput === null ? null : biographyInput.trim();
   if (biography !== null && biography.length > MAX_BIOGRAPHY_LENGTH) throw new Error(`Profile biography must not exceed ${MAX_BIOGRAPHY_LENGTH} characters`);
   return {
     ...input,
     fields: { ...input.fields },
     geographicScope: { ...input.geographicScope } as GeographicScope,
-    avatar: input.avatar === null ? null : normalizeMedia(input.avatar),
-    gallery: input.gallery.map(normalizeMedia),
+    avatar: avatar === null ? null : normalizeMedia(avatar),
+    gallery: gallery.map(normalizeMedia),
     biography,
+    verificationStatus,
   };
 }
 
