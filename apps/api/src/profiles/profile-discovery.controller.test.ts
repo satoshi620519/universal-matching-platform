@@ -17,6 +17,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       ({ require: vi.fn().mockResolvedValue(undefined), can: vi.fn().mockResolvedValue(false) } as never),
       ({ resolve: vi.fn().mockResolvedValue({ supportedCountries:['JP','US'] }) } as never),
       ({ resolve: vi.fn().mockResolvedValue({ publicPrecision:'country' }) } as never),
+      ({ isEnabled: vi.fn().mockResolvedValue(true) } as never),
     );
   }
 
@@ -181,6 +182,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     });
   });
 
+  it('rejects distance constrained discovery when disabled by deployment configuration', async () => {
+    const c=controller();
+    vi.spyOn((c as any).distanceMatching,'isEnabled').mockResolvedValue(false);
+    await expect(c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,'2500','Bearer test')).rejects.toThrow('distance matching is disabled');
+  });
+
   it('rejects discovery scoped to a country disabled by deployment localization configuration', async () => {
     const c=controller();
     await expect(c.discover('cat-1','country','FR',undefined,undefined,'10',undefined,undefined,'Bearer test')).rejects.toThrow('countryCode is not supported');
@@ -201,7 +208,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('propagates authentication failure before accessing services', async () => {
     const resolver={ requireAuthenticated: vi.fn().mockRejectedValue(new UnauthorizedException()) };
-    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
+    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
     await expect(c.listCategories()).resolves.toBeDefined();
     await expect(c.getMyProfile()).rejects.toBeInstanceOf(UnauthorizedException);
   });
