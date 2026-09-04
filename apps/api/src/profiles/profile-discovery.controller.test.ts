@@ -33,8 +33,8 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const repo=(c as any).profileRepository; const update=vi.spyOn((c as any).profiles,'update');
     await c.getMyProfile('Bearer test');
     expect(repo.findByAccountId).toHaveBeenCalledWith('viewer-1');
-    await c.updateMyProfile({ fields:{ displayName:'Updated' } },'Bearer test');
-    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ fields:{displayName:'Updated'} }));
+    await c.updateMyProfile({ fields:{ displayName:'Updated' }, biography:'New bio', verificationStatus:'verified' },'Bearer test');
+    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ fields:{displayName:'Updated'}, biography:'New bio', verificationStatus:'verified' }));
   });
 
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
