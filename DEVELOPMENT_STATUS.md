@@ -3217,3 +3217,12 @@ Inventory existing authentication/account code and specifications, identify genu
 - Repair commit: 3eaa8e456d691a5d16fb5acb61bb149d92eea57a.
 - No application service behavior was changed; only demonstrated database schema incompatibility was repaired.
 - EXACT NEXT ACTION: fetch the CI runs for head 3eaa8e456d691a5d16fb5acb61bb149d92eea57a. Confirm migration integration passes before moving to typecheck diagnostics; process subsequent failures sequentially.
+
+
+## Phase 6 typecheck diagnosis and test-double repair — checkpoint
+- Migration integration now passes completely through 0021; CI advanced to API Typecheck.
+- Exact typecheck failure: PasswordRecoveryRepository gained create and revokeActiveForAuthenticationIdentity methods, but PasswordResetCompletionService unit-test doubles still implemented the older partial contract.
+- Repaired only the affected test doubles to satisfy the expanded repository contract; production reset orchestration was unchanged.
+- Repair commit: 13625fbb0217c292180979e42f66d192cd34cd0e.
+- Matching Concurrency Gate is running independently and remains in progress; do not infer its result yet.
+- EXACT NEXT ACTION: fetch CI results for head 13625fbb0217c292180979e42f66d192cd34cd0e. Confirm Typecheck, then continue sequentially through lint/test/build failures if any.
