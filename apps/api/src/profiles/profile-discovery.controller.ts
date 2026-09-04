@@ -8,7 +8,7 @@ import { AdministrativeCapabilityAccessService } from '../administration/adminis
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
-import { createGeographicScope, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
+import { createGeographicScope, projectProfile, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileCoreProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
   displayName: { kind: 'string', required: true, minLength: 1, maxLength: 80 },
@@ -16,7 +16,6 @@ const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
   bio: { kind: 'string', maxLength: 2000 },
 };
 const PUBLIC_PROJECTION: ProfileProjectionPolicy = { displayName: 'public', headline: 'public', bio: 'public' };
-const OWNER_PROJECTION: ProfileProjectionPolicy = {};
 const PUBLIC_CORE_PROJECTION: ProfileCoreProjectionPolicy = { avatar: 'public', gallery: 'public', biography: 'public', verificationStatus: 'public' };
 
 @Controller()
