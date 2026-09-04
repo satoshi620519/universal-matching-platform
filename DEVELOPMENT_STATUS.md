@@ -3859,3 +3859,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused regression coverage for the privileged viewer projection path.
 - Commits: cfbfab4 (implementation), 72c4d25 (test).
 - Next exact action: validate the consolidated privacy contract in CI, then proceed to the next unmet Phase 7 requirement from the roadmap audit.
+
+
+### 2026-09-04 — Phase 7 privileged viewer CI repair
+- Confirmed CI typecheck failure was caused by using nonexistent AdministrativeCapabilityAccessService.has().
+- Inspected the authoritative service implementation; the non-throwing capability API is can(accountId, capability).
+- Replaced only has() with can(); require() remains used for moderation mutations.
+- Commit: 9c92737.
+- Next exact action: CI validation, then resume Phase 7 requirement audit.
