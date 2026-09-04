@@ -3944,3 +3944,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added a minimal deterministic MatchStrategyRegistry keyed by stable strategy identifiers, with duplicate/unknown-key protection and regression tests.
 - Existing mutual-match transition remains untouched; strategy evaluation is intentionally separated from persistence/state transitions.
 - Next exact task: verify CI for current Phase 9 commits, then connect the rule-based compatibility evaluator to a concrete MatchStrategy adapter without duplicating scoring logic.
+
+- CI #2624 exposed concrete Phase 9 integration errors rather than behavioral regressions: DiscoveryService had not yet accepted the newly introduced sort contract, and controller tests still used the pre-sorting discover signature.
+- Fixed only those boundary mismatches; no discovery behavior or eligibility logic was rewritten.
+- Added RuleBasedMatchStrategy as a thin adapter from the existing evaluateRuleBasedCompatibility function into the existing MatchStrategy contract; scoring logic remains single-source and was not duplicated.
+- Added focused adapter regression coverage.
+- Matching Concurrency Gate #476 remains in progress at this checkpoint; CI must be revalidated after the compile repair and strategy adapter commits.
+- Next exact task: inspect fresh CI results, fix only concrete failures if present, then connect strategy selection to purchaser configuration without touching existing match persistence.
