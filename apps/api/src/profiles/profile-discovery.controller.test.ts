@@ -56,8 +56,9 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const create=vi.spyOn((c as any).profiles,'create'); const update=vi.spyOn((c as any).profiles,'update');
     const avatar={ id:'media-1', storageKey:'avatars/1', status:'active' as const };
     const gallery=[{ id:'media-2', storageKey:'gallery/2', status:'pending' as const }];
-    await c.createMyProfile({ categoryId:'cat-1', avatar, gallery, biography:'Hello', verificationStatus:'pending' }, 'Bearer test');
-    expect(create).toHaveBeenCalledWith(expect.objectContaining({ avatar, gallery, biography:'Hello', verificationStatus:'pending', accountId:'viewer-1' }));
+    await c.createMyProfile({ categoryId:'cat-1', avatar, gallery, biography:'Hello' }, 'Bearer test');
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ avatar, gallery, biography:'Hello', accountId:'viewer-1' }));
+    expect((create.mock.calls[0][0] as any).verificationStatus).toBeUndefined();
     await c.updateMyProfile({ avatar:null, gallery, biography:'Updated' }, 'Bearer test');
     expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ avatar:null, gallery, biography:'Updated' }));
   });
