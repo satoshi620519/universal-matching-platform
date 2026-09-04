@@ -3938,3 +3938,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Preferences are applied after existing category/geographic eligibility and before privacy projection; block/safety exclusions remain authoritative and cannot be bypassed.
 - Added domain and integration regression coverage.
 - Next exact task: verify CI for Phase 9 sorting/preferences commits, then connect purchaser-configurable matching rules to an engine-level strategy selection path without duplicating MatchStrategy.
+
+- Phase 9 sorting/preferences CI was in progress at this checkpoint; no result inferred before completion.
+- Audited existing MatchStrategy and confirmed only the extension interface existed; no runtime strategy selection boundary was present.
+- Added a minimal deterministic MatchStrategyRegistry keyed by stable strategy identifiers, with duplicate/unknown-key protection and regression tests.
+- Existing mutual-match transition remains untouched; strategy evaluation is intentionally separated from persistence/state transitions.
+- Next exact task: verify CI for current Phase 9 commits, then connect the rule-based compatibility evaluator to a concrete MatchStrategy adapter without duplicating scoring logic.
