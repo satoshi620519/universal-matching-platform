@@ -8,6 +8,11 @@ const DEFAULT_DEFINITIONS: readonly DraftConfigurationSettingDefinition[] = [
     valueType: 'text',
     allowedScopes: ['deployment'],
   },
+  {
+    key: 'location.precision',
+    valueType: 'text',
+    allowedScopes: ['deployment'],
+  },
 ];
 
 @Injectable()
