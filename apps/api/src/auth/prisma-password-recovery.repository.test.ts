@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 
+// This repository is intentionally unit-tested with a mocked Prisma delegate.
+// Shared PostgreSQL cleanup tests drop authentication_identities and therefore
+// cannot own schema lifecycle for password_recovery_requests, which has an FK to it.
+
 import { PrismaPasswordRecoveryRepository } from './prisma-password-recovery.repository.js';
 
 describe('PrismaPasswordRecoveryRepository', () => {
