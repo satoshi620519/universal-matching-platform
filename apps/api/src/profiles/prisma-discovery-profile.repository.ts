@@ -109,7 +109,9 @@ export class PrismaDiscoveryProfileRepository implements DiscoveryProfileReposit
         accountId: { not: query.subjectAccountId },
         ...geographicWhere(query.geographicScope),
       },
-      orderBy: { id: 'asc' },
+      orderBy: query.sort?.key === 'id'
+        ? { id: query.sort.direction }
+        : { id: 'asc' },
       ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
       take: query.limit + 1,
     });
