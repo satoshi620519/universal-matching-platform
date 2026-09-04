@@ -3187,3 +3187,13 @@ Inventory existing authentication/account code and specifications, identify genu
 - The Phase 6 branch currently has no dedicated pull request/workflow run surfaced through the connected GitHub context, so CI results cannot be truthfully inferred without opening/running a PR workflow.
 - Do not claim Phase 6 tests/typecheck passed yet. Next validation must obtain actual execution output.
 - EXACT NEXT ACTION: reconcile the Phase 6 branch against the current integration base and inspect changed-file/package consistency before opening a validation PR; then use actual CI diagnostics to fix only demonstrated failures.
+
+
+## Phase 6 integration reconciliation — PR validation checkpoint
+- Compared Phase 6 directly against current main: branch is 34 commits ahead, 0 behind, with 21 changed files.
+- Main already contains the current AuthenticationSession Prisma model; Phase 6 does not alter that model, but adds account-wide revokeAllForAccount behavior to the existing repository.
+- Historical migration 0020 on Phase 6 has a schema shape inconsistent with the current Prisma AuthenticationSession model (different columns). This is an evidence-based migration compatibility risk and is explicitly called out for CI/DB integration validation rather than guessed away.
+- Password recovery adds a separate 0021 migration plus matching Prisma model/repository wiring.
+- Opened validation PR #22 against current main to obtain actual CI diagnostics: https://github.com/satoshi620519/universal-matching-platform/pull/22
+- PR intentionally states that validation has not yet been claimed successful.
+- EXACT NEXT ACTION: fetch PR #22 workflow/check results. If failures occur, inspect exact logs and fix only demonstrated defects; if all required checks pass, merge and record Phase 6 completion.
