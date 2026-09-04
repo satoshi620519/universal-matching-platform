@@ -14,6 +14,7 @@ import {
   type ProfileCompletion,
   type ProfileCompletionPolicy,
   type ProfileSchemaConfiguration,
+  type PrivateLocation,
 } from '@universal/domain';
 import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 
@@ -31,6 +32,7 @@ export class ProfileService {
     fields: Record<string, ProfileFieldValue>;
     fieldSchema?: ProfileFieldSchema;
     geographicScope: GeographicScope;
+    privateLocation?: PrivateLocation | null;
     avatar?: Profile['avatar'];
     gallery?: Profile['gallery'];
     biography?: Profile['biography'];
@@ -49,6 +51,7 @@ export class ProfileService {
       categoryId: category.id,
       fields: input.fields,
       geographicScope: input.geographicScope,
+      privateLocation: input.privateLocation,
       avatar: input.avatar,
       gallery: input.gallery,
       biography: input.biography,
@@ -73,6 +76,7 @@ export class ProfileService {
     fields?: Record<string, ProfileFieldValue>;
     fieldSchema?: ProfileFieldSchema;
     geographicScope?: GeographicScope;
+    privateLocation?: PrivateLocation | null;
     avatar?: Profile['avatar'];
     gallery?: Profile['gallery'];
     biography?: Profile['biography'];
@@ -103,6 +107,7 @@ export class ProfileService {
       categoryId,
       fields,
       geographicScope: input.geographicScope ?? existing.geographicScope,
+      privateLocation: input.privateLocation === undefined ? existing.privateLocation : input.privateLocation,
       avatar: input.avatar === undefined ? existing.avatar : input.avatar,
       gallery: input.gallery === undefined ? existing.gallery : input.gallery,
       biography: input.biography === undefined ? existing.biography : input.biography,
