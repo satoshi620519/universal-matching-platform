@@ -1,6 +1,9 @@
 import type { Profile, ProfileFieldValue } from './profile.js';
 import type { ProfileSchemaConfiguration } from './profile-schema-configuration.js';
 
+// Completion is intentionally derived from current profile + published schema.
+// Never persist percentage/counts as independent mutable state.
+
 export type ProfileCoreRequirement = 'avatar' | 'biography' | 'verification';
 
 export type ProfileCompletionPolicy = Readonly<{
