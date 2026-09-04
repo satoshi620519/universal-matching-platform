@@ -3144,3 +3144,15 @@ Inventory existing authentication/account code and specifications, identify genu
 - Focused tests cover valid use, consumed/revoked/expired rejection, missing secret hash, and invalid expiry ordering.
 - IMPLEMENTATION CHECKPOINT: 4fb255bb79ec807487cbeaf478f8f99159f2ffad.
 - EXACT NEXT ACTION: reconcile existing password sign-in/verification runtime services against the new credential and recovery boundaries, then implement only the smallest missing service contract before HTTP adapters.
+
+
+## Phase 6 password sign-in core reconciliation — implementation checkpoint
+- Initial broad code search missed the existing apps/api/src/auth runtime surface; direct auth inventory confirmed substantial prior identity, credential repository, session issuance, revocation, and request-principal infrastructure.
+- No email/password sign-in orchestration service existed, so added only that missing core service rather than recreating sessions or repositories.
+- EmailPasswordAuthenticationService composes identity lookup, credential lookup, injected password-hash verification, and existing session issuance behind provider-neutral interfaces.
+- Session issuance occurs only after identity resolution + active credential status + successful password verification.
+- Disabled credentials fail before verifier execution; invalid credentials never issue a session.
+- No password algorithm, token format, JWT, cookie policy, controller, or provider-specific adapter was selected.
+- Focused tests cover successful issuance, invalid credential rejection, and disabled-credential short-circuiting.
+- IMPLEMENTATION CHECKPOINT: 7dcbebfed1c92806dbb9f42c70eb7d7e3bf270ca.
+- EXACT NEXT ACTION: inventory password reset runtime/service support against PasswordRecoveryRecord and existing session revocation infrastructure; implement only the missing recovery completion orchestration, including credential replacement and revoke-all-sessions boundary.
