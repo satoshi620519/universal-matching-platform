@@ -3970,3 +3970,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Did not duplicate discovery fetching, filtering, search, safety logic, or matching behavior; presentation changes consume the existing server-authorized results.
 - Remaining Phase 9 acceptance item: compatibilityScore sorting is intentionally reserved in the domain contract but not yet executable because score calculation occurs after candidate retrieval; resolve this boundary correctly (score-before-pagination) rather than faking database ordering.
 - Next exact task: inspect current CI completion, then implement engine-level compatibility scoring order before pagination or formally constrain the API contract if architecture requires a separate ranking endpoint.
+
+- CI #2674 failed only on stale controller test calls after the new search transport parameters expanded the discover signature; migration and PostgreSQL integration passed, and Matching Concurrency Gate #513 completed SUCCESS.
+- Fixed the concrete stale test signature mismatch without changing runtime behavior.
+- Final Phase 9 ranking audit confirmed compatibilityScore ordering could not be delegated to the paginated repository without faking correctness.
+- Added a deterministic engine-level compatibility ranking boundary with score calculation, stable id tie-breaks, domain regression coverage, and service integration after eligibility filtering and before privacy projection.
+- No database fake orderBy was introduced. Note: repository cursor pagination remains authoritative for id ordering; compatibility ranking is currently an in-memory eligible-set boundary and must be evolved to score-before-repository-pagination for large datasets before marketplace-scale claims.
+- Next exact task: verify CI for ranking and compile repair commits, then run final Phase 9 acceptance audit and explicitly record any scale limitation rather than hiding it.
