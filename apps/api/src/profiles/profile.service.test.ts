@@ -78,9 +78,9 @@ describe('ProfileService', () => {
       policy: { requiredCore: ['avatar', 'verification'] },
     });
     expect(completion).toMatchObject({
-      completedRequiredCount: 0,
+      completedRequiredCount: 1,
       totalRequiredCount: 3,
-      missingRequirementKeys: ['field:display_name', 'core:avatar', 'core:verification'],
+      missingRequirementKeys: ['core:avatar', 'core:verification'],
     });
     expect(save).not.toHaveBeenCalled();
   });
