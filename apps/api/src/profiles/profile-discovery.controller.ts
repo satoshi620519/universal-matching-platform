@@ -58,7 +58,7 @@ export class ProfileDiscoveryController {
     const allowed = new Set<ProfileVerificationStatus>(['unverified', 'pending', 'verified', 'rejected']);
     if (typeof body.status !== 'string' || !allowed.has(body.status as ProfileVerificationStatus)) throw new BadRequestException('verification status is invalid');
     const existing = await this.profileRepository.findByAccountId(accountId);
-    if (!existing) throw new Error('profile not found');
+    if (!existing) throw new NotFoundException('profile not found');
     return this.profiles.update(existing.id, { verificationStatus: body.status as ProfileVerificationStatus });
   }
 
@@ -66,7 +66,7 @@ export class ProfileDiscoveryController {
   async getMyProfileCompletion(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-completion' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
-    if (!existing) throw new Error('profile not found');
+    if (!existing) throw new NotFoundException('profile not found');
     const category = (await this.categories.list()).find(item => item.id === existing.categoryId);
     const fieldSchema = category ? this.schemas.schemaFor(category.key) : DEFAULT_FIELD_SCHEMA;
     return this.profiles.completion(existing.id, { schema: this.completionSchema(fieldSchema) });
@@ -82,7 +82,7 @@ export class ProfileDiscoveryController {
   async updateMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
-    if (!existing) throw new Error('profile not found');
+    if (!existing) throw new NotFoundException('profile not found');
     return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined, avatar: body.avatar, gallery: body.gallery, biography: body.biography });
   }
 
