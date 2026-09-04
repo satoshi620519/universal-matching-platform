@@ -4026,3 +4026,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused authorization/lifecycle regression coverage.
 - Remaining Phase 10 audit items: verify block relationship integration (not just communication-wide safety restriction), report target integration for message/conversation IDs, ephemeral typing event boundary, and media-reference policy.
 - Next exact task: inspect fresh CI for the lifecycle additions, fix only concrete failures, then close the remaining Phase 10 acceptance gaps without reimplementing existing realtime infrastructure.
+
+- Fresh CI run #2744 is active for the messaging lifecycle changes. Setup, migrations, PostgreSQL migration integration, Typecheck and Lint have already passed; Test is running. Matching Concurrency Gate #553 is SUCCESS.
+- Continued independent Phase 10 acceptance work without touching the same lifecycle surface.
+- Safety report integration already supports ReportTargetType message, so no duplicate report subsystem was added; message IDs can already enter the durable moderation workflow.
+- No standalone block subsystem was found; existing communication-wide safety enforcement remains the authoritative hard restriction boundary. A relationship-block implementation will require a separate domain model rather than a fake messaging-local block list.
+- Added the missing ephemeral typing publication event to the existing replaceable RealtimePublisher boundary. It creates no durable message state and preserves account-targeted fan-out.
+- Audited media acceptance: no authorized media storage/scanning subsystem currently exists, so arbitrary attachment URLs/binaries were deliberately not added. The specification now explicitly requires a future ownership-checked durable media identifier.
+- Next exact task: inspect CI #2744 completion, repair only concrete failures, then run Phase 10 final acceptance audit and record remaining platform-wide block/media dependencies without falsely marking them complete.
