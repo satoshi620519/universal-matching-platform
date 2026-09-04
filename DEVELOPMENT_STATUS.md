@@ -3927,3 +3927,8 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added only the missing deterministic rule-based compatibility scoring domain boundary, reusing existing MatchingRulesConfiguration and replaceable MatchStrategy architecture.
 - Added weighted-score regression tests.
 - Next exact task: inspect CI for the Phase 9 foundation commits, then add deterministic candidate sorting/filtering only where the specification gap remains.
+
+- Phase 9 CI for the compatibility foundation was still running at the last checkpoint; implementation continued only with an independently scoped sorting contract.
+- Added validated deterministic discovery sorting metadata with stable default id ordering and explicit direction.
+- Repository applies persisted id sorting; compatibilityScore remains a reserved engine-level sort until scores are available before pagination (no fake DB ordering added).
+- Next exact action: verify CI for all Phase 9 commits, then implement candidate filtering/preferences as a normalized domain boundary without bypassing existing safety/geographic/distance exclusions.
