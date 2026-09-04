@@ -3,6 +3,7 @@ import { validateLocalizationConfiguration, type LocalizationConfiguration } fro
 import { validateProfileSchemaConfiguration, type ProfileSchemaConfiguration } from './profile-schema-configuration.js';
 import { validateFeatureVisibilityConfiguration, type FeatureVisibilityConfiguration } from './feature-visibility-configuration.js';
 import { validateMatchingRulesConfiguration, type MatchingRulesConfiguration } from './matching-rules-configuration.js';
+import { validateNotificationPresentationPreferences, resolveNotificationPresentationPreferences, type NotificationPresentationPreferences } from './notification-presentation-preferences.js';
 
 export interface QuickLaunchCategory {
   readonly key: string;
@@ -29,6 +30,8 @@ export interface QuickLaunchDraft {
   readonly legalSupport?: { readonly privacyPolicyUrl?: string; readonly termsOfServiceUrl?: string; readonly supportUrl?: string; readonly supportEmail?: string };
   /** Optional purchaser matching metadata; runtime interpretation remains matching-engine-owned. */
   readonly matchingRules?: MatchingRulesConfiguration;
+  /** Purchaser-facing notification presentation defaults; delivery/consent remain separate. */
+  readonly notificationPresentation?: NotificationPresentationPreferences;
   readonly supportedCountries: readonly string[];
   readonly categories: readonly QuickLaunchCategory[];
   readonly enabledFeatures: readonly string[];
@@ -52,6 +55,7 @@ export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   if (draft.profileSchema) validateProfileSchemaConfiguration(draft.profileSchema);
   if (draft.featureVisibility) validateFeatureVisibilityConfiguration(draft.featureVisibility);
   if (draft.matchingRules) validateMatchingRulesConfiguration(draft.matchingRules);
+  if (draft.notificationPresentation) validateNotificationPresentationPreferences(draft.notificationPresentation);
   if (draft.legalSupport) {
     const normalized = (value?: string) => value?.trim() || undefined;
     const urls = [normalized(draft.legalSupport.privacyPolicyUrl), normalized(draft.legalSupport.termsOfServiceUrl), normalized(draft.legalSupport.supportUrl)].filter((value): value is string => Boolean(value));
@@ -87,6 +91,7 @@ export function publishQuickLaunchConfiguration(
     ...draft,
     ...(draft.legalSupport ? (() => { const privacyPolicyUrl=draft.legalSupport.privacyPolicyUrl?.trim()||undefined, termsOfServiceUrl=draft.legalSupport.termsOfServiceUrl?.trim()||undefined, supportUrl=draft.legalSupport.supportUrl?.trim()||undefined, supportEmail=draft.legalSupport.supportEmail?.trim().toLowerCase()||undefined; return privacyPolicyUrl||termsOfServiceUrl||supportUrl||supportEmail ? { legalSupport: Object.freeze({ ...(privacyPolicyUrl?{privacyPolicyUrl}:{}), ...(termsOfServiceUrl?{termsOfServiceUrl}:{}), ...(supportUrl?{supportUrl}:{}), ...(supportEmail?{supportEmail}:{}) }) } : {}; })() : {}),
     ...(draft.featureVisibility ? { featureVisibility: Object.freeze({ features: Object.freeze(draft.featureVisibility.features.map(feature => Object.freeze({ ...feature }))) }) } : {}),
+    ...(draft.notificationPresentation ? { notificationPresentation: Object.freeze({ notifications: Object.freeze(resolveNotificationPresentationPreferences(draft.notificationPresentation)) }) } : {}),
     ...(draft.matchingRules ? { matchingRules: Object.freeze({ rules: Object.freeze(draft.matchingRules.rules.map(rule => Object.freeze({ key: rule.key.trim(), targetField: rule.targetField.trim(), operator: rule.operator, value: rule.value, enabled: rule.enabled, ...(rule.weight !== undefined ? { weight: rule.weight } : {}) }))) }) } : {}),
     ...(draft.profileSchema ? { profileSchema: Object.freeze({ fields: Object.freeze(draft.profileSchema.fields.map(field => Object.freeze({ ...field, ...(field.options ? { options: Object.freeze([...field.options]) } : {}) }))) }) } : {}),
     ...(draft.localization ? { localization: Object.freeze({ ...draft.localization, supportedLocales: Object.freeze([...draft.localization.supportedLocales]), ...(draft.localization.countryLocales ? { countryLocales: Object.freeze({ ...draft.localization.countryLocales }) } : {}) }) } : {}),
