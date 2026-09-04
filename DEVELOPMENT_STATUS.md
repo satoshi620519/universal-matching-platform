@@ -3304,3 +3304,21 @@ TEST RESULTS:
 
 EXACT NEXT ACTION:
 - Inspect existing domain exports/tests around profile field schema and projection, then implement the smallest first-class Phase 7 domain contracts (media, verification status, deterministic completion) with focused tests before touching Prisma persistence.
+
+
+## Phase 7 implementation checkpoint — domain contracts
+COMPLETED THIS CHECKPOINT:
+- Inspected existing Profile, ProfileRepository, ProfileProjectionPolicy, ProfileService and ProfileSchemaConfiguration before implementation.
+- Added first-class Profile metadata contracts: avatar, ordered gallery, biography, provider-neutral verification status.
+- Added gallery bound (12) and uniqueness invariant.
+- Added centrally defined biography length limit (2000) and normalization.
+- Added deterministic ProfileCompletion calculation from required schema fields and deployment-selected core requirements; no mutable completion counter is persisted.
+- Added focused domain tests for normalization/bounds and completion calculation.
+- Exported completion contract from domain package.
+
+CURRENT STATE:
+- Domain implementation committed on phase7-profile-system-foundation.
+- Persistence and service reconciliation intentionally not started yet to keep the change surface small until domain validation is confirmed.
+
+EXACT NEXT ACTION:
+- Inspect package scripts/CI conventions and validate the new domain contracts. Fix only demonstrated failures. After green validation, extend Profile projection visibility for core metadata before Prisma persistence.
