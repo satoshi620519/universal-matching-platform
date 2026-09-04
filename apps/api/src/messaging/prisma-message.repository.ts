@@ -105,6 +105,7 @@ export class PrismaMessageRepository {
     });
   }
 
+
   async markReadForParticipant(input: { conversationId: string; accountId: string; at?: Date }): Promise<boolean> {
     const updated = await this.database.conversationParticipant.updateMany({
       where: { conversationId: input.conversationId, accountId: input.accountId },
@@ -112,7 +113,6 @@ export class PrismaMessageRepository {
     });
     return updated.count === 1;
   }
-}
 
   async softDeleteForSender(input: { messageId: string; senderAccountId: string; at?: Date }): Promise<boolean> {
     const updated = await this.database.message.updateMany({
@@ -121,3 +121,4 @@ export class PrismaMessageRepository {
     });
     return updated.count === 1;
   }
+}
