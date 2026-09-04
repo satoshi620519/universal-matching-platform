@@ -3799,3 +3799,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Removed the completion fallback and return HTTP 404 for a missing authoritative category; added focused regression coverage.
 - Commits: 88d27b0 (implementation), 0bead40 (test).
 - Next exact action: validate this isolated correction in CI before selecting another Phase 7 gap.
+
+
+### 2026-09-04 — Phase 7 category-change schema validation reconciliation
+- Continued from the exact completion/category authority checkpoint without reopening completed work.
+- Found a distinct gap: PATCH /profiles/me changing only categoryId did not resolve/pass the new category schema, so existing fields could bypass validation against the destination category.
+- Updated transport to resolve the authoritative schema whenever categoryId changes, even when fields are omitted; ProfileService therefore validates existing fields before persistence.
+- Added focused regression coverage for category-only changes.
+- Commits: 0f76bf0 (implementation), 3c955c6 (test).
+- Next exact action: validate this isolated category-change contract correction in CI, then continue Phase 7 gap audit.
