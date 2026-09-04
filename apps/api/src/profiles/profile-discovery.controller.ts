@@ -85,7 +85,10 @@ export class ProfileDiscoveryController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new NotFoundException('profile not found');
-    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined, avatar: body.avatar, gallery: body.gallery, biography: body.biography });
+    const categoryId = body.categoryId ?? existing.categoryId;
+    const categoryChanged = categoryId !== existing.categoryId;
+    const fieldSchema = (body.fields !== undefined || categoryChanged) ? await this.schemaFor(categoryId) : undefined;
+    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined, avatar: body.avatar, gallery: body.gallery, biography: body.biography });
   }
 
   @Get('discovery')
