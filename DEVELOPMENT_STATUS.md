@@ -3032,3 +3032,23 @@ Implement the smallest notification presentation configuration extension on this
 1. Reconcile remaining Phase 4 configuration requirements against current main after PR #20.
 2. Do not repeat completed Quick Launch matching rules, category metadata, notification presentation, legal/support, or Phase 5 UX work.
 3. Select only the earliest genuinely missing dependency-ordered configuration integration, record scope before implementation, then follow source review -> CI -> PR -> merge.
+
+
+## Phase 4 reconciliation — Quick Launch contract completion
+CURRENT PHASE: Phase 4 configuration expansion
+CURRENT MILESTONE: Quick Launch contract completion (default + extension-point audit)
+STATUS: Ready for scoped implementation
+
+EVIDENCE:
+- All eight CONFIGURATION_SYSTEM_SPEC.md domains are now represented after PR #20.
+- The remaining explicit extension-contract requirements are not uniformly represented at the domain level: default value semantics and advanced customization extension points are documented conceptually but not exposed as a coherent purchaser/developer-facing contract.
+- This is now the earliest genuinely missing Phase 4 completion item; adding another unrelated configuration domain would duplicate the completed domain list.
+
+SCOPE BOUNDARY:
+- Do not add new runtime business features.
+- Add a typed Quick Launch contract descriptor that maps supported domains to defaults, purchaser visibility, and documented advanced extension points.
+- Keep publication/version behavior and migration compatibility explicit through the existing aggregate.
+- Reuse current domain validators and avoid duplicating configuration values.
+
+EXACT NEXT ACTION:
+Implement the smallest typed Quick Launch contract descriptor + focused tests, then source-review, CI, PR, merge, and record Phase 4 reconciliation completion status.
