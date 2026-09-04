@@ -29,7 +29,7 @@ export class DiscoveryService {
     if (blocksCapability(subjectRestriction, 'general')) return { items: [] };
 
     const eligible = await Promise.all(page.items.map(async (candidate) => {
-      if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate).eligible) return null;
+      if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate, input.geographicScope).eligible) return null;
       if (await this.blockExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (await this.safetyExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (this.effectiveSafety) {
