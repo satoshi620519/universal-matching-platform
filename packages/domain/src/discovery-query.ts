@@ -3,6 +3,7 @@ import type { GeographicScope } from './geographic-scope.js';
 import type { Profile } from './profile.js';
 import { createDiscoverySort, type DiscoverySort } from './discovery-sorting.js';
 import { createDiscoveryPreferences, type DiscoveryPreferences } from './discovery-preferences.js';
+import { createDiscoverySearch, type DiscoverySearch } from './discovery-search.js';
 
 export type DiscoveryCursor = string;
 
@@ -15,6 +16,7 @@ export type DiscoveryQuery = Readonly<{
   distanceConstraint?: DistanceConstraint;
   sort?: DiscoverySort;
   preferences?: DiscoveryPreferences;
+  search?: DiscoverySearch;
 }>;
 
 export type DiscoveryPage = Readonly<{
@@ -40,6 +42,7 @@ export function createDiscoveryQuery(input: DiscoveryQuery): DiscoveryQuery {
     ...(input.distanceConstraint ? { distanceConstraint: { ...input.distanceConstraint } } : {}),
     sort: createDiscoverySort(input.sort),
     preferences: createDiscoveryPreferences(input.preferences),
+    ...(input.search ? { search: createDiscoverySearch(input.search) } : {}),
   };
 }
 
