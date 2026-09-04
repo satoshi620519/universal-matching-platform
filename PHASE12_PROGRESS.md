@@ -31,14 +31,13 @@
 - `d8a230c5b21bee01eee71e5baff8b4e37578677d` — restore compatible discovery wiring
 
 ### Remaining User Block work
-1. Verify CI for the persistence slice.
-2. Explicitly wire block/safety discovery policies without disturbing existing safety enforcement.
-3. Add repository/application tests, including duplicate-block and removal semantics.
-4. Integrate block enforcement into match/messaging transitions.
-5. Add authenticated HTTP block/unblock surface.
-6. Add audit and focused integration coverage.
+1. Verify CI for persistence + discovery wiring.
+2. Add repository/application tests, including duplicate-block and removal semantics.
+3. Integrate block enforcement into match/messaging transitions.
+4. Add authenticated HTTP block/unblock surface.
+5. Add audit and focused integration coverage.
 
 ### Exact next action
-Wait for the current CI result to become observable; if green, proceed directly to explicit discovery policy wiring and focused repository/application tests. If CI fails, fix only the exact diagnostic first.
+CI #2855 and Matching Concurrency Gate #596 are green. Persistent User Block is now wired into Discovery through an explicit named policy pair, keeping the existing safety policy independent. Next action: add focused repository/application tests before integrating block enforcement into match/messaging transitions.
 
 Do not implement ban, evidence/context, rate/spam controls, or moderation queue UI until the User Block persistence/enforcement boundary is established.
