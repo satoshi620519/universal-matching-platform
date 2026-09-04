@@ -64,4 +64,20 @@ describe('DiscoveryService', () => {
     expect(after.items).toEqual([]);
     expect(effectiveSafety.resolveForAccount).toHaveBeenCalledWith('a1', 'general');
   });
+  it('applies preferences without bypassing eligibility exclusions', async () => {
+    const discover = vi.fn().mockResolvedValue({
+      items: [
+        { id: 'self', accountId: 'a1', categoryId: 'dating', fields: { role: 'designer' }, geographicScope: scope },
+        { id: 'match', accountId: 'a2', categoryId: 'dating', fields: { role: 'designer' }, geographicScope: scope },
+        { id: 'miss', accountId: 'a3', categoryId: 'dating', fields: { role: 'developer' }, geographicScope: scope },
+      ],
+    });
+    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const result = await service.discover({
+      subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy,
+      preferences: { filters: [{ field: 'role', operator: 'equals', value: 'designer' }] },
+    });
+    expect(result.items.map((item) => item.id)).toEqual(['match']);
+  });
+
 });
