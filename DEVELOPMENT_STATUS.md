@@ -3019,3 +3019,16 @@ Implement the smallest notification presentation configuration extension on this
 - PR #20 opened: https://github.com/satoshi620519/universal-matching-platform/pull/20
 - HEAD CHECKPOINT: e7ec1a716da89b9dfdb5349f68018b0b149c0e88
 - EXACT NEXT ACTION: fetch PR #20 CI. If all required checks pass, merge and record completion; otherwise inspect only failing diagnostics and apply the smallest evidence-based fix.
+
+
+## Notification Presentation Preferences — COMPLETE
+- PR #20 merged into main after CI run 33822466876 and Matching Concurrency Gate run 33822466645 both completed successfully.
+- Merge commit: 249412b295452005270f0b43e908934bcc655cad.
+- Added typed purchaser-facing notification presentation defaults for match, message, like, and system without introducing delivery infrastructure or user-owned preference concerns.
+- Validation rejects invalid and duplicate keys; resolution preserves explicit false and supplies enabled defaults for omitted supported types when configured.
+- Published notification metadata is immutable and legacy snapshots remain compatible because the field is optional.
+
+## Exact next action
+1. Reconcile remaining Phase 4 configuration requirements against current main after PR #20.
+2. Do not repeat completed Quick Launch matching rules, category metadata, notification presentation, legal/support, or Phase 5 UX work.
+3. Select only the earliest genuinely missing dependency-ordered configuration integration, record scope before implementation, then follow source review -> CI -> PR -> merge.
