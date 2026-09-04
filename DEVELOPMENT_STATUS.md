@@ -3411,3 +3411,18 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - Re-run/fetch CI for current head and require Prisma generation plus PostgreSQL migration integration to pass before proceeding.
+
+
+## Phase 7 migration stream diagnosis — CI #2212
+CI FAILURE DIAGNOSED FROM POSTGRESQL LOGS:
+- Prisma schema P1012 issue was fixed, but CI #2212 then failed applying packaged database migration 0022 with PostgreSQL error: relation "profiles" does not exist.
+- Root cause: repository has two migration mechanisms. Profile table is created by the API Prisma migration stream, while packages/database packaged migrations run independently in CI. Adding executable Profile DDL to packages/database caused an invalid cross-stream dependency.
+
+FIX APPLIED:
+- Restored packages/database migration 0022 as a non-DDL release marker to avoid duplicate/cross-stream schema ownership.
+- Added canonical executable migration under apps/api/prisma/migrations/20260904000100_extend_profiles_phase7/migration.sql, after existing profile creation migrations.
+- No unrelated application code changed.
+
+CURRENT STATE:
+- Latest persistence migration architecture now respects existing repository ownership boundaries.
+- EXACT NEXT ACTION: fetch CI for current head and verify packaged migration integration and Prisma migration path before Typecheck.
