@@ -29,6 +29,10 @@ export class ProfileService {
     fields: Record<string, ProfileFieldValue>;
     fieldSchema: ProfileFieldSchema;
     geographicScope: GeographicScope;
+    avatar?: Profile['avatar'];
+    gallery?: Profile['gallery'];
+    biography?: Profile['biography'];
+    verificationStatus?: Profile['verificationStatus'];
   }): Promise<Profile> {
     const category = await this.categories.findById(input.categoryId);
     if (!category) throw new Error('profile category not found');
@@ -41,6 +45,10 @@ export class ProfileService {
       categoryId: category.id,
       fields: input.fields,
       geographicScope: input.geographicScope,
+      avatar: input.avatar,
+      gallery: input.gallery,
+      biography: input.biography,
+      verificationStatus: input.verificationStatus,
     });
     await this.profiles.save(profile);
     return profile;
