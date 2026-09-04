@@ -10,6 +10,7 @@ import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
 import { LocalizationConfigurationService } from '../configuration/localization-configuration.service.js';
 import { LocationPrecisionConfigurationService } from '../configuration/location-precision-configuration.service.js';
+import { DistanceMatchingConfigurationService } from '../configuration/distance-matching-configuration.service.js';
 import { createGeographicScope, projectProfile, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileCoreProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
@@ -33,6 +34,7 @@ export class ProfileDiscoveryController {
     private readonly admin: AdministrativeCapabilityAccessService,
     private readonly localization: LocalizationConfigurationService,
     private readonly locationPrecision: LocationPrecisionConfigurationService,
+    private readonly distanceMatching: DistanceMatchingConfigurationService,
   ) {}
 
   @Get('profile-categories')
@@ -125,6 +127,9 @@ export class ProfileDiscoveryController {
     await this.requireSupportedGeography(geographicScope);
     const projectionPolicy = await this.schemaFor(categoryId);
     const distanceConstraint = maxDistanceMeters === undefined ? undefined : { maxDistanceMeters: Number(maxDistanceMeters) };
+    if (distanceConstraint && !await this.distanceMatching.isEnabled()) {
+      throw new BadRequestException('distance matching is disabled by deployment configuration');
+    }
     return this.discovery.discover({
       subjectAccountId: principal.accountId,
       categoryId,
