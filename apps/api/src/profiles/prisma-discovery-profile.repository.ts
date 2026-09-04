@@ -24,6 +24,26 @@ function decodeCursor(value: string): Cursor {
   }
 }
 
+function geographicWhere(scope: DiscoveryQuery['geographicScope']) {
+  if (scope.kind === 'global') return { OR: [{ scopeKind: 'global' }] };
+  const candidates: Array<Record<string, unknown>> = [
+    { scopeKind: 'global' },
+    { scopeKind: 'country', countryCode: scope.countryCode },
+  ];
+  if (scope.kind === 'region' || scope.kind === 'city') {
+    candidates.push({ scopeKind: 'region', countryCode: scope.countryCode, regionCode: scope.regionCode });
+  }
+  if (scope.kind === 'city') {
+    candidates.push({
+      scopeKind: 'city',
+      countryCode: scope.countryCode,
+      regionCode: scope.regionCode,
+      localityCode: scope.localityCode,
+    });
+  }
+  return { OR: candidates };
+}
+
 @Injectable()
 export class PrismaDiscoveryProfileRepository implements DiscoveryProfileRepository {
   constructor(private readonly database: DatabaseService) {}
@@ -31,7 +51,11 @@ export class PrismaDiscoveryProfileRepository implements DiscoveryProfileReposit
   async discover(query: DiscoveryQuery): Promise<DiscoveryPage> {
     const cursor = query.cursor ? decodeCursor(query.cursor) : undefined;
     const rows = await this.database.profile.findMany({
-      where: { categoryId: query.categoryId },
+      where: {
+        categoryId: query.categoryId,
+        accountId: { not: query.subjectAccountId },
+        ...geographicWhere(query.geographicScope),
+      },
       orderBy: { id: 'asc' },
       ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
       take: query.limit + 1,
@@ -44,7 +68,7 @@ export class PrismaDiscoveryProfileRepository implements DiscoveryProfileReposit
 
   private map(row: {
     id: string; accountId: string; categoryId: string; fields: unknown;
-    scopeKind: string; countryCode: string | null; regionCode: string | null;
+    scopeKind: string; countryCode: string | null; regionCode: string | null; localityCode?: string | null;
   }): Profile {
     if (typeof row.fields !== 'object' || row.fields === null || Array.isArray(row.fields)) throw new Error('Persisted profile fields must be an object');
     const scope = row.scopeKind === 'global'
@@ -53,7 +77,9 @@ export class PrismaDiscoveryProfileRepository implements DiscoveryProfileReposit
         ? createGeographicScope({ kind: 'country', countryCode: row.countryCode })
         : row.scopeKind === 'region' && row.countryCode && row.regionCode
           ? createGeographicScope({ kind: 'region', countryCode: row.countryCode, regionCode: row.regionCode })
-          : (() => { throw new Error('Persisted profile geographic scope is invalid'); })();
+          : row.scopeKind === 'city' && row.countryCode && row.regionCode && row.localityCode
+            ? createGeographicScope({ kind: 'city', countryCode: row.countryCode, regionCode: row.regionCode, localityCode: row.localityCode })
+            : (() => { throw new Error('Persisted profile geographic scope is invalid'); })();
     return createProfile({
       id: row.id, accountId: row.accountId, categoryId: row.categoryId,
       fields: row.fields as Record<string, string | number | boolean | null>, geographicScope: scope,
