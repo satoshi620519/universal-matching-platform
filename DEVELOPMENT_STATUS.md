@@ -3910,3 +3910,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 
 - Added missing deployment toggle `distance.matching.enabled`; distance-constrained discovery is rejected when disabled and defaults to disabled for privacy/safety.
 - CI checkpoint pending for distance presentation + distance matching configuration changes.
+
+
+### 2026-09-04 — Phase 8 internationalization acceptance validation complete
+- HEAD `6e0140e` validated successfully after adding deployment-configurable distance presentation and distance-matching enablement boundaries.
+- CI run `33845666233`: SUCCESS (migrations, PostgreSQL migration integration, Typecheck, Lint, Test, matching concurrency integration, Build).
+- Phase 8 acceptance audit confirmed: normalized geographic hierarchy, independent locale/language/timezone configuration, private precise coordinates, country/region discovery filtering, deployment-controlled public location precision, optional deployment-controlled distance matching, and regression coverage for privacy/configuration boundaries.
+- No distance-search implementation was duplicated; existing constraint/repository logic remains authoritative.
+- Phase 8 is complete. Next exact action: begin Phase 9 roadmap-to-code gap audit from the recorded master roadmap checkpoint; do not reopen completed Phase 8 work without a concrete regression.
