@@ -115,7 +115,7 @@ export class ProfileDiscoveryController {
 
   private async schemaFor(categoryId?: string): Promise<ProfileFieldSchema> {
     const category = (await this.categories.list()).find(item => item.id === categoryId);
-    if (!category) return DEFAULT_FIELD_SCHEMA;
+    if (!category) throw new NotFoundException('profile category not found');
     return this.schemas.schemaFor(category.key);
   }
 
