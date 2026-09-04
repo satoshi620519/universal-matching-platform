@@ -76,6 +76,7 @@ export * from './discovery-preferences.js';
 export * from './discovery-eligibility.js';
 export * from './match-strategy.js';
 export * from './match-compatibility.js';
+export * from './match-strategy-selection.js';
 export * from './match-transition.js';
 export * from './match-transition-state.js';
 export * from './conversation.js';
