@@ -3977,3 +3977,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added a deterministic engine-level compatibility ranking boundary with score calculation, stable id tie-breaks, domain regression coverage, and service integration after eligibility filtering and before privacy projection.
 - No database fake orderBy was introduced. Note: repository cursor pagination remains authoritative for id ordering; compatibility ranking is currently an in-memory eligible-set boundary and must be evolved to score-before-repository-pagination for large datasets before marketplace-scale claims.
 - Next exact task: verify CI for ranking and compile repair commits, then run final Phase 9 acceptance audit and explicitly record any scale limitation rather than hiding it.
+
+- CI #2688 exposed one remaining stale controller test call (line 198) after search parameters expanded the transport signature; migration stages passed and Matching Concurrency Gate #523 was still running at the checkpoint.
+- Fixed only that test signature mismatch.
+- Final ranking wiring audit found the new compatibility ranking boundary was not yet receiving the authenticated subject profile from the HTTP discovery path, so public API requests could silently skip compatibility ranking.
+- Wired the existing authoritative subject profile into DiscoveryService and added focused transport regression coverage. Matching rules configuration resolution remains a separate deployment-configuration integration concern; no fake default rules were injected.
+- Next exact task: verify CI for the ranking transport repair, then complete Phase 9 acceptance audit. Explicitly distinguish implemented ranking boundary from any remaining deployment-level rule-resolution or pagination-scale limitation.
