@@ -11,6 +11,7 @@ import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transi
 import { LocalizationConfigurationService } from '../configuration/localization-configuration.service.js';
 import { LocationPrecisionConfigurationService } from '../configuration/location-precision-configuration.service.js';
 import { DistanceMatchingConfigurationService } from '../configuration/distance-matching-configuration.service.js';
+import { MatchingRulesConfigurationService } from '../configuration/matching-rules-configuration.service.js';
 import { createDiscoverySort, createGeographicScope, projectProfile, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileCoreProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
@@ -35,6 +36,7 @@ export class ProfileDiscoveryController {
     private readonly localization: LocalizationConfigurationService,
     private readonly locationPrecision: LocationPrecisionConfigurationService,
     private readonly distanceMatching: DistanceMatchingConfigurationService,
+    private readonly matchingRules: MatchingRulesConfigurationService,
   ) {}
 
   @Get('profile-categories')
@@ -127,6 +129,7 @@ export class ProfileDiscoveryController {
     await this.requireSupportedGeography(geographicScope);
     const projectionPolicy = await this.schemaFor(categoryId);
     const subjectProfile = await this.profileRepository.findByAccountId(principal.accountId);
+    const matchingRules = await this.matchingRules.resolve();
     const distanceConstraint = maxDistanceMeters === undefined ? undefined : { maxDistanceMeters: Number(maxDistanceMeters) };
     if (distanceConstraint && !await this.distanceMatching.isEnabled()) {
       throw new BadRequestException('distance matching is disabled by deployment configuration');
@@ -143,6 +146,7 @@ export class ProfileDiscoveryController {
       projectionPolicy: Object.fromEntries(Object.entries(projectionPolicy).map(([key, rule]) => [key, rule.visibility ?? 'public'])),
       locationPolicy: await this.locationPrecision.resolve(),
       ...(subjectProfile ? { subjectProfile } : {}),
+      ...(matchingRules ? { matchingRules } : {}),
     });
   }
 
