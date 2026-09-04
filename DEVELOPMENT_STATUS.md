@@ -4039,3 +4039,16 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Migrations and PostgreSQL integration had already passed; the failure was isolated to that file at Typecheck.
 - Reconstructed the service with both methods explicitly closed and no behavioral change beyond making the already intended recipient and typing publications syntactically valid.
 - Fresh CI after commit add75ee is now the immediate gate; do not infer Phase 10 completion until Typecheck/Test/Build evidence is green.
+
+
+### 2026-09-04 — Phase 10 CI validation and acceptance boundary
+- CI #2756 SUCCESS: migrations, PostgreSQL migration integration, Typecheck, Lint, Test, matching concurrency integration and Build all passed after the typing publication syntax repair.
+- Matching Concurrency Gate #559 SUCCESS with isolated PostgreSQL reciprocal transition evidence.
+- Phase 10 implementation is validated for conversations, durable messages, participant authorization, realtime delivery, read state, ephemeral typing, soft deletion, message reporting target support, reconnect/reconciliation and communication safety enforcement.
+- Explicit cross-phase dependencies remain recorded rather than falsely implemented: relationship-level Block is a Phase 12 safety domain concern (no fake messaging-local block list created), and media messages require an authorized storage/scanning subsystem before safe durable media references can be enabled.
+- Phase 10 messaging core is complete to its currently available platform boundary; deferred Block/Media integrations remain acceptance dependencies to be closed when their authoritative platform modules are built.
+
+### 2026-09-04 — Phase 11 specification-first start
+- Created NOTIFICATION_SYSTEM_SPEC.md before notification implementation.
+- Existing durable notification/realtime foundations will be audited first; only missing preference, channel adapter, localization, and reliability boundaries will be implemented.
+- Next exact task: audit existing notification entities/controllers/repositories against the Phase 11 specification and avoid duplicate notification delivery infrastructure.
