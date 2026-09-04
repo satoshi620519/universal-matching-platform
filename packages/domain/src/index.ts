@@ -89,6 +89,7 @@ export * from './quick-launch-configuration.js';
 export * from './quick-launch-domain-contract.js';
 export * from './matching-rules-configuration.js';
 export * from './notification-presentation-preferences.js';
+export * from './notification-delivery-preferences.js';
 
 export * from './branding-theme-configuration.js';
 
