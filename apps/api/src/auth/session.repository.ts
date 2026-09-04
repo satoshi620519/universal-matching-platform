@@ -15,9 +15,7 @@ export abstract class SessionRepository {
     readonly credentialHash: string;
   }): Promise<AuthenticationSession>;
 
-  abstract findByCredentialHash(
-    credentialHash: string,
-  ): Promise<AuthenticationSession | null>;
-
+  abstract findByCredentialHash(credentialHash: string): Promise<AuthenticationSession | null>;
   abstract revoke(id: string, revokedAt: Date): Promise<void>;
+  abstract revokeAllForAccount(accountId: string, revokedAt: Date): Promise<void>;
 }
