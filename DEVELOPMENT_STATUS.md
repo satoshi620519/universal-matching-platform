@@ -2928,3 +2928,41 @@ EXACT NEXT ACTION:
 1. Reconcile the next dependency-ordered unfinished configuration milestone from current main source and Phase 4 specifications.
 2. Do not revisit completed matchingRules, legal/support, or Phase 5 UX work.
 3. Prefer the smallest missing integration with an existing aggregate contract, validate it through CI, and record the continuation checkpoint.
+
+
+## Phase 4 next milestone reconciliation — Category metadata
+CURRENT PHASE: Phase 4 configuration expansion
+CURRENT MILESTONE: Matching category metadata integration
+STATUS: Ready for scoped implementation
+
+EVIDENCE:
+- Quick Launch core domains now include branding/theme, localization, profile schema, feature visibility, legal/support, and matching rules.
+- MATCHING_CATEGORY_CONFIGURATION.md explicitly defines a richer category contract (stable key, purchaser-facing label, optional description, enabled state) and marks Quick Launch/review/publish integration as the next integration.
+- Current QuickLaunchDraft categories only contain key + displayName, so optional description and enabled state are genuinely missing from the current aggregate contract.
+
+SCOPE BOUNDARY:
+- Extend the existing categories contract; do not create a second category configuration aggregate.
+- Add validation, normalization, immutable publication behavior, and legacy compatibility tests.
+- Reuse existing API draft/publish/history JSON lifecycle.
+- Do not change runtime matching algorithms or category-specific policy enforcement.
+
+EXACT NEXT ACTION:
+Implement the smallest typed category metadata extension on this branch, then source-review, CI, PR, merge, and record completion.
+
+
+## Phase 4 Category metadata — implementation checkpoint
+- Added QuickLaunchCategory typed contract rather than creating a parallel category aggregate.
+- Extended categories with optional purchaser-facing description and optional enabled state.
+- Added validation for blank and duplicate normalized purchaser-facing labels while retaining existing stable-key validation.
+- Publish snapshots normalize optional descriptions, preserve explicit enabled state (including false), and deep-freeze category objects/arrays.
+- Added focused tests for normalization, immutability, invalid labels, and legacy categories without metadata.
+- Existing API draft/publish/history lifecycle remains reused because categories are part of the existing aggregate snapshot.
+- IMPLEMENTATION COMMITS: c5029fc3034e27cd2e9a1545cd56f4cb965d7711, b09352ccf92348b7ebb3818dbf463dcf122b2342.
+- EXACT NEXT ACTION: source-level sanity review, then PR + CI. Do not broaden into runtime category policy or matching algorithm changes.
+
+
+## Quick Launch Category Metadata PR checkpoint
+- Source-level sanity review completed: optional metadata is additive, explicit enabled=false is preserved, normalized labels are validated, and legacy key/displayName-only snapshots remain compatible.
+- PR #19 opened: https://github.com/satoshi620519/universal-matching-platform/pull/19
+- HEAD CHECKPOINT: 86b62405edcd0ba269fbb517ef839e8aff49fda5
+- EXACT NEXT ACTION: fetch PR #19 CI. If all required checks pass, merge and record completion; otherwise inspect only the failing diagnostic and apply the smallest evidence-based fix.
