@@ -88,7 +88,7 @@ export class ProfileDiscoveryController {
     if (!profile) throw new NotFoundException('profile not found');
     return projectProfile(
       profile,
-      { accountId: principal.accountId, privileged: await this.admin.has(principal.accountId, 'manage-moderation') },
+      { accountId: principal.accountId, privileged: await this.admin.can(principal.accountId, 'manage-moderation') },
       PUBLIC_PROJECTION,
       PUBLIC_CORE_PROJECTION,
     );
