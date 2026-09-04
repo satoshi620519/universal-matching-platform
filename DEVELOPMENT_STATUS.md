@@ -3081,3 +3081,184 @@ Implement the smallest typed Quick Launch contract descriptor + focused tests, t
 - Phase 4 is closed.
 - Before implementation, reconcile MASTER_DEVELOPMENT_ROADMAP.md and current main to select the earliest incomplete dependency-ordered milestone after Phase 4.
 - Preserve completed Phase 4 domains and Phase 5 UX work; do not reopen them unless evidence identifies a defect.
+
+
+## Next dependency-ordered milestone — Phase 6 Authentication and Account System
+CURRENT PHASE: Phase 6
+CURRENT MILESTONE: Authentication and account system specification reconciliation
+STATUS: Ready for implementation planning
+
+EVIDENCE:
+- Phase 4 is closed on main after PR #21.
+- Phase 5 UX work is already documented as an existing completed platform contract and is explicitly excluded from reopening unless a defect is found.
+- The roadmap's next incomplete dependency-ordered implementation phase is Phase 6 Authentication and Account System.
+- Existing architecture decisions already establish provider-neutral, API-owned authentication with email/password, verification, and reset capabilities, but Phase 6 requires a coherent implementation specification before major feature coding.
+
+SCOPE BOUNDARY:
+- Start with specification reconciliation and existing-code inventory before creating auth runtime modules.
+- Cover email authentication, password reset, verification flows, session management, device/session security, account deletion, and privacy controls.
+- Preserve provider-neutral architecture and backend-authoritative security boundaries.
+- Record supported contracts and deferred provider selections before implementation.
+
+EXACT NEXT ACTION:
+Inventory existing authentication/account code and specifications, identify genuinely missing Phase 6 contracts, then add the smallest authoritative Authentication and Account System specification before runtime implementation.
+
+
+## Phase 6 Authentication and Account System — specification reconciliation checkpoint
+- Repository inventory found substantial prior boundary documentation for identity, credential persistence planning, email/password implementation boundaries, verification separation, and account deletion lifecycle.
+- No single authoritative AUTHENTICATION_SYSTEM_SPEC.md existed to reconcile Phase 6 scope and prevent parallel implementations.
+- Added AUTHENTICATION_SYSTEM_SPEC.md as the Phase 6 authoritative capability and lifecycle contract.
+- Explicitly reuses existing account deletion and verification boundaries; does not select OAuth/OIDC providers, token formats, password hashing algorithms, or delivery providers.
+- Implementation order now requires credential persistence -> password verification/replacement -> recovery -> server-authoritative sessions -> verification integration -> deletion/privacy integration -> HTTP adapters.
+- IMPLEMENTATION CHECKPOINT: 5091ea2f55b84ac217513cbc20f64f322b9beb30.
+- EXACT NEXT ACTION: inspect actual authentication identity persistence/database implementation against the spec and identify the smallest genuinely missing credential/session contract; do not create parallel auth models.
+
+
+## Phase 6 authentication persistence reconciliation — credential boundary checkpoint
+- Actual persistence inventory confirms authentication_identities (0002) and password_credentials (0005) already exist; earlier Phase 6 planning must not recreate either table.
+- password_credentials is identity-linked, opaque-hash-only, lifecycle-aware, and separate from accounts exactly as the prior persistence plan required.
+- Missing implementation contract was the typed domain/repository boundary; added PasswordCredentialRecord and PasswordCredentialRepository without choosing a hash algorithm or adding transport/session formats.
+- Verification eligibility is explicitly status-gated; replacement/disable operations are repository-owned lifecycle transitions.
+- Focused tests cover valid identity linkage, opaque-hash requirement, and disabled verification behavior.
+- IMPLEMENTATION CHECKPOINT: 320187ad90e4771322804596f5997185c0dfae4c.
+- EXACT NEXT ACTION: inventory existing session persistence/contracts before adding any session model; if persistence already exists, add only the smallest missing lifecycle contract.
+
+
+## Phase 6 authentication session reconciliation — implementation checkpoint
+- Repository inventory found no existing authentication_sessions persistence or SessionRepository contract, while authentication identities and password credentials already exist.
+- Added the smallest missing session persistence as migration 0020_create_authentication_sessions.sql linked to existing accounts and authentication_identities.
+- Session persistence stores lifecycle metadata and opaque server-side security context only; it does not select token signing, JWT, cookies, bearer formats, or client authorization claims.
+- Added typed AuthenticationSessionRecord/Repository lifecycle contract with create, active lookup/list, individual revoke, and revoke-all-for-account operations.
+- Active status is strictly derived from server-authoritative revocation and expiry state.
+- Focused tests cover valid lifecycle, revocation/expiry inactivity, and issuance/expiry invariant.
+- IMPLEMENTATION CHECKPOINT: 0c66bc02edc4e79ff6d3f8acbc9af8494fd1a04c.
+- EXACT NEXT ACTION: reconcile password recovery/reset persistence and existing verification flow before implementing any reset runtime service.
+
+
+## Phase 6 password recovery reconciliation — implementation checkpoint
+- Inventory found verification_requests/outcomes are identity-level verification workflows and must not be repurposed as password-reset secrets.
+- No password recovery persistence or lifecycle contract existed.
+- Added password_recovery_requests as a dedicated, identity-linked, opaque-secret-hash lifecycle with active/consumed/expired/revoked states and expiry invariant.
+- Added typed PasswordRecoveryRecord/Repository boundary with consume and revoke-active-for-identity operations.
+- Recovery usability requires active + unconsumed + unrevoked + unexpired; raw secrets are intentionally outside persistence and API projections.
+- Focused tests cover valid use, consumed/revoked/expired rejection, missing secret hash, and invalid expiry ordering.
+- IMPLEMENTATION CHECKPOINT: 4fb255bb79ec807487cbeaf478f8f99159f2ffad.
+- EXACT NEXT ACTION: reconcile existing password sign-in/verification runtime services against the new credential and recovery boundaries, then implement only the smallest missing service contract before HTTP adapters.
+
+
+## Phase 6 password sign-in core reconciliation — implementation checkpoint
+- Initial broad code search missed the existing apps/api/src/auth runtime surface; direct auth inventory confirmed substantial prior identity, credential repository, session issuance, revocation, and request-principal infrastructure.
+- No email/password sign-in orchestration service existed, so added only that missing core service rather than recreating sessions or repositories.
+- EmailPasswordAuthenticationService composes identity lookup, credential lookup, injected password-hash verification, and existing session issuance behind provider-neutral interfaces.
+- Session issuance occurs only after identity resolution + active credential status + successful password verification.
+- Disabled credentials fail before verifier execution; invalid credentials never issue a session.
+- No password algorithm, token format, JWT, cookie policy, controller, or provider-specific adapter was selected.
+- Focused tests cover successful issuance, invalid credential rejection, and disabled-credential short-circuiting.
+- IMPLEMENTATION CHECKPOINT: 7dcbebfed1c92806dbb9f42c70eb7d7e3bf270ca.
+- EXACT NEXT ACTION: inventory password reset runtime/service support against PasswordRecoveryRecord and existing session revocation infrastructure; implement only the missing recovery completion orchestration, including credential replacement and revoke-all-sessions boundary.
+
+
+## Phase 6 password reset completion reconciliation — implementation checkpoint
+- Existing runtime already provided password credential replacement and individual session revocation, but lacked password recovery repository runtime and account-wide session revocation.
+- Added only the missing recovery completion orchestration: validate usable recovery -> resolve identity/account -> hash replacement password through injected boundary -> replace credential -> consume recovery -> revoke all active account sessions.
+- Added PasswordRecoveryRepository runtime contract without exposing raw recovery secrets.
+- Extended existing SessionRepository/PrismaSessionRepository with revokeAllForAccount rather than creating a parallel session system.
+- Completion performs no side effects for unusable recovery records.
+- Focused tests assert successful ordered completion and zero side effects for consumed recovery.
+- IMPLEMENTATION CHECKPOINT: 5b8cfda2b7bd761593d3ee23b3f0f0b2e72e6001.
+- EXACT NEXT ACTION: reconcile dependency injection/module wiring and database migration runtime support for newly added Phase 6 recovery/session contracts, then run focused tests/typecheck before expanding HTTP endpoints.
+
+
+## Phase 6 runtime wiring and persistence reconciliation — checkpoint
+- Direct AppModule inventory found Phase 6 runtime wiring is centralized in AppModule rather than a separate auth module.
+- Existing PasswordCredentialRepository was not explicitly bound in DI; Phase 6 recovery/reset wiring exposed and corrected this missing binding.
+- Added PrismaPasswordRecoveryRepository and registered PasswordRecoveryRepository + PasswordResetCompletionService in AppModule.
+- Added PasswordRecoveryRequest mapping to the existing Prisma schema and linked it to AuthenticationIdentity.
+- Migration artifacts are append-only and the database package already has ordered transactional execution support; new recovery migration remains versioned as 0021.
+- IMPORTANT: repository contains overlapping historical authentication-session migration artifacts/contracts from earlier work; do not add another session migration. Existing Prisma runtime is authoritative for current API persistence wiring.
+- VALIDATION GATE NEXT: run API Prisma generation, focused auth tests, and typecheck before adding recovery HTTP transport.
+- IMPLEMENTATION CHECKPOINT: 20a6922e8a496681ed6b8c9327599ed8ebb80c34.
+- EXACT NEXT ACTION: inspect current CI/workflow and package validation scripts, then run the narrowest available validation sequence for the Phase 6 branch and fix only demonstrated failures.
+
+
+## Phase 6 validation strategy checkpoint
+- CI inventory confirmed the repository's authoritative validation order: migration build verification -> PostgreSQL migration integration -> typecheck -> lint -> test -> matching concurrency integration -> build.
+- API package typecheck already performs Prisma generation first, so validation must not manually assume generated client state.
+- The Phase 6 branch currently has no dedicated pull request/workflow run surfaced through the connected GitHub context, so CI results cannot be truthfully inferred without opening/running a PR workflow.
+- Do not claim Phase 6 tests/typecheck passed yet. Next validation must obtain actual execution output.
+- EXACT NEXT ACTION: reconcile the Phase 6 branch against the current integration base and inspect changed-file/package consistency before opening a validation PR; then use actual CI diagnostics to fix only demonstrated failures.
+
+
+## Phase 6 integration reconciliation — PR validation checkpoint
+- Compared Phase 6 directly against current main: branch is 34 commits ahead, 0 behind, with 21 changed files.
+- Main already contains the current AuthenticationSession Prisma model; Phase 6 does not alter that model, but adds account-wide revokeAllForAccount behavior to the existing repository.
+- Historical migration 0020 on Phase 6 has a schema shape inconsistent with the current Prisma AuthenticationSession model (different columns). This is an evidence-based migration compatibility risk and is explicitly called out for CI/DB integration validation rather than guessed away.
+- Password recovery adds a separate 0021 migration plus matching Prisma model/repository wiring.
+- Opened validation PR #22 against current main to obtain actual CI diagnostics: https://github.com/satoshi620519/universal-matching-platform/pull/22
+- PR intentionally states that validation has not yet been claimed successful.
+- EXACT NEXT ACTION: fetch PR #22 workflow/check results. If failures occur, inspect exact logs and fix only demonstrated defects; if all required checks pass, merge and record Phase 6 completion.
+
+
+## Phase 6 CI failure diagnosis and migration repair — checkpoint
+- PR #22 CI produced a real PostgreSQL migration failure before typecheck/lint/test/build.
+- Exact failure: migration 0020 defined authentication_sessions.account_id as TEXT while accounts.id is UUID; PostgreSQL rejected the foreign key with SQLSTATE 42804.
+- Root cause was an existing historical migration/runtime schema divergence, not a speculative Phase 6 application-service failure.
+- Repaired 0020 to match the current authoritative Prisma/runtime session shape: UUID ids/account ids, authentication_method, expires_at, revoked_at, credential_hash, created_at, and compatible indexes.
+- Did not create another authentication_sessions table or parallel migration.
+- Repair commit: 876b84c4b20569bf58596552c972e5cec5a0fa01.
+- EXACT NEXT ACTION: fetch PR #22's new head SHA and actual rerun results; confirm migration integration first, then diagnose subsequent validation stages one failure at a time.
+
+
+## Phase 6 second CI migration diagnosis — password recovery repair
+- After the 0020 authentication_sessions repair, CI advanced to migration 0021 and exposed the next real failure.
+- Exact PostgreSQL failure: password_recovery_requests.authentication_identity_id was TEXT while authentication_identities.id is UUID (SQLSTATE 42804).
+- This confirms the migration integration gate is successfully uncovering historical/runtime type drift sequentially.
+- Repaired 0021 to align with the authoritative Prisma schema: UUID id/authentication_identity_id, unique secret_hash, TIMESTAMPTZ(6) timestamps, created_at, lifecycle status check, expiry check, and active lookup index.
+- Repair commit: 3eaa8e456d691a5d16fb5acb61bb149d92eea57a.
+- No application service behavior was changed; only demonstrated database schema incompatibility was repaired.
+- EXACT NEXT ACTION: fetch the CI runs for head 3eaa8e456d691a5d16fb5acb61bb149d92eea57a. Confirm migration integration passes before moving to typecheck diagnostics; process subsequent failures sequentially.
+
+
+## Phase 6 typecheck diagnosis and test-double repair — checkpoint
+- Migration integration now passes completely through 0021; CI advanced to API Typecheck.
+- Exact typecheck failure: PasswordRecoveryRepository gained create and revokeActiveForAuthenticationIdentity methods, but PasswordResetCompletionService unit-test doubles still implemented the older partial contract.
+- Repaired only the affected test doubles to satisfy the expanded repository contract; production reset orchestration was unchanged.
+- Repair commit: 13625fbb0217c292180979e42f66d192cd34cd0e.
+- Matching Concurrency Gate is running independently and remains in progress; do not infer its result yet.
+- EXACT NEXT ACTION: fetch CI results for head 13625fbb0217c292180979e42f66d192cd34cd0e. Confirm Typecheck, then continue sequentially through lint/test/build failures if any.
+
+
+## Phase 6 live CI progression checkpoint
+- Head commit 51b27f2ebbe52e8a51134c2711de1d65d49290f0 is under active CI validation.
+- CI has now actually passed: dependency install, packaged migration verification, PostgreSQL migration integration, Typecheck, and Lint.
+- Test is currently running; Matching concurrency integration and Build remain pending.
+- Matching Concurrency Gate is running independently in parallel.
+- Do not make speculative code changes while these gates are in progress.
+- EXACT NEXT ACTION: fetch the completed CI and concurrency workflow results; if a gate fails, inspect its exact diagnostics and repair only that demonstrated failure. If all gates pass, perform final PR status review and merge Phase 6.
+
+
+## Phase 6 validation rerun checkpoint
+- Latest documentation checkpoint commit e87e93e6dd69b0527e8742379436845cbcb3a44b triggered fresh CI and Matching Concurrency workflows.
+- Both workflows are currently installing dependencies; no new validation failure has been produced.
+- Previous CI evidence remains valid for the earlier head, but final merge approval must be based on completed checks for the latest head.
+- No code changes were made while the fresh validation run is pending.
+- EXACT NEXT ACTION: poll completed workflow results for CI run 33825017229 and Matching Concurrency Gate 33825017222, then merge only if all required checks pass.
+
+
+## Phase 6 concurrency validation checkpoint
+- Latest HEAD 328281f42ec7614f4dd45cea3c97899da69a8b1a is under CI run 2160.
+- Matching Concurrency Gate run 187 PASSED completely, including isolated PostgreSQL reciprocal transition evidence and gate attestation.
+- Main CI dependency installation passed and migration verification is currently running; subsequent migration/typecheck/lint/test/build gates remain pending.
+- This independently confirms the repository's concurrency evidence remains green on the latest Phase 6 head.
+- No speculative code changes made.
+- EXACT NEXT ACTION: wait for CI run 2160 completion. On failure inspect exact diagnostics; on full success perform final PR review and merge.
+
+
+## Phase 6 final validation progression checkpoint
+- Latest HEAD 0fabcc6fa6e9c4e00c2df0af6556671e4bacebf8 is under CI run 2162.
+- Packaged migration verification PASSED.
+- PostgreSQL migration command integration PASSED.
+- Typecheck is actively running; Lint/Test/Build remain pending.
+- Matching Concurrency Gate run 188 PASSED completely on the same latest validation cycle.
+- No code changes made while validation is active.
+- EXACT NEXT ACTION: obtain CI 2162 completion. If Typecheck and subsequent gates pass, final-review PR #22 and merge; otherwise fix only exact reported failures.

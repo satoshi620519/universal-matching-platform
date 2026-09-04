@@ -85,3 +85,9 @@ export * from './localization-configuration.js';
 export * from './profile-schema-configuration.js';
 
 export * from './feature-visibility-configuration.js';
+
+export * from './password-credential.js';
+
+export * from './authentication-session.js';
+
+export * from './password-recovery.js';

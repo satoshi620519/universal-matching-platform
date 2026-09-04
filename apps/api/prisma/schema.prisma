@@ -41,6 +41,7 @@ model AuthenticationIdentity {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
   account Account @relation(fields: [accountId], references: [id])
   passwordCredential PasswordCredential?
+  passwordRecoveryRequests PasswordRecoveryRequest[]
   @@unique([providerType, providerSubject])
   @@index([accountId])
   @@map("authentication_identities")
@@ -127,6 +128,21 @@ model PasswordCredential {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
   authenticationIdentity AuthenticationIdentity @relation(fields: [authenticationIdentityId], references: [id], onDelete: Cascade)
   @@map("password_credentials")
+}
+
+model PasswordRecoveryRequest {
+  id String @id @db.Uuid
+  authenticationIdentityId String @map("authentication_identity_id") @db.Uuid
+  secretHash String @unique @map("secret_hash")
+  status String
+  requestedAt DateTime @map("requested_at") @db.Timestamptz(6)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz(6)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  authenticationIdentity AuthenticationIdentity @relation(fields:[authenticationIdentityId], references:[id], onDelete:Cascade)
+  @@index([authenticationIdentityId, expiresAt])
+  @@map("password_recovery_requests")
 }
 
 model AuthenticationSession {
