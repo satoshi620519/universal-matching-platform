@@ -8,7 +8,7 @@ describe('PasswordResetCompletionService',()=>{
   it('replaces credential, consumes recovery, and revokes all sessions in order',async()=>{
     const events:string[]=[];
     const service=new PasswordResetCompletionService(
-      {findById:async()=>recovery,consume:async()=>{events.push('consume');}},
+      {create:async()=>recovery,findById:async()=>recovery,consume:async()=>{events.push('consume');},revokeActiveForAuthenticationIdentity:async()=>{}},
       {findById:async()=>({id:'i1',accountId:'a1'})},
       {replacePasswordHash:async()=>{events.push('replace');return {} as never;}} as never,
       {hash:async()=>{events.push('hash');return 'new-hash';}},
@@ -21,7 +21,7 @@ describe('PasswordResetCompletionService',()=>{
   it('does nothing for unusable recovery',async()=>{
     let sideEffects=0;
     const service=new PasswordResetCompletionService(
-      {findById:async()=>({...recovery,status:'consumed' as const,consumedAt:now}),consume:async()=>{sideEffects++;}},
+      {create:async()=>recovery,findById:async()=>({...recovery,status:'consumed' as const,consumedAt:now}),consume:async()=>{sideEffects++;},revokeActiveForAuthenticationIdentity:async()=>{sideEffects++;}},
       {} as never,{} as never,{hash:async()=>{sideEffects++;return 'x';}},{revokeAllForAccount:async()=>{sideEffects++;}},
     );
     expect((await service.complete({recoveryId:'r1',newPassword:'x',now})).ok).toBe(false);
