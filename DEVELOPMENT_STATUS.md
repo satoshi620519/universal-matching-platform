@@ -2856,22 +2856,38 @@ COMPLETED:
 - Repository search found no source-level implementation hit for Quick Launch implementation, legal/support link configuration, profile-schema Quick Launch UI, feature-flag Quick Launch UI, or a configuration route.
 - Roadmap still identifies Phase 4 Universal Configuration Engine as a major prerequisite/commercial differentiator with Quick Launch and Advanced Customization levels.
 
-IN PROGRESS:
-- Verify existing Phase 4 specifications and actual source boundaries so the next milestone can be selected without guessing or duplicating any partially completed configuration work.
+COMPLETED RECONCILIATION:
+- Located and read CONFIGURATION_ARCHITECTURE.md, CONFIGURATION_SYSTEM_SPEC.md, LEGAL_SUPPORT_QUICK_LAUNCH_SPEC.md, MATCHING_CATEGORY_CONFIGURATION.md, and MATCHING_RULE_CONFIGURATION.md.
+- Located the existing Quick Launch aggregate and lifecycle implementation: domain `packages/domain/src/quick-launch-configuration.ts`, API controller/service/repository under `apps/api/src/configuration/`, and immutable draft/publish/history semantics.
+- Verified existing aggregate already covers application name, branding/theme extension, localization, profile schema, feature visibility, countries, categories, onboarding, and legal/support metadata.
+- Verified legal/support validation and normalization tests already exist.
+- The earlier source search was incomplete because repository search did not surface several existing files; tree/source inspection corrected that assumption.
 
-NOT STARTED:
-- New implementation is intentionally blocked until the relevant configuration specifications and existing source contracts are inspected.
+PHASE 4 COMPLETION MATRIX:
+- Application name: implemented
+- Branding/theme: implemented domain aggregate
+- Localization/languages/geography: implemented aggregate and validation
+- Profile schema/onboarding: implemented aggregate and validation
+- Feature visibility: implemented aggregate and validation
+- Matching categories: basic categories implemented; richer category metadata integration remains a documented next integration candidate
+- Matching rules/presets: documented as a separate configuration domain; no matchingRules field is present in QuickLaunchDraft
+- Legal/support links: implemented end-to-end in aggregate validation/publication; API lifecycle reuses existing draft/publish/history
+
+NEXT MILESTONE SELECTED:
+- Implement matching rule presets as the earliest clearly missing Quick Launch configuration domain, because its specification explicitly requires integration into the existing aggregate/review/publish snapshots and the current aggregate has no matchingRules contract.
+- Keep scope limited to typed rule metadata + validation + immutable publication compatibility first. Do not redesign the already-existing configuration lifecycle or repeat legal/support/category work.
 
 FILES CHANGED:
 - DEVELOPMENT_STATUS.md
 
 KNOWN ISSUES:
-- None confirmed; absence of search hits is not treated as proof of total feature absence until relevant specifications/source are inspected.
+- None confirmed.
 
 TEST RESULTS:
-- No implementation changes yet; no CI run required at this checkpoint.
+- Reconciliation/documentation only; no implementation CI required.
 
 EXACT NEXT ACTION:
-1. Locate and read the Phase 4 configuration specifications and any existing configuration-related source/API/database contracts.
-2. Build a concise completion matrix against Phase 4 roadmap requirements (app name, branding, terminology, languages, geography, profile questions, matching categories/rules, onboarding, feature visibility, legal/support links).
-3. Select the smallest earliest missing dependency-ordered configuration milestone, document its boundary, then create a dedicated implementation branch only after that evidence review.
+1. Read the existing matching rule domain contract and matching-engine integration boundaries.
+2. Create a dedicated implementation branch from this checkpoint.
+3. Add the smallest typed `matchingRules` Quick Launch extension with validation and publication immutability/legacy compatibility tests.
+4. Only after the domain contract is green, integrate API persistence/transport if required by the existing aggregate lifecycle (expected to flow automatically through existing JSON snapshots).
