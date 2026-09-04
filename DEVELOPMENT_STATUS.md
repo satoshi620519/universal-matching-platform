@@ -2948,3 +2948,14 @@ SCOPE BOUNDARY:
 
 EXACT NEXT ACTION:
 Implement the smallest typed category metadata extension on this branch, then source-review, CI, PR, merge, and record completion.
+
+
+## Phase 4 Category metadata — implementation checkpoint
+- Added QuickLaunchCategory typed contract rather than creating a parallel category aggregate.
+- Extended categories with optional purchaser-facing description and optional enabled state.
+- Added validation for blank and duplicate normalized purchaser-facing labels while retaining existing stable-key validation.
+- Publish snapshots normalize optional descriptions, preserve explicit enabled state (including false), and deep-freeze category objects/arrays.
+- Added focused tests for normalization, immutability, invalid labels, and legacy categories without metadata.
+- Existing API draft/publish/history lifecycle remains reused because categories are part of the existing aggregate snapshot.
+- IMPLEMENTATION COMMITS: c5029fc3034e27cd2e9a1545cd56f4cb965d7711, b09352ccf92348b7ebb3818dbf463dcf122b2342.
+- EXACT NEXT ACTION: source-level sanity review, then PR + CI. Do not broaden into runtime category policy or matching algorithm changes.
