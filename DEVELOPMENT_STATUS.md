@@ -3963,3 +3963,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Search is applied inside the existing eligibility pipeline and cannot bypass category/geographic/self/block/safety exclusions; no search provider or duplicate repository subsystem was introduced.
 - CI #2648 was still running at the checkpoint: migration, Typecheck, and Lint had passed; Test was active. Matching Concurrency Gate #496 completed SUCCESS.
 - Next exact task: inspect CI #2648 completion, then perform final Phase 9 acceptance audit including card/list/grid presentation boundary and compatibilityScore sorting behavior before declaring completion.
+
+- Latest Phase 9 CI #2664 was running at checkpoint; Matching Concurrency Gate #508 was also running, so no success was inferred before completion.
+- Acceptance audit confirmed the web Discovery UI previously had only an implicit grid and no reusable presentation boundary, while the roadmap explicitly requires card/list/grid.
+- Added a reusable DiscoveryPresentation boundary with explicit card/list/grid modes, accessible mode controls, responsive styling, and focused regression coverage.
+- Did not duplicate discovery fetching, filtering, search, safety logic, or matching behavior; presentation changes consume the existing server-authorized results.
+- Remaining Phase 9 acceptance item: compatibilityScore sorting is intentionally reserved in the domain contract but not yet executable because score calculation occurs after candidate retrieval; resolve this boundary correctly (score-before-pagination) rather than faking database ordering.
+- Next exact task: inspect current CI completion, then implement engine-level compatibility scoring order before pagination or formally constrain the API contract if architecture requires a separate ranking endpoint.
