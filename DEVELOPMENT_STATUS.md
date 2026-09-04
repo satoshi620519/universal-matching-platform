@@ -4014,3 +4014,15 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Created REALTIME_MESSAGING_SPEC.md before implementation as required by the development operating rules.
 - Specification defines durable REST versus replaceable realtime delivery, server-derived identity, participant authorization, block/report integration, read state, ephemeral typing, media references, policy-driven deletion, and scale boundaries.
 - Next exact task: audit existing database schema and block/report services against this specification, then add only the missing conversation/message domain and persistence foundations.
+
+
+### 2026-09-04 — Phase 10 authoritative repository reconciliation
+- Corrected the previous checkpoint's stale audit conclusion: the branch already contained substantial messaging foundations (Conversation/Participant/Message persistence, direct-pair race handling, participant authorization, mutual-match entry, durable notifications, SSE realtime publication, reconnect reconciliation contracts, and communication safety enforcement).
+- No duplicate messaging subsystem was created. REALTIME_MESSAGING_SPEC.md is retained as the acceptance contract and existing code is now audited against it.
+- Gap audit identified missing durable participant read state and policy-driven message deletion state.
+- Added last_read_at to conversation participants and deleted_at soft-delete state to messages, with a forward migration and indexes.
+- Added authorized repository transitions and HTTP endpoints for conversation read state and sender-owned soft deletion.
+- Participant history now redacts the body of soft-deleted messages while retaining the durable record for moderation/audit retention.
+- Added focused authorization/lifecycle regression coverage.
+- Remaining Phase 10 audit items: verify block relationship integration (not just communication-wide safety restriction), report target integration for message/conversation IDs, ephemeral typing event boundary, and media-reference policy.
+- Next exact task: inspect fresh CI for the lifecycle additions, fix only concrete failures, then close the remaining Phase 10 acceptance gaps without reimplementing existing realtime infrastructure.
