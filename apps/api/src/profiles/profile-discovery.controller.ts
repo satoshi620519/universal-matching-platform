@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Headers, Param, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CategoryService } from './category.service.js';
@@ -43,7 +43,7 @@ export class ProfileDiscoveryController {
   async updateMyProfileMetadata(@Body() body: { avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-metadata-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
-    if (!existing) throw new Error('profile not found');
+    if (!existing) throw new NotFoundException('profile not found');
     return this.profiles.update(existing.id, {
       avatar: body.avatar,
       gallery: body.gallery,
