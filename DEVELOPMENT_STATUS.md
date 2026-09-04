@@ -4001,3 +4001,16 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Runtime repository behavior was already correct: configurable id direction was introduced by Phase 9 sorting, but the old test still required the literal pre-sorting string orderBy: { id: 'asc' }.
 - Updated only the stale assertion to verify both configurable id direction and deterministic ascending fallback. No repository behavior was changed.
 - Fresh CI for commit 4cbe2ea is now the sole Phase 9 completion gate. If green, record Phase 9 complete and move to Phase 10 specification-first work; no Phase 10 messaging implementation begins before the specification audit.
+
+### 2026-09-04 — Phase 9 completion validated
+- CI #2720 on the latest Phase 9 checkpoint completed SUCCESS.
+- Matching Concurrency Gate #539 also completed SUCCESS.
+- Final CI evidence confirms the corrected repository contract test alongside migrations, PostgreSQL integration, Typecheck, Lint, Test, concurrency integration, and Build.
+- Phase 9 is complete: card/list/grid presentation, filters/preferences, field-whitelisted search, deterministic sorting, geographic constraints, configurable compatibility scoring, published purchaser rule resolution, mutual-interest foundation, and replaceable matching strategies are implemented.
+- Compatibility pagination scale limitation remains explicitly deferred to Phase 20 and is not represented as completed large-scale ranking.
+
+### 2026-09-04 — Phase 10 specification-first start
+- Confirmed no existing messaging/conversation implementation was present, avoiding duplicate subsystem work.
+- Created REALTIME_MESSAGING_SPEC.md before implementation as required by the development operating rules.
+- Specification defines durable REST versus replaceable realtime delivery, server-derived identity, participant authorization, block/report integration, read state, ephemeral typing, media references, policy-driven deletion, and scale boundaries.
+- Next exact task: audit existing database schema and block/report services against this specification, then add only the missing conversation/message domain and persistence foundations.
