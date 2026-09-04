@@ -49,6 +49,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     await expect(c.getMyProfileCompletion('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
   });
 
+  it('maps GET of a missing authenticated profile to HTTP 404', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue(null);
+    await expect(c.getMyProfile('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
   it('hydrates and updates only the authenticated account profile', async () => {
     const c=controller(); const repo=(c as any).profileRepository; const update=vi.spyOn((c as any).profiles,'update');
     await c.getMyProfile('Bearer test');
