@@ -279,6 +279,12 @@ model Profile {
   scopeKind String @map("scope_kind")
   countryCode String? @map("country_code")
   regionCode String? @map("region_code")
+  avatarId String? @map("avatar_id")
+  avatarStorageKey String? @map("avatar_storage_key")
+  avatarStatus String? @map("avatar_status")
+  biography String?
+  verificationStatus String @default("unverified") @map("verification_status")
+  galleryMedia ProfileGalleryMedia[]
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
   account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
