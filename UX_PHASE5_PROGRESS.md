@@ -129,7 +129,11 @@
 - Added an explicit accessible label to the public main navigation.
 - No backend, authentication, discovery, notification, conversation, or realtime behavior was changed.
 - Implementation commit: `5f52920ed5fe754a68f6dcd751271124c24dd621`.
-- Next: inspect responsive and state-coverage consistency for the integrated screens, then record findings and run CI for this final coherent quality slice before opening a PR.
+- Final integrated source review exposed one markup regression in Access navigation: a partially migrated raw opening `<button>` was paired with a shared `Button` closing tag. Corrected immediately as a syntax/primitive consistency fix.
+- Fix commit: `74bee9dd5dc94998e3a1aef5f9575c4b1fa6a533`.
+- Responsive coverage review: existing breakpoints cover the major Home, Access, Dashboard, Conversation, Discovery, and Notification grid collapses. No evidence-based layout rewrite is needed in this slice.
+- State coverage review: authentication has loading/success/error feedback; account has loading/error states; notifications has loading/empty/error; discovery has loading/empty/error feedback; conversation has ready/error/empty/realtime state. No missing state requires a speculative redesign.
+- Next: run repository CI on the final quality-pass branch. If successful, open one final Phase 5 PR; if it fails, inspect only the reported diagnostic and apply the smallest targeted fix.
 
 ## Next continuation point
 
