@@ -3833,3 +3833,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Inspected packages/domain/src/profile-projection.ts and confirmed ProfileCoreProjectionPolicy and projectProfile are exported via the domain barrel; corrected the public projection invocation to the actual ProfileViewer contract.
 - Commit: 21dee68 (domain API alignment fix).
 - Next exact action: validate the corrected privacy projection compilation in CI before continuing Phase 7 completion audit.
+
+
+### 2026-09-04 — Phase 7 privacy projection compile repair (final import alignment)
+- Re-audited the exact controller source after CI #2354 rather than assuming the prior correction was sufficient.
+- Confirmed the remaining compile break was stale/missing imports in profile-discovery.controller.ts: projectProfile and ProfileCoreProjectionPolicy were referenced but absent from the @universal/domain import.
+- Restored only the required domain imports and removed the unused OWNER_PROJECTION constant; no privacy behavior was duplicated or changed.
+- Commit: 7dd1eb8 (compile import alignment).
+- Next exact action: CI validation of consolidated privacy projection, then continue Phase 7 completion audit from the recorded checkpoint.
