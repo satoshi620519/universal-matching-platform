@@ -86,10 +86,14 @@ export class ProfileDiscoveryController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-public' });
     const profile = await this.profileRepository.findByAccountId(accountId);
     if (!profile) throw new NotFoundException('profile not found');
+    const fieldSchema = await this.schemaFor(profile.categoryId);
+    const projectionPolicy: ProfileProjectionPolicy = Object.fromEntries(
+      Object.entries(fieldSchema).map(([key, rule]) => [key, rule.visibility ?? 'public']),
+    );
     return projectProfile(
       profile,
       { accountId: principal.accountId, privileged: await this.admin.can(principal.accountId, 'manage-moderation') },
-      PUBLIC_PROJECTION,
+      projectionPolicy,
       PUBLIC_CORE_PROJECTION,
     );
   }
