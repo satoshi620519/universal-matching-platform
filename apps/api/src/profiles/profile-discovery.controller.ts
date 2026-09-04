@@ -121,7 +121,7 @@ export class ProfileDiscoveryController {
   }
 
   @Get('discovery')
-  async discover(@Query('categoryId') categoryId: string, @Query('scope') scope = 'global', @Query('countryCode') countryCode: string | undefined, @Query('regionCode') regionCode: string | undefined, @Query('localityCode') localityCode: string | undefined, @Query('limit') limit = '20', @Query('cursor') cursor: string | undefined, @Query('maxDistanceMeters') maxDistanceMeters: string | undefined, @Query('sort') sort: 'id' | 'compatibilityScore' | undefined, @Query('direction') direction: 'asc' | 'desc' | undefined, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async discover(@Query('categoryId') categoryId: string, @Query('scope') scope = 'global', @Query('countryCode') countryCode: string | undefined, @Query('regionCode') regionCode: string | undefined, @Query('localityCode') localityCode: string | undefined, @Query('limit') limit = '20', @Query('cursor') cursor: string | undefined, @Query('maxDistanceMeters') maxDistanceMeters: string | undefined, @Query('sort') sort: 'id' | 'compatibilityScore' | undefined, @Query('direction') direction: 'asc' | 'desc' | undefined, @Query('search') search: string | undefined, @Query('searchFields') searchFields: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'discovery' });
     const geographicScope = this.scope({ kind: scope, countryCode, regionCode, localityCode });
     await this.requireSupportedGeography(geographicScope);
@@ -138,6 +138,7 @@ export class ProfileDiscoveryController {
       cursor,
       distanceConstraint,
       sort: createDiscoverySort(sort === undefined && direction === undefined ? undefined : { key: sort ?? 'id', direction: direction ?? 'asc' }),
+      ...(search === undefined && searchFields === undefined ? {} : { search: { term: search ?? '', fields: (searchFields ?? '').split(',') } }),
       projectionPolicy: Object.fromEntries(Object.entries(projectionPolicy).map(([key, rule]) => [key, rule.visibility ?? 'public'])),
       locationPolicy: await this.locationPrecision.resolve(),
     });
