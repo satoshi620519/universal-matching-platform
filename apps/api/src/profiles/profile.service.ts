@@ -9,6 +9,11 @@ import {
   type ProfileRepository,
   type ProfileFieldSchema,
   validateProfileFields,
+  calculateProfileCompletion,
+  validateProfileAgainstSchema,
+  type ProfileCompletion,
+  type ProfileCompletionPolicy,
+  type ProfileSchemaConfiguration,
 } from '@universal/domain';
 
 @Injectable()
@@ -39,6 +44,16 @@ export class ProfileService {
     });
     await this.profiles.save(profile);
     return profile;
+  }
+
+  async completion(id: string, input: {
+    schema: ProfileSchemaConfiguration;
+    policy?: ProfileCompletionPolicy;
+  }): Promise<ProfileCompletion> {
+    const profile = await this.profiles.findById(id);
+    if (!profile) throw new Error('profile not found');
+    validateProfileAgainstSchema(profile.fields, input.schema);
+    return calculateProfileCompletion(profile, input.schema, input.policy);
   }
 
   async update(id: string, input: {
