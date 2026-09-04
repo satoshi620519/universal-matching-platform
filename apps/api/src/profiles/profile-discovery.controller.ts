@@ -75,7 +75,9 @@ export class ProfileDiscoveryController {
   @Get('profiles/me')
   async getMyProfile(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-me' });
-    return this.profileRepository.findByAccountId(principal.accountId);
+    const existing = await this.profileRepository.findByAccountId(principal.accountId);
+    if (!existing) throw new NotFoundException('profile not found');
+    return existing;
   }
 
   @Patch('profiles/me')
