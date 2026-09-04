@@ -38,6 +38,8 @@ Typing state is ephemeral and never required for durable correctness.
 ## Media
 Media messages reference an existing authorized media object. Upload security, scanning, and storage policy are not bypassed by messaging.
 
+**Current acceptance boundary:** the repository intentionally does not yet contain a media-object storage/scanning subsystem. Phase 10 therefore does not introduce unsafe arbitrary attachment payloads. A future media message must reference a durable, ownership-checked media identifier after the media subsystem exists; raw URLs and binary payloads are not accepted as a substitute.
+
 ## Scale boundary
 Gateway fan-out must remain replaceable. The domain/service layer cannot depend directly on a specific WebSocket provider. Horizontal scale may use a broker/adapter in Phase 20.
 
