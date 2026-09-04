@@ -1,7 +1,7 @@
 import type { GeographicScope } from './geographic-scope.js';
 import type { Profile, ProfileFieldValue, ProfileMedia } from './profile.js';
+import type { ProfileFieldVisibility } from './profile-field-schema.js';
 
-export type ProfileFieldVisibility = 'public' | 'owner' | 'privileged';
 export type ProfileViewer = Readonly<{ accountId?: string; privileged?: boolean }>;
 export type ProfileProjectionPolicy = Readonly<Record<string, ProfileFieldVisibility>>;
 
