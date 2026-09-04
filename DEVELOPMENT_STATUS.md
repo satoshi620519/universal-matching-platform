@@ -3898,3 +3898,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - This prevents deployment-specific owner/privileged custom fields from leaking through discovery while preserving one schema authority.
 - Commit: 0913866.
 - Next exact action: CI validation of both projection paths, then finish avatar/gallery lifecycle and verification completion-policy audit.
+
+
+## Latest continuation checkpoint
+
+- Phase 8 localization/location precision wiring verified through CI before proceeding.
+- Distance filtering already existed; it was not reimplemented.
+- Added only the missing deployment-configurable distance presentation policy boundary.
+- Added domain policy for metric and imperial presentation, deployment setting distance.presentation, and configuration validation tests.
+- Next: verify CI for the distance presentation addition, then audit remaining Phase 8 acceptance criteria before further implementation.
