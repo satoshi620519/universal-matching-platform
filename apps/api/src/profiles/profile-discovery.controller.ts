@@ -113,7 +113,15 @@ export class ProfileDiscoveryController {
   async discover(@Query('categoryId') categoryId: string, @Query('scope') scope = 'global', @Query('countryCode') countryCode: string | undefined, @Query('limit') limit = '20', @Query('cursor') cursor: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'discovery' });
     const geographicScope = scope === 'country' && countryCode ? createGeographicScope({ kind:'country', countryCode }) : createGeographicScope({ kind:'global' });
-    return this.discovery.discover({ subjectAccountId: principal.accountId, categoryId, geographicScope, limit: Number(limit), cursor, projectionPolicy: PUBLIC_PROJECTION });
+    const projectionPolicy = await this.schemaFor(categoryId);
+    return this.discovery.discover({
+      subjectAccountId: principal.accountId,
+      categoryId,
+      geographicScope,
+      limit: Number(limit),
+      cursor,
+      projectionPolicy: Object.fromEntries(Object.entries(projectionPolicy).map(([key, rule]) => [key, rule.visibility ?? 'public'])),
+    });
   }
 
   @Post('matches/decision')
