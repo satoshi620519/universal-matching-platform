@@ -4,7 +4,7 @@ import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js'
 import { CategoryService } from './category.service.js';
 import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 import { ProfileService } from './profile.service.js';
-import { AdministrativeCapabilityAccessService } from '../administration/administrative-role-access.service.js';
+import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
