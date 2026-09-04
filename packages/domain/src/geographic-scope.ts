@@ -1,7 +1,8 @@
 export type GeographicScope =
   | Readonly<{ kind: 'global' }>
   | Readonly<{ kind: 'country'; countryCode: string }>
-  | Readonly<{ kind: 'region'; countryCode: string; regionCode: string }>;
+  | Readonly<{ kind: 'region'; countryCode: string; regionCode: string }>
+  | Readonly<{ kind: 'city'; countryCode: string; regionCode: string; localityCode: string }>;
 
 export function createGeographicScope(input: GeographicScope): GeographicScope {
   if (input.kind === 'global') return { kind: 'global' };
@@ -10,5 +11,8 @@ export function createGeographicScope(input: GeographicScope): GeographicScope {
   if (input.kind === 'country') return { kind: 'country', countryCode };
   const regionCode = input.regionCode.trim();
   if (!regionCode) throw new Error('regionCode must not be empty');
-  return { kind: 'region', countryCode, regionCode };
+  if (input.kind === 'region') return { kind: 'region', countryCode, regionCode };
+  const localityCode = input.localityCode.trim();
+  if (!localityCode) throw new Error('localityCode must not be empty');
+  return { kind: 'city', countryCode, regionCode, localityCode };
 }
