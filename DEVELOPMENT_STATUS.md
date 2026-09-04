@@ -3918,3 +3918,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Phase 8 acceptance audit confirmed: normalized geographic hierarchy, independent locale/language/timezone configuration, private precise coordinates, country/region discovery filtering, deployment-controlled public location precision, optional deployment-controlled distance matching, and regression coverage for privacy/configuration boundaries.
 - No distance-search implementation was duplicated; existing constraint/repository logic remains authoritative.
 - Phase 8 is complete. Next exact action: begin Phase 9 roadmap-to-code gap audit from the recorded master roadmap checkpoint; do not reopen completed Phase 8 work without a concrete regression.
+
+
+### 2026-09-04 — Phase 9 matching engine foundation
+- Phase 8 remains complete and was not reopened.
+- Per roadmap rule, created MATCHING_ENGINE_SPEC.md before Phase 9 implementation.
+- Existing discovery/geographic/distance/safety/mutual-transition foundations were retained as authoritative.
+- Added only the missing deterministic rule-based compatibility scoring domain boundary, reusing existing MatchingRulesConfiguration and replaceable MatchStrategy architecture.
+- Added weighted-score regression tests.
+- Next exact task: inspect CI for the Phase 9 foundation commits, then add deterministic candidate sorting/filtering only where the specification gap remains.
