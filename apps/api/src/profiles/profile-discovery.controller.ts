@@ -37,6 +37,14 @@ export class ProfileDiscoveryController {
     return this.profiles.create({ accountId: principal.accountId, categoryId: body.categoryId ?? '', fields: body.fields ?? {}, fieldSchema: await this.schemaFor(body.categoryId), geographicScope: this.scope(body.geographicScope) });
   }
 
+  @Get('profiles/me/completion')
+  async getMyProfileCompletion(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-completion' });
+    const existing = await this.profileRepository.findByAccountId(principal.accountId);
+    if (!existing) throw new Error('profile not found');
+    return this.profiles.completion(existing.id, { schema: this.completionSchema(existing.fields) });
+  }
+
   @Get('profiles/me')
   async getMyProfile(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-me' });
@@ -62,6 +70,18 @@ export class ProfileDiscoveryController {
   async decide(@Body() body: { targetAccountId?: string; decision?: 'like' | 'pass'; idempotencyKey?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-decision' });
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
+  }
+
+  private completionSchema(fields: Record<string, unknown>) {
+    return {
+      fields: Object.keys(fields).map(key => ({
+        key,
+        label: key,
+        type: 'text' as const,
+        required: true,
+        visibility: 'private' as const,
+      })),
+    };
   }
 
   private async schemaFor(categoryId?: string): Promise<ProfileFieldSchema> {
