@@ -11,6 +11,7 @@ import {
   type GeographicScope,
   type ProfileProjectionPolicy,
   type ProjectedProfile,
+  type LocationPrecisionPolicy,
 } from '@universal/domain';
 
 @Injectable()
@@ -22,7 +23,7 @@ export class DiscoveryService {
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
-  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
+  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
     const query = createDiscoveryQuery(input);
     const page = await this.profiles.discover(query);
     const subjectCountryCode = input.geographicScope.kind === 'global' ? undefined : input.geographicScope.countryCode;
@@ -39,7 +40,7 @@ export class DiscoveryService {
       }
       return candidate;
     }));
-    const items = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null).map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy));
+    const items = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null).map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy, {}, input.locationPolicy));
     return { items, ...(page.nextCursor ? { nextCursor: page.nextCursor } : {}) };
   }
 }
