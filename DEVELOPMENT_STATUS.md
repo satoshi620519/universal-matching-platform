@@ -2998,3 +2998,15 @@ SCOPE BOUNDARY:
 
 EXACT NEXT ACTION:
 Implement the smallest notification presentation configuration extension on this branch, then source-review, CI, PR, merge, and record completion.
+
+
+## Phase 4 Notification presentation preferences — implementation checkpoint
+- Added a dedicated typed purchaser-facing notification presentation contract without exposing delivery infrastructure, provider credentials, authorization, or user-owned consent choices.
+- Supported stable presentation keys: match, message, like, system.
+- Validation rejects invalid and duplicate keys.
+- Resolution supplies explicit default-enabled entries for omitted supported presentation types when the purchaser configures this domain.
+- Integrated optional notificationPresentation into QuickLaunchDraft and immutable published snapshots.
+- Legacy snapshots remain compatible because the new aggregate field is optional.
+- Added focused tests for default resolution, explicit false preservation, immutability, duplicate rejection, and legacy absence.
+- IMPLEMENTATION COMMITS: 502ec10541e311a733e50f840eeb3394e3c43dd3, ac048ab4e6d27e54bd24f01c9466d9363c9281de, e0f29019e7b2f74f6e334ec4fa273c78c70ef3de, 7f005cf3e6d7f8b7e6b9de9167c9d429a1560f3b.
+- EXACT NEXT ACTION: source-level sanity review, then PR + CI. Keep scope strictly to presentation defaults and do not broaden into notification delivery or user preference infrastructure.
