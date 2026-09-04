@@ -3808,3 +3808,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused regression coverage for category-only changes.
 - Commits: 0f76bf0 (implementation), 3c955c6 (test).
 - Next exact action: validate this isolated category-change contract correction in CI, then continue Phase 7 gap audit.
+
+
+### 2026-09-04 — Phase 7 privacy visibility implementation started
+- Continued from category/schema validation checkpoint and audited the Phase 7 roadmap requirement for privacy visibility against current transport.
+- Found that projection policy existed in discovery but there was no dedicated public profile retrieval path enforcing field visibility.
+- Added authenticated GET /profiles/:accountId with explicit public-field projection; owner GET remains owner-scoped.
+- Added regression coverage proving non-public fields are excluded from public profile responses.
+- Commits: 7bf6d0a (implementation), 54a1fbe (test).
+- Next exact action: validate CI, then continue remaining Phase 7 completion audit.
