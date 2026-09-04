@@ -3529,3 +3529,25 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - CI-validate the HTTP completion endpoint. On green, reconcile metadata write DTO/service/repository path while preserving existing create/update behavior.
+
+
+## Phase 7 HTTP completion CI diagnosis — visibility vocabulary
+CI #2246 RESULTS:
+- Packaged migrations: PASS
+- PostgreSQL migration integration: PASS
+- Typecheck: FAIL
+- Independent Matching Concurrency Gate #240: PASS.
+
+ROOT CAUSE:
+- HTTP completion schema helper used visibility='private', but the domain ProfileFieldVisibility vocabulary is 'public' | 'owner' | 'privileged'.
+- Compiler correctly rejected the transport-generated schema.
+
+FIX APPLIED:
+- Replaced invalid 'private' visibility with domain-valid 'owner'.
+- No endpoint ownership/authentication behavior changed.
+
+CURRENT STATE:
+- HTTP completion endpoint implementation remains isolated; only its schema vocabulary boundary was corrected.
+
+EXACT NEXT ACTION:
+- Revalidate CI for current head. Require Typecheck and full pipeline green before metadata write transport work.
