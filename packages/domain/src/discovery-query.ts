@@ -1,6 +1,7 @@
 import type { DistanceConstraint } from './private-location.js';
 import type { GeographicScope } from './geographic-scope.js';
 import type { Profile } from './profile.js';
+import { createDiscoverySort, type DiscoverySort } from './discovery-sorting.js';
 
 export type DiscoveryCursor = string;
 
@@ -11,6 +12,7 @@ export type DiscoveryQuery = Readonly<{
   limit: number;
   cursor?: DiscoveryCursor;
   distanceConstraint?: DistanceConstraint;
+  sort?: DiscoverySort;
 }>;
 
 export type DiscoveryPage = Readonly<{
@@ -34,6 +36,7 @@ export function createDiscoveryQuery(input: DiscoveryQuery): DiscoveryQuery {
     ...input,
     geographicScope: { ...input.geographicScope } as GeographicScope,
     ...(input.distanceConstraint ? { distanceConstraint: { ...input.distanceConstraint } } : {}),
+    sort: createDiscoverySort(input.sort),
   };
 }
 
