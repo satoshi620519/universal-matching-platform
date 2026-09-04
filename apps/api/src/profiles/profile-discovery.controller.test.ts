@@ -80,6 +80,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect(update).toHaveBeenCalledWith('p1',expect.objectContaining({ categoryId:'cat-2', fieldSchema:expect.any(Object) }));
   });
 
+  it('projects only public fields when viewing another account profile', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ accountId:'target', fields:{ displayName:'Visible', secret:'Hidden' } });
+    await expect(c.getPublicProfile('target','Bearer test')).resolves.toEqual(expect.objectContaining({ fields:{ displayName:'Visible' } }));
+  });
+
   it('hydrates and updates only the authenticated account profile', async () => {
     const c=controller(); const repo=(c as any).profileRepository; const update=vi.spyOn((c as any).profiles,'update');
     await c.getMyProfile('Bearer test');
