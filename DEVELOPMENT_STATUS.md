@@ -3750,3 +3750,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching Concurrency Gate #271 remained SUCCESS; migration, Typecheck, and Lint also passed before the focused test failure.
 - Latest fix commit: `7694ab6`.
 - Next action: validate CI on `7694ab6`; if green, record the error-contract slice complete and audit only genuinely distinct remaining Phase 7 gaps.
+
+
+### 2026-09-04 — Phase 7 profile transport error-contract validation complete
+- Latest HEAD `5b9960e` validated successfully after correcting all remaining generic missing-profile throws.
+- CI #2312: SUCCESS (migrations, Typecheck, Lint, Test, matching integration, Build).
+- Matching Concurrency Gate #273: SUCCESS.
+- Owner-scoped missing-profile transport paths now consistently map to HTTP 404 rather than generic errors.
+- Next exact action: audit the roadmap and current ProfileService/repository contracts for the next genuinely uncovered Phase 7 capability; do not reopen verification authority, completion schema, or error-contract work.
