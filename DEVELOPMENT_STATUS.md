@@ -3394,3 +3394,20 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - Validate the Phase 7 persistence slice against repository CI. Inspect exact diagnostics on failure and fix only demonstrated incompatibilities before touching ProfileService.
+
+
+## Phase 7 persistence CI diagnosis — Prisma schema mapping
+CI FAILURE DIAGNOSED FROM JOB LOGS:
+- CI #2208 and Matching Concurrency Gate #218 failed before application tests.
+- Root cause was Prisma P1012: Profile referenced ProfileGalleryMedia[] but the ProfileGalleryMedia Prisma model was absent from apps/api/prisma/schema.prisma.
+- This was a schema mapping omission, not a matching concurrency regression and not a migration execution failure.
+
+FIX APPLIED:
+- Added the missing ProfileGalleryMedia Prisma model with profile relation, composite primary key and unique profile/position constraint matching migration 0022.
+
+CURRENT STATE:
+- New branch head: 637e8d1b3034010cff454b97cb80b1aa94b9ab77.
+- No speculative application changes made.
+
+EXACT NEXT ACTION:
+- Re-run/fetch CI for current head and require Prisma generation plus PostgreSQL migration integration to pass before proceeding.
