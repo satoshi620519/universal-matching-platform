@@ -118,9 +118,28 @@
 - PR #16 CI run `33743268385` (run #2044) completed successfully across database migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency, concurrency gate, diagnostics, and build.
 - PR #16 merged into `main` as merge commit `633c1584c76e703c34a80b3b2b8b4f7284d4bec8`.
 
+## Final Phase 5 quality pass in progress
+
+- Created branch `feature/ux-phase5-final-quality-pass` from the PR #16 main checkpoint.
+- Re-read the full Phase 5 progress record before inspection; no completed primitive or screen migration was repeated.
+- Inspected integrated `main.tsx` and shared styling for remaining legacy interaction patterns.
+- Found a small remaining coherent cleanup slice: Home and access navigation still contained raw interactive controls despite the shared `Button` primitive already being available.
+- Migrated remaining Home CTA/sign-in/get-started controls and access/verification navigation buttons to shared `Button`.
+- Changed the non-functional “How it works” button into a semantic anchor targeting the existing `#experience` section.
+- Added an explicit accessible label to the public main navigation.
+- No backend, authentication, discovery, notification, conversation, or realtime behavior was changed.
+- Implementation commit: `5f52920ed5fe754a68f6dcd751271124c24dd621`.
+- Final integrated source review exposed one markup regression in Access navigation: a partially migrated raw opening `<button>` was paired with a shared `Button` closing tag. Corrected immediately as a syntax/primitive consistency fix.
+- Fix commit: `74bee9dd5dc94998e3a1aef5f9575c4b1fa6a533`.
+- Responsive coverage review: existing breakpoints cover the major Home, Access, Dashboard, Conversation, Discovery, and Notification grid collapses. No evidence-based layout rewrite is needed in this slice.
+- State coverage review: authentication has loading/success/error feedback; account has loading/error states; notifications has loading/empty/error; discovery has loading/empty/error feedback; conversation has ready/error/empty/realtime state. No missing state requires a speculative redesign.
+- Final Phase 5 PR #17 opened: https://github.com/satoshi620519/universal-matching-platform/pull/17.
+- CI must be treated as the next gate. Do not make speculative changes while checks are pending.
+- Resume procedure: fetch workflow runs for PR #17 head `5fb08ebb4d4ccfb9357f6869b5100d7c167f4e1b`; if all required checks pass, merge PR #17 and update this record. If a check fails, inspect only that diagnostic, apply the smallest targeted fix, then rerun CI.
+
 ## Next continuation point
 
-Conversation migration is complete and all major Phase 5 screen slices are integrated. Next begin the final Phase 5 integration/quality pass: inspect the integrated Web application for duplicated legacy UI patterns, semantic/accessibility consistency, responsive behavior, loading/empty/error state coverage, and cross-screen interaction regressions. Reuse existing primitives; do not reimplement completed screen migrations. Make only coherent, evidence-based fixes and validate each final slice with CI.
+Continue from the final quality-pass checkpoint above. Do not revisit already migrated screen logic. Focus only on evidence-based integrated consistency issues; after completing the final coherent slice, validate with CI and open one final Phase 5 PR.
 
 ## Interruption-safe rule
 
