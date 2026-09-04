@@ -33,11 +33,10 @@
 ### Remaining User Block work
 1. Verify CI for persistence + discovery wiring.
 2. Add repository/application tests, including duplicate-block and removal semantics.
-3. Integrate block enforcement into match/messaging transitions.
-4. Add authenticated HTTP block/unblock surface.
-5. Add audit and focused integration coverage.
+3. Add authenticated HTTP block/unblock surface.
+4. Add audit and focused integration coverage.
 
 ### Exact next action
-CI #2855 and Matching Concurrency Gate #596 are green. Persistent User Block is now wired into Discovery through an explicit named policy pair, keeping the existing safety policy independent. Next action: add focused repository/application tests before integrating block enforcement into match/messaging transitions.
+CI #2855 and Matching Concurrency Gate #596 are green. Persistent User Block is now wired into Discovery through an explicit named policy pair, keeping the existing safety policy independent. Block enforcement is now also applied at matching transitions and conversation creation boundaries (including mutual-match conversation creation). Next action: add authenticated HTTP block/unblock surface and focused tests.
 
 Do not implement ban, evidence/context, rate/spam controls, or moderation queue UI until the User Block persistence/enforcement boundary is established.
