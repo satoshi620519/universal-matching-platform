@@ -26,6 +26,36 @@ describe('ProfileService', () => {
     expect(save).toHaveBeenCalledWith(profile);
   });
 
+  it('preserves private location when profile updates omit it', async () => {
+    const privateLocation = { latitude: 36.5613, longitude: 136.6562 };
+    const existing = {
+      id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {}, geographicScope: scope,
+      privateLocation,
+    };
+    const save = vi.fn();
+    const service = new ProfileService(
+      { save, findById: vi.fn().mockResolvedValue(existing), delete: vi.fn() },
+      { findById: vi.fn(), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+    );
+    const profile = await service.update('p1', { biography: 'Updated' });
+    expect(profile.privateLocation).toEqual(privateLocation);
+    expect(save).toHaveBeenCalledWith(profile);
+  });
+
+  it('updates private location explicitly', async () => {
+    const save = vi.fn();
+    const service = new ProfileService(
+      { save, findById: vi.fn().mockResolvedValue({
+        id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {}, geographicScope: scope,
+      }), delete: vi.fn() },
+      { findById: vi.fn(), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+    );
+    const privateLocation = { latitude: 35.6895, longitude: 139.6917 };
+    const profile = await service.update('p1', { privateLocation });
+    expect(profile.privateLocation).toEqual(privateLocation);
+    expect(save).toHaveBeenCalledWith(profile);
+  });
+
   it('rejects updates for profiles that do not exist', async () => {
     const service = new ProfileService(
       { save: vi.fn(), findById: vi.fn().mockResolvedValue(null), delete: vi.fn() },
