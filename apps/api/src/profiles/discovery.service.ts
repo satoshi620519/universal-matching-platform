@@ -7,6 +7,7 @@ import {
   evaluateDiscoveryEligibility,
   projectProfile,
   type DiscoveryProfileRepository,
+  type DistanceConstraint,
   type GeographicScope,
   type ProfileProjectionPolicy,
   type ProjectedProfile,
@@ -21,7 +22,7 @@ export class DiscoveryService {
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
-  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; projectionPolicy: ProfileProjectionPolicy }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
+  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
     const query = createDiscoveryQuery(input);
     const page = await this.profiles.discover(query);
     const subjectCountryCode = input.geographicScope.kind === 'global' ? undefined : input.geographicScope.countryCode;
