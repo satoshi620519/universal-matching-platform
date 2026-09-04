@@ -3207,3 +3207,13 @@ Inventory existing authentication/account code and specifications, identify genu
 - Did not create another authentication_sessions table or parallel migration.
 - Repair commit: 876b84c4b20569bf58596552c972e5cec5a0fa01.
 - EXACT NEXT ACTION: fetch PR #22's new head SHA and actual rerun results; confirm migration integration first, then diagnose subsequent validation stages one failure at a time.
+
+
+## Phase 6 second CI migration diagnosis — password recovery repair
+- After the 0020 authentication_sessions repair, CI advanced to migration 0021 and exposed the next real failure.
+- Exact PostgreSQL failure: password_recovery_requests.authentication_identity_id was TEXT while authentication_identities.id is UUID (SQLSTATE 42804).
+- This confirms the migration integration gate is successfully uncovering historical/runtime type drift sequentially.
+- Repaired 0021 to align with the authoritative Prisma schema: UUID id/authentication_identity_id, unique secret_hash, TIMESTAMPTZ(6) timestamps, created_at, lifecycle status check, expiry check, and active lookup index.
+- Repair commit: 3eaa8e456d691a5d16fb5acb61bb149d92eea57a.
+- No application service behavior was changed; only demonstrated database schema incompatibility was repaired.
+- EXACT NEXT ACTION: fetch the CI runs for head 3eaa8e456d691a5d16fb5acb61bb149d92eea57a. Confirm migration integration passes before moving to typecheck diagnostics; process subsequent failures sequentially.
