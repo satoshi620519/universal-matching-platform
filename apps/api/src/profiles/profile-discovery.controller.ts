@@ -1,13 +1,15 @@
-import { Body, Controller, Get, Headers, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, Patch, Post, Query } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CategoryService } from './category.service.js';
 import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 import { ProfileService } from './profile.service.js';
+import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
+import type { ProfileVerificationStatus } from '@universal/domain';
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
-import { createGeographicScope, type ProfileFieldSchema, type ProfileProjectionPolicy } from '@universal/domain';
+import { createGeographicScope, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
   displayName: { kind: 'string', required: true, minLength: 1, maxLength: 80 },
@@ -26,6 +28,7 @@ export class ProfileDiscoveryController {
     private readonly profileRepository: PrismaProfileRepository,
     private readonly discovery: DiscoveryService,
     private readonly matches: PrismaMatchTransitionRepository,
+    private readonly admin: AdministrativeCapabilityAccessService,
   ) {}
 
   @Get('profile-categories')
@@ -47,6 +50,17 @@ export class ProfileDiscoveryController {
       gallery: body.gallery,
       biography: body.biography,
     });
+  }
+
+  @Post('moderation/profiles/:accountId/verification')
+  async transitionVerification(@Param('accountId') accountId: string, @Body() body: { status?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-verification-transition' });
+    await this.admin.require(principal.accountId, 'manage-moderation');
+    const allowed = new Set<ProfileVerificationStatus>(['unverified', 'pending', 'verified', 'rejected']);
+    if (typeof body.status !== 'string' || !allowed.has(body.status as ProfileVerificationStatus)) throw new BadRequestException('verification status is invalid');
+    const existing = await this.profileRepository.findByAccountId(accountId);
+    if (!existing) throw new Error('profile not found');
+    return this.profiles.update(existing.id, { verificationStatus: body.status as ProfileVerificationStatus });
   }
 
   @Get('profiles/me/completion')
