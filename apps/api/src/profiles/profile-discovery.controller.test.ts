@@ -201,7 +201,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('propagates authentication failure before accessing services', async () => {
     const resolver={ requireAuthenticated: vi.fn().mockRejectedValue(new UnauthorizedException()) };
-    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
+    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never, {} as never, {} as never);
     await expect(c.listCategories()).resolves.toBeDefined();
     await expect(c.getMyProfile()).rejects.toBeInstanceOf(UnauthorizedException);
   });
