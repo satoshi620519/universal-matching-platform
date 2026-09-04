@@ -103,7 +103,7 @@ export class PrismaDiscoveryProfileRepository implements DiscoveryProfileReposit
   }
 
   private async fetchPage(query: DiscoveryQuery, cursor: Cursor | undefined) {
-    return this.database.profile.findMany({
+    const rows = await this.database.profile.findMany({
       where: {
         categoryId: query.categoryId,
         accountId: { not: query.subjectAccountId },
@@ -113,6 +113,7 @@ export class PrismaDiscoveryProfileRepository implements DiscoveryProfileReposit
       ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
       take: query.limit + 1,
     });
+    return { rows };
   }
 
   private map(row: {
