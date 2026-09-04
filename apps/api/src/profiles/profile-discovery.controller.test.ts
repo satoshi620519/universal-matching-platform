@@ -49,6 +49,13 @@ describe('ProfileDiscoveryController transport boundary', () => {
     await expect(c.getMyProfileCompletion('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
   });
 
+  it('rejects completion lookup when the persisted profile category no longer exists', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ id:'p1', categoryId:'missing' });
+    vi.spyOn((c as any).categories,'list').mockResolvedValue([]);
+    await expect(c.getMyProfileCompletion('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
   it('rejects profile creation for an unknown category instead of validating against the base schema', async () => {
     const c=controller();
     vi.spyOn((c as any).categories,'list').mockResolvedValue([]);
