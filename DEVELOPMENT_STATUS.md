@@ -3734,3 +3734,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching Concurrency Gate #267: SUCCESS.
 - Completion requirements now come from the configured category schema, including required fields absent from persisted profile data.
 - Next exact action: perform the remaining Phase 7 contract audit for field-schema semantics (category changes vs schema validation and endpoint error mapping), then implement only a confirmed gap.
+
+
+### 2026-09-04 — Phase 7 profile transport error-contract reconciliation
+- Completed the planned contract audit after schema-driven completion validation.
+- Confirmed a concrete transport gap: missing authenticated profiles were surfaced as generic errors in several owner-scoped profile endpoints.
+- Began normalizing the profile transport boundary to return HTTP 404 for absent profiles; added focused completion endpoint coverage.
+- Latest implementation commits: `8e472c2`, `fd02976`.
+- Next action: validate latest CI and continue the same error-contract normalization only where owner-scoped endpoints still expose generic missing-profile errors; do not reopen completed schema/verification work.
