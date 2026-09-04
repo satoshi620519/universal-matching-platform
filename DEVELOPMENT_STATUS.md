@@ -2904,3 +2904,13 @@ EXACT NEXT ACTION:
 - Existing draft/save/publish/history API lifecycle was intentionally not rewritten because it persists aggregate JSON snapshots and should transport the new optional field without a parallel endpoint.
 - IMPLEMENTATION COMMITS: 16456c8b, 4e5b2c17, 7bd3e2d9, 8229e495.
 - EXACT NEXT ACTION: perform source-level contract sanity review of the new domain/aggregate/test files, then open a PR and use repository CI as the validation gate. Fix only evidence-backed failures; after CI success, merge and record completion.
+
+
+## Quick Launch Matching Rules PR checkpoint
+- Source-level sanity review completed for the new domain contract, QuickLaunch aggregate integration, and focused tests.
+- Confirmed matchingRules is optional, so older persisted snapshots remain valid.
+- Confirmed publish performs normalization and deep freezing for rule metadata.
+- Confirmed runtime matching interpretation remains outside purchaser configuration and existing API lifecycle is reused.
+- PR #18 opened: https://github.com/satoshi620519/universal-matching-platform/pull/18
+- HEAD CHECKPOINT: 6f00efed1672ef74b0c030f4fc195022b4594880
+- EXACT NEXT ACTION: wait for/fetch PR #18 CI. If all required checks pass, merge and update DEVELOPMENT_STATUS.md with the merge checkpoint. If any check fails, inspect only the failing diagnostic and apply the smallest targeted fix.
