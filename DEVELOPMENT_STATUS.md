@@ -3718,3 +3718,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching Concurrency Gate #263: SUCCESS.
 - Verification status is not request-controlled through profile create or self-update transports; moderation capability remains the authority boundary.
 - Next exact action: select the next smallest Phase 7 profile-system slice from the roadmap after confirming existing implementation coverage; do not reopen completed verification work.
+
+
+### 2026-09-04 — Phase 7 configurable completion schema reconciliation
+- Fixed completion endpoint to derive requirements from the configured category field schema rather than only keys already present in the profile.
+- This preserves visibility of missing required fields in completion progress and keeps category customization authoritative.
+- Added focused controller coverage for a configured required field absent from persisted profile data.
+- Latest implementation commits: `a1c03dd`, `3684f03`.
+- Next action: validate latest CI, then continue only with remaining uncovered Phase 7 profile-system capability.
