@@ -17,6 +17,7 @@ const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
 };
 const PUBLIC_PROJECTION: ProfileProjectionPolicy = { displayName: 'public', headline: 'public', bio: 'public' };
 const OWNER_PROJECTION: ProfileProjectionPolicy = {};
+const PUBLIC_CORE_PROJECTION: ProfileCoreProjectionPolicy = { avatar: 'public', gallery: 'public', biography: 'public', verificationStatus: 'public' };
 
 @Controller()
 export class ProfileDiscoveryController {
@@ -78,7 +79,7 @@ export class ProfileDiscoveryController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-me' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new NotFoundException('profile not found');
-    return this.projectProfile(existing, OWNER_PROJECTION);
+    return existing;
   }
 
   @Get('profiles/:accountId')
@@ -86,7 +87,7 @@ export class ProfileDiscoveryController {
     await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-public' });
     const profile = await this.profileRepository.findByAccountId(accountId);
     if (!profile) throw new NotFoundException('profile not found');
-    return this.projectProfile(profile, PUBLIC_PROJECTION);
+    return projectProfile(profile, {}, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION);
   }
 
   @Patch('profiles/me')
@@ -111,11 +112,6 @@ export class ProfileDiscoveryController {
   async decide(@Body() body: { targetAccountId?: string; decision?: 'like' | 'pass'; idempotencyKey?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-decision' });
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
-  }
-
-  private projectProfile(profile: any, policy: ProfileProjectionPolicy) {
-    const projectedFields = Object.fromEntries(Object.entries(profile.fields ?? {}).filter(([key]) => policy[key] === 'public'));
-    return { ...profile, fields: projectedFields };
   }
 
   private completionSchema(fieldSchema: ProfileFieldSchema) {
