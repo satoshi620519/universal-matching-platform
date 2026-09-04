@@ -3907,3 +3907,6 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added only the missing deployment-configurable distance presentation policy boundary.
 - Added domain policy for metric and imperial presentation, deployment setting distance.presentation, and configuration validation tests.
 - Next: verify CI for the distance presentation addition, then audit remaining Phase 8 acceptance criteria before further implementation.
+
+- Added missing deployment toggle `distance.matching.enabled`; distance-constrained discovery is rejected when disabled and defaults to disabled for privacy/safety.
+- CI checkpoint pending for distance presentation + distance matching configuration changes.
