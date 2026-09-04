@@ -2842,3 +2842,75 @@ Inventory the existing API/controller routes and application capabilities, map t
 1. Before new implementation, reconcile MASTER_DEVELOPMENT_ROADMAP.md against actual repository source and DEVELOPMENT_STATUS.md to identify the earliest genuinely unfinished dependency-ordered milestone.
 2. Do not repeat completed Phase 5 UX work or assume roadmap phase numbers equal implementation completeness.
 3. Create a dedicated checkpoint/branch for the selected next milestone, implement only its documented boundary, validate with CI, and record the exact continuation point.
+
+
+## Post-Phase 5 roadmap reconciliation — IN PROGRESS
+CURRENT PHASE: Roadmap reconciliation after Phase 5
+CURRENT MILESTONE: Select earliest genuinely unfinished dependency-ordered milestone
+CURRENT TASK: Reconcile roadmap claims against actual repository source and status evidence before implementation
+STATUS: In progress
+
+COMPLETED:
+- Phase 5 is merged and CI-validated; UX work will not be repeated.
+- Re-read PROJECT_MASTER.md, MASTER_DEVELOPMENT_ROADMAP.md, DEVELOPMENT_STATUS.md, DECISIONS.md, CONTINUITY_PROTOCOL.md, and UX_PHASE5_PROGRESS.md from main.
+- Repository search found no source-level implementation hit for Quick Launch implementation, legal/support link configuration, profile-schema Quick Launch UI, feature-flag Quick Launch UI, or a configuration route.
+- Roadmap still identifies Phase 4 Universal Configuration Engine as a major prerequisite/commercial differentiator with Quick Launch and Advanced Customization levels.
+
+COMPLETED RECONCILIATION:
+- Located and read CONFIGURATION_ARCHITECTURE.md, CONFIGURATION_SYSTEM_SPEC.md, LEGAL_SUPPORT_QUICK_LAUNCH_SPEC.md, MATCHING_CATEGORY_CONFIGURATION.md, and MATCHING_RULE_CONFIGURATION.md.
+- Located the existing Quick Launch aggregate and lifecycle implementation: domain `packages/domain/src/quick-launch-configuration.ts`, API controller/service/repository under `apps/api/src/configuration/`, and immutable draft/publish/history semantics.
+- Verified existing aggregate already covers application name, branding/theme extension, localization, profile schema, feature visibility, countries, categories, onboarding, and legal/support metadata.
+- Verified legal/support validation and normalization tests already exist.
+- The earlier source search was incomplete because repository search did not surface several existing files; tree/source inspection corrected that assumption.
+
+PHASE 4 COMPLETION MATRIX:
+- Application name: implemented
+- Branding/theme: implemented domain aggregate
+- Localization/languages/geography: implemented aggregate and validation
+- Profile schema/onboarding: implemented aggregate and validation
+- Feature visibility: implemented aggregate and validation
+- Matching categories: basic categories implemented; richer category metadata integration remains a documented next integration candidate
+- Matching rules/presets: documented as a separate configuration domain; no matchingRules field is present in QuickLaunchDraft
+- Legal/support links: implemented end-to-end in aggregate validation/publication; API lifecycle reuses existing draft/publish/history
+
+NEXT MILESTONE SELECTED:
+- Implement matching rule presets as the earliest clearly missing Quick Launch configuration domain, because its specification explicitly requires integration into the existing aggregate/review/publish snapshots and the current aggregate has no matchingRules contract.
+- Keep scope limited to typed rule metadata + validation + immutable publication compatibility first. Do not redesign the already-existing configuration lifecycle or repeat legal/support/category work.
+
+FILES CHANGED:
+- DEVELOPMENT_STATUS.md
+
+KNOWN ISSUES:
+- None confirmed.
+
+TEST RESULTS:
+- Reconciliation/documentation only; no implementation CI required.
+
+EXACT NEXT ACTION:
+1. Read the existing matching rule domain contract and matching-engine integration boundaries.
+2. Create a dedicated implementation branch from this checkpoint.
+3. Add the smallest typed `matchingRules` Quick Launch extension with validation and publication immutability/legacy compatibility tests.
+4. Only after the domain contract is green, integrate API persistence/transport if required by the existing aggregate lifecycle (expected to flow automatically through existing JSON snapshots).
+
+
+## Quick Launch Matching Rules — domain implementation checkpoint
+- Re-read the selected milestone boundary and inspected MATCHING_RULE_CONFIGURATION.md plus the actual current QuickLaunch aggregate.
+- Confirmed historical status references to an earlier Configuration Engine integration are not reflected by the current main matchingRules source contract; current source evidence was treated as authoritative and duplicate branch-history assumptions were avoided.
+- Created feature/quick-launch-matching-rules from the reconciliation checkpoint.
+- Added MatchingRulesConfiguration domain contract with stable key, targetField, supported operator, typed scalar value, enabled state, and optional non-negative finite weight.
+- Added validation for normalized key uniqueness, required target fields, supported operators, typed/finite values, and valid weights.
+- Integrated optional matchingRules metadata into QuickLaunchDraft and immutable publication snapshots with deep-frozen rule arrays/objects and normalized keys/target fields.
+- Added focused tests for immutable publication, typed values, validation failures, and older snapshots without matchingRules metadata.
+- Existing draft/save/publish/history API lifecycle was intentionally not rewritten because it persists aggregate JSON snapshots and should transport the new optional field without a parallel endpoint.
+- IMPLEMENTATION COMMITS: 16456c8b, 4e5b2c17, 7bd3e2d9, 8229e495.
+- EXACT NEXT ACTION: perform source-level contract sanity review of the new domain/aggregate/test files, then open a PR and use repository CI as the validation gate. Fix only evidence-backed failures; after CI success, merge and record completion.
+
+
+## Quick Launch Matching Rules PR checkpoint
+- Source-level sanity review completed for the new domain contract, QuickLaunch aggregate integration, and focused tests.
+- Confirmed matchingRules is optional, so older persisted snapshots remain valid.
+- Confirmed publish performs normalization and deep freezing for rule metadata.
+- Confirmed runtime matching interpretation remains outside purchaser configuration and existing API lifecycle is reused.
+- PR #18 opened: https://github.com/satoshi620519/universal-matching-platform/pull/18
+- HEAD CHECKPOINT: 6f00efed1672ef74b0c030f4fc195022b4594880
+- EXACT NEXT ACTION: wait for/fetch PR #18 CI. If all required checks pass, merge and update DEVELOPMENT_STATUS.md with the merge checkpoint. If any check fails, inspect only the failing diagnostic and apply the smallest targeted fix.

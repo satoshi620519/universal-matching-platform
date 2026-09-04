@@ -74,6 +74,7 @@ export * from './match-transition-state.js';
 export * from './conversation.js';
 
 export * from './quick-launch-configuration.js';
+export * from './matching-rules-configuration.js';
 
 export * from './branding-theme-configuration.js';
 

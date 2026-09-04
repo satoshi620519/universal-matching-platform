@@ -2,6 +2,7 @@ import { validateBrandingThemeConfiguration, type BrandingThemeConfiguration } f
 import { validateLocalizationConfiguration, type LocalizationConfiguration } from './localization-configuration.js';
 import { validateProfileSchemaConfiguration, type ProfileSchemaConfiguration } from './profile-schema-configuration.js';
 import { validateFeatureVisibilityConfiguration, type FeatureVisibilityConfiguration } from './feature-visibility-configuration.js';
+import { validateMatchingRulesConfiguration, type MatchingRulesConfiguration } from './matching-rules-configuration.js';
 
 export interface QuickLaunchDraft {
   readonly applicationName: string;
@@ -17,6 +18,8 @@ export interface QuickLaunchDraft {
   readonly featureVisibility?: FeatureVisibilityConfiguration;
   /** Public legal/support destinations; protected operational policies remain independent. */
   readonly legalSupport?: { readonly privacyPolicyUrl?: string; readonly termsOfServiceUrl?: string; readonly supportUrl?: string; readonly supportEmail?: string };
+  /** Optional purchaser matching metadata; runtime interpretation remains matching-engine-owned. */
+  readonly matchingRules?: MatchingRulesConfiguration;
   readonly supportedCountries: readonly string[];
   readonly categories: readonly { readonly key: string; readonly displayName: string }[];
   readonly enabledFeatures: readonly string[];
@@ -39,6 +42,7 @@ export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   if (draft.localization) validateLocalizationConfiguration({ ...draft.localization, supportedCountries: draft.supportedCountries });
   if (draft.profileSchema) validateProfileSchemaConfiguration(draft.profileSchema);
   if (draft.featureVisibility) validateFeatureVisibilityConfiguration(draft.featureVisibility);
+  if (draft.matchingRules) validateMatchingRulesConfiguration(draft.matchingRules);
   if (draft.legalSupport) {
     const normalized = (value?: string) => value?.trim() || undefined;
     const urls = [normalized(draft.legalSupport.privacyPolicyUrl), normalized(draft.legalSupport.termsOfServiceUrl), normalized(draft.legalSupport.supportUrl)].filter((value): value is string => Boolean(value));
@@ -71,6 +75,7 @@ export function publishQuickLaunchConfiguration(
     ...draft,
     ...(draft.legalSupport ? (() => { const privacyPolicyUrl=draft.legalSupport.privacyPolicyUrl?.trim()||undefined, termsOfServiceUrl=draft.legalSupport.termsOfServiceUrl?.trim()||undefined, supportUrl=draft.legalSupport.supportUrl?.trim()||undefined, supportEmail=draft.legalSupport.supportEmail?.trim().toLowerCase()||undefined; return privacyPolicyUrl||termsOfServiceUrl||supportUrl||supportEmail ? { legalSupport: Object.freeze({ ...(privacyPolicyUrl?{privacyPolicyUrl}:{}), ...(termsOfServiceUrl?{termsOfServiceUrl}:{}), ...(supportUrl?{supportUrl}:{}), ...(supportEmail?{supportEmail}:{}) }) } : {}; })() : {}),
     ...(draft.featureVisibility ? { featureVisibility: Object.freeze({ features: Object.freeze(draft.featureVisibility.features.map(feature => Object.freeze({ ...feature }))) }) } : {}),
+    ...(draft.matchingRules ? { matchingRules: Object.freeze({ rules: Object.freeze(draft.matchingRules.rules.map(rule => Object.freeze({ key: rule.key.trim(), targetField: rule.targetField.trim(), operator: rule.operator, value: rule.value, enabled: rule.enabled, ...(rule.weight !== undefined ? { weight: rule.weight } : {}) }))) }) } : {}),
     ...(draft.profileSchema ? { profileSchema: Object.freeze({ fields: Object.freeze(draft.profileSchema.fields.map(field => Object.freeze({ ...field, ...(field.options ? { options: Object.freeze([...field.options]) } : {}) }))) }) } : {}),
     ...(draft.localization ? { localization: Object.freeze({ ...draft.localization, supportedLocales: Object.freeze([...draft.localization.supportedLocales]), ...(draft.localization.countryLocales ? { countryLocales: Object.freeze({ ...draft.localization.countryLocales }) } : {}) }) } : {}),
     ...(draft.brandingTheme ? { brandingTheme: Object.freeze({ ...draft.brandingTheme, ...(draft.brandingTheme.typography ? { typography: Object.freeze({ ...draft.brandingTheme.typography }) } : {}) }) } : {}),
