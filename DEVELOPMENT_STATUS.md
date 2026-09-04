@@ -2891,3 +2891,16 @@ EXACT NEXT ACTION:
 2. Create a dedicated implementation branch from this checkpoint.
 3. Add the smallest typed `matchingRules` Quick Launch extension with validation and publication immutability/legacy compatibility tests.
 4. Only after the domain contract is green, integrate API persistence/transport if required by the existing aggregate lifecycle (expected to flow automatically through existing JSON snapshots).
+
+
+## Quick Launch Matching Rules — domain implementation checkpoint
+- Re-read the selected milestone boundary and inspected MATCHING_RULE_CONFIGURATION.md plus the actual current QuickLaunch aggregate.
+- Confirmed historical status references to an earlier Configuration Engine integration are not reflected by the current main matchingRules source contract; current source evidence was treated as authoritative and duplicate branch-history assumptions were avoided.
+- Created feature/quick-launch-matching-rules from the reconciliation checkpoint.
+- Added MatchingRulesConfiguration domain contract with stable key, targetField, supported operator, typed scalar value, enabled state, and optional non-negative finite weight.
+- Added validation for normalized key uniqueness, required target fields, supported operators, typed/finite values, and valid weights.
+- Integrated optional matchingRules metadata into QuickLaunchDraft and immutable publication snapshots with deep-frozen rule arrays/objects and normalized keys/target fields.
+- Added focused tests for immutable publication, typed values, validation failures, and older snapshots without matchingRules metadata.
+- Existing draft/save/publish/history API lifecycle was intentionally not rewritten because it persists aggregate JSON snapshots and should transport the new optional field without a parallel endpoint.
+- IMPLEMENTATION COMMITS: 16456c8b, 4e5b2c17, 7bd3e2d9, 8229e495.
+- EXACT NEXT ACTION: perform source-level contract sanity review of the new domain/aggregate/test files, then open a PR and use repository CI as the validation gate. Fix only evidence-backed failures; after CI success, merge and record completion.
