@@ -68,6 +68,7 @@ export * from './profile-repository.js';
 export * from './profile-field-schema.js';
 export * from './profile-projection.js';
 export * from './location-precision.js';
+export * from './private-location.js';
 export * from './discovery-query.js';
 export * from './discovery-eligibility.js';
 export * from './match-strategy.js';
