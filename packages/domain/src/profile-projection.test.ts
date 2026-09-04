@@ -4,7 +4,7 @@ import { projectProfile } from './profile-projection.js';
 const profile = {
   id: 'p1', accountId: 'owner', categoryId: 'dating',
   fields: { displayName: 'Satoshi', phone: 'secret', moderationNote: 'internal' },
-  geographicScope: { kind: 'country', countryCode: 'JP' } as const,
+  geographicScope: { kind: 'city', countryCode: 'JP', regionCode: '13', localityCode: '13101' } as const,
   avatar: { id: 'a1', storageKey: 'avatar/1', status: 'active' as const },
   gallery: [
     { id: 'g1', storageKey: 'gallery/1', status: 'active' as const },
@@ -53,5 +53,22 @@ describe('privacy-aware profile projection', () => {
     expect(projected).not.toHaveProperty('gallery');
     expect(projected).not.toHaveProperty('biography');
     expect(projected).not.toHaveProperty('verificationStatus');
+  });
+
+  it('defaults public location precision to country', () => {
+    expect(projectProfile(profile, { accountId: 'other' }, policy).geographicScope)
+      .toEqual({ kind: 'country', countryCode: 'JP' });
+  });
+
+  it('allows a deployment to expose region or city precision explicitly', () => {
+    expect(projectProfile(profile, {}, policy, {}, { publicPrecision: 'region' }).geographicScope)
+      .toEqual({ kind: 'region', countryCode: 'JP', regionCode: '13' });
+    expect(projectProfile(profile, {}, policy, {}, { publicPrecision: 'city' }).geographicScope)
+      .toEqual({ kind: 'city', countryCode: 'JP', regionCode: '13', localityCode: '13101' });
+  });
+
+  it('can suppress public location entirely', () => {
+    expect(projectProfile(profile, {}, policy, {}, { publicPrecision: 'none' }))
+      .not.toHaveProperty('geographicScope');
   });
 });
