@@ -53,4 +53,11 @@ describe('MessagingController', () => {
     expect(softDeleteForSender).toHaveBeenCalledWith({ messageId:'m1', senderAccountId:'a1' });
   });
 
+  it('lists unread notifications only for the authenticated account', async () => {
+    const principalResolver = { requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'a1' }) };
+    const notifications = { listUnreadForAccount: vi.fn().mockResolvedValue([{ id: 'n1' }]) };
+    const controller = new MessagingController(principalResolver as never, {} as never, {} as never, notifications as never, {} as never, {} as never);
+    await expect(controller.listUnreadNotifications()).resolves.toEqual({ notifications: [{ id: 'n1' }] });
+    expect(notifications.listUnreadForAccount).toHaveBeenCalledWith('a1');
+  });
 });
