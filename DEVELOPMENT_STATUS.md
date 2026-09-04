@@ -3488,3 +3488,24 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - Validate the new service reconciliation slice in CI. On green, inspect existing API transport architecture and add Phase 7 completion/profile metadata endpoints without duplicating another transport pattern.
+
+
+## Phase 7 service reconciliation CI diagnosis — completion expectation
+CI #2236 RESULTS:
+- Packaged migrations: PASS
+- PostgreSQL migration integration: PASS
+- Typecheck: PASS
+- Lint: PASS
+- Independent Matching Concurrency Gate #235: PASS
+- Test: FAIL, 1 failed / 356 passed / 4 skipped.
+
+ROOT CAUSE:
+- The newly added completion test fixture includes display_name='Satoshi' and the schema marks display_name required. The completion engine correctly counts this as completed, but the test expected zero completed requirements and listed the field as missing.
+- Production completion logic is behaving correctly; only the test expectation contradicted its own fixture.
+
+FIX APPLIED:
+- Corrected expected completion to 1 of 3 and missing keys to avatar + verification only.
+- No production logic changed.
+
+EXACT NEXT ACTION:
+- Revalidate service reconciliation CI from the corrected expectation. On green, proceed to inspect API transport patterns for Phase 7 endpoints.
