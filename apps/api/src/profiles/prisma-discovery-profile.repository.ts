@@ -25,7 +25,7 @@ function decodeCursor(value: string): Cursor {
 }
 
 function geographicWhere(scope: DiscoveryQuery['geographicScope']) {
-  if (scope.kind === 'global') return { OR: [{ scopeKind: 'global' }] };
+  if (scope.kind === 'global') return {};
   const candidates: Array<Record<string, unknown>> = [
     { scopeKind: 'global' },
     { scopeKind: 'country', countryCode: scope.countryCode },
