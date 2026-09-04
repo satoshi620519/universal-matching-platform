@@ -1,10 +1,6 @@
-import { Inject, Injectable, Optional } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { blocksCapability, type SafetyRestriction } from '@universal/domain';
-import {
-  BLOCK_DISCOVERY_EXCLUSION_POLICY,
-  DiscoveryExclusionPolicy,
-  SAFETY_DISCOVERY_EXCLUSION_POLICY,
-} from './discovery-exclusion.policy.js';
+import { DiscoveryExclusionPolicy } from './discovery-exclusion.policy.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
 import {
   createDiscoveryQuery,
@@ -29,8 +25,8 @@ import {
 export class DiscoveryService {
   constructor(
     private readonly profiles: DiscoveryProfileRepository,
-    @Inject(BLOCK_DISCOVERY_EXCLUSION_POLICY) private readonly blockExclusions: DiscoveryExclusionPolicy,
-    @Inject(SAFETY_DISCOVERY_EXCLUSION_POLICY) private readonly safetyExclusions: DiscoveryExclusionPolicy,
+    private readonly blockExclusions: DiscoveryExclusionPolicy,
+    private readonly safetyExclusions: DiscoveryExclusionPolicy,
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
