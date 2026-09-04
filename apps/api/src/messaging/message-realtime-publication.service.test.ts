@@ -12,4 +12,10 @@ describe('MessageRealtimePublicationService', () => {
       eventType: 'message.created', resource: { type: 'message', id: 'm1' },
     }));
   });
+  it('publishes typing ephemerally without creating a durable message', async () => {
+    const publishToAccount = vi.fn().mockResolvedValue(undefined);
+    const service = new MessageRealtimePublicationService({ publishToAccount } as never);
+    await service.publishTyping({ conversationId:'c1', senderAccountId:'a1', recipientAccountIds:['a2'], isTyping:true });
+    expect(publishToAccount).toHaveBeenCalledWith('a2', expect.objectContaining({ eventType:'conversation.typing', resource:{ type:'conversation', id:'c1' }, payload:expect.objectContaining({ isTyping:true }) }));
+  });
 });
