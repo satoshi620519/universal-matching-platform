@@ -15,7 +15,29 @@ describe('PrismaProfileRepository', () => {
       geographicScope: createGeographicScope({ kind: 'country', countryCode: 'jp' }),
     }));
     expect(upsert).toHaveBeenCalledWith(expect.objectContaining({
-      create: expect.objectContaining({ scopeKind: 'country', countryCode: 'JP', regionCode: null }),
+      create: expect.objectContaining({ scopeKind: 'country', countryCode: 'JP', regionCode: null, localityCode: null }),
+    }));
+  });
+
+  it('persists city locality without leaking it into broader scopes', async () => {
+    const upsert = vi.fn();
+    const repository = new PrismaProfileRepository({
+      $transaction: vi.fn(async (callback) => callback({
+        profile: { upsert },
+        profileGalleryMedia: { deleteMany: vi.fn(), createMany: vi.fn() },
+      })),
+    } as never);
+    await repository.save(createProfile({
+      id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {},
+      geographicScope: createGeographicScope({ kind: 'city', countryCode: 'jp', regionCode: '13', localityCode: 'tokyo' }),
+    }));
+    expect(upsert).toHaveBeenCalledWith(expect.objectContaining({
+      create: expect.objectContaining({
+        scopeKind: 'city', countryCode: 'JP', regionCode: '13', localityCode: 'tokyo',
+      }),
+      update: expect.objectContaining({
+        scopeKind: 'city', countryCode: 'JP', regionCode: '13', localityCode: 'tokyo',
+      }),
     }));
   });
 
@@ -53,7 +75,7 @@ describe('PrismaProfileRepository', () => {
     const repository = new PrismaProfileRepository({
       profile: { findUnique: vi.fn().mockResolvedValue({
         id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {},
-        scopeKind: 'region', countryCode: null, regionCode: '13',
+        scopeKind: 'region', countryCode: null, regionCode: '13', localityCode: null,
         avatarId: null, avatarStorageKey: null, avatarStatus: null,
         biography: null, verificationStatus: 'unverified', galleryMedia: [],
       }) },
