@@ -34,21 +34,21 @@ describe('ProfileService', () => {
     await expect(service.update('missing', { fields: {} })).rejects.toThrow('profile not found');
   });
 
-  it('does not query category persistence when the category is unchanged', async () => {
+  it('queries the category when field values are updated for automatic schema validation', async () => {
     const findById = vi.fn().mockResolvedValue({
-      id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {}, geographicScope: scope,
+      id: 'p1', accountId: 'a1', categoryId: 'c1', fields: { displayName: 'Old' }, geographicScope: scope,
     });
-    const categoryLookup = vi.fn();
+    const categoryLookup = vi.fn().mockResolvedValue(category);
     const save = vi.fn();
     const service = new ProfileService(
       { save, findById, delete: vi.fn() },
       { findById: categoryLookup, findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+      { schemaFor: vi.fn().mockReturnValue(schema) } as never,
     );
-    await service.update('p1', { fields: { age: 21 } });
-    expect(categoryLookup).not.toHaveBeenCalled();
+    await service.update('p1', { fields: { displayName: 'Updated' } });
+    expect(categoryLookup).toHaveBeenCalledWith('c1');
     expect(save).toHaveBeenCalledTimes(1);
   });
-
 
   it('validates category field rules before persistence', async () => {
     const save = vi.fn();
@@ -60,6 +60,7 @@ describe('ProfileService', () => {
       .rejects.toThrow('too short');
     expect(save).not.toHaveBeenCalled();
   });
+
   it('updates Phase 7 metadata without replacing unspecified existing metadata', async () => {
     const existing = {
       id: 'p1', accountId: 'a1', categoryId: 'c1', fields: {}, geographicScope: scope,
@@ -116,5 +117,4 @@ describe('ProfileService', () => {
     await expect(service.completion('missing', { schema: { fields: [] } }))
       .rejects.toThrow('profile not found');
   });
-
 });
