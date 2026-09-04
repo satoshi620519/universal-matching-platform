@@ -47,7 +47,8 @@ export class PrismaProfileRepository implements ProfileRepository {
           id: profile.id, accountId: profile.accountId, categoryId: profile.categoryId,
           fields: profile.fields, scopeKind: scope.kind,
           countryCode: scope.kind === 'global' ? null : scope.countryCode,
-          regionCode: scope.kind === 'region' ? scope.regionCode : null,
+          regionCode: scope.kind === 'region' || scope.kind === 'city' ? scope.regionCode : null,
+          localityCode: scope.kind === 'city' ? scope.localityCode : null,
           avatarId: avatar?.id ?? null,
           avatarStorageKey: avatar?.storageKey ?? null,
           avatarStatus: avatar?.status ?? null,
@@ -57,7 +58,8 @@ export class PrismaProfileRepository implements ProfileRepository {
         update: {
           categoryId: profile.categoryId, fields: profile.fields, scopeKind: scope.kind,
           countryCode: scope.kind === 'global' ? null : scope.countryCode,
-          regionCode: scope.kind === 'region' ? scope.regionCode : null,
+          regionCode: scope.kind === 'region' || scope.kind === 'city' ? scope.regionCode : null,
+          localityCode: scope.kind === 'city' ? scope.localityCode : null,
           avatarId: avatar?.id ?? null,
           avatarStorageKey: avatar?.storageKey ?? null,
           avatarStatus: avatar?.status ?? null,
@@ -86,7 +88,7 @@ export class PrismaProfileRepository implements ProfileRepository {
 
   private map(row: {
     id: string; accountId: string; categoryId: string; fields: unknown;
-    scopeKind: string; countryCode: string | null; regionCode: string | null;
+    scopeKind: string; countryCode: string | null; regionCode: string | null; localityCode: string | null;
     avatarId: string | null; avatarStorageKey: string | null; avatarStatus: string | null;
     biography: string | null; verificationStatus: string;
     galleryMedia: readonly PersistedGalleryMedia[];
@@ -100,7 +102,9 @@ export class PrismaProfileRepository implements ProfileRepository {
         ? createGeographicScope({ kind: 'country', countryCode: row.countryCode })
         : row.scopeKind === 'region' && row.countryCode && row.regionCode
           ? createGeographicScope({ kind: 'region', countryCode: row.countryCode, regionCode: row.regionCode })
-          : (() => { throw new Error('Persisted profile geographic scope is invalid'); })();
+          : row.scopeKind === 'city' && row.countryCode && row.regionCode && row.localityCode
+            ? createGeographicScope({ kind: 'city', countryCode: row.countryCode, regionCode: row.regionCode, localityCode: row.localityCode })
+            : (() => { throw new Error('Persisted profile geographic scope is invalid'); })();
     const avatar = this.mapAvatar(row);
     return createProfile({
       id: row.id, accountId: row.accountId, categoryId: row.categoryId,
