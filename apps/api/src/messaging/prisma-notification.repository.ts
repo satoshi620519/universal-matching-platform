@@ -23,6 +23,14 @@ export class PrismaNotificationRepository {
     return this.database.notification.create({ data: { ...input, payload: input.payload as Prisma.InputJsonValue } });
   }
 
+  async listUnreadForAccount(accountId: string, limit = 50): Promise<NotificationRecord[]> {
+    return this.database.notification.findMany({
+      where: { accountId, readAt: null },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      take: Math.min(Math.max(limit, 1), 100),
+    });
+  }
+
   async listForAccount(accountId: string, limit = 50): Promise<NotificationRecord[]> {
     return this.database.notification.findMany({
       where: { accountId },
