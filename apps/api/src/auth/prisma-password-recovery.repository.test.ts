@@ -9,7 +9,7 @@ describe('PrismaPasswordRecoveryRepository', () => {
     id: 'recovery-1',
     authenticationIdentityId: 'identity-1',
     secretHash: 'opaque-secret-hash',
-    status: 'active',
+    status: 'active' as const,
     requestedAt,
     expiresAt,
     consumedAt: null,
