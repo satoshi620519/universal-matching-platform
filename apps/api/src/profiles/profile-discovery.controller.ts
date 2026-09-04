@@ -35,7 +35,6 @@ export class ProfileDiscoveryController {
     private readonly localization: LocalizationConfigurationService,
     private readonly locationPrecision: LocationPrecisionConfigurationService,
     private readonly distanceMatching: DistanceMatchingConfigurationService,
-    private readonly profileRepository: PrismaProfileRepository,
   ) {}
 
   @Get('profile-categories')
