@@ -3445,3 +3445,24 @@ FIX APPLIED:
 
 EXACT NEXT ACTION:
 - Fetch CI for the current head after this type-boundary fix. Require Typecheck green before continuing to tests/service reconciliation.
+
+
+## Phase 7 persistence CI diagnosis — packaged migration expectation
+CI #2224 RESULTS:
+- Packaged migration verification: PASS
+- PostgreSQL migration command integration: PASS
+- Typecheck: PASS
+- Lint: PASS
+- Independent Matching Concurrency Gate #229: PASS
+- Test suite: FAIL, 1 failed / 354 passed / 4 skipped.
+
+ROOT CAUSE:
+- filesystem-postgres-migration.integration.test.ts intentionally enumerates all packaged migration versions. Adding release marker 0022 correctly introduced version 22, but the explicit expected list still ended at 21.
+- This is a test expectation update required by the repository's migration artifact contract, not a runtime persistence defect.
+
+FIX APPLIED:
+- Updated expected packaged migration versions to include 22.
+- No production migration behavior or application logic changed.
+
+EXACT NEXT ACTION:
+- Fetch CI for current head and verify full Test stage, then Build, before starting ProfileService reconciliation.
