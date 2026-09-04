@@ -3322,3 +3322,20 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - Inspect package scripts/CI conventions and validate the new domain contracts. Fix only demonstrated failures. After green validation, extend Profile projection visibility for core metadata before Prisma persistence.
+
+
+## Phase 7 implementation checkpoint — privacy projection extension
+COMPLETED THIS CHECKPOINT:
+- Confirmed root/domain scripts and CI gate order before continuing.
+- Extended existing ProfileProjectionPolicy architecture instead of adding a parallel privacy mechanism.
+- Added explicit core metadata visibility policy for avatar, gallery, biography and verificationStatus.
+- Projection fails closed when a core metadata policy is absent.
+- Only active avatar/gallery media are projectable; pending/removed media never leak through projection.
+- Added focused privacy tests for active media filtering and fail-closed behavior.
+
+CURRENT STATE:
+- Phase 7 domain metadata + deterministic completion + projection privacy contracts are implemented.
+- Persistence, ProfileService reconciliation and HTTP transport remain intentionally unmodified.
+
+EXACT NEXT ACTION:
+- Run/trigger validation for the accumulated Phase 7 domain changes before persistence work. Inspect exact diagnostics on any failure; do not add speculative fixes. On green validation, inspect existing Prisma Profile mapping/migrations and design the smallest backward-compatible persistence migration.
