@@ -26,5 +26,15 @@ export class MessageRealtimePublicationService {
         },
       }),
     ));
+
+  async publishTyping(input: { conversationId: string; senderAccountId: string; recipientAccountIds: string[]; isTyping: boolean }): Promise<void> {
+    await Promise.all(input.recipientAccountIds.map((accountId) => this.realtime.publishToAccount(accountId, {
+      eventId: randomUUID(),
+      eventType: 'conversation.typing',
+      schemaVersion: 1,
+      occurredAt: new Date().toISOString(),
+      resource: { type: 'conversation', id: input.conversationId },
+      payload: { conversationId: input.conversationId, senderAccountId: input.senderAccountId, isTyping: input.isTyping },
+    })));
   }
 }
