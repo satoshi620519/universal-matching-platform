@@ -3850,3 +3850,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused regression coverage around the authenticated-viewer projection path.
 - Commits: 6bb3468 (implementation), 30d31bf (test).
 - Next exact action: validate consolidated privacy projection changes in CI, then continue Phase 7 requirement-by-requirement completion audit.
+
+
+### 2026-09-04 — Phase 7 privileged viewer privacy reconciliation
+- Continued from the authenticated-viewer checkpoint and audited the domain projection contract end-to-end.
+- Found that accountId was now propagated, but privileged viewer context was still discarded, making ProfileFieldVisibility='privileged' unreachable through the public-profile transport even for authorized moderators.
+- Added capability-derived privileged context to GET /profiles/:accountId before domain projection; authorization remains server-owned and no client-supplied privilege is trusted.
+- Added focused regression coverage for the privileged viewer projection path.
+- Commits: cfbfab4 (implementation), 72c4d25 (test).
+- Next exact action: validate the consolidated privacy contract in CI, then proceed to the next unmet Phase 7 requirement from the roadmap audit.
