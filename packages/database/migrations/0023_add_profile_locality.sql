@@ -1,0 +1,4 @@
+-- Phase 8 profile geographic locality is owned by the API Prisma migration stream.
+-- Keep the packaged migration stream aware of the release without duplicating DDL.
+-- The canonical executable schema change lives at:
+-- apps/api/prisma/migrations/20260904000200_add_profile_locality/migration.sql
