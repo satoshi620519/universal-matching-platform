@@ -3874,3 +3874,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Updated the focused privileged-viewer test to use can(), keeping production and regression contracts aligned.
 - Commit: dcd6cb9.
 - Next exact action: CI validation of production + regression alignment, then continue remaining Phase 7 requirement audit.
+
+
+### 2026-09-04 — Phase 7 deployment-configurable profile fields audit
+- Verified deployment-configurable profile fields are already implemented end-to-end through QuickLaunchDraft.profileSchema, domain validation, immutable published snapshots, API draft/publish flow, and admin summary coverage.
+- Schema supports stable keys, labels, text/number/boolean/date/select types, required flags, visibility, and validated select options.
+- No duplicate implementation added; requirement marked implementation-present pending final Phase 7 completion evidence audit.
+- CI #2386 remains in progress for the latest privacy projection regression alignment.
+- Next exact action: inspect avatar/gallery and verification requirements for end-to-end gaps, then implement only unmet behavior.
