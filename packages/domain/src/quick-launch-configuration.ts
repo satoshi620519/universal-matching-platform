@@ -4,6 +4,15 @@ import { validateProfileSchemaConfiguration, type ProfileSchemaConfiguration } f
 import { validateFeatureVisibilityConfiguration, type FeatureVisibilityConfiguration } from './feature-visibility-configuration.js';
 import { validateMatchingRulesConfiguration, type MatchingRulesConfiguration } from './matching-rules-configuration.js';
 
+export interface QuickLaunchCategory {
+  readonly key: string;
+  readonly displayName: string;
+  /** Optional purchaser-facing context for category selection/review. */
+  readonly description?: string;
+  /** Presentation/configuration state; runtime matching algorithms remain independent. */
+  readonly enabled?: boolean;
+}
+
 export interface QuickLaunchDraft {
   readonly applicationName: string;
   readonly logoUrl?: string;
@@ -21,7 +30,7 @@ export interface QuickLaunchDraft {
   /** Optional purchaser matching metadata; runtime interpretation remains matching-engine-owned. */
   readonly matchingRules?: MatchingRulesConfiguration;
   readonly supportedCountries: readonly string[];
-  readonly categories: readonly { readonly key: string; readonly displayName: string }[];
+  readonly categories: readonly QuickLaunchCategory[];
   readonly enabledFeatures: readonly string[];
   readonly onboarding: readonly { readonly field: string; readonly required: boolean }[];
 }
@@ -56,6 +65,9 @@ export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   const keys = draft.categories.map((category) => category.key.trim());
   if (keys.some((key) => !key)) throw new Error('category key must not be empty');
   if (new Set(keys).size !== keys.length) throw new Error('category keys must be unique');
+  const labels = draft.categories.map((category) => category.displayName.trim());
+  if (labels.some((label) => !label)) throw new Error('category displayName must not be empty');
+  if (new Set(labels).size !== labels.length) throw new Error('category displayNames must be unique');
   if (draft.enabledFeatures.some((feature) => !feature.trim())) throw new Error('enabledFeatures must not contain empty values');
   const onboardingFields = draft.onboarding.map((field) => field.field.trim());
   if (onboardingFields.some((field) => !field)) throw new Error('onboarding field must not be empty');
@@ -85,6 +97,8 @@ export function publishQuickLaunchConfiguration(
     categories: Object.freeze(draft.categories.map((category) => Object.freeze({
       key: category.key.trim(),
       displayName: category.displayName.trim(),
+      ...(category.description?.trim() ? { description: category.description.trim() } : {}),
+      ...(category.enabled !== undefined ? { enabled: category.enabled } : {}),
     }))),
     enabledFeatures: Object.freeze([...draft.enabledFeatures]),
     onboarding: Object.freeze(draft.onboarding.map((field) => Object.freeze({
