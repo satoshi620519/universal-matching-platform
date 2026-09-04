@@ -70,6 +70,16 @@ describe('ProfileDiscoveryController transport boundary', () => {
     expect(update).toHaveBeenCalledWith('profile-1',{ verificationStatus:'verified' });
   });
 
+  it('derives completion requirements from the configured category schema even for missing optional fields', async () => {
+    const c=controller();
+    vi.spyOn((c as any).profileRepository,'findByAccountId').mockResolvedValue({ id:'p1', accountId:'viewer-1', categoryId:'cat-1', fields:{ displayName:'Satoshi' } });
+    vi.spyOn((c as any).categories,'list').mockResolvedValue([{ id:'cat-1', key:'freelance' }]);
+    vi.spyOn((c as any).schemas,'schemaFor').mockReturnValue({ displayName:{ kind:'string', required:true }, skills:{ kind:'string', required:true } });
+    const completion=vi.spyOn((c as any).profiles,'completion').mockResolvedValue({ percentage:50 });
+    await c.getMyProfileCompletion('Bearer test');
+    expect(completion).toHaveBeenCalledWith('p1', expect.objectContaining({ schema: expect.objectContaining({ fields: expect.arrayContaining([expect.objectContaining({ key:'skills', required:true })]) }) }));
+  });
+
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
     await c.discover('cat-1','global',undefined,'10',undefined,'Bearer test');
