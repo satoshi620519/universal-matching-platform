@@ -14,6 +14,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
       ({ findById: vi.fn(), findByAccountId: vi.fn().mockResolvedValue({ id:'profile-1', accountId:'viewer-1', categoryId:'cat-1', fields:{displayName:'Satoshi'}, geographicScope:{kind:'global'} }) } as never),
       ({ discover: vi.fn().mockResolvedValue({ items:[], nextCursor:undefined }) } as never),
       ({ transition: vi.fn().mockResolvedValue({ state:'passed' }) } as never),
+      ({ require: vi.fn().mockResolvedValue(undefined) } as never),
     );
   }
 
@@ -46,8 +47,9 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const c=controller(); const repo=(c as any).profileRepository; const update=vi.spyOn((c as any).profiles,'update');
     await c.getMyProfile('Bearer test');
     expect(repo.findByAccountId).toHaveBeenCalledWith('viewer-1');
-    await c.updateMyProfile({ fields:{ displayName:'Updated' }, biography:'New bio', verificationStatus:'verified' },'Bearer test');
-    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ fields:{displayName:'Updated'}, biography:'New bio', verificationStatus:'verified' }));
+    await c.updateMyProfile({ fields:{ displayName:'Updated' }, biography:'New bio' },'Bearer test');
+    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ fields:{displayName:'Updated'}, biography:'New bio' }));
+    expect((update.mock.calls[0][1] as any).verificationStatus).toBeUndefined();
   });
 
   it('forwards Phase 7 metadata only through the authenticated profile path', async () => {
@@ -56,8 +58,15 @@ describe('ProfileDiscoveryController transport boundary', () => {
     const gallery=[{ id:'media-2', storageKey:'gallery/2', status:'pending' as const }];
     await c.createMyProfile({ categoryId:'cat-1', avatar, gallery, biography:'Hello', verificationStatus:'pending' }, 'Bearer test');
     expect(create).toHaveBeenCalledWith(expect.objectContaining({ avatar, gallery, biography:'Hello', verificationStatus:'pending', accountId:'viewer-1' }));
-    await c.updateMyProfile({ avatar:null, gallery, biography:'Updated', verificationStatus:'verified' }, 'Bearer test');
-    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ avatar:null, gallery, biography:'Updated', verificationStatus:'verified' }));
+    await c.updateMyProfile({ avatar:null, gallery, biography:'Updated' }, 'Bearer test');
+    expect(update).toHaveBeenCalledWith('profile-1',expect.objectContaining({ avatar:null, gallery, biography:'Updated' }));
+  });
+
+  it('allows verification transitions only through moderation capability', async () => {
+    const c=controller(); const update=vi.spyOn((c as any).profiles,'update'); const admin=(c as any).admin;
+    await c.transitionVerification('target-1', { status:'verified' }, 'Bearer moderator');
+    expect(admin.require).toHaveBeenCalledWith('viewer-1','manage-moderation');
+    expect(update).toHaveBeenCalledWith('profile-1',{ verificationStatus:'verified' });
   });
 
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
@@ -75,7 +84,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('propagates authentication failure before accessing services', async () => {
     const resolver={ requireAuthenticated: vi.fn().mockRejectedValue(new UnauthorizedException()) };
-    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never);
+    const c=new ProfileDiscoveryController(resolver as never, ({ list: vi.fn().mockResolvedValue([]) } as never), ({ schemaFor: vi.fn() } as never), {} as never, {} as never, {} as never, {} as never, {} as never);
     await expect(c.listCategories()).resolves.toBeDefined();
     await expect(c.getMyProfile()).rejects.toBeInstanceOf(UnauthorizedException);
   });
