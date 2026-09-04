@@ -74,6 +74,7 @@ export * from './discovery-query.js';
 export * from './discovery-sorting.js';
 export * from './discovery-preferences.js';
 export * from './discovery-search.js';
+export * from './discovery-ranking.js';
 export * from './discovery-eligibility.js';
 export * from './match-strategy.js';
 export * from './match-compatibility.js';
