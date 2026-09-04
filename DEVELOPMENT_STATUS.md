@@ -3112,3 +3112,13 @@ Inventory existing authentication/account code and specifications, identify genu
 - Implementation order now requires credential persistence -> password verification/replacement -> recovery -> server-authoritative sessions -> verification integration -> deletion/privacy integration -> HTTP adapters.
 - IMPLEMENTATION CHECKPOINT: 5091ea2f55b84ac217513cbc20f64f322b9beb30.
 - EXACT NEXT ACTION: inspect actual authentication identity persistence/database implementation against the spec and identify the smallest genuinely missing credential/session contract; do not create parallel auth models.
+
+
+## Phase 6 authentication persistence reconciliation — credential boundary checkpoint
+- Actual persistence inventory confirms authentication_identities (0002) and password_credentials (0005) already exist; earlier Phase 6 planning must not recreate either table.
+- password_credentials is identity-linked, opaque-hash-only, lifecycle-aware, and separate from accounts exactly as the prior persistence plan required.
+- Missing implementation contract was the typed domain/repository boundary; added PasswordCredentialRecord and PasswordCredentialRepository without choosing a hash algorithm or adding transport/session formats.
+- Verification eligibility is explicitly status-gated; replacement/disable operations are repository-owned lifecycle transitions.
+- Focused tests cover valid identity linkage, opaque-hash requirement, and disabled verification behavior.
+- IMPLEMENTATION CHECKPOINT: 320187ad90e4771322804596f5997185c0dfae4c.
+- EXACT NEXT ACTION: inventory existing session persistence/contracts before adding any session model; if persistence already exists, add only the smallest missing lifecycle contract.
