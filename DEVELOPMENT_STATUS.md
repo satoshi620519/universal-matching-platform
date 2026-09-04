@@ -3613,3 +3613,24 @@ CURRENT STATE:
 
 EXACT NEXT ACTION:
 - Inspect completion configuration vs existing category schemas and resolve any contract mismatch before declaring Phase 7 complete.
+
+
+## Phase 7 HTTP completion validation complete — CI #2250
+FINAL VALIDATION:
+- CI #2250: PASS all stages.
+- Independent Matching Concurrency Gate #242: PASS.
+- HTTP completion transport slice is validated and closed.
+
+METADATA WRITE TRANSPORT STARTED:
+- Added dedicated authenticated PATCH /profiles/me/metadata endpoint to the existing ProfileDiscoveryController.
+- Endpoint accepts only avatar/gallery/biography metadata; verificationStatus is intentionally excluded from this self-service metadata path to avoid treating verification as arbitrary user-editable profile metadata.
+- Authenticated principal determines the only profile that can be updated.
+- Existing generic PATCH /profiles/me remains untouched for backward compatibility.
+- Added focused ownership/field-boundary transport test.
+
+CURRENT STATE:
+- Dedicated metadata endpoint implemented but not yet CI-validated.
+- Verification transition workflow remains intentionally separate/unimplemented.
+
+EXACT NEXT ACTION:
+- CI-validate metadata write transport. On green, inspect existing moderation/safety patterns and design verification status transition authority rather than exposing direct arbitrary verification mutation.
