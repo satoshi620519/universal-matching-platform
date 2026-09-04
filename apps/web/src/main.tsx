@@ -26,7 +26,7 @@ function AccessForm({ screen, onBack, onSignedIn }: { screen: 'signin' | 'regist
   }
   const title = screen === 'signin' ? 'Welcome back.' : 'Start your journey.';
   const tone = status === 'error' ? 'error' : 'success';
-  return <main className="accessPage"><nav aria-label="Access navigation"><button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</Button><Button className="textButton" onClick={onBack}>← Back</Button></nav>
+  return <main className="accessPage"><nav aria-label="Access navigation"><Button className="brand plain" onClick={onBack}><span className="brandMark">C</span>connect</Button><Button className="textButton" onClick={onBack}>← Back</Button></nav>
     <section className="accessCard" aria-labelledby="access-title"><div className="eyebrow">{screen === 'signin' ? 'WELCOME BACK' : 'CREATE YOUR ACCOUNT'}</div><h1 id="access-title">{title}</h1><p>{screen === 'signin' ? 'Sign in to continue your conversations and connections.' : 'Create your account and discover a more thoughtful way to connect.'}</p>
       <form onSubmit={submit}>
         <Field label="Email" id="access-email" required><TextInput value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="you@example.com" required autoComplete="email" /></Field>
