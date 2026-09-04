@@ -1,5 +1,7 @@
 import type { ProfileFieldValue } from './profile.js';
 
+export type ProfileFieldVisibility = 'public' | 'owner' | 'privileged';
+
 export type ProfileFieldRule = Readonly<{
   required?: boolean;
   kind: 'string' | 'number' | 'boolean';
@@ -7,6 +9,7 @@ export type ProfileFieldRule = Readonly<{
   maxLength?: number;
   minimum?: number;
   maximum?: number;
+  visibility?: ProfileFieldVisibility;
 }>;
 
 export type ProfileFieldSchema = Readonly<Record<string, ProfileFieldRule>>;
