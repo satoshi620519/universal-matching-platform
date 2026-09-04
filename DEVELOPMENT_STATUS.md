@@ -4034,3 +4034,8 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added the missing ephemeral typing publication event to the existing replaceable RealtimePublisher boundary. It creates no durable message state and preserves account-targeted fan-out.
 - Audited media acceptance: no authorized media storage/scanning subsystem currently exists, so arbitrary attachment URLs/binaries were deliberately not added. The specification now explicitly requires a future ownership-checked durable media identifier.
 - Next exact task: inspect CI #2744 completion, repair only concrete failures, then run Phase 10 final acceptance audit and record remaining platform-wide block/media dependencies without falsely marking them complete.
+
+- CI #2752 produced a concrete TypeScript syntax failure in MessageRealtimePublicationService after the typing-event insertion: publishRecipients was missing its closing method brace before publishTyping.
+- Migrations and PostgreSQL integration had already passed; the failure was isolated to that file at Typecheck.
+- Reconstructed the service with both methods explicitly closed and no behavioral change beyond making the already intended recipient and typing publications syntactically valid.
+- Fresh CI after commit add75ee is now the immediate gate; do not infer Phase 10 completion until Typecheck/Test/Build evidence is green.
