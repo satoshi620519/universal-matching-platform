@@ -1,11 +1,10 @@
-import { BadRequestException, Body, Controller, Get, Headers, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, Param, Patch, Post, Query } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { CategoryService } from './category.service.js';
 import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 import { ProfileService } from './profile.service.js';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
-import type { ProfileVerificationStatus } from '@universal/domain';
 import { DiscoveryService } from './discovery.service.js';
 import { PrismaProfileRepository } from './prisma-profile.repository.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
@@ -78,11 +77,11 @@ export class ProfileDiscoveryController {
   }
 
   @Patch('profiles/me')
-  async updateMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null; verificationStatus?: 'unverified' | 'pending' | 'verified' | 'rejected' }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+  async updateMyProfile(@Body() body: { categoryId?: string; fields?: Record<string, string | number | boolean | null>; geographicScope?: { kind?: string; countryCode?: string; regionCode?: string }; avatar?: { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' } | null; gallery?: readonly { id: string; storageKey: string; status: 'pending' | 'active' | 'removed' }[]; biography?: string | null }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new Error('profile not found');
-    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined, avatar: body.avatar, gallery: body.gallery, biography: body.biography, verificationStatus: body.verificationStatus });
+    return this.profiles.update(existing.id, { categoryId: body.categoryId, fields: body.fields, fieldSchema: body.fields ? await this.schemaFor(body.categoryId ?? existing.categoryId) : undefined, geographicScope: body.geographicScope ? this.scope(body.geographicScope) : undefined, avatar: body.avatar, gallery: body.gallery, biography: body.biography });
   }
 
   @Get('discovery')
