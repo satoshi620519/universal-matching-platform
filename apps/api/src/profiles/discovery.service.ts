@@ -25,8 +25,8 @@ import {
 export class DiscoveryService {
   constructor(
     private readonly profiles: DiscoveryProfileRepository,
-    private readonly blockExclusions: DiscoveryExclusionPolicy,
-    private readonly safetyExclusions: DiscoveryExclusionPolicy,
+    @Optional() private readonly blockExclusions?: DiscoveryExclusionPolicy,
+    @Optional() private readonly safetyExclusions?: DiscoveryExclusionPolicy,
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
@@ -41,8 +41,8 @@ export class DiscoveryService {
       if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate, input.geographicScope).eligible) return null;
       if (!matchesDiscoveryPreferences(candidate, query.preferences ?? { filters: [] })) return null;
       if (!matchesDiscoverySearch(candidate, query.search)) return null;
-      if (await this.blockExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
-      if (await this.safetyExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
+      if (this.blockExclusions && await this.blockExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
+      if (this.safetyExclusions && await this.safetyExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (this.effectiveSafety) {
         const candidateRestriction = await this.effectiveSafety.resolveForAccount(candidate.accountId, 'general');
         if (blocksCapability(candidateRestriction, 'general')) return null;
