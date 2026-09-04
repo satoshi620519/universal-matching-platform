@@ -68,6 +68,18 @@ describe('ProfileDiscoveryController transport boundary', () => {
     await expect(c.getMyProfile('Bearer test')).rejects.toBeInstanceOf(NotFoundException);
   });
 
+  it('validates existing fields against the new category schema on a category-only change', async () => {
+    const c=controller();
+    const repo=(c as any).profileRepository;
+    vi.spyOn(repo,'findByAccountId').mockResolvedValue({ id:'p1', accountId:'viewer-1', categoryId:'cat-1', fields:{ displayName:'Satoshi' } });
+    vi.spyOn((c as any).categories,'list').mockResolvedValue([{ id:'cat-2', key:'freelance' }]);
+    const schemaFor=vi.spyOn((c as any).schemas,'schemaFor').mockReturnValue({ displayName:{ kind:'string', required:true }, skills:{ kind:'string', required:true } });
+    const update=vi.spyOn((c as any).profiles,'update').mockResolvedValue({} as never);
+    await c.updateMyProfile({ categoryId:'cat-2' },'Bearer test');
+    expect(schemaFor).toHaveBeenCalledWith('freelance');
+    expect(update).toHaveBeenCalledWith('p1',expect.objectContaining({ categoryId:'cat-2', fieldSchema:expect.any(Object) }));
+  });
+
   it('hydrates and updates only the authenticated account profile', async () => {
     const c=controller(); const repo=(c as any).profileRepository; const update=vi.spyOn((c as any).profiles,'update');
     await c.getMyProfile('Bearer test');
