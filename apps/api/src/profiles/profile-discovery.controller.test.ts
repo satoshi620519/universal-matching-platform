@@ -174,7 +174,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('exposes city hierarchy and distance constraint through discovery transport', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
-    await c.discover('cat-1','city','JP','13','13101','10',undefined,'2500',undefined,undefined,'Bearer test');
+    await c.discover('cat-1','city','JP','13','13101','10',undefined,'2500',undefined,undefined,undefined,undefined,'Bearer test');
     expect(discover.mock.calls[0][0] as any).toMatchObject({
       categoryId:'cat-1',
       geographicScope:{ kind:'city', countryCode:'JP', regionCode:'13', localityCode:'13101' },
@@ -185,12 +185,12 @@ describe('ProfileDiscoveryController transport boundary', () => {
   it('rejects distance constrained discovery when disabled by deployment configuration', async () => {
     const c=controller();
     vi.spyOn((c as any).distanceMatching,'isEnabled').mockResolvedValue(false);
-    await expect(c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,'2500',undefined,undefined,'Bearer test')).rejects.toThrow('distance matching is disabled');
+    await expect(c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,'2500',undefined,undefined,undefined,undefined,'Bearer test')).rejects.toThrow('distance matching is disabled');
   });
 
   it('rejects discovery scoped to a country disabled by deployment localization configuration', async () => {
     const c=controller();
-    await expect(c.discover('cat-1','country','FR',undefined,undefined,'10',undefined,undefined,undefined,undefined,'Bearer test')).rejects.toThrow('countryCode is not supported');
+    await expect(c.discover('cat-1','country','FR',undefined,undefined,'10',undefined,undefined,undefined,undefined,undefined,undefined,'Bearer test')).rejects.toThrow('countryCode is not supported');
   });
 
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
