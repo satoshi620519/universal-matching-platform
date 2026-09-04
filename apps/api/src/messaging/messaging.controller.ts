@@ -69,6 +69,12 @@ export class MessagingController {
     return { notifications: await this.notifications.listForAccount(principal.accountId) };
   }
 
+  @Get('/notifications/unread')
+  async listUnreadNotifications(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'notification-unread-list' });
+    return { notifications: await this.notifications.listUnreadForAccount(principal.accountId) };
+  }
+
   @Post('/notifications/:notificationId/read')
   async markNotificationRead(@Param('notificationId') notificationId: string, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'notification-read' });
