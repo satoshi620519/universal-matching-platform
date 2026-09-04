@@ -3841,3 +3841,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Restored only the required domain imports and removed the unused OWNER_PROJECTION constant; no privacy behavior was duplicated or changed.
 - Commit: 7dd1eb8 (compile import alignment).
 - Next exact action: CI validation of consolidated privacy projection, then continue Phase 7 completion audit from the recorded checkpoint.
+
+
+### 2026-09-04 — Phase 7 privacy viewer identity reconciliation
+- Continued the Phase 7 privacy audit while CI #2362/#298 runs, avoiding overlap with completed category/schema work.
+- Found a viewer-contract gap in GET /profiles/:accountId: authentication was required, but the authenticated accountId was discarded and an anonymous viewer was passed to domain projection.
+- Preserved the authenticated principal and pass its accountId to projectProfile so owner/privileged viewer-sensitive privacy rules can evaluate correctly.
+- Added focused regression coverage around the authenticated-viewer projection path.
+- Commits: 6bb3468 (implementation), 30d31bf (test).
+- Next exact action: validate consolidated privacy projection changes in CI, then continue Phase 7 requirement-by-requirement completion audit.
