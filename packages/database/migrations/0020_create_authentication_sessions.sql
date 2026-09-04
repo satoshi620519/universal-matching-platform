@@ -1,14 +1,15 @@
 CREATE TABLE authentication_sessions (
-  id TEXT PRIMARY KEY,
-  account_id TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-  authentication_identity_id TEXT NOT NULL REFERENCES authentication_identities(id) ON DELETE CASCADE,
-  security_context JSONB NOT NULL DEFAULT '{}'::jsonb,
-  issued_at TIMESTAMPTZ NOT NULL,
-  expires_at TIMESTAMPTZ NOT NULL,
-  revoked_at TIMESTAMPTZ NULL,
-  CONSTRAINT authentication_sessions_expiry_after_issue CHECK (expires_at > issued_at)
+  id UUID PRIMARY KEY,
+  account_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  authentication_method TEXT NOT NULL,
+  expires_at TIMESTAMPTZ(6) NOT NULL,
+  revoked_at TIMESTAMPTZ(6) NULL,
+  credential_hash TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX authentication_sessions_active_account_idx
-  ON authentication_sessions(account_id, expires_at)
-  WHERE revoked_at IS NULL;
+CREATE INDEX authentication_sessions_account_expires_idx
+  ON authentication_sessions(account_id, expires_at);
+
+CREATE INDEX authentication_sessions_expires_idx
+  ON authentication_sessions(expires_at);
