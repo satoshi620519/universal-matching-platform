@@ -9,6 +9,7 @@ export type MessageRecord = {
   senderAccountId: string;
   body: string;
   createdAt: Date;
+  deletedAt?: Date | null;
 };
 
 @Injectable()
@@ -104,3 +105,19 @@ export class PrismaMessageRepository {
     });
   }
 }
+
+  async markReadForParticipant(input: { conversationId: string; accountId: string; at?: Date }): Promise<boolean> {
+    const updated = await this.database.conversationParticipant.updateMany({
+      where: { conversationId: input.conversationId, accountId: input.accountId },
+      data: { lastReadAt: input.at ?? new Date() },
+    });
+    return updated.count === 1;
+  }
+
+  async softDeleteForSender(input: { messageId: string; senderAccountId: string; at?: Date }): Promise<boolean> {
+    const updated = await this.database.message.updateMany({
+      where: { id: input.messageId, senderAccountId: input.senderAccountId, deletedAt: null },
+      data: { deletedAt: input.at ?? new Date() },
+    });
+    return updated.count === 1;
+  }
