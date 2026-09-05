@@ -252,3 +252,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Scope remains metadata-only: no upload/storage provider or admin UI introduced.
 - Commits: 7619dd3ee132ca4898f2b1c33f84b2fd504d3590, 30ac434dafdd2e456bea2632fddbd56a702fabf7, 3b5e8c912b2b95afe58b64b96a03fe17ec5b663c.
 - Next exact action: inspect the concrete existing SafetyReport persistence/migration conventions from repository paths and add the smallest foreign-keyed evidence persistence boundary. Do not expose HTTP upload APIs before persistence is verified.
+
+
+## Evidence persistence checkpoint — 2026-09-05
+- Inspected the concrete SafetyReport Prisma model and existing repository conventions before persistence work.
+- Added a single ReportEvidence persistence boundary and Prisma implementation; no parallel report repository was introduced.
+- Added ReportEvidence -> SafetyReport foreign-key relation with cascade cleanup and deterministic chronological reads (capturedAt, id).
+- Evidence remains metadata-only; storage/upload concerns are intentionally excluded.
+- Commits: 431bc33f8c13d68ba3b741e70c47ec88d27c91e2, 598e93c4bd6dfcd0093f11a41c2ebca34aacdbd7, 603a53130ee2fe873b7fde0b8d3cc217fca9544d.
+- Next exact action: inspect migration naming/history and add the matching PostgreSQL migration for report_evidence, then register the repository only where an existing DI token convention requires it. Add focused persistence tests before any HTTP API.
