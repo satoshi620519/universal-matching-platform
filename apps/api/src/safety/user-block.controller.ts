@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Headers, HttpStatus, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Headers, HttpStatus, NotFoundException, Param, Post } from '@nestjs/common';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { UserBlockRepository } from './user-block.repository.js';
 
@@ -35,6 +35,7 @@ export class UserBlockController {
       requestId: requestId ?? 'user-block-remove',
     });
     const removed = await this.blocks.remove(principal.accountId, accountId.trim());
-    return removed ? { removed: true } : { statusCode: HttpStatus.NOT_FOUND, removed: false };
+    if (!removed) throw new NotFoundException('user block does not exist');
+    return { statusCode: HttpStatus.OK, removed: true };
   }
 }
