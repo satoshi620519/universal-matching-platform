@@ -5,4 +5,11 @@
 - Added the existing RequestPrincipalResolver authentication boundary before AccountLookupService is called. No new authorization system or data model was introduced.
 - Added focused regression tests: unauthenticated lookup is rejected before repository/service access; authenticated lookup continues through the existing service.
 - Commits: 27362b114f9305326b6e2812b7538fa82480ceae, 60edb5f395bf038797acb90011a7c1df9714d1e9.
-- Next exact action: inventory the remaining externally exposed account/profile controllers only once, identify whether any return non-public fields or bypass existing safety/privacy policies, and patch only concrete exposure gaps.
+
+## Phase 13 user-block discovery enforcement checkpoint — 2026-09-05
+- Completed the remaining account/profile controller inventory needed for the current privacy boundary: ProfileService/PrismaProfileRepository are application/repository layers, while the externally exposed profile surface is ProfileDiscoveryController; no additional arbitrary profile lookup controller was found on the branch.
+- No new non-public profile-field exposure was identified in this pass; profile persistence includes private location fields, so those must remain behind the existing projection/discovery boundary rather than being exposed directly.
+- Confirmed DiscoveryService already consumes the explicit `DISCOVERY_EXCLUSION_POLICIES` token and evaluates the block policy before candidate projection; no duplicate DI implementation was introduced.
+- Added focused regression coverage for UserBlockDiscoveryExclusionPolicy: subject blocks candidate, candidate blocks subject, and neither side blocked.
+- Commit: 4796bdfbbfcba38051a354d692f848a58cb19950.
+- Next exact action: add repository/application-level UserBlock tests for duplicate/create and remove semantics, then wire block enforcement into match/messaging boundaries only where a concrete bypass remains.
