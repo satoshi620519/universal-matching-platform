@@ -61,3 +61,10 @@ Audit the repository for existing installation/deployment material and create th
 - Repository release inventory confirms no GitHub release has been published yet; this is expected because a buyer-facing version and commercial license decision are still explicit release-owner gates.
 - No speculative version tag, legal license text, deployment target or marketplace listing was invented.
 - Technical documentation expansion is now closed. Next exact action: wait for the latest CI baseline; if green, freeze the technical baseline and execute the clean-environment verification before any marketplace packaging.
+
+
+## Lockfile/reproducibility reconciliation checkpoint — 2026-09-05
+- Before claiming clean-install reproducibility, audited the repository tree for dependency lockfiles and found none committed.
+- This exposed a concrete contradiction in release docs: several buyer commands used `pnpm install --frozen-lockfile`, which cannot succeed without a lockfile.
+- Corrected INSTALLATION, QUICK_START, RELEASE_CHECKLIST and RELEASE_VERIFICATION to use the repository's current executable `--no-frozen-lockfile` behavior and explicitly record dependency reproducibility as an unresolved release-quality limitation until a maintained lockfile is intentionally introduced.
+- This is a documentation correctness repair, not a feature change. Next exact action: validate CI on the corrected baseline, then treat introduction of a lockfile as a concrete reproducibility decision rather than falsely claiming it is already solved.
