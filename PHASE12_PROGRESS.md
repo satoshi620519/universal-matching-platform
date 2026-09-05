@@ -331,3 +331,13 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Existing moderation actions infrastructure already supports warnings, restrictions, suspension and enforcement persistence; recreating it would be duplicate work.
 - Selected the explicit remaining roadmap requirement: permanent/irreversible ban semantics.
 - Next exact action: inspect existing SafetyEnforcement domain contracts, schema, and action-to-restriction mapping to identify the smallest concrete missing invariant before implementation.
+
+
+## Ban semantics implementation checkpoint — 2026-09-05
+- Inspected existing enforcement domain, persistence, effective restriction resolution, moderation action mapping, and controller before changing code.
+- Found the enforcement model already supports permanent actions naturally via an active enforcement with no expiresAt; no new ban table or parallel subsystem was needed.
+- Added only the missing canonical `ban` action and `banned` restriction mapping.
+- Banned restrictions block all capabilities and resolve account state through the existing suspended safety boundary, preserving current account-state schema without a duplicate status model.
+- Exposed `ban` through the existing canonical moderation action endpoint; administrative authorization and audit reuse remain unchanged.
+- Commits: d5ac844a8786e0fb84014549cabb90e09b031488, cdfd2488751e03ed983e732b1d92818ac493e38f, 5d717e126797665d156899aa0484771c8e6f6e10.
+- Next exact action: add focused domain/action and effective-restriction tests proving ban is permanent by default, blocks all scopes, and maps through the existing API; then run CI and fix only concrete diagnostics.
