@@ -13,3 +13,10 @@
 - Added focused regression coverage for UserBlockDiscoveryExclusionPolicy: subject blocks candidate, candidate blocks subject, and neither side blocked.
 - Commit: 4796bdfbbfcba38051a354d692f848a58cb19950.
 - Next exact action: add repository/application-level UserBlock tests for duplicate/create and remove semantics, then wire block enforcement into match/messaging boundaries only where a concrete bypass remains.
+
+## Phase 13 user-block repository checkpoint — 2026-09-05
+- Added focused PrismaUserBlockRepository regression coverage for normalized create success, duplicate insert -> ConflictException, remove true/false semantics, and exists true/false semantics.
+- No repository implementation change was needed; the tests lock the current persistence contract in place.
+- Commit: 11f8673d567bda0fb3e83411d269cda33614f098.
+- Match and messaging boundaries were rechecked before any new enforcement work: both already perform bidirectional UserBlock checks, so no duplicate bypass patch was introduced.
+- Next exact action: inspect the current test/build/CI evidence for these latest commits; only patch a concrete failure or missing boundary.
