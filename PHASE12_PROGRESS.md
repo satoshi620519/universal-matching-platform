@@ -444,3 +444,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Report/evidence abuse limits are frozen: existing RequestRateLimiter reused with canonical policy definitions and HTTP 429 rejection semantics.
 - Completed slices must not be reopened without a concrete regression.
 - Next exact action: inspect messaging write paths and existing anti-spam/rate-limit consumers to identify the smallest remaining Phase 12 abuse-prevention gap; do not rate-limit read paths or duplicate authentication controls.
+
+
+## Spam-control gap inspection checkpoint — 2026-09-05
+- After freezing report/evidence limits, searched current repository for messaging/conversation write paths and existing messaging rate-limit consumers.
+- No messaging subsystem or message-send write endpoint is present in the current implementation, so no speculative spam-control integration was added.
+- This prevents inventing infrastructure for an unavailable feature.
+- Next exact action: return to the recorded Phase 12 roadmap/spec gap list and select the next implemented-surface abuse boundary; only integrate where a concrete write action exists.
