@@ -31,10 +31,15 @@ Verify both containers are healthy before continuing.
 
 ## 3. Configure the database
 
+Copy the environment template, then apply migrations:
+
 ```bash
-export DATABASE_URL='postgresql://universal:universal@localhost:5432/universal_matching'
+cp .env.example .env
+set -a; . ./.env; set +a
 pnpm --filter @universal/database migrate
 ```
+
+On Windows PowerShell, set `DATABASE_URL` from `.env.example` in the current session before running the migration command.
 
 Migration history is tracked in `schema_migrations`. Never edit a migration already deployed; add a new higher-numbered migration.
 
