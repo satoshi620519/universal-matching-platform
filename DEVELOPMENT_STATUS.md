@@ -4157,3 +4157,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Broad searches for separate safety/moderation controllers returned no additional concrete controller surface under the searched implementation, so no speculative authorization integration was added.
 - This is consistent with the earlier completion decision: moderation domain infrastructure may exist without an independently exposed admin transport; Phase 13 must expose existing capabilities deliberately rather than assume endpoints exist.
 - Next exact action: inventory controller classes from application module imports/routes, then identify the first concrete admin-operable read surface (moderation queue or audit records) and add a capability-protected transport only if backed by an existing canonical service.
+
+
+## Phase 13 moderation authorization gap closed — 2026-09-05
+- Corrected the previous incomplete controller inventory by reading AppModule directly; SafetyModerationController is a concrete exposed transport.
+- Audit found a real authorization gap: moderation queue and privileged moderation mutations required authentication but did not require an administrative capability.
+- Closed the gap using the existing canonical AdministrativeCapabilityAccessService; no new guard/decorator/authorization stack was created.
+- moderation.read now protects queue access; moderation.decide protects report transitions, case opening, case transitions and enforcement actions.
+- Commit: 9d153390e159aa092bd57ab1dc4a91c16a2b351c.
+- Next exact action: add focused controller/service authorization regression tests for denied and authorized moderation operations, then run the existing CI suite before auditing the next admin-operable surface.
