@@ -124,3 +124,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Reviewed MASTER_DEVELOPMENT_ROADMAP.md Phase 12 and selected Reporting as the next canonical slice because it follows directly after block and enables later moderation actions/queue without coupling them prematurely.
 - Added SAFETY_AND_MODERATION_SPEC.md before coding, defining scope, invariants, minimal data model, lifecycle, and explicit boundary.
 - Next exact action: inspect existing domain/database migration conventions and implement the Reporting slice starting with domain contracts and persistence; do not build queue/admin UI yet.
+
+
+## Reporting implementation checkpoint — 2026-09-05
+- Inspection found Reporting was not absent: canonical domain/report and SafetyReport persistence already existed.
+- Avoided duplicating tables/repos. Aligned the existing report domain with the Phase 12 spec instead.
+- Lifecycle updated to: submitted -> triaged -> actioned | dismissed.
+- Added invariant validation: reporter/target required, reason required, self-report prohibited for user targets.
+- Persistence create path now enforces the canonical domain invariant.
+- Next exact action: inspect existing report API/application surfaces and add authenticated submission only where missing; then add focused transition/invariant tests and run CI.
