@@ -4077,3 +4077,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Exposed the already implemented bounded unread repository query through an authenticated unread endpoint with principal-scoping regression coverage.
 - Channel adapter/dispatch abstractions remain foundation contracts until an authoritative notification producer is introduced; they are not falsely treated as active delivery infrastructure.
 - Next exact task: confirm CI #2782 final Build result, then perform a focused Phase 11 acceptance audit covering durable creation ownership, event producers, adapter registration, retry/idempotency, and explicit deferred push/email/account-preference dependencies.
+
+
+## Phase 12 completion audit — 2026-09-05
+- Phase 12 Safety, Trust and Moderation backend boundaries are complete for currently implemented surfaces.
+- CI-verified slices: User Block, Reporting, Moderation Actions, Moderation Queue, Evidence/Context Capture, Ban semantics, and Abuse Prevention integration.
+- Existing AuditRecord infrastructure is canonical and integrated with moderation operations.
+- Spam-specific enforcement is intentionally deferred to the future concrete message-send transport rather than implemented speculatively.
+- Next development focus: select the next roadmap phase based on dependency order; do not duplicate Phase 12 infrastructure.
