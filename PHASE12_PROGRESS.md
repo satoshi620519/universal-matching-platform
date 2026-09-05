@@ -168,3 +168,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Reporting slice is now CI verified: canonical domain invariants/lifecycle, persistence enforcement, authenticated submission/listing API, controller identity coverage, and regression coverage.
 - Reporting implementation is frozen as a completed vertical slice; do not reopen it without a concrete regression.
 - Next exact action: inspect the current Phase 12 roadmap/spec and existing moderation infrastructure to select the smallest missing canonical moderation slice. Check existing code first to avoid duplicating any moderation case/action functionality.
+
+
+## Moderation actions verification checkpoint — 2026-09-05
+- Re-read Phase 12 progress and inspected existing domain/enforcement infrastructure before coding; moderation actions and enforcement already existed and were not duplicated.
+- Confirmed canonical action mapping: warning/close-without-action => none; feature restriction => feature-restricted; communication restriction => communication-restricted; suspend => suspended.
+- Existing enforcement persistence already filters by status, effectiveAt, and expiresAt; domain activity logic already handles revoked/expired status.
+- Updated existing moderation-action tests rather than creating a parallel suite, and extended existing safety-enforcement tests with the exact expiry-boundary invariant.
+- Commits: cf62747c0fa696bd92ff797d349904e72edcc386, dc48e0b432b390084b2b3b917c92982c5f9f4184.
+- Next exact action: run CI for these focused moderation-action verification changes. Fix only concrete diagnostics. Do not start moderation queue/admin UI or alter Reporting/User Block.
