@@ -27,6 +27,10 @@ describe('isSafetyEnforcementActive', () => {
     ).toBe(false);
   });
 
+  it('is inactive exactly at its expiry boundary', () => {
+    expect(isSafetyEnforcementActive({ ...base, expiresAt: '2026-08-31T00:00:00.000Z' }, '2026-08-31T00:00:00.000Z')).toBe(false);
+  });
+
   it('is inactive when expired', () => {
     expect(
       isSafetyEnforcementActive(
