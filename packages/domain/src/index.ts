@@ -98,3 +98,5 @@ export * from './authentication-session.js';
 export * from './password-recovery.js';
 
 export * from './report-evidence.js';
+
+export * from './abuse-control.js';
