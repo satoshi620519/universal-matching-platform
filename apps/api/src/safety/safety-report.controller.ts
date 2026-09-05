@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
-import type { ReportTargetType } from '@universal/domain';
+import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
+import type { ReportEvidenceKind, ReportTargetType } from '@universal/domain';
+import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { SafetyModerationService } from './safety-moderation.service.js';
 
@@ -28,6 +29,17 @@ export class SafetyReportController {
         reason: body.reason ?? '',
       }),
     };
+  }
+
+  @Post(':reportId/evidence')
+  async captureEvidence(
+    @Body() body: { kind?: ReportEvidenceKind; context?: string; reference?: string | null; capturedAt?: string },
+    @Headers('authorization') authorization: string | undefined,
+    @Headers('x-request-id') requestId: string | undefined,
+    @Param('reportId') reportId: string,
+  ) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'report-evidence-capture' });
+    return { evidence: await this.moderation.captureReportEvidence({ reporterId: principal.accountId, reportId, id: randomUUID(), kind: body.kind ?? 'text-context', context: body.context ?? '', reference: body.reference, capturedAt: body.capturedAt }) };
   }
 
   @Get('me')
