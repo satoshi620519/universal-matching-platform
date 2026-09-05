@@ -107,3 +107,19 @@ Inspect dependency conventions and request identity seams, then implement the sm
 - The reusable AbuseControlPolicy contract and existing RequestRateLimiter provide the current anti-abuse foundation.
 - Further spam controls should be integrated when Phase 10 messaging introduces concrete message-send boundaries, rather than inventing unused infrastructure in Phase 12.
 - Phase 12 abuse prevention is complete for currently implemented write surfaces and is frozen pending a concrete regression or newly implemented write boundary.
+
+
+## Phase 12 completion audit — 2026-09-05
+### Roadmap requirement reconciliation
+- Block user: implemented and CI verified.
+- Report user/content: implemented and CI verified.
+- Report categories: existing canonical category validation/configuration remains in the report domain.
+- Evidence/context capture: implemented and CI verified.
+- Moderation queue: implemented and CI verified.
+- Admin actions: existing canonical moderation service/controller verified, including warning, restrictions, suspension and ban semantics.
+- Audit logs: canonical AuditRecord/AuditRecordService is already integrated into moderation transitions, case operations, and action application.
+- Abuse prevention/rate limiting: implemented for concrete current write boundaries; speculative messaging controls intentionally deferred until a message-send transport exists.
+- Spam controls: no concrete messaging write transport currently exists, so no unused subsystem is introduced.
+
+### Completion decision
+Phase 12 is functionally complete for the currently implemented backend surface. Remaining work under later phases (Admin Console UI, Messaging transport, Security Hardening) must consume these canonical boundaries rather than reopening or duplicating Phase 12 infrastructure.
