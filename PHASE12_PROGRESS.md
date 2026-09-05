@@ -277,3 +277,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added focused PrismaReportEvidenceRepository tests for canonical metadata persistence and report-scoped deterministic chronological reads.
 - Commit: d932cbd72f738597da436f3a8aa6ce472c79e7b7.
 - Next exact action: run CI for this evidence persistence slice and fix only concrete diagnostics. Do not expose evidence HTTP APIs until persistence is green.
+
+
+## Evidence persistence verification complete — 2026-09-05
+- CI for 56c2142498e543750b4407d8497247dc4f496349 is fully green.
+- Passed: migration packaging verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Evidence persistence is CI verified and frozen: canonical domain invariants, SafetyReport FK with cascade cleanup, deterministic `(capturedAt, id)` ordering, DI registration, and focused repository coverage.
+- Next exact action: inspect existing report creation/service/controller patterns and implement the smallest authenticated Evidence/Context capture write slice using the frozen persistence boundary. Do not add binary upload/storage or reopen completed slices without a concrete regression.
