@@ -193,3 +193,13 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Existing admin operations already cover report transition, idempotent case opening, case transition, and action application with admin capability checks/audit records.
 - No dedicated moderation queue listing endpoint or canonical moderation-case repository file was found at the inspected paths/searches.
 - Next exact action: trace the existing SafetyReportRepository persistence contract for moderation-case storage/listing conventions, then add only the smallest admin queue read model/API needed for review. Do not duplicate case creation, transition, action, authorization, or audit logic.
+
+
+## Moderation queue implementation checkpoint — 2026-09-05
+- Re-read Phase 12 progress and traced the existing SafetyReportRepository/Prisma persistence before implementation.
+- Added only the missing queue read path; reused existing report, moderation service, admin capability, authentication, and audit architecture.
+- Repository boundary: listForModeration(status?, limit?) with bounded limit 1..100 and oldest-first deterministic ordering.
+- Service boundary: listModerationQueue requires existing manage-moderation capability.
+- API: GET /safety/moderation/reports with optional status=submitted|triaged and limit=1..100.
+- No parallel queue table, case repository, admin subsystem, or UI was introduced.
+- Next exact action: inspect existing controller/service/repository test conventions, add focused queue authorization/filter/order/bound tests, then run CI. Do not alter completed User Block, Reporting, or Moderation Actions slices.
