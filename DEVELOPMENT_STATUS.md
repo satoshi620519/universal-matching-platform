@@ -4166,3 +4166,13 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - moderation.read now protects queue access; moderation.decide protects report transitions, case opening, case transitions and enforcement actions.
 - Commit: 9d153390e159aa092bd57ab1dc4a91c16a2b351c.
 - Next exact action: add focused controller/service authorization regression tests for denied and authorized moderation operations, then run the existing CI suite before auditing the next admin-operable surface.
+
+
+## Phase 13 moderation authorization regression coverage — 2026-09-05
+- Added focused regression tests directly against the concrete SafetyModerationController authorization boundary.
+- Verified denied moderation.read requests do not reach the queue domain service.
+- Verified denied moderation.decide requests do not reach privileged case operations.
+- Verified an authorized moderation.read path reaches the canonical queue service.
+- This closes the planned test step for commit 9d153390 without adding a second authorization mechanism.
+- Test commit: bf47fb9ee5c3aaa2f5881218406f46d52b30d924.
+- Next exact action: run the repository's existing API test/typecheck/lint/build validation for the changed controller and inspect the next concrete admin-operable read surface only after this slice is green.
