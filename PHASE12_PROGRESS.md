@@ -341,3 +341,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Exposed `ban` through the existing canonical moderation action endpoint; administrative authorization and audit reuse remain unchanged.
 - Commits: d5ac844a8786e0fb84014549cabb90e09b031488, cdfd2488751e03ed983e732b1d92818ac493e38f, 5d717e126797665d156899aa0484771c8e6f6e10.
 - Next exact action: add focused domain/action and effective-restriction tests proving ban is permanent by default, blocks all scopes, and maps through the existing API; then run CI and fix only concrete diagnostics.
+
+
+## Ban semantics focused test checkpoint — 2026-09-05
+- Inspected existing domain and effective-restriction tests; extended those canonical tests instead of creating duplicate test suites.
+- Added assertions that `ban -> banned`, ban is an enforcement action, banned blocks both general and communication scopes, and banned maps through the existing suspended account-state boundary.
+- Commits: 5b80186af117bcea1e2aed94b4870e07da218f9e, e830381d8dba87ecb004eff887dce89e32ebe99c.
+- Next exact action: run CI for the Ban semantics slice and fix only concrete diagnostics. If green, freeze the slice and re-read the Phase 12 roadmap before selecting another missing requirement.
