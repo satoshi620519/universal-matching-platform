@@ -185,3 +185,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Moderation action/enforcement invariants are verified, including canonical action mapping, enforcement/non-enforcement distinction, effectiveAt, exact expiry boundary, and revoked handling.
 - Freeze Moderation Actions as a completed vertical slice; do not reopen without a concrete regression.
 - Next exact action: inspect existing moderation queue/administration implementation and Phase 12 progress before selecting the smallest missing gap. Reuse existing moderation case/controller infrastructure where present; avoid parallel queue or admin subsystems.
+
+
+## Moderation queue reconnaissance checkpoint — 2026-09-05
+- Moderation Actions CI is fully green and frozen.
+- Inspected existing SafetyModerationController/Service before adding the next slice.
+- Existing admin operations already cover report transition, idempotent case opening, case transition, and action application with admin capability checks/audit records.
+- No dedicated moderation queue listing endpoint or canonical moderation-case repository file was found at the inspected paths/searches.
+- Next exact action: trace the existing SafetyReportRepository persistence contract for moderation-case storage/listing conventions, then add only the smallest admin queue read model/API needed for review. Do not duplicate case creation, transition, action, authorization, or audit logic.
