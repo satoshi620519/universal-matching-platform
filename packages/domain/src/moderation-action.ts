@@ -5,6 +5,7 @@ export type ModerationActionType =
   | 'restrict-features'
   | 'restrict-communication'
   | 'suspend'
+  | 'ban'
   | 'close-without-action';
 
 export interface ModerationAction {
@@ -23,6 +24,8 @@ export function restrictionForModerationAction(
       return 'communication-restricted';
     case 'suspend':
       return 'suspended';
+    case 'ban':
+      return 'banned';
     case 'warning':
     case 'close-without-action':
       return 'none';
