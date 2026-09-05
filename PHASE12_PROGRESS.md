@@ -117,3 +117,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - User Block vertical slice is now verified end-to-end across persistence, discovery, matching, messaging, authenticated API, and controller coverage.
 - Audit infrastructure was searched for before adding scope; no existing canonical audit mechanism was found in apps/api/src, so no parallel audit subsystem was introduced.
 - Next exact action: inspect existing Phase 12 roadmap and choose the next smallest canonical safety slice; do not reopen User Block unless a concrete regression is reported.
+
+
+## Phase 12 next-slice decision — 2026-09-05
+- User Block is fully CI verified and frozen as a completed vertical slice.
+- Reviewed MASTER_DEVELOPMENT_ROADMAP.md Phase 12 and selected Reporting as the next canonical slice because it follows directly after block and enables later moderation actions/queue without coupling them prematurely.
+- Added SAFETY_AND_MODERATION_SPEC.md before coding, defining scope, invariants, minimal data model, lifecycle, and explicit boundary.
+- Next exact action: inspect existing domain/database migration conventions and implement the Reporting slice starting with domain contracts and persistence; do not build queue/admin UI yet.
