@@ -227,3 +227,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Focused fix commit 361ac57cfa47f99ec3913e787a3decf037ee3a21 narrows the validation argument to submitted|triaged, matching the already-narrow service call.
 - No behavioral change; only the remaining TypeScript contract mismatch was removed.
 - Next exact action: verify CI for 361ac57c...; if green, mark Moderation Queue complete and inspect only the next Phase 12 gap.
+
+
+## Moderation queue verification complete — 2026-09-05
+- CI for cd31e8060ab85000847f5723fde996439d051409 is fully green.
+- Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration, concurrency gate, and Build.
+- Moderation Queue is CI verified and frozen: authenticated admin access, manage-moderation authorization, canonical submitted/triaged filtering, bounded limit 1..100, deterministic oldest-first reads, and focused service/controller coverage.
+- Next exact action: re-read Phase 12 roadmap/spec and inspect existing safety infrastructure for the next missing vertical slice. Do not reopen User Block, Reporting, Moderation Actions, or Moderation Queue without a concrete regression.
