@@ -421,3 +421,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - The framework-independent AbuseControlPolicy domain contract remains as policy semantics; enforcement must reuse the existing RequestRateLimiter abstraction.
 - Removal commits: c4b2dbe869a18cc96061b0932fa5d94bfb31adf5, 1d678c86a80f9b0221d4db2d302a7e6c2ec0a3cb, 411b1728536536e91976da1584ca509a254ec74f.
 - Next exact action: inspect current consumers of RequestRateLimiter and integrate the AbuseControlPolicy only where an explicit Phase 12 abuse-prevention boundary is still missing; do not create another limiter/repository.
+
+
+## Abuse prevention integration checkpoint — 2026-09-05
+- Inspected actual RequestRateLimiter consumers and found authentication already uses the canonical limiter abstraction with explicit policy-like limits.
+- Chose safety report submission and evidence capture as the next missing Phase 12 abuse boundaries rather than duplicating authentication controls or rate-limiting read endpoints.
+- Reused existing RequestRateLimiter and the new canonical AbuseControlPolicy contract; no second limiter, repository, or infrastructure was added.
+- Added per-authenticated-account quotas: report submission 10/minute; evidence capture 30/minute. Rejections use existing HTTP 429 semantics.
+- Commits: 1ebc6e3cee16fe49e47bf257490a63f46a60496d, 8461989bcaef6ae39bbd763a43f05f2824fb18ec.
+- Next exact action: add focused controller/service tests for quota boundaries and run CI; fix only concrete diagnostics. After green, inspect messaging write paths for the next smallest spam-control gap.
