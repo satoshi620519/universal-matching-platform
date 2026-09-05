@@ -25,3 +25,10 @@ Audit the repository for existing installation/deployment material and create th
 - Audited actual repository manifests before writing buyer documentation: pnpm 10 monorepo, Node 22 toolchain, Docker Compose PostgreSQL 17/Redis 7, immutable database migrations, and separate API/Web/Admin packages.
 - Added INSTALLATION.md based on those actual commands rather than a generic deployment template.
 - Next exact action: verify CI for documentation change, then continue with QUICK_START.md and release checklist using the same repository-first approach.
+
+
+## Buyer path documentation checkpoint — 2026-09-05
+- CI for the installation/checkpoint commits is in progress; no code changes were introduced while awaiting it.
+- Audited the actual Admin Quick Launch workflow and documented its existing 11-step purchaser path in QUICK_START.md instead of inventing a separate setup flow.
+- Added RELEASE_CHECKLIST.md to convert the remaining release blockers into explicit, verifiable sign-off items covering clean installation, CI, migrations, Quick Launch, secrets, operational handoff and marketplace packaging.
+- Next exact action: inspect CI, then audit existing license/changelog/security documentation and fill only concrete release-package gaps.
