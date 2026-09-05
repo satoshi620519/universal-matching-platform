@@ -412,3 +412,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - CI for 34986eb92dde3f2a3cf47e6155a2090ec959bf0f is fully green across migration verification, PostgreSQL integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
 - Stateful adapter is frozen: policy+subject isolation, expiry reset, allowed-only increment, deterministic decision reuse.
 - Next exact action: inspect existing Prisma schema/module DI patterns and choose the smallest production persistence implementation for AbuseControlRepository without adding duplicate infrastructure.
+
+
+## Duplicate-work correction checkpoint — 2026-09-05
+- During production-wiring inspection, discovered an existing canonical common RequestRateLimiter + InMemoryRequestRateLimiter that earlier repository search failed to surface.
+- The newly added AbuseControlService/Repository stateful adapter duplicated this capability and was removed immediately before endpoint wiring.
+- No production wiring depended on the duplicate adapter, so removal is isolated.
+- The framework-independent AbuseControlPolicy domain contract remains as policy semantics; enforcement must reuse the existing RequestRateLimiter abstraction.
+- Removal commits: c4b2dbe869a18cc96061b0932fa5d94bfb31adf5, 1d678c86a80f9b0221d4db2d302a7e6c2ec0a3cb, 411b1728536536e91976da1584ca509a254ec74f.
+- Next exact action: inspect current consumers of RequestRateLimiter and integrate the AbuseControlPolicy only where an explicit Phase 12 abuse-prevention boundary is still missing; do not create another limiter/repository.
