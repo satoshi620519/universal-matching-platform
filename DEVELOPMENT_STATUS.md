@@ -43,3 +43,11 @@
 - Commits: 42c2a6e8f88b8d22508d414a93727da5a4a6351f and 1f5a02020f4126124e599d99b7669910fd5c4e8b.
 - No existing UserBlock, moderation authorization, AccountLookup, or canonical administration service was recreated or modified.
 - Next exact action: verify CI for this isolated admin-console boundary; if green, integrate the adapter into the existing admin UI as a focused moderation workspace rather than creating a parallel console shell.
+
+## Phase 13 admin moderation workspace checkpoint — 2026-09-05
+- CI run #3198 (`33943298904`) for commit `3e4d388c340a0329256434c9f330fd4a50d84f21` completed successfully across migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, matching concurrency integration/gate verification, and Build.
+- Integrated the existing browser moderation API into `apps/admin` as a focused Moderation workspace. The existing Quick Launch shell remains intact; the workspace is opened from a dedicated moderation entry point and operates against the canonical moderation API routes.
+- The workspace supports report queue filtering, report triage/dismissal, case opening, case lifecycle controls currently exposed by the backend, and moderation actions using the canonical action set. Server-side `manage-moderation` authorization remains authoritative.
+- Backend moderation behavior was re-inspected before integration: report/case transitions and actions are already capability-checked and audited in `SafetyModerationService`; no duplicate backend implementation was introduced.
+- Commit: 3e4d388c340a0329256434c9f330fd4a50d84f21.
+- Next exact action: inspect the remaining Phase 13 admin-console roadmap against existing backend surfaces and select the next smallest genuinely missing operational boundary; do not refactor the working moderation workspace or reopen completed safety slices without a concrete gap.
