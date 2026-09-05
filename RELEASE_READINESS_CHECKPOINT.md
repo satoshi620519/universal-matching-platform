@@ -83,3 +83,10 @@ Audit the repository for existing installation/deployment material and create th
 - Added minimal `dev` (`tsx watch src/main.ts`) and `start` (`node dist/main.js`) scripts to `@universal/api`.
 - Restored accurate three-application startup instructions in release docs and removed the resolved API-entrypoint blocker.
 - Next exact action: CI-validate this runtime-script change, then continue clean-environment verification without reopening documentation work.
+
+
+## Environment-template checkpoint — 2026-09-05
+- After resolving API startup, audited the actual runtime configuration instead of inventing environment variables.
+- Added `.env.example` containing only variables consumed by the API runtime and the documented local PostgreSQL connection.
+- Updated INSTALLATION and QUICK_START to use the template so buyer configuration is discoverable without committing a real `.env`.
+- Next exact action: CI-validate the environment/startup changes, then proceed to clean-environment execution and fix only observed failures.
