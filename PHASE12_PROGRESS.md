@@ -365,3 +365,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - No new subsystem, persistence, or API changes were introduced.
 - Fix commit: cd0cfeca3c7f3f7906e835b90b79f4edfb42955f.
 - Next exact action: verify CI for this scope fix. If green, freeze Ban semantics and select the next roadmap gap from recorded progress.
+
+
+## Ban semantics verification complete — 2026-09-05
+- CI for 74665278b05835beefbab389ec55907765b02cf6 is fully green.
+- Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Ban semantics are CI verified and frozen: canonical ban action, banned restriction, permanent enforcement via existing no-expiry model, strongest precedence, all-scope applicability, existing admin authorization and audit reuse.
+- Completed slices must not be reopened without a concrete regression.
+- Next exact action: re-read the remaining Phase 12 roadmap/spec requirements against current implementation and choose the next smallest missing vertical slice; avoid Reporting, Moderation Queue, Evidence Capture, and Ban semantics.
