@@ -35,7 +35,7 @@ export class SafetyModerationController {
     const parsedLimit = limit === undefined ? undefined : Number(limit);
     if (status !== undefined && !(['submitted', 'triaged'] as const).includes(status as ReportStatus)) throw new BadRequestException('status is invalid');
     if (parsedLimit !== undefined && (!Number.isInteger(parsedLimit) || parsedLimit < 1 || parsedLimit > 100)) throw new BadRequestException('limit is invalid');
-    return this.moderation.listModerationQueue({ actorId: principal.accountId, status: status as ReportStatus | undefined, limit: parsedLimit });
+    return this.moderation.listModerationQueue({ actorId: principal.accountId, status: status as 'submitted' | 'triaged' | undefined, limit: parsedLimit });
   }
 
   @Post('moderation/reports/:reportId/transition')
