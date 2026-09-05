@@ -4085,3 +4085,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Existing AuditRecord infrastructure is canonical and integrated with moderation operations.
 - Spam-specific enforcement is intentionally deferred to the future concrete message-send transport rather than implemented speculatively.
 - Next development focus: select the next roadmap phase based on dependency order; do not duplicate Phase 12 infrastructure.
+
+
+## Phase transition: 12 → 13 — 2026-09-05
+- Phase 12 completion audit is frozen for current backend surfaces.
+- Dependency-order review selected Phase 13 Admin Console as the next implementation focus because it consumes completed moderation, audit, safety and configuration capabilities without requiring speculative future messaging/notification infrastructure.
+- Repository inspection found no existing admin module/controller.
+- Added ADMIN_CONSOLE_SPEC.md defining capability-first, deny-by-default backend boundaries and delivery order.
+- Decision commit: 7006c9b256ee9fc271bc24fda8d022151bdb88df. Spec commit: cc93f8e13069ac01dbcce94946adcb832f83dd67.
+- Next exact action: inventory the current authentication/authorization model and existing canonical services that an admin boundary can safely expose; do not create UI or generic CRUD before explicit capability contracts exist.
