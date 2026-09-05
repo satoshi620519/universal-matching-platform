@@ -151,3 +151,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added SafetyReportController tests proving reporter identity comes from authentication and reporter listing is scoped to the authenticated account.
 - Commits: 04499f34d5d21e18a4bfee6d6bcaeaaaafaf34f4 (domain tests), baea805bca4bb59983222071be035234e316fef2 (controller tests).
 - Next exact action: run CI for the Reporting slice and fix only concrete diagnostics. Do not start moderation queue/admin UI while CI is unresolved.
+
+
+## Reporting CI diagnostic checkpoint — 2026-09-05
+- CI for 298ad9f... failed at Typecheck before lint/test/build.
+- Exact diagnostic: SafetyModerationController still declared the obsolete ReportStatus value `closed` after the canonical lifecycle was changed.
+- Focused fix in commit 1b4da4065621708afa39a3d0c8818a0c9908fe98: allowed moderation transition targets are now triaged, actioned, dismissed.
+- No new subsystem or duplicate controller was introduced; existing moderation controller was aligned with the domain contract.
+- Matching Concurrency Gate was still running during diagnosis.
+- Next exact action: verify CI for 1b4da406... and fix only new concrete diagnostics. Keep Reporting scope frozen until CI is green.
