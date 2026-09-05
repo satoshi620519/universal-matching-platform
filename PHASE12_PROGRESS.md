@@ -203,3 +203,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - API: GET /safety/moderation/reports with optional status=submitted|triaged and limit=1..100.
 - No parallel queue table, case repository, admin subsystem, or UI was introduced.
 - Next exact action: inspect existing controller/service/repository test conventions, add focused queue authorization/filter/order/bound tests, then run CI. Do not alter completed User Block, Reporting, or Moderation Actions slices.
+
+
+## Moderation queue test checkpoint — 2026-09-05
+- Re-read progress and searched for existing queue test coverage before adding tests; no dedicated queue tests existed.
+- Added focused service tests: capability is required before reading, and authorization failure prevents repository access.
+- Added focused controller tests: authenticated actor propagation, submitted/triaged filtering, and limit bounds 1..100.
+- Commits: 799d1761619c192ea665446ea64b448312f29222, 20105b14318bc39c26acf24cd606fafbb61ae738.
+- Next exact action: run CI for moderation queue slice and fix only concrete diagnostics. Do not expand queue features or reopen completed Phase 12 slices while CI is unresolved.
