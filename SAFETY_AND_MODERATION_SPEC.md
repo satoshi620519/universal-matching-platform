@@ -91,3 +91,19 @@ Inspect SafetyEnforcement domain contracts, persistence schema, and existing mod
 
 ### Next exact action
 Inspect dependency conventions and request identity seams, then implement the smallest in-memory/testable abuse-control policy boundary with explicit key, window, and rejection semantics.
+
+
+## Abuse prevention completion boundary
+### Implemented concrete surfaces
+- Authentication registration already uses the canonical RequestRateLimiter (5/minute).
+- Safety report submission now uses the canonical limiter (10/minute/account).
+- Safety evidence capture now uses the canonical limiter (30/minute/account).
+
+### Inspection result
+- No messaging/conversation write endpoint currently exists in the repository, so no speculative spam-control integration is justified.
+- No other concrete authenticated write transport was identified during the current Phase 12 inspection.
+
+### Phase 12 boundary decision
+- The reusable AbuseControlPolicy contract and existing RequestRateLimiter provide the current anti-abuse foundation.
+- Further spam controls should be integrated when Phase 10 messaging introduces concrete message-send boundaries, rather than inventing unused infrastructure in Phase 12.
+- Phase 12 abuse prevention is complete for currently implemented write surfaces and is frozen pending a concrete regression or newly implemented write boundary.
