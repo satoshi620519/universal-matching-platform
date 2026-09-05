@@ -108,3 +108,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - The previous fix correctly added @Inject('DISCOVERY_PROFILE_REPOSITORY') to DiscoveryService, but AppModule did not yet register that token.
 - Focused provider registration added: DISCOVERY_PROFILE_REPOSITORY -> PrismaDiscoveryProfileRepository (commit a26cd6f663959d79cae437bc58a30819c468bfc9).
 - Next exact action: verify CI for a26cd6f...; do not change unrelated scope unless diagnostics identify another concrete issue.
+
+
+## User Block verification checkpoint — 2026-09-05
+- CI for commit a26cd6f663959d79cae437bc58a30819c468bfc9 is fully green.
+- Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration, and Build.
+- Matching Concurrency Gate is also green.
+- User Block vertical slice is now verified end-to-end across persistence, discovery, matching, messaging, authenticated API, and controller coverage.
+- Audit infrastructure was searched for before adding scope; no existing canonical audit mechanism was found in apps/api/src, so no parallel audit subsystem was introduced.
+- Next exact action: inspect existing Phase 12 roadmap and choose the next smallest canonical safety slice; do not reopen User Block unless a concrete regression is reported.
