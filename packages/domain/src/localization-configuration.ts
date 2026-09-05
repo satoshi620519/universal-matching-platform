@@ -18,6 +18,17 @@ function normalizeCountry(country: string): string {
   return normalized;
 }
 
+function normalizeTimezone(timezone: string): string {
+  const normalized = timezone.trim();
+  if (!normalized) throw new Error('timezone must not be empty');
+  try {
+    new Intl.DateTimeFormat('en', { timeZone: normalized }).format();
+  } catch {
+    throw new Error('timezone must be a valid IANA timezone');
+  }
+  return normalized;
+}
+
 export function defaultLocalizationConfiguration(input: Pick<LocalizationConfiguration, 'supportedCountries'>): LocalizationConfiguration {
   const countries = input.supportedCountries.map(normalizeCountry);
   return Object.freeze({
@@ -36,6 +47,7 @@ export function validateLocalizationConfiguration(configuration: LocalizationCon
   if (new Set(countries).size !== countries.length) throw new Error('supportedCountries must be unique');
   const defaultLocale = normalizeLocale(configuration.defaultLocale);
   if (!locales.includes(defaultLocale)) throw new Error('defaultLocale must be included in supportedLocales');
+  if (configuration.defaultTimezone !== undefined) normalizeTimezone(configuration.defaultTimezone);
   for (const [country, locale] of Object.entries(configuration.countryLocales ?? {})) {
     normalizeCountry(country);
     const normalizedLocale = normalizeLocale(locale);

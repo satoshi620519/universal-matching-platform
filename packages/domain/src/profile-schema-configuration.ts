@@ -1,5 +1,5 @@
 import type { ProfileFieldValue } from './profile.js';
-import type { ProfileFieldVisibility } from './profile-projection.js';
+import type { ProfileFieldVisibility } from './profile-field-schema.js';
 
 export type ConfigurableProfileFieldType = 'text' | 'number' | 'boolean' | 'date' | 'select';
 

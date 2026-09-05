@@ -62,13 +62,25 @@ export {
 export * from './category.js';
 export * from './geographic-scope.js';
 export * from './profile.js';
+export * from './profile-completion.js';
 export * from './category-repository.js';
 export * from './profile-repository.js';
 export * from './profile-field-schema.js';
 export * from './profile-projection.js';
+export * from './location-precision.js';
+export * from './private-location.js';
+export * from './distance-presentation.js';
 export * from './discovery-query.js';
+export * from './discovery-sorting.js';
+export * from './discovery-preferences.js';
+export * from './discovery-search.js';
+export * from './discovery-ranking.js';
 export * from './discovery-eligibility.js';
 export * from './match-strategy.js';
+export * from './match-compatibility.js';
+export * from './match-strategy-selection.js';
+export * from './match-strategy-configuration.js';
+export * from './rule-based-match-strategy.js';
 export * from './match-transition.js';
 export * from './match-transition-state.js';
 export * from './conversation.js';
@@ -77,6 +89,7 @@ export * from './quick-launch-configuration.js';
 export * from './quick-launch-domain-contract.js';
 export * from './matching-rules-configuration.js';
 export * from './notification-presentation-preferences.js';
+export * from './notification-delivery-preferences.js';
 
 export * from './branding-theme-configuration.js';
 

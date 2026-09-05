@@ -31,6 +31,12 @@ describe('Quick Launch configuration', () => {
     expect(Object.isFrozen(published.featureVisibility?.features)).toBe(true);
   });
 
+  it('publishes a validated immutable match strategy selection', () => {
+    const published = publishQuickLaunchConfiguration({ ...draft, matchStrategy: { strategy: 'rule-based' } }, 4, '2026-09-03T00:00:00.000Z');
+    expect(published.matchStrategy).toEqual({ strategy: 'rule-based' });
+    expect(Object.isFrozen(published.matchStrategy)).toBe(true);
+  });
+
   it('rejects incomplete or ambiguous launch settings', () => {
     expect(() => validateQuickLaunchDraft({ ...draft, applicationName: ' ' })).toThrow('applicationName');
     expect(() => validateQuickLaunchDraft({ ...draft, supportedCountries: [] })).toThrow('country');

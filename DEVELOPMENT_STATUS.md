@@ -3262,3 +3262,818 @@ Inventory existing authentication/account code and specifications, identify genu
 - Matching Concurrency Gate run 188 PASSED completely on the same latest validation cycle.
 - No code changes made while validation is active.
 - EXACT NEXT ACTION: obtain CI 2162 completion. If Typecheck and subsequent gates pass, final-review PR #22 and merge; otherwise fix only exact reported failures.
+
+
+## Phase 7 profile system foundation — active checkpoint
+CURRENT PHASE: Phase 7 — Profile System
+CURRENT MILESTONE: Profile contract reconciliation and specification
+CURRENT TASK: Reconcile existing Profile aggregate, ProfileSchemaConfiguration, ProfileProjectionPolicy, Quick Launch ownership and Prisma persistence before extending runtime behavior.
+STATUS: In progress
+
+COMPLETED:
+- Phase 6 authentication/password recovery merged to main as e327e152b2e2bcc0fd5e7f91de0469450fd266d4 after full CI and concurrency validation.
+- Inventoried existing profile surface before writing new code: Profile, ProfileRepository, ProfileProjectionPolicy, ProfileSchemaConfiguration, ProfileService, category schema defaults, Prisma Profile persistence and prior profile migrations already exist.
+- Confirmed missing Phase 7 capabilities: first-class avatar/gallery contracts, biography metadata, provider-neutral profile verification status, deterministic completion progress, and runtime reconciliation between configurable profile schema and existing category defaults.
+- Added PROFILE_SYSTEM_SPEC.md defining ownership boundaries and acceptance criteria without duplicating Profile.fields, ProfileProjectionPolicy or Quick Launch lifecycle.
+- Active branch: phase7-profile-system-foundation.
+
+IN PROGRESS:
+- Domain contract design for profile media, verification presentation and completion calculation.
+
+NOT STARTED:
+- Phase 7 persistence migration/Prisma mapping.
+- ProfileService runtime reconciliation.
+- HTTP adapters.
+- Full Phase 7 validation and merge.
+
+FILES CHANGED:
+- PROFILE_SYSTEM_SPEC.md
+- DEVELOPMENT_STATUS.md
+
+DECISIONS MADE:
+- Phase 7 extends existing profile ownership rather than replacing the aggregate.
+- Completion progress is derived, not stored as mutable truth.
+- Profile verification status is provider-neutral presentation state and not an authorization source.
+- Quick Launch continues to own field definitions only, never user profile values.
+
+KNOWN ISSUES:
+- DEVELOPMENT_STATUS.md contains extensive historical checkpoints; Phase 7 checkpoint above is the current continuation anchor.
+
+TEST RESULTS:
+- No Phase 7 implementation tests run yet; specification checkpoint only.
+
+EXACT NEXT ACTION:
+- Inspect existing domain exports/tests around profile field schema and projection, then implement the smallest first-class Phase 7 domain contracts (media, verification status, deterministic completion) with focused tests before touching Prisma persistence.
+
+
+## Phase 7 implementation checkpoint — domain contracts
+COMPLETED THIS CHECKPOINT:
+- Inspected existing Profile, ProfileRepository, ProfileProjectionPolicy, ProfileService and ProfileSchemaConfiguration before implementation.
+- Added first-class Profile metadata contracts: avatar, ordered gallery, biography, provider-neutral verification status.
+- Added gallery bound (12) and uniqueness invariant.
+- Added centrally defined biography length limit (2000) and normalization.
+- Added deterministic ProfileCompletion calculation from required schema fields and deployment-selected core requirements; no mutable completion counter is persisted.
+- Added focused domain tests for normalization/bounds and completion calculation.
+- Exported completion contract from domain package.
+
+CURRENT STATE:
+- Domain implementation committed on phase7-profile-system-foundation.
+- Persistence and service reconciliation intentionally not started yet to keep the change surface small until domain validation is confirmed.
+
+EXACT NEXT ACTION:
+- Inspect package scripts/CI conventions and validate the new domain contracts. Fix only demonstrated failures. After green validation, extend Profile projection visibility for core metadata before Prisma persistence.
+
+
+## Phase 7 implementation checkpoint — privacy projection extension
+COMPLETED THIS CHECKPOINT:
+- Confirmed root/domain scripts and CI gate order before continuing.
+- Extended existing ProfileProjectionPolicy architecture instead of adding a parallel privacy mechanism.
+- Added explicit core metadata visibility policy for avatar, gallery, biography and verificationStatus.
+- Projection fails closed when a core metadata policy is absent.
+- Only active avatar/gallery media are projectable; pending/removed media never leak through projection.
+- Added focused privacy tests for active media filtering and fail-closed behavior.
+
+CURRENT STATE:
+- Phase 7 domain metadata + deterministic completion + projection privacy contracts are implemented.
+- Persistence, ProfileService reconciliation and HTTP transport remain intentionally unmodified.
+
+EXACT NEXT ACTION:
+- Run/trigger validation for the accumulated Phase 7 domain changes before persistence work. Inspect exact diagnostics on any failure; do not add speculative fixes. On green validation, inspect existing Prisma Profile mapping/migrations and design the smallest backward-compatible persistence migration.
+
+
+## Phase 7 validation checkpoint
+- Created draft PR #23 for the Phase 7 domain slice so CI validates the exact incremental change set independently from future persistence work.
+- PR #23 head initially 523712fc90bc0dcaa7f578d13d815d1cc44db55e; current branch continues with a documentation-only invariant clarification after PR creation.
+- Required CI gate order confirmed from repository workflow: migrations -> PostgreSQL migration integration -> typecheck -> lint -> test -> matching concurrency integration -> build.
+- No persistence changes have been started before domain validation.
+- EXACT NEXT ACTION: fetch CI/workflow status for the current PR head after it is triggered; inspect exact diagnostics if any gate fails. Do not start Prisma migration until this domain/projection slice is green.
+
+
+## Phase 7 validation checkpoint — CI #2190 typecheck diagnosis
+RESULT:
+- Migration verification: PASS
+- PostgreSQL migration integration: PASS
+- Typecheck: FAIL (diagnosed)
+- Later CI stages skipped because typecheck is a hard gate.
+
+ROOT CAUSE:
+- Existing Profile call sites/tests construct legacy profiles with only the pre-Phase-7 fields.
+- Phase 7 initially made avatar/gallery/biography/verificationStatus required, breaking backward compatibility during the incremental rollout.
+
+FIX APPLIED:
+- New Phase 7 core metadata inputs are optional at construction boundaries and normalize to canonical defaults: avatar=null, gallery=[], biography=null, verificationStatus='unverified'.
+- Projection and completion calculations tolerate legacy objects during rollout.
+- This preserves a single canonical Profile returned by createProfile while avoiding a mass unrelated call-site rewrite.
+
+CURRENT VALIDATION STATE:
+- New head after fix: b18f62b6ab86dec9aae691482554f06d9d083126.
+- Matching Concurrency Gate #204 was still running independently at diagnosis time; its result must be recorded when fetched.
+
+EXACT NEXT ACTION:
+- Fetch workflow status for head b18f62b6ab86dec9aae691482554f06d9d083126 and verify Typecheck before any Prisma work.
+
+
+## Phase 7 persistence checkpoint
+VALIDATION OF DOMAIN SLICE:
+- CI #2198: PASS all stages (migration verification, PostgreSQL integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Matching Concurrency Gate #211: PASS.
+- Domain/projection slice is therefore validated independently before persistence changes.
+
+PERSISTENCE IMPLEMENTED:
+- Added database migration 0022_extend_profiles_phase7.sql.
+- profiles now persists avatar reference columns, biography and provider-neutral verification status.
+- Added profile_gallery_media with ordered positions and cascade deletion.
+- Added database constraints for biography length, avatar column consistency, gallery position and media lifecycle status.
+- Updated Prisma schema mapping.
+- Updated PrismaProfileRepository to persist profile core metadata and replace ordered gallery inside one transaction.
+- Added focused repository persistence tests.
+
+CURRENT STATE:
+- Persistence implementation is complete but not yet CI-validated.
+- ProfileService schema reconciliation and HTTP transport remain unstarted.
+
+EXACT NEXT ACTION:
+- Validate the Phase 7 persistence slice against repository CI. Inspect exact diagnostics on failure and fix only demonstrated incompatibilities before touching ProfileService.
+
+
+## Phase 7 persistence CI diagnosis — Prisma schema mapping
+CI FAILURE DIAGNOSED FROM JOB LOGS:
+- CI #2208 and Matching Concurrency Gate #218 failed before application tests.
+- Root cause was Prisma P1012: Profile referenced ProfileGalleryMedia[] but the ProfileGalleryMedia Prisma model was absent from apps/api/prisma/schema.prisma.
+- This was a schema mapping omission, not a matching concurrency regression and not a migration execution failure.
+
+FIX APPLIED:
+- Added the missing ProfileGalleryMedia Prisma model with profile relation, composite primary key and unique profile/position constraint matching migration 0022.
+
+CURRENT STATE:
+- New branch head: 637e8d1b3034010cff454b97cb80b1aa94b9ab77.
+- No speculative application changes made.
+
+EXACT NEXT ACTION:
+- Re-run/fetch CI for current head and require Prisma generation plus PostgreSQL migration integration to pass before proceeding.
+
+
+## Phase 7 migration stream diagnosis — CI #2212
+CI FAILURE DIAGNOSED FROM POSTGRESQL LOGS:
+- Prisma schema P1012 issue was fixed, but CI #2212 then failed applying packaged database migration 0022 with PostgreSQL error: relation "profiles" does not exist.
+- Root cause: repository has two migration mechanisms. Profile table is created by the API Prisma migration stream, while packages/database packaged migrations run independently in CI. Adding executable Profile DDL to packages/database caused an invalid cross-stream dependency.
+
+FIX APPLIED:
+- Restored packages/database migration 0022 as a non-DDL release marker to avoid duplicate/cross-stream schema ownership.
+- Added canonical executable migration under apps/api/prisma/migrations/20260904000100_extend_profiles_phase7/migration.sql, after existing profile creation migrations.
+- No unrelated application code changed.
+
+CURRENT STATE:
+- Latest persistence migration architecture now respects existing repository ownership boundaries.
+- EXACT NEXT ACTION: fetch CI for current head and verify packaged migration integration and Prisma migration path before Typecheck.
+
+
+## Phase 7 persistence CI diagnosis — Prisma enum boundary
+CI #2218 RESULT:
+- Packaged migration verification: PASS
+- PostgreSQL migration command integration: PASS
+- Typecheck: FAIL (diagnosed from compiler output)
+- Matching Concurrency Gate #226 was still running independently when diagnosis began.
+
+ROOT CAUSE:
+- Prisma schema exposes ProfileGalleryMedia.status as string, while the domain correctly uses the closed union 'pending' | 'active' | 'removed'. Repository mapping incorrectly claimed persisted rows were already narrowed to the domain union.
+
+FIX APPLIED:
+- Persisted row boundary now accepts status:string, matching Prisma output.
+- Repository validates each avatar/gallery status explicitly before constructing the domain Profile.
+- Invalid persisted status fails loudly instead of unsafe casting.
+
+EXACT NEXT ACTION:
+- Fetch CI for the current head after this type-boundary fix. Require Typecheck green before continuing to tests/service reconciliation.
+
+
+## Phase 7 persistence CI diagnosis — packaged migration expectation
+CI #2224 RESULTS:
+- Packaged migration verification: PASS
+- PostgreSQL migration command integration: PASS
+- Typecheck: PASS
+- Lint: PASS
+- Independent Matching Concurrency Gate #229: PASS
+- Test suite: FAIL, 1 failed / 354 passed / 4 skipped.
+
+ROOT CAUSE:
+- filesystem-postgres-migration.integration.test.ts intentionally enumerates all packaged migration versions. Adding release marker 0022 correctly introduced version 22, but the explicit expected list still ended at 21.
+- This is a test expectation update required by the repository's migration artifact contract, not a runtime persistence defect.
+
+FIX APPLIED:
+- Updated expected packaged migration versions to include 22.
+- No production migration behavior or application logic changed.
+
+EXACT NEXT ACTION:
+- Fetch CI for current head and verify full Test stage, then Build, before starting ProfileService reconciliation.
+
+
+## Phase 7 persistence validation complete — CI #2228
+FINAL VALIDATION:
+- CI #2228: PASS all stages (packaged migrations, PostgreSQL migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Independent Matching Concurrency Gate #231: PASS.
+- Phase 7 persistence slice is validated and closed.
+
+PROFILE SERVICE RECONCILIATION STARTED:
+- Added ProfileService.completion(id, { schema, policy }) as a derived read operation.
+- Completion is calculated from the current Profile + configurable schema + optional core policy and is never persisted as mutable percentage state.
+- Schema is validated at the service boundary before derivation.
+- Unknown profiles fail explicitly.
+- Added focused tests proving completion derivation does not call persistence save.
+
+CURRENT STATE:
+- Service completion integration implemented but not yet CI-validated.
+- Existing create/update behavior intentionally left unchanged.
+- HTTP transport/controller integration remains unstarted.
+
+EXACT NEXT ACTION:
+- Validate the new service reconciliation slice in CI. On green, inspect existing API transport architecture and add Phase 7 completion/profile metadata endpoints without duplicating another transport pattern.
+
+
+## Phase 7 service reconciliation CI diagnosis — completion expectation
+CI #2236 RESULTS:
+- Packaged migrations: PASS
+- PostgreSQL migration integration: PASS
+- Typecheck: PASS
+- Lint: PASS
+- Independent Matching Concurrency Gate #235: PASS
+- Test: FAIL, 1 failed / 356 passed / 4 skipped.
+
+ROOT CAUSE:
+- The newly added completion test fixture includes display_name='Satoshi' and the schema marks display_name required. The completion engine correctly counts this as completed, but the test expected zero completed requirements and listed the field as missing.
+- Production completion logic is behaving correctly; only the test expectation contradicted its own fixture.
+
+FIX APPLIED:
+- Corrected expected completion to 1 of 3 and missing keys to avatar + verification only.
+- No production logic changed.
+
+EXACT NEXT ACTION:
+- Revalidate service reconciliation CI from the corrected expectation. On green, proceed to inspect API transport patterns for Phase 7 endpoints.
+
+
+## Phase 7 service validation complete — CI #2240
+FINAL VALIDATION:
+- CI #2240: PASS all stages (packaged migrations, PostgreSQL integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Independent Matching Concurrency Gate #237: PASS.
+- ProfileService completion reconciliation slice is validated and closed.
+
+HTTP TRANSPORT PHASE STARTED:
+- Inspected existing NestJS ProfileDiscoveryController transport pattern rather than creating a duplicate controller.
+- Added authenticated GET /profiles/me/completion endpoint.
+- Endpoint resolves the authenticated principal, loads only that account's profile, derives completion through ProfileService and never accepts account/profile ownership from request input.
+- Added focused transport test proving completion derivation targets the authenticated profile.
+
+CURRENT STATE:
+- HTTP completion endpoint implemented but not yet CI-validated.
+- Profile metadata write transport (avatar/gallery/biography/verification) remains unstarted.
+
+EXACT NEXT ACTION:
+- CI-validate the HTTP completion endpoint. On green, reconcile metadata write DTO/service/repository path while preserving existing create/update behavior.
+
+
+## Phase 7 HTTP completion CI diagnosis — visibility vocabulary
+CI #2246 RESULTS:
+- Packaged migrations: PASS
+- PostgreSQL migration integration: PASS
+- Typecheck: FAIL
+- Independent Matching Concurrency Gate #240: PASS.
+
+ROOT CAUSE:
+- HTTP completion schema helper used visibility='private', but the domain ProfileFieldVisibility vocabulary is 'public' | 'owner' | 'privileged'.
+- Compiler correctly rejected the transport-generated schema.
+
+FIX APPLIED:
+- Replaced invalid 'private' visibility with domain-valid 'owner'.
+- No endpoint ownership/authentication behavior changed.
+
+CURRENT STATE:
+- HTTP completion endpoint implementation remains isolated; only its schema vocabulary boundary was corrected.
+
+EXACT NEXT ACTION:
+- Revalidate CI for current head. Require Typecheck and full pipeline green before metadata write transport work.
+
+
+## Phase 7 HTTP completion validation complete — CI #2250
+FINAL VALIDATION:
+- CI #2250: PASS all stages.
+- Independent Matching Concurrency Gate #242: PASS.
+- HTTP completion transport slice is validated and closed.
+
+PHASE 7 METADATA RECONCILIATION STARTED:
+- Extended existing ProfileService.update() instead of creating separate avatar/gallery/biography/verification services.
+- Partial update now preserves unspecified metadata and only replaces explicitly supplied avatar/gallery/biography/verification values.
+- Extended authenticated PATCH /profiles/me transport to pass typed Phase 7 metadata through the existing ownership-protected update path.
+- Added service and transport tests for metadata preservation/ownership.
+
+CURRENT STATE:
+- Metadata reconciliation implementation complete but not CI-validated.
+- Deliberately no separate media upload/storage endpoint added; current scope reconciles profile metadata references, not binary upload infrastructure.
+
+EXACT NEXT ACTION:
+- Validate metadata reconciliation slice in CI. On green, review Phase 7 completion schema semantics and remaining API contract/documentation gaps before declaring Phase 7 complete.
+
+
+## Phase 7 HTTP completion validation complete — CI #2250
+FINAL VALIDATION:
+- CI #2250: PASS all stages (packaged migrations, PostgreSQL migration integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Independent Matching Concurrency Gate #242: PASS.
+- HTTP completion endpoint slice is validated and closed.
+
+PHASE 7 PROFILE METADATA TRANSPORT RECONCILIATION:
+- Inspected existing create/update controller and service paths before adding endpoints.
+- Avatar/gallery/biography/verification fields already existed in the controller create DTO but were previously dropped before reaching ProfileService.create.
+- Reconciled existing paths instead of creating redundant metadata endpoints.
+- ProfileService.create now accepts and preserves avatar, gallery, biography and verificationStatus.
+- Existing authenticated POST /profiles/me and PATCH /profiles/me now consistently pass Phase 7 metadata through the established ownership boundary.
+- Added focused transport coverage for create/update metadata passthrough and authenticated ownership.
+
+CURRENT STATE:
+- Metadata transport reconciliation implemented but not yet CI-validated.
+- No separate duplicate endpoints introduced.
+
+EXACT NEXT ACTION:
+- CI-validate metadata transport reconciliation. On green, perform final Phase 7 contract review (schema/completion/projection/persistence/transport) and identify any missing buyer-facing documentation before closure.
+
+
+## Phase 7 HTTP completion validation complete — CI #2250
+FINAL VALIDATION:
+- CI #2250: PASS all stages (packaged migrations, PostgreSQL integration, typecheck, lint, tests, matching concurrency integration/gate verification, build).
+- Independent Matching Concurrency Gate #242: PASS.
+- GET /profiles/me/completion is CI-validated and closed.
+
+METADATA WRITE RECONCILIATION:
+- Re-inspected existing ProfileDiscoveryController create/update transport and ProfileService + PrismaProfileRepository persistence path.
+- Avatar, gallery, biography, and verificationStatus write paths were already implemented through authenticated POST/PATCH /profiles/me before the completion endpoint work.
+- Existing focused transport tests already cover forwarding all four Phase 7 metadata groups only through the authenticated profile path.
+- Avoided creating duplicate endpoints or parallel write services.
+
+CURRENT STATE:
+- Phase 7 transport foundations are validated.
+- Next work should be final Phase 7 integration audit: reconcile completion configuration semantics with existing category field schemas, endpoint error mapping, and documentation/roadmap closure rather than duplicating CRUD already present.
+
+EXACT NEXT ACTION:
+- Inspect completion configuration vs existing category schemas and resolve any contract mismatch before declaring Phase 7 complete.
+
+
+## Phase 7 HTTP completion validation complete — CI #2250
+FINAL VALIDATION:
+- CI #2250: PASS all stages.
+- Independent Matching Concurrency Gate #242: PASS.
+- HTTP completion transport slice is validated and closed.
+
+METADATA WRITE TRANSPORT STARTED:
+- Added dedicated authenticated PATCH /profiles/me/metadata endpoint to the existing ProfileDiscoveryController.
+- Endpoint accepts only avatar/gallery/biography metadata; verificationStatus is intentionally excluded from this self-service metadata path to avoid treating verification as arbitrary user-editable profile metadata.
+- Authenticated principal determines the only profile that can be updated.
+- Existing generic PATCH /profiles/me remains untouched for backward compatibility.
+- Added focused ownership/field-boundary transport test.
+
+CURRENT STATE:
+- Dedicated metadata endpoint implemented but not yet CI-validated.
+- Verification transition workflow remains intentionally separate/unimplemented.
+
+EXACT NEXT ACTION:
+- CI-validate metadata write transport. On green, inspect existing moderation/safety patterns and design verification status transition authority rather than exposing direct arbitrary verification mutation.
+
+
+## Phase 7 verification authority reconciliation
+AUDIT FINDING:
+- Generic self-service profile update exposed verificationStatus, which conflicts with verification being a trust/moderation decision rather than arbitrary user metadata.
+- Existing safety architecture already provides AdministrativeCapabilityAccessService with manage-moderation capability checks and audit-oriented moderation patterns.
+
+FIX/APPLICATION:
+- Added moderation-only verification transition transport under POST /moderation/profiles/:accountId/verification.
+- Actor must be authenticated and possess manage-moderation capability.
+- Self-service dedicated metadata endpoint remains limited to avatar/gallery/biography.
+
+CURRENT STATE:
+- Verification authority path implemented; generic PATCH /profiles/me still requires final contract audit to ensure self-service mutation cannot bypass moderation authority.
+
+EXACT NEXT ACTION:
+- Remove or constrain verificationStatus from generic self-service PATCH DTO, then add focused tests and CI validation for the final Phase 7 authority boundary.
+
+
+## HANDOFF CHECKPOINT — 2026-09-03 Phase 7
+### Last fully validated checkpoint
+- CI #2250: PASS all stages.
+- Matching Concurrency Gate #242: PASS.
+- HTTP GET /profiles/me/completion is implemented and fully CI-validated.
+- Phase 7 completion transport is closed.
+
+### Completed work (do not repeat)
+1. Profile domain foundation and configurable completion engine.
+2. Privacy/projection foundations.
+3. Profile persistence and Prisma migration ownership reconciliation.
+4. Profile metadata persistence model (avatar/gallery/biography/verification fields).
+5. ProfileService.completion() derived-read integration.
+6. GET /profiles/me/completion authenticated transport endpoint.
+7. Focused service and transport tests for completion.
+8. CI validation through #2250 / Concurrency Gate #242.
+
+### Important architecture decisions
+- Two migration streams exist; executable Profile schema changes belong to apps/api/prisma/migrations. packages/database migration 0022 is a non-DDL release marker and must not be turned back into Profile DDL.
+- Completion is derived from current Profile + configurable schema/policy; never persist a mutable completion percentage.
+- Transport ownership must come from authenticated principal, never request-supplied account/profile ownership identifiers.
+- Domain ProfileFieldVisibility vocabulary is exactly: public | owner | privileged. Do not introduce 'private'.
+- Validate DB/Prisma string media statuses at repository boundaries before mapping into closed domain unions.
+
+### Current exact state
+- Branch: phase7-profile-system-foundation
+- PR: #23
+- Last validated HEAD: 8ec970390ee5291820e0fb3c9d52f13c8716ed9f
+- CI #2250: SUCCESS
+- Concurrency Gate #242: SUCCESS
+
+### Work currently NOT started
+- Avatar metadata write transport
+- Gallery metadata write transport
+- Biography update transport
+- Verification update transport
+- Final Phase 7 end-to-end integration
+
+### Exact next action — start here in the next chat
+1. Read PROJECT_MASTER.md, MASTER_DEVELOPMENT_ROADMAP.md, DEVELOPMENT_STATUS.md, DECISIONS.md and CONTINUITY_PROTOCOL.md.
+2. Confirm branch/PR/head and latest CI before changing code.
+3. Inspect existing ProfileService, ProfileDiscoveryController, PrismaProfileRepository and existing DTO/controller conventions.
+4. Implement the next smallest isolated slice: profile metadata write reconciliation, starting with service/repository contract analysis before adding HTTP endpoints.
+5. Do not duplicate existing create/update behavior. Prefer extending the established Profile update path.
+6. Add focused tests.
+7. Commit the smallest coherent change and wait for full CI green before starting the next metadata slice.
+
+### Efficiency rule
+Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do not redo any completed CI diagnosis, migration reconciliation, completion engine, service completion integration, or completion HTTP transport work.
+
+
+### 2026-09-04 — Phase 7 verification authority reconciliation
+- Removed request-controlled `verificationStatus` from profile create transport as well as self-update transport.
+- Verification transitions remain exclusively on the moderation capability boundary.
+- Added focused transport assertion preventing self-selected verification status during profile creation.
+- Validation pending on latest commits `a004e8e` / `65660b9`; prior HEAD `8d8ed380` had Typecheck/Lint/Test/Concurrency evidence progressing successfully.
+- Next action: confirm full CI on latest HEAD before any additional Phase 7 slice.
+
+
+### 2026-09-04 — Phase 7 verification authority validation complete
+- Latest Phase 7 authority-boundary HEAD `8b6cf67` validated successfully.
+- CI #2292: SUCCESS (migrations, Typecheck, Lint, Test, matching integration, Build).
+- Matching Concurrency Gate #263: SUCCESS.
+- Verification status is not request-controlled through profile create or self-update transports; moderation capability remains the authority boundary.
+- Next exact action: select the next smallest Phase 7 profile-system slice from the roadmap after confirming existing implementation coverage; do not reopen completed verification work.
+
+
+### 2026-09-04 — Phase 7 configurable completion schema reconciliation
+- Fixed completion endpoint to derive requirements from the configured category field schema rather than only keys already present in the profile.
+- This preserves visibility of missing required fields in completion progress and keeps category customization authoritative.
+- Added focused controller coverage for a configured required field absent from persisted profile data.
+- Latest implementation commits: `a1c03dd`, `3684f03`.
+- Next action: validate latest CI, then continue only with remaining uncovered Phase 7 profile-system capability.
+
+
+### 2026-09-04 — Phase 7 configurable completion schema validation complete
+- Latest schema-driven completion reconciliation HEAD `bfa944e` validated successfully.
+- CI #2300: SUCCESS (migrations, Typecheck, Lint, Test, matching integration, Build).
+- Matching Concurrency Gate #267: SUCCESS.
+- Completion requirements now come from the configured category schema, including required fields absent from persisted profile data.
+- Next exact action: perform the remaining Phase 7 contract audit for field-schema semantics (category changes vs schema validation and endpoint error mapping), then implement only a confirmed gap.
+
+
+### 2026-09-04 — Phase 7 profile transport error-contract reconciliation
+- Completed the planned contract audit after schema-driven completion validation.
+- Confirmed a concrete transport gap: missing authenticated profiles were surfaced as generic errors in several owner-scoped profile endpoints.
+- Began normalizing the profile transport boundary to return HTTP 404 for absent profiles; added focused completion endpoint coverage.
+- Latest implementation commits: `8e472c2`, `fd02976`.
+- Next action: validate latest CI and continue the same error-contract normalization only where owner-scoped endpoints still expose generic missing-profile errors; do not reopen completed schema/verification work.
+
+
+### 2026-09-04 — Phase 7 profile error-contract correction after CI
+- CI #2308 failed only in the new focused profile completion test: implementation still contained generic `Error('profile not found')` in completion (and another owner-scoped verification path), so the earlier narrow replacement did not cover all occurrences.
+- Corrected all remaining exact generic missing-profile throws in the controller to `NotFoundException` for consistent HTTP transport semantics.
+- Matching Concurrency Gate #271 remained SUCCESS; migration, Typecheck, and Lint also passed before the focused test failure.
+- Latest fix commit: `7694ab6`.
+- Next action: validate CI on `7694ab6`; if green, record the error-contract slice complete and audit only genuinely distinct remaining Phase 7 gaps.
+
+
+### 2026-09-04 — Phase 7 profile transport error-contract validation complete
+- Latest HEAD `5b9960e` validated successfully after correcting all remaining generic missing-profile throws.
+- CI #2312: SUCCESS (migrations, Typecheck, Lint, Test, matching integration, Build).
+- Matching Concurrency Gate #273: SUCCESS.
+- Owner-scoped missing-profile transport paths now consistently map to HTTP 404 rather than generic errors.
+- Next exact action: audit the roadmap and current ProfileService/repository contracts for the next genuinely uncovered Phase 7 capability; do not reopen verification authority, completion schema, or error-contract work.
+
+
+### 2026-09-04 — Phase 7 owner-scoped GET contract reconciliation
+- Audited the actual current Profile files from the branch tree before selecting new work, avoiding guessed paths and duplicate implementation.
+- Found one concrete remaining inconsistency after the prior error-contract slice: GET /profiles/me returned null/200 when the authenticated account had no profile, while completion, metadata update, and full update map absence to HTTP 404.
+- Normalized GET /profiles/me to the same NotFoundException contract and added a focused regression test.
+- Commits: 61fb32e (implementation), a8a17a5 (test).
+- Next exact action: validate CI for this isolated contract correction; do not reopen completed schema/completion/verification work.
+
+
+### 2026-09-04 — Phase 7 owner-scoped GET contract validation complete
+- HEAD `07d7112` validated successfully.
+- CI #2320: SUCCESS (migrations, Typecheck, Lint, Test, matching integration, Build).
+- Matching Concurrency Gate #277: SUCCESS.
+- GET /profiles/me now shares the consistent HTTP 404 contract for absent authenticated profiles.
+- Error-contract reconciliation is complete; next action is roadmap-to-code gap audit for a genuinely uncovered Phase 7 capability.
+
+
+### 2026-09-04 — Phase 7 category/schema authority reconciliation
+- Audited actual CategoryService, CategoryFieldSchemaService, ProfileService, and profile transport after closing error-contract work.
+- Found a concrete mismatch: unknown category IDs at create/update transport silently fell back to DEFAULT_FIELD_SCHEMA, allowing validation to proceed under a schema unrelated to the requested category before service persistence rejected it.
+- Changed transport schema resolution to fail explicitly with HTTP 404 for unknown categories, preserving category configuration as the schema authority.
+- Added focused regression coverage for unknown-category profile creation.
+- Commits: 2076ea8 (implementation), bc384e9 (test).
+- Next exact action: validate this isolated category/schema contract correction in CI before selecting another Phase 7 gap.
+
+
+### 2026-09-04 — Phase 7 category/schema authority validation complete
+- HEAD `518ef24` validated successfully.
+- CI #2328: SUCCESS (migrations, Typecheck, Lint, Test, matching integration, Build).
+- Matching Concurrency Gate #281: SUCCESS.
+- Unknown categories no longer silently validate against DEFAULT_FIELD_SCHEMA; category lookup is now authoritative.
+- Next exact action: perform the next roadmap-to-code gap audit and select only a genuinely uncovered Phase 7 capability.
+
+
+### 2026-09-04 — Phase 7 completion/category authority reconciliation
+- After CI #2328 reached full green, continued the roadmap-to-code audit from the exact checkpoint.
+- Found a remaining authority inconsistency: completion lookup silently fell back to DEFAULT_FIELD_SCHEMA when a persisted profile referenced a category that no longer existed, unlike create/update which now reject unknown categories.
+- Removed the completion fallback and return HTTP 404 for a missing authoritative category; added focused regression coverage.
+- Commits: 88d27b0 (implementation), 0bead40 (test).
+- Next exact action: validate this isolated correction in CI before selecting another Phase 7 gap.
+
+
+### 2026-09-04 — Phase 7 category-change schema validation reconciliation
+- Continued from the exact completion/category authority checkpoint without reopening completed work.
+- Found a distinct gap: PATCH /profiles/me changing only categoryId did not resolve/pass the new category schema, so existing fields could bypass validation against the destination category.
+- Updated transport to resolve the authoritative schema whenever categoryId changes, even when fields are omitted; ProfileService therefore validates existing fields before persistence.
+- Added focused regression coverage for category-only changes.
+- Commits: 0f76bf0 (implementation), 3c955c6 (test).
+- Next exact action: validate this isolated category-change contract correction in CI, then continue Phase 7 gap audit.
+
+
+### 2026-09-04 — Phase 7 privacy visibility implementation started
+- Continued from category/schema validation checkpoint and audited the Phase 7 roadmap requirement for privacy visibility against current transport.
+- Found that projection policy existed in discovery but there was no dedicated public profile retrieval path enforcing field visibility.
+- Added authenticated GET /profiles/:accountId with explicit public-field projection; owner GET remains owner-scoped.
+- Added regression coverage proving non-public fields are excluded from public profile responses.
+- Commits: 7bf6d0a (implementation), 54a1fbe (test).
+- Next exact action: validate CI, then continue remaining Phase 7 completion audit.
+
+
+### 2026-09-04 — Phase 7 privacy projection authority reconciliation
+- CI #2342 and Matching Concurrency Gate #288 for the preceding category-only schema change are fully SUCCESS.
+- During public-profile implementation review, found duplicate transport-level projection logic that bypassed the richer domain projectProfile policy (core metadata, active-media filtering, fail-closed behavior).
+- Rewired GET /profiles/:accountId to the domain privacy projection authority with explicit public core policy; owner GET remains full owner view.
+- Added regression coverage for active-only avatar/gallery and public biography/verification projection.
+- Commits: 2bae7e0 (implementation), 7f0a323 (test).
+- Next exact action: validate the consolidated privacy implementation in CI, then continue the remaining Phase 7 completion audit.
+
+
+### 2026-09-04 — Phase 7 privacy projection CI failure resolved
+- CI #2354 exposed a transport/domain integration error after privacy projection consolidation: the controller import/use did not match the actual exported profile-projection API.
+- Inspected packages/domain/src/profile-projection.ts and confirmed ProfileCoreProjectionPolicy and projectProfile are exported via the domain barrel; corrected the public projection invocation to the actual ProfileViewer contract.
+- Commit: 21dee68 (domain API alignment fix).
+- Next exact action: validate the corrected privacy projection compilation in CI before continuing Phase 7 completion audit.
+
+
+### 2026-09-04 — Phase 7 privacy projection compile repair (final import alignment)
+- Re-audited the exact controller source after CI #2354 rather than assuming the prior correction was sufficient.
+- Confirmed the remaining compile break was stale/missing imports in profile-discovery.controller.ts: projectProfile and ProfileCoreProjectionPolicy were referenced but absent from the @universal/domain import.
+- Restored only the required domain imports and removed the unused OWNER_PROJECTION constant; no privacy behavior was duplicated or changed.
+- Commit: 7dd1eb8 (compile import alignment).
+- Next exact action: CI validation of consolidated privacy projection, then continue Phase 7 completion audit from the recorded checkpoint.
+
+
+### 2026-09-04 — Phase 7 privacy viewer identity reconciliation
+- Continued the Phase 7 privacy audit while CI #2362/#298 runs, avoiding overlap with completed category/schema work.
+- Found a viewer-contract gap in GET /profiles/:accountId: authentication was required, but the authenticated accountId was discarded and an anonymous viewer was passed to domain projection.
+- Preserved the authenticated principal and pass its accountId to projectProfile so owner/privileged viewer-sensitive privacy rules can evaluate correctly.
+- Added focused regression coverage around the authenticated-viewer projection path.
+- Commits: 6bb3468 (implementation), 30d31bf (test).
+- Next exact action: validate consolidated privacy projection changes in CI, then continue Phase 7 requirement-by-requirement completion audit.
+
+
+### 2026-09-04 — Phase 7 privileged viewer privacy reconciliation
+- Continued from the authenticated-viewer checkpoint and audited the domain projection contract end-to-end.
+- Found that accountId was now propagated, but privileged viewer context was still discarded, making ProfileFieldVisibility='privileged' unreachable through the public-profile transport even for authorized moderators.
+- Added capability-derived privileged context to GET /profiles/:accountId before domain projection; authorization remains server-owned and no client-supplied privilege is trusted.
+- Added focused regression coverage for the privileged viewer projection path.
+- Commits: cfbfab4 (implementation), 72c4d25 (test).
+- Next exact action: validate the consolidated privacy contract in CI, then proceed to the next unmet Phase 7 requirement from the roadmap audit.
+
+
+### 2026-09-04 — Phase 7 privileged viewer CI repair
+- Confirmed CI typecheck failure was caused by using nonexistent AdministrativeCapabilityAccessService.has().
+- Inspected the authoritative service implementation; the non-throwing capability API is can(accountId, capability).
+- Replaced only has() with can(); require() remains used for moderation mutations.
+- Commit: 9c92737.
+- Next exact action: CI validation, then resume Phase 7 requirement audit.
+
+
+### 2026-09-04 — Phase 7 privileged projection test contract repair
+- During residual Phase 7 audit, found the regression test still mocked obsolete admin.has() after production moved to the authoritative can() API.
+- Updated the focused privileged-viewer test to use can(), keeping production and regression contracts aligned.
+- Commit: dcd6cb9.
+- Next exact action: CI validation of production + regression alignment, then continue remaining Phase 7 requirement audit.
+
+
+### 2026-09-04 — Phase 7 deployment-configurable profile fields audit
+- Verified deployment-configurable profile fields are already implemented end-to-end through QuickLaunchDraft.profileSchema, domain validation, immutable published snapshots, API draft/publish flow, and admin summary coverage.
+- Schema supports stable keys, labels, text/number/boolean/date/select types, required flags, visibility, and validated select options.
+- No duplicate implementation added; requirement marked implementation-present pending final Phase 7 completion evidence audit.
+- CI #2386 remains in progress for the latest privacy projection regression alignment.
+- Next exact action: inspect avatar/gallery and verification requirements for end-to-end gaps, then implement only unmet behavior.
+
+
+### 2026-09-04 — Phase 7 category-driven privacy projection repair
+- Continued Phase 7 end-to-end audit and found public profile projection still used a hard-coded DEFAULT_FIELD_SCHEMA/PUBLIC_PROJECTION, bypassing deployment/category-configured field visibility for arbitrary custom fields.
+- Replaced the hard-coded projection policy at GET /profiles/:accountId with a policy derived from the profile category's authoritative field schema visibility (defaulting unspecified visibility to public).
+- This connects deployment-configurable custom fields and their privacy rules to the public transport projection without duplicating schema definitions.
+- Commit: 2db4ac3.
+- Next exact action: CI validation, then audit avatar/gallery lifecycle and verification-status integration for remaining Phase 7 gaps.
+
+
+### 2026-09-04 — Phase 7 discovery privacy policy reconciliation
+- While auditing avatar/gallery and verification integration, found a second transport path still bypassing category-configured field visibility: GET /discovery passed the hard-coded PUBLIC_PROJECTION.
+- Replaced it with the authoritative category field-schema visibility policy, matching the repaired public-profile projection path.
+- This prevents deployment-specific owner/privileged custom fields from leaking through discovery while preserving one schema authority.
+- Commit: 0913866.
+- Next exact action: CI validation of both projection paths, then finish avatar/gallery lifecycle and verification completion-policy audit.
+
+
+## Latest continuation checkpoint
+
+- Phase 8 localization/location precision wiring verified through CI before proceeding.
+- Distance filtering already existed; it was not reimplemented.
+- Added only the missing deployment-configurable distance presentation policy boundary.
+- Added domain policy for metric and imperial presentation, deployment setting distance.presentation, and configuration validation tests.
+- Next: verify CI for the distance presentation addition, then audit remaining Phase 8 acceptance criteria before further implementation.
+
+- Added missing deployment toggle `distance.matching.enabled`; distance-constrained discovery is rejected when disabled and defaults to disabled for privacy/safety.
+- CI checkpoint pending for distance presentation + distance matching configuration changes.
+
+
+### 2026-09-04 — Phase 8 internationalization acceptance validation complete
+- HEAD `6e0140e` validated successfully after adding deployment-configurable distance presentation and distance-matching enablement boundaries.
+- CI run `33845666233`: SUCCESS (migrations, PostgreSQL migration integration, Typecheck, Lint, Test, matching concurrency integration, Build).
+- Phase 8 acceptance audit confirmed: normalized geographic hierarchy, independent locale/language/timezone configuration, private precise coordinates, country/region discovery filtering, deployment-controlled public location precision, optional deployment-controlled distance matching, and regression coverage for privacy/configuration boundaries.
+- No distance-search implementation was duplicated; existing constraint/repository logic remains authoritative.
+- Phase 8 is complete. Next exact action: begin Phase 9 roadmap-to-code gap audit from the recorded master roadmap checkpoint; do not reopen completed Phase 8 work without a concrete regression.
+
+
+### 2026-09-04 — Phase 9 matching engine foundation
+- Phase 8 remains complete and was not reopened.
+- Per roadmap rule, created MATCHING_ENGINE_SPEC.md before Phase 9 implementation.
+- Existing discovery/geographic/distance/safety/mutual-transition foundations were retained as authoritative.
+- Added only the missing deterministic rule-based compatibility scoring domain boundary, reusing existing MatchingRulesConfiguration and replaceable MatchStrategy architecture.
+- Added weighted-score regression tests.
+- Next exact task: inspect CI for the Phase 9 foundation commits, then add deterministic candidate sorting/filtering only where the specification gap remains.
+
+- Phase 9 CI for the compatibility foundation was still running at the last checkpoint; implementation continued only with an independently scoped sorting contract.
+- Added validated deterministic discovery sorting metadata with stable default id ordering and explicit direction.
+- Repository applies persisted id sorting; compatibilityScore remains a reserved engine-level sort until scores are available before pagination (no fake DB ordering added).
+- Next exact action: verify CI for all Phase 9 commits, then implement candidate filtering/preferences as a normalized domain boundary without bypassing existing safety/geographic/distance exclusions.
+
+- Phase 9 compatibility foundation CI and matching concurrency gate both completed SUCCESS.
+- Added normalized typed discovery preferences only after confirming no equivalent preference boundary existed.
+- Preferences are applied after existing category/geographic eligibility and before privacy projection; block/safety exclusions remain authoritative and cannot be bypassed.
+- Added domain and integration regression coverage.
+- Next exact task: verify CI for Phase 9 sorting/preferences commits, then connect purchaser-configurable matching rules to an engine-level strategy selection path without duplicating MatchStrategy.
+
+- Phase 9 sorting/preferences CI was in progress at this checkpoint; no result inferred before completion.
+- Audited existing MatchStrategy and confirmed only the extension interface existed; no runtime strategy selection boundary was present.
+- Added a minimal deterministic MatchStrategyRegistry keyed by stable strategy identifiers, with duplicate/unknown-key protection and regression tests.
+- Existing mutual-match transition remains untouched; strategy evaluation is intentionally separated from persistence/state transitions.
+- Next exact task: verify CI for current Phase 9 commits, then connect the rule-based compatibility evaluator to a concrete MatchStrategy adapter without duplicating scoring logic.
+
+- CI #2624 exposed concrete Phase 9 integration errors rather than behavioral regressions: DiscoveryService had not yet accepted the newly introduced sort contract, and controller tests still used the pre-sorting discover signature.
+- Fixed only those boundary mismatches; no discovery behavior or eligibility logic was rewritten.
+- Added RuleBasedMatchStrategy as a thin adapter from the existing evaluateRuleBasedCompatibility function into the existing MatchStrategy contract; scoring logic remains single-source and was not duplicated.
+- Added focused adapter regression coverage.
+- Matching Concurrency Gate #476 remains in progress at this checkpoint; CI must be revalidated after the compile repair and strategy adapter commits.
+- Next exact task: inspect fresh CI results, fix only concrete failures if present, then connect strategy selection to purchaser configuration without touching existing match persistence.
+
+- Fresh CI #2636 and Matching Concurrency Gate #485 are running; baseline migration, PostgreSQL migration integration, and Typecheck have already passed at the checkpoint, with Lint/Test/Build still pending.
+- Audited purchaser configuration and found matchingRules already persisted/versioned, but no purchaser-facing strategy selector existed.
+- Added a minimal validated MatchStrategyConfiguration with the current stable rule-based key, then integrated it into immutable QuickLaunch published snapshots and regression coverage.
+- This config selects an existing registry strategy by key; it does not duplicate strategy implementations, scoring, discovery, or match persistence.
+- Next exact task: inspect fresh CI completion. If green, perform final Phase 9 acceptance audit (preferences, filters, sorting, compatibility scoring, replaceable algorithms) before declaring the phase complete.
+
+- Phase 9 acceptance audit found one concrete roadmap gap: explicit search criteria were absent despite filters/preferences and sorting being present.
+- Added a normalized, field-whitelisted discovery search contract (term + explicit searchable fields), query integration, service filtering, API parameters, and regression coverage.
+- Search is applied inside the existing eligibility pipeline and cannot bypass category/geographic/self/block/safety exclusions; no search provider or duplicate repository subsystem was introduced.
+- CI #2648 was still running at the checkpoint: migration, Typecheck, and Lint had passed; Test was active. Matching Concurrency Gate #496 completed SUCCESS.
+- Next exact task: inspect CI #2648 completion, then perform final Phase 9 acceptance audit including card/list/grid presentation boundary and compatibilityScore sorting behavior before declaring completion.
+
+- Latest Phase 9 CI #2664 was running at checkpoint; Matching Concurrency Gate #508 was also running, so no success was inferred before completion.
+- Acceptance audit confirmed the web Discovery UI previously had only an implicit grid and no reusable presentation boundary, while the roadmap explicitly requires card/list/grid.
+- Added a reusable DiscoveryPresentation boundary with explicit card/list/grid modes, accessible mode controls, responsive styling, and focused regression coverage.
+- Did not duplicate discovery fetching, filtering, search, safety logic, or matching behavior; presentation changes consume the existing server-authorized results.
+- Remaining Phase 9 acceptance item: compatibilityScore sorting is intentionally reserved in the domain contract but not yet executable because score calculation occurs after candidate retrieval; resolve this boundary correctly (score-before-pagination) rather than faking database ordering.
+- Next exact task: inspect current CI completion, then implement engine-level compatibility scoring order before pagination or formally constrain the API contract if architecture requires a separate ranking endpoint.
+
+- CI #2674 failed only on stale controller test calls after the new search transport parameters expanded the discover signature; migration and PostgreSQL integration passed, and Matching Concurrency Gate #513 completed SUCCESS.
+- Fixed the concrete stale test signature mismatch without changing runtime behavior.
+- Final Phase 9 ranking audit confirmed compatibilityScore ordering could not be delegated to the paginated repository without faking correctness.
+- Added a deterministic engine-level compatibility ranking boundary with score calculation, stable id tie-breaks, domain regression coverage, and service integration after eligibility filtering and before privacy projection.
+- No database fake orderBy was introduced. Note: repository cursor pagination remains authoritative for id ordering; compatibility ranking is currently an in-memory eligible-set boundary and must be evolved to score-before-repository-pagination for large datasets before marketplace-scale claims.
+- Next exact task: verify CI for ranking and compile repair commits, then run final Phase 9 acceptance audit and explicitly record any scale limitation rather than hiding it.
+
+- CI #2688 exposed one remaining stale controller test call (line 198) after search parameters expanded the transport signature; migration stages passed and Matching Concurrency Gate #523 was still running at the checkpoint.
+- Fixed only that test signature mismatch.
+- Final ranking wiring audit found the new compatibility ranking boundary was not yet receiving the authenticated subject profile from the HTTP discovery path, so public API requests could silently skip compatibility ranking.
+- Wired the existing authoritative subject profile into DiscoveryService and added focused transport regression coverage. Matching rules configuration resolution remains a separate deployment-configuration integration concern; no fake default rules were injected.
+- Next exact task: verify CI for the ranking transport repair, then complete Phase 9 acceptance audit. Explicitly distinguish implemented ranking boundary from any remaining deployment-level rule-resolution or pagination-scale limitation.
+
+- CI #2698: Matching Concurrency Gate #528 SUCCESS; baseline CI failed at Typecheck only. Exact diagnostics showed two stale ProfileDiscoveryController test calls (one over-supplied, one under-supplied). Corrected argument counts directly from the current 14-parameter signature; no runtime code was changed for this repair.
+- Phase 9 final wiring audit then closed the remaining deployment-level rule-resolution gap: purchaser matchingRules were already validated/versioned/immutably published in QuickLaunch snapshots but Discovery HTTP transport did not resolve them into compatibility ranking.
+- Added MatchingRulesConfigurationService that reads only the authoritative published QuickLaunch snapshot and returns undefined when absent (no fabricated default scoring rules).
+- Wired resolved rules into DiscoveryService alongside the authenticated subject profile, registered the resolver, and added focused regression coverage.
+- Compatibility ranking is now executable through the normal HTTP discovery path when a purchaser has published matchingRules and requests compatibilityScore sorting; id sorting remains authoritative otherwise.
+- Remaining explicit limitation for marketplace-scale evolution: compatibility ranking currently ranks the fetched eligible set, while cursor pagination originates at repository retrieval. Score-before-repository-pagination requires a dedicated persisted/precomputed ranking architecture and is not falsely claimed as complete.
+- Next exact task: verify CI for the current compile/test/config wiring commits, then perform final Phase 9 acceptance audit and mark only genuinely satisfied requirements complete.
+
+- CI #2711: Matching Concurrency Gate #535 SUCCESS; baseline CI again reached Typecheck only. Exact diagnostics showed both controller test fixtures still omitted the newly required MatchingRulesConfigurationService constructor dependency (expected 12, got 11). Added the resolver fixture to the shared factory and explicit unauthorized fixture; no runtime behavior changed for this CI repair.
+- Phase 9 acceptance re-audit reconfirmed core discovery coverage: explicit card/list/grid boundary, normalized preferences/filters, field-whitelisted search, deterministic sorting, geographic constraints, compatibility scoring, published purchaser rule resolution, and replaceable strategy architecture.
+- Phase 9 completion is blocked only on fresh baseline CI evidence for the latest constructor-fixture repair. Marketplace-scale compatibility pagination remains explicitly recorded as a Phase 20 scale architecture concern, not a false Phase 9 acceptance claim.
+- Next exact task: inspect fresh CI after commit 64d0150, fix only concrete failures if any; if green, mark Phase 9 complete and begin Phase 10 specification before messaging implementation.
+
+- CI #2716: Matching Concurrency Gate #537 SUCCESS. Baseline CI passed migrations, PostgreSQL migration integration, Typecheck and Lint, then failed exactly one stale source-contract test in PrismaDiscoveryProfileRepository.
+- Runtime repository behavior was already correct: configurable id direction was introduced by Phase 9 sorting, but the old test still required the literal pre-sorting string orderBy: { id: 'asc' }.
+- Updated only the stale assertion to verify both configurable id direction and deterministic ascending fallback. No repository behavior was changed.
+- Fresh CI for commit 4cbe2ea is now the sole Phase 9 completion gate. If green, record Phase 9 complete and move to Phase 10 specification-first work; no Phase 10 messaging implementation begins before the specification audit.
+
+### 2026-09-04 — Phase 9 completion validated
+- CI #2720 on the latest Phase 9 checkpoint completed SUCCESS.
+- Matching Concurrency Gate #539 also completed SUCCESS.
+- Final CI evidence confirms the corrected repository contract test alongside migrations, PostgreSQL integration, Typecheck, Lint, Test, concurrency integration, and Build.
+- Phase 9 is complete: card/list/grid presentation, filters/preferences, field-whitelisted search, deterministic sorting, geographic constraints, configurable compatibility scoring, published purchaser rule resolution, mutual-interest foundation, and replaceable matching strategies are implemented.
+- Compatibility pagination scale limitation remains explicitly deferred to Phase 20 and is not represented as completed large-scale ranking.
+
+### 2026-09-04 — Phase 10 specification-first start
+- Confirmed no existing messaging/conversation implementation was present, avoiding duplicate subsystem work.
+- Created REALTIME_MESSAGING_SPEC.md before implementation as required by the development operating rules.
+- Specification defines durable REST versus replaceable realtime delivery, server-derived identity, participant authorization, block/report integration, read state, ephemeral typing, media references, policy-driven deletion, and scale boundaries.
+- Next exact task: audit existing database schema and block/report services against this specification, then add only the missing conversation/message domain and persistence foundations.
+
+
+### 2026-09-04 — Phase 10 authoritative repository reconciliation
+- Corrected the previous checkpoint's stale audit conclusion: the branch already contained substantial messaging foundations (Conversation/Participant/Message persistence, direct-pair race handling, participant authorization, mutual-match entry, durable notifications, SSE realtime publication, reconnect reconciliation contracts, and communication safety enforcement).
+- No duplicate messaging subsystem was created. REALTIME_MESSAGING_SPEC.md is retained as the acceptance contract and existing code is now audited against it.
+- Gap audit identified missing durable participant read state and policy-driven message deletion state.
+- Added last_read_at to conversation participants and deleted_at soft-delete state to messages, with a forward migration and indexes.
+- Added authorized repository transitions and HTTP endpoints for conversation read state and sender-owned soft deletion.
+- Participant history now redacts the body of soft-deleted messages while retaining the durable record for moderation/audit retention.
+- Added focused authorization/lifecycle regression coverage.
+- Remaining Phase 10 audit items: verify block relationship integration (not just communication-wide safety restriction), report target integration for message/conversation IDs, ephemeral typing event boundary, and media-reference policy.
+- Next exact task: inspect fresh CI for the lifecycle additions, fix only concrete failures, then close the remaining Phase 10 acceptance gaps without reimplementing existing realtime infrastructure.
+
+- Fresh CI run #2744 is active for the messaging lifecycle changes. Setup, migrations, PostgreSQL migration integration, Typecheck and Lint have already passed; Test is running. Matching Concurrency Gate #553 is SUCCESS.
+- Continued independent Phase 10 acceptance work without touching the same lifecycle surface.
+- Safety report integration already supports ReportTargetType message, so no duplicate report subsystem was added; message IDs can already enter the durable moderation workflow.
+- No standalone block subsystem was found; existing communication-wide safety enforcement remains the authoritative hard restriction boundary. A relationship-block implementation will require a separate domain model rather than a fake messaging-local block list.
+- Added the missing ephemeral typing publication event to the existing replaceable RealtimePublisher boundary. It creates no durable message state and preserves account-targeted fan-out.
+- Audited media acceptance: no authorized media storage/scanning subsystem currently exists, so arbitrary attachment URLs/binaries were deliberately not added. The specification now explicitly requires a future ownership-checked durable media identifier.
+- Next exact task: inspect CI #2744 completion, repair only concrete failures, then run Phase 10 final acceptance audit and record remaining platform-wide block/media dependencies without falsely marking them complete.
+
+- CI #2752 produced a concrete TypeScript syntax failure in MessageRealtimePublicationService after the typing-event insertion: publishRecipients was missing its closing method brace before publishTyping.
+- Migrations and PostgreSQL integration had already passed; the failure was isolated to that file at Typecheck.
+- Reconstructed the service with both methods explicitly closed and no behavioral change beyond making the already intended recipient and typing publications syntactically valid.
+- Fresh CI after commit add75ee is now the immediate gate; do not infer Phase 10 completion until Typecheck/Test/Build evidence is green.
+
+
+### 2026-09-04 — Phase 10 CI validation and acceptance boundary
+- CI #2756 SUCCESS: migrations, PostgreSQL migration integration, Typecheck, Lint, Test, matching concurrency integration and Build all passed after the typing publication syntax repair.
+- Matching Concurrency Gate #559 SUCCESS with isolated PostgreSQL reciprocal transition evidence.
+- Phase 10 implementation is validated for conversations, durable messages, participant authorization, realtime delivery, read state, ephemeral typing, soft deletion, message reporting target support, reconnect/reconciliation and communication safety enforcement.
+- Explicit cross-phase dependencies remain recorded rather than falsely implemented: relationship-level Block is a Phase 12 safety domain concern (no fake messaging-local block list created), and media messages require an authorized storage/scanning subsystem before safe durable media references can be enabled.
+- Phase 10 messaging core is complete to its currently available platform boundary; deferred Block/Media integrations remain acceptance dependencies to be closed when their authoritative platform modules are built.
+
+### 2026-09-04 — Phase 11 specification-first start
+- Created NOTIFICATION_SYSTEM_SPEC.md before notification implementation.
+- Existing durable notification/realtime foundations will be audited first; only missing preference, channel adapter, localization, and reliability boundaries will be implemented.
+- Next exact task: audit existing notification entities/controllers/repositories against the Phase 11 specification and avoid duplicate notification delivery infrastructure.
+
+
+### 2026-09-04 — Phase 11 notification foundation audit
+- Existing notification infrastructure was found under messaging and retained: durable Notification records, account-scoped read state, SSE notification.created publication, and purchaser-facing presentation defaults.
+- No duplicate notification table or realtime transport was created.
+- Gap analysis identified missing explicit transport abstraction and unread retrieval contract.
+- Added NotificationChannelAdapter contract and NotificationChannelDispatchService so future email/push providers remain replaceable and cannot become the durable source of truth.
+- Added InAppNotificationChannelAdapter over the existing realtime publisher rather than creating another in-app delivery path.
+- Added bounded account-scoped unread notification retrieval and regression coverage.
+- Email infrastructure already exists as a separate durable outbox; it will be integrated through the new adapter boundary instead of creating a second email queue.
+- No push-device-token infrastructure exists yet, so only the push adapter contract is deferred; no fake push delivery implementation was added.
+- Next exact task: wire the existing durable notification creation flow to the channel dispatch boundary transaction-safely, then audit preferences/localization and event-category policy gaps.
+
+- Phase 11 preference/localization audit found no existing delivery preference policy, while LocalizationConfiguration already provides the authoritative supported/default locale boundary.
+- Added domain-level notification delivery categories (match, message, account_security, moderation) and channels (in_app, email, push) with validation and explicit safe defaults: in_app enabled, email/push disabled until policy enables them.
+- This is a policy contract only; no duplicate account preference persistence was invented before the authoritative account settings model exists.
+- Notification localization now explicitly reuses LocalizationConfiguration rather than introducing a second locale registry; durable payloads remain stable data rather than permanently localized sentences.
+- Existing email outbox is currently typed only for email verification, so notification email delivery cannot safely be wired into it without first generalizing its message contract. Deferred rather than abusing the verification pipeline.
+- Next exact task: inspect module/provider composition and existing notification producers, then integrate channel dispatch only where durable notification creation can be made atomic/idempotent without crossing the verification-email boundary.
+
+- CI #2782 is healthy through migrations, PostgreSQL integration, Typecheck, Lint, Test, and matching concurrency integration; Build is the only remaining running step at this checkpoint. Matching Concurrency Gate #575 is SUCCESS.
+- Audited notification producers and found no authoritative generic NotificationCreationService yet; avoided wiring channel dispatch into guessed producers or creating duplicate notification events.
+- Exposed the already implemented bounded unread repository query through an authenticated unread endpoint with principal-scoping regression coverage.
+- Channel adapter/dispatch abstractions remain foundation contracts until an authoritative notification producer is introduced; they are not falsely treated as active delivery infrastructure.
+- Next exact task: confirm CI #2782 final Build result, then perform a focused Phase 11 acceptance audit covering durable creation ownership, event producers, adapter registration, retry/idempotency, and explicit deferred push/email/account-preference dependencies.

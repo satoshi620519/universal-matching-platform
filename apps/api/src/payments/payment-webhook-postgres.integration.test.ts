@@ -23,7 +23,12 @@ describe.skipIf(!process.env.DATABASE_URL)('payment webhook PostgreSQL integrati
     await database.$executeRawUnsafe("INSERT INTO accounts (id, status) VALUES ('" + accountId + "', 'active')");
   });
 
-  afterAll(async () => { await database.$disconnect(); });
+  afterAll(async () => {
+    await database.$executeRawUnsafe('DROP TABLE IF EXISTS payment_webhook_idempotency');
+    await database.$executeRawUnsafe('DROP TABLE IF EXISTS entitlements');
+    await database.$executeRawUnsafe('DROP TABLE IF EXISTS accounts');
+    await database.$disconnect();
+  });
 
   it('atomically claims duplicate webhook deliveries only once', async () => {
     const eventId = 'evt-pg-' + randomUUID();

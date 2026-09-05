@@ -7,9 +7,18 @@ import {
   evaluateDiscoveryEligibility,
   projectProfile,
   type DiscoveryProfileRepository,
+  type DistanceConstraint,
   type GeographicScope,
   type ProfileProjectionPolicy,
   type ProjectedProfile,
+  type LocationPrecisionPolicy,
+  matchesDiscoveryPreferences,
+  matchesDiscoverySearch,
+  type DiscoveryPreferences,
+  type DiscoverySort,
+  rankDiscoveryCandidates,
+  type MatchingRulesConfiguration,
+  type Profile,
 } from '@universal/domain';
 
 @Injectable()
@@ -21,7 +30,7 @@ export class DiscoveryService {
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
 
-  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; projectionPolicy: ProfileProjectionPolicy }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
+  async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy; preferences?: DiscoveryPreferences; sort?: DiscoverySort; search?: { term: string; fields: readonly string[] }; matchingRules?: MatchingRulesConfiguration; subjectProfile?: Profile }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
     const query = createDiscoveryQuery(input);
     const page = await this.profiles.discover(query);
     const subjectCountryCode = input.geographicScope.kind === 'global' ? undefined : input.geographicScope.countryCode;
@@ -29,7 +38,9 @@ export class DiscoveryService {
     if (blocksCapability(subjectRestriction, 'general')) return { items: [] };
 
     const eligible = await Promise.all(page.items.map(async (candidate) => {
-      if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate).eligible) return null;
+      if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate, input.geographicScope).eligible) return null;
+      if (!matchesDiscoveryPreferences(candidate, query.preferences ?? { filters: [] })) return null;
+      if (!matchesDiscoverySearch(candidate, query.search)) return null;
       if (await this.blockExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (await this.safetyExclusions.excludes(input.subjectAccountId, candidate.accountId)) return null;
       if (this.effectiveSafety) {
@@ -38,7 +49,11 @@ export class DiscoveryService {
       }
       return candidate;
     }));
-    const items = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null).map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy));
+    const candidates = eligible.filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null);
+    const ordered = query.sort?.key === 'compatibilityScore' && input.subjectProfile && input.matchingRules
+      ? rankDiscoveryCandidates(input.subjectProfile, candidates, input.matchingRules, query.sort).map((entry) => entry.profile)
+      : candidates;
+    const items = ordered.map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy, {}, input.locationPolicy));
     return { items, ...(page.nextCursor ? { nextCursor: page.nextCursor } : {}) };
   }
 }

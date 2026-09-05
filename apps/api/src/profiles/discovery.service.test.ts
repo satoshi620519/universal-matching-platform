@@ -64,4 +64,47 @@ describe('DiscoveryService', () => {
     expect(after.items).toEqual([]);
     expect(effectiveSafety.resolveForAccount).toHaveBeenCalledWith('a1', 'general');
   });
+  it('applies preferences without bypassing eligibility exclusions', async () => {
+    const discover = vi.fn().mockResolvedValue({
+      items: [
+        { id: 'self', accountId: 'a1', categoryId: 'dating', fields: { role: 'designer' }, geographicScope: scope },
+        { id: 'match', accountId: 'a2', categoryId: 'dating', fields: { role: 'designer' }, geographicScope: scope },
+        { id: 'miss', accountId: 'a3', categoryId: 'dating', fields: { role: 'developer' }, geographicScope: scope },
+      ],
+    });
+    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const result = await service.discover({
+      subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy,
+      preferences: { filters: [{ field: 'role', operator: 'equals', value: 'designer' }] },
+    });
+    expect(result.items.map((item) => item.id)).toEqual(['match']);
+  });
+
+  it('applies search after eligibility without bypassing exclusions', async () => {
+    const discover = vi.fn().mockResolvedValue({
+      items: [
+        { id: 'self', accountId: 'a1', categoryId: 'dating', fields: { name: 'Alice' }, geographicScope: scope },
+        { id: 'hit', accountId: 'a2', categoryId: 'dating', fields: { name: 'Alice' }, geographicScope: scope },
+        { id: 'miss', accountId: 'a3', categoryId: 'dating', fields: { name: 'Bob' }, geographicScope: scope },
+      ],
+    });
+    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const result = await service.discover({
+      subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy,
+      search: { term: 'alice', fields: ['name'] },
+    });
+    expect(result.items.map((item) => item.id)).toEqual(['hit']);
+  });
+
+  it('ranks eligible candidates by compatibility score before projection', async () => {
+    const discover = vi.fn().mockResolvedValue({ items: [
+      { id:'low', accountId:'a2', categoryId:'dating', fields:{ role:'developer' }, geographicScope:scope },
+      { id:'high', accountId:'a3', categoryId:'dating', fields:{ role:'designer' }, geographicScope:scope },
+    ]});
+    const subject={ id:'subject', accountId:'a1', categoryId:'dating', fields:{ role:'designer' }, geographicScope:scope };
+    const service=new DiscoveryService({discover},{excludes:vi.fn().mockResolvedValue(false)},{excludes:vi.fn().mockResolvedValue(false)});
+    const result=await service.discover({subjectAccountId:'a1',categoryId:'dating',geographicScope:scope,limit:10,projectionPolicy:policy,subjectProfile:subject,matchingRules:{rules:[{key:'role',targetField:'role',operator:'equals',value:'designer',enabled:true}]},sort:{key:'compatibilityScore',direction:'desc'}});
+    expect(result.items.map(item=>item.id)).toEqual(['high','low']);
+  });
+
 });

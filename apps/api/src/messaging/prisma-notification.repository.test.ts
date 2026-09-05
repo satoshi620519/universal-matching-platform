@@ -15,4 +15,10 @@ describe('PrismaNotificationRepository', () => {
     await expect(repository.markReadForAccount('n1', 'a1')).resolves.toBe(false);
     expect(updateMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: 'n1', accountId: 'a1', readAt: null } }));
   });
+  it('retrieves unread notifications with account and read-state boundaries', async () => {
+    const findMany = vi.fn().mockResolvedValue([]);
+    const repository = new PrismaNotificationRepository({ notification: { findMany } } as never);
+    await repository.listUnreadForAccount('a1', 500);
+    expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { accountId: 'a1', readAt: null }, take: 100 }));
+  });
 });

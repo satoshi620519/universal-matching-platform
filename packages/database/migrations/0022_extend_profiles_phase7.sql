@@ -1,0 +1,4 @@
+-- Phase 7 profile core metadata is owned by the API Prisma migration stream.
+-- Keep the packaged migration stream aware of the release without duplicating DDL.
+-- The canonical executable schema change lives at:
+-- apps/api/prisma/migrations/20260904000100_extend_profiles_phase7/migration.sql

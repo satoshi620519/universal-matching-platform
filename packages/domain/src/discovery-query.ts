@@ -1,5 +1,9 @@
+import type { DistanceConstraint } from './private-location.js';
 import type { GeographicScope } from './geographic-scope.js';
 import type { Profile } from './profile.js';
+import { createDiscoverySort, type DiscoverySort } from './discovery-sorting.js';
+import { createDiscoveryPreferences, type DiscoveryPreferences } from './discovery-preferences.js';
+import { createDiscoverySearch, type DiscoverySearch } from './discovery-search.js';
 
 export type DiscoveryCursor = string;
 
@@ -9,6 +13,10 @@ export type DiscoveryQuery = Readonly<{
   geographicScope: GeographicScope;
   limit: number;
   cursor?: DiscoveryCursor;
+  distanceConstraint?: DistanceConstraint;
+  sort?: DiscoverySort;
+  preferences?: DiscoveryPreferences;
+  search?: DiscoverySearch;
 }>;
 
 export type DiscoveryPage = Readonly<{
@@ -23,7 +31,19 @@ export function createDiscoveryQuery(input: DiscoveryQuery): DiscoveryQuery {
     throw new Error('Discovery limit must be an integer between 1 and 100');
   }
   if (input.cursor !== undefined && !input.cursor.trim()) throw new Error('Discovery cursor must not be empty');
-  return { ...input, geographicScope: { ...input.geographicScope } as GeographicScope };
+  if (input.distanceConstraint) {
+    if (!Number.isFinite(input.distanceConstraint.maxDistanceMeters) || input.distanceConstraint.maxDistanceMeters < 0) {
+      throw new Error('Discovery maxDistanceMeters must be a finite non-negative number');
+    }
+  }
+  return {
+    ...input,
+    geographicScope: { ...input.geographicScope } as GeographicScope,
+    ...(input.distanceConstraint ? { distanceConstraint: { ...input.distanceConstraint } } : {}),
+    sort: createDiscoverySort(input.sort),
+    preferences: createDiscoveryPreferences(input.preferences),
+    ...(input.search ? { search: createDiscoverySearch(input.search) } : {}),
+  };
 }
 
 export interface DiscoveryProfileRepository {

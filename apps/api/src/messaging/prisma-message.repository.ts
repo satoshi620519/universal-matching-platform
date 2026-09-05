@@ -9,6 +9,7 @@ export type MessageRecord = {
   senderAccountId: string;
   body: string;
   createdAt: Date;
+  deletedAt?: Date | null;
 };
 
 @Injectable()
@@ -87,7 +88,7 @@ export class PrismaMessageRepository {
     if (!participant) return null;
 
     const limit = Math.min(Math.max(input.limit ?? 50, 1), 100);
-    return this.database.message.findMany({
+    const records = await this.database.message.findMany({
       where: {
         conversationId: input.conversationId,
         ...(input.before
@@ -102,5 +103,23 @@ export class PrismaMessageRepository {
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: limit,
     });
+    return records.map((message: MessageRecord) => message.deletedAt ? { ...message, body: '' } : message);
+  }
+
+
+  async markReadForParticipant(input: { conversationId: string; accountId: string; at?: Date }): Promise<boolean> {
+    const updated = await this.database.conversationParticipant.updateMany({
+      where: { conversationId: input.conversationId, accountId: input.accountId },
+      data: { lastReadAt: input.at ?? new Date() },
+    });
+    return updated.count === 1;
+  }
+
+  async softDeleteForSender(input: { messageId: string; senderAccountId: string; at?: Date }): Promise<boolean> {
+    const updated = await this.database.message.updateMany({
+      where: { id: input.messageId, senderAccountId: input.senderAccountId, deletedAt: null },
+      data: { deletedAt: input.at ?? new Date() },
+    });
+    return updated.count === 1;
   }
 }
