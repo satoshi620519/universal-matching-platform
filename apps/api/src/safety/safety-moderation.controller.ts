@@ -29,6 +29,15 @@ export class SafetyModerationController {
     return this.moderation.listMyReports(principal.accountId, parsed);
   }
 
+  @Get('moderation/reports')
+  async queue(@Query('status') status: string | undefined, @Query('limit') limit: string | undefined, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationId?: string) {
+    const principal = await this.principal.requireAuthenticated({ authorization, requestId: correlationId ?? 'moderation-report-queue' });
+    const parsedLimit = limit === undefined ? undefined : Number(limit);
+    if (status !== undefined && !(['submitted', 'triaged'] as const).includes(status as ReportStatus)) throw new BadRequestException('status is invalid');
+    if (parsedLimit !== undefined && (!Number.isInteger(parsedLimit) || parsedLimit < 1 || parsedLimit > 100)) throw new BadRequestException('limit is invalid');
+    return this.moderation.listModerationQueue({ actorId: principal.accountId, status: status as ReportStatus | undefined, limit: parsedLimit });
+  }
+
   @Post('moderation/reports/:reportId/transition')
   async transitionReport(@Param('reportId') reportId: string, @Body() body: { status?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationId?: string) {
     const principal = await this.principal.requireAuthenticated({ authorization, requestId: correlationId ?? 'moderation-report-transition' });
