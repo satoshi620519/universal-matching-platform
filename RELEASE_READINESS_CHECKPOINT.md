@@ -32,3 +32,11 @@ Audit the repository for existing installation/deployment material and create th
 - Audited the actual Admin Quick Launch workflow and documented its existing 11-step purchaser path in QUICK_START.md instead of inventing a separate setup flow.
 - Added RELEASE_CHECKLIST.md to convert the remaining release blockers into explicit, verifiable sign-off items covering clean installation, CI, migrations, Quick Launch, secrets, operational handoff and marketplace packaging.
 - Next exact action: inspect CI, then audit existing license/changelog/security documentation and fill only concrete release-package gaps.
+
+
+## Commercial package documentation checkpoint — 2026-09-05
+- Audited repository tree for existing LICENSE, CHANGELOG and SECURITY documentation; none existed.
+- Added CHANGELOG.md with pre-1.0 versioning policy and buyer-facing release history structure.
+- Added SECURITY.md defining vulnerability handling and deployment-owner security responsibilities without pretending configuration settings are authorization.
+- Added LICENSE_DECISION_REQUIRED.md instead of inventing legal terms. Commercial license selection is now explicitly tracked as an owner decision and release blocker.
+- Next exact action: inspect CI for the documentation commits, then perform a concrete clean-install/release verification audit and identify any remaining technical blocker without reopening completed feature work.
