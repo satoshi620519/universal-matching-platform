@@ -4,15 +4,23 @@ import { AuditRecordService } from '../administration/audit-record.service.js';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 import { SafetyEnforcementRepository } from './safety-enforcement.repository.js';
 import { SafetyReportRepository } from './safety-report.repository.js';
+import { ReportEvidenceRepository } from './report-evidence.repository.js';
+import { createReportEvidence, type ReportEvidenceKind } from '@universal/domain';
 
 @Injectable()
 export class SafetyModerationService {
-  constructor(private readonly reports: SafetyReportRepository, private readonly enforcement: SafetyEnforcementRepository, private readonly admin: AdministrativeCapabilityAccessService, private readonly audit: AuditRecordService) {}
+  constructor(private readonly reports: SafetyReportRepository, private readonly evidence: ReportEvidenceRepository, private readonly enforcement: SafetyEnforcementRepository, private readonly admin: AdministrativeCapabilityAccessService, private readonly audit: AuditRecordService) {}
   async submitReport(input: { reporterId: string; targetId: string; targetType: ReportTargetType; reason: string }) {
     if (!input.targetId.trim() || !input.reason.trim()) throw new BadRequestException('targetId and reason are required');
     return this.reports.create({ ...input, reason: input.reason.trim() });
   }
   async listMyReports(accountId: string, limit?: number) { return this.reports.listForReporter(accountId, limit); }
+  async captureReportEvidence(input: { reporterId: string; reportId: string; id: string; kind: ReportEvidenceKind; context: string; reference?: string | null; capturedAt?: string }) {
+    const report = await this.reports.findById(input.reportId);
+    if (!report) throw new NotFoundException('report not found');
+    if (report.reporterId !== input.reporterId) throw new NotFoundException('report not found');
+    return this.evidence.create(createReportEvidence(input));
+  }
   async listModerationQueue(input: { actorId: string; status?: ReportStatus; limit?: number }) {
     await this.admin.require(input.actorId, 'manage-moderation');
     return this.reports.listForModeration(input.status, input.limit);
