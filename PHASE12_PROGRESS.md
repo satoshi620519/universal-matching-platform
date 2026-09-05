@@ -56,8 +56,7 @@ Do not implement ban, evidence/context, rate/spam controls, or moderation queue 
 User Block is implemented across: domain contract, PostgreSQL persistence, repository, Discovery exclusion, Matching rejection, and Messaging/conversation rejection.
 
 ### Not yet completed (do next, in this order)
-1. Inspect current authenticated controller conventions and add authenticated Block / Unblock HTTP API.
-2. Add focused tests: duplicate block idempotency, directed unblock semantics, self-block rejection, and bidirectional enforcement in discovery/matching/messaging.
+1. Add focused tests: duplicate block idempotency, directed unblock semantics, self-block rejection, and bidirectional enforcement in discovery/matching/messaging.
 3. Run CI and fix only concrete failures.
 4. Add audit coverage where the existing canonical audit mechanism supports User Block actions.
 
@@ -75,4 +74,12 @@ User Block is implemented across: domain contract, PostgreSQL persistence, repos
 - 45f5e4cdef55af0c137c2a84e5756cd0a8d80ede — progress update
 
 ### Exact first action tomorrow
-Inspect authenticated controller conventions, then implement the minimal Block / Unblock API on top of the existing UserBlockRepository. Do not modify Discovery/Matching/Messaging again unless tests expose a concrete defect.
+Authenticated Block / Unblock API has been added using the existing RequestPrincipalResolver convention. Next: add focused tests, then run CI. Do not modify Discovery/Matching/Messaging again unless tests expose a concrete defect.
+
+
+## Continuation update — 2026-09-05
+- Inspected current authenticated controller convention (RequestPrincipalResolver + Authorization header + request ID).
+- Added UserBlockController: POST /blocks/:accountId and DELETE /blocks/:accountId.
+- Registered UserBlockController in AppModule.
+- Authentication is resolved server-side; blocker identity is never accepted from the request body.
+- Next exact action: add focused controller/repository behavior tests, then run CI before any further Phase 12 scope.
