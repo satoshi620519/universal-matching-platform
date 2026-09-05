@@ -16,6 +16,10 @@ export class PrismaSafetyReportRepository extends SafetyReportRepository {
     const records = await this.database.safetyReport.findMany({ where: { reporterId }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: Math.min(100, Math.max(1, limit)) });
     return records.map(record => this.toReport(record));
   }
+  async listForModeration(status?: SafetyReport['status'], limit = 50): Promise<readonly SafetyReport[]> {
+    const records = await this.database.safetyReport.findMany({ where: status ? { status } : undefined, orderBy: [{ createdAt: 'asc' }, { id: 'asc' }], take: Math.min(100, Math.max(1, limit)) });
+    return records.map(record => this.toReport(record));
+  }
   async findById(id: string): Promise<SafetyReport | null> {
     const record = await this.database.safetyReport.findUnique({ where: { id } });
     return record ? this.toReport(record) : null;
