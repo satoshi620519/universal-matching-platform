@@ -4191,3 +4191,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Therefore there is no existing audit-read transport authorization gap to patch; creating a standalone audit subsystem merely to satisfy Phase 13 would duplicate/speculate beyond current concrete surfaces.
 - Decision: audit infrastructure remains an internal/cross-cutting concern until a canonical query boundary is introduced by a concrete Admin Console requirement.
 - Next exact action: inventory remaining concrete privileged controllers from AppModule/module composition and audit the next exposed write/read boundary for capability enforcement; skip absent domain transports.
+
+
+## Phase 13 privileged controller inventory checkpoint — 2026-09-05
+- Continued from the recorded next action by reading concrete controllers from AppModule; did not repeat moderation or audit-read inspection.
+- AdministrativeFailedEmailOutboxController is authenticated at transport and delegates authorization/auditing to PrivilegedFailedEmailOutboxService, which requires review-failed-email-outbox for both list and requeue. No gap.
+- QuickLaunchConfigurationController already requires manage-quick-launch for every draft/publish/read operation. No gap.
+- AdministrativeRoleManagementController delegates privileged checks to AdministrativeRoleManagementService. No duplicate transport check added.
+- Result: inspected concrete privileged surfaces are already protected either at transport or canonical service boundary. No speculative fixes introduced.
+- Next exact action: inspect remaining AppModule controllers that expose configuration/security-sensitive operations and distinguish ordinary self-service/public endpoints from administrative surfaces; only patch concrete privilege gaps.
