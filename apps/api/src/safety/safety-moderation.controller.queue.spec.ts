@@ -6,6 +6,7 @@ describe('SafetyModerationController moderation queue', () => {
   const controller = (moderation: unknown) => new SafetyModerationController(
     { requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'admin-1' }) } as never,
     moderation as never,
+    { require: vi.fn().mockResolvedValue(undefined) } as never,
   );
 
   it('passes authenticated actor and validated filters to the queue service', async () => {
