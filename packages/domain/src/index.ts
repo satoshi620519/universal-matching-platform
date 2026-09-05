@@ -96,3 +96,5 @@ export * from './feature-visibility-configuration.js';
 export * from './password-credential.js';
 export * from './authentication-session.js';
 export * from './password-recovery.js';
+
+export * from './report-evidence.js';
