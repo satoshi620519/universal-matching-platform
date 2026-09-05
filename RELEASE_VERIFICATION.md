@@ -16,7 +16,8 @@ This matrix distinguishes checks already enforced by repository CI from checks t
 - Docker Compose PostgreSQL and Redis startup
 - `pnpm install --no-frozen-lockfile` (current repository has no committed lockfile)
 - Clean database migration using the buyer installation path
-- API, Web and Admin startup together
+- Web and Admin startup
+- API runtime startup through a documented entrypoint (currently unavailable; release blocker)
 - Admin Quick Launch draft save/reload
 - Complete all 11 configuration steps
 - Publish configuration and verify immutable history
