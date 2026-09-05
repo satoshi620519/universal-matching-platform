@@ -284,3 +284,13 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Passed: migration packaging verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
 - Evidence persistence is CI verified and frozen: canonical domain invariants, SafetyReport FK with cascade cleanup, deterministic `(capturedAt, id)` ordering, DI registration, and focused repository coverage.
 - Next exact action: inspect existing report creation/service/controller patterns and implement the smallest authenticated Evidence/Context capture write slice using the frozen persistence boundary. Do not add binary upload/storage or reopen completed slices without a concrete regression.
+
+
+## Evidence capture write slice checkpoint — 2026-09-05
+- Evidence persistence CI is fully green and frozen.
+- Re-read existing report controller and moderation service patterns before exposing a write path.
+- Added authenticated `POST /reports/:reportId/evidence` metadata capture; server generates evidence UUID.
+- Ownership boundary: evidence capture first resolves the report and returns not-found when the authenticated reporter does not own it, avoiding cross-report evidence injection.
+- Reuses canonical `createReportEvidence` invariants and frozen ReportEvidenceRepository; no upload/storage provider added.
+- Commits: e9ad785e84c50c460567618b972440e61d59b03a, e0c5107bbacffd7cc8bbc6845ea90d11bd9bb8ad.
+- Next exact action: inspect constructor/test fallout caused by the new repository dependency, add focused ownership/domain validation tests for capture, then run CI. Do not add binary attachments or retrieval/admin APIs before the write slice is green.
