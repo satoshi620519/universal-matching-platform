@@ -56,7 +56,8 @@ Do not implement ban, evidence/context, rate/spam controls, or moderation queue 
 User Block is implemented across: domain contract, PostgreSQL persistence, repository, Discovery exclusion, Matching rejection, and Messaging/conversation rejection.
 
 ### Not yet completed (do next, in this order)
-1. Add focused tests: duplicate block idempotency, directed unblock semantics, self-block rejection, and bidirectional enforcement in discovery/matching/messaging.
+1. Run CI for the completed User Block slice and fix only concrete failures.
+2. Add any missing focused tests: duplicate block idempotency, directed unblock semantics, self-block rejection, and bidirectional enforcement in discovery/matching/messaging.
 3. Run CI and fix only concrete failures.
 4. Add audit coverage where the existing canonical audit mechanism supports User Block actions.
 
@@ -82,4 +83,4 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added UserBlockController: POST /blocks/:accountId and DELETE /blocks/:accountId.
 - Registered UserBlockController in AppModule.
 - Authentication is resolved server-side; blocker identity is never accepted from the request body.
-- Next exact action: add focused controller/repository behavior tests, then run CI before any further Phase 12 scope.
+- Controller tests are now added and the unblock endpoint returns a proper NotFoundException instead of embedding a status code in a success payload. Next exact action: run CI for the completed User Block slice and fix only concrete failures.
