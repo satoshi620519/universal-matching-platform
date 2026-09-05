@@ -4140,3 +4140,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused tests for deny-by-default and least-privilege capability evaluation.
 - No new persistence, role CRUD, admin endpoint, or UI added.
 - Next exact action: inspect administration module/provider composition and add the smallest authorization guard/decorator boundary that can enforce a required AdminCapability on future admin endpoints, with focused unauthorized/authorized tests before exposing endpoints.
+
+
+## Phase 13 canonical authorization discovery — 2026-09-05
+- Module composition inspection revealed an already implemented canonical administrative authorization stack: RoleAssignmentRepository → AdministrativeRoleAccessService → AdministrativeCapabilityAccessService.
+- AdministrativeCapabilityAccessService already provides deny-by-default `can`/`require` semantics and AdministrativeRoleManagementService already enforces capability checks for privileged mutations.
+- Existing AdministrativeRoleManagementController is a concrete protected admin boundary, so Phase 13 is further along than the earlier file inventory indicated.
+- Removed the newly created duplicate `apps/api/src/admin` capability evaluator/access-service path rather than adding another guard/decorator system.
+- No new authorization infrastructure was added. Future Admin Console work must consume AdministrativeCapabilityAccessService and existing protected services.
+- Next exact action: audit existing administrative/safety controllers for inconsistent authorization boundaries, starting with concrete moderation operations, and close only real gaps using the canonical AdministrativeCapabilityAccessService.
