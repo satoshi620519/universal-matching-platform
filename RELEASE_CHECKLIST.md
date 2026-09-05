@@ -4,12 +4,14 @@ Use this checklist to decide whether a build is ready to package for marketplace
 
 ## Source and quality baseline
 - [ ] Clean checkout uses the documented Node.js and pnpm versions.
-- [ ] `pnpm install --frozen-lockfile` succeeds.
+- [ ] `pnpm install --no-frozen-lockfile` succeeds.
 - [ ] `pnpm typecheck` succeeds.
 - [ ] `pnpm lint` succeeds.
 - [ ] `pnpm test` succeeds.
 - [ ] `pnpm build` succeeds.
 - [ ] Required CI workflow is green for the release commit.
+
+- [ ] Dependency reproducibility is not claimed until a maintained lockfile is intentionally introduced.
 
 ## Infrastructure
 - [ ] PostgreSQL starts from the documented Compose configuration.
