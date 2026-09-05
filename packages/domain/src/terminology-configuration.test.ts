@@ -6,11 +6,11 @@ describe('TerminologyConfiguration', () => {
     expect(terminologyKeys).toEqual(['user','profile','discovery','match','matches','message','messages']);
   });
   it('rejects unsupported keys without changing implementation identifiers', () => {
-    expect(() => validateTerminologyConfiguration({ stranger: 'Member' } as never)).toThrow('stable key');
+    expect(() => validateTerminologyConfiguration({ terms: { stranger: 'Member' } } as never)).toThrow('stable key');
   });
   it('discards empty labels and preserves explicit fallbacks', () => {
-    const normalized = normalizeTerminologyConfiguration({ user: '  Member  ', match: '   ' });
-    expect(normalized).toEqual({ user: 'Member' });
+    const normalized = normalizeTerminologyConfiguration({ terms: { user: '  Member  ', match: '   ' } });
+    expect(normalized).toEqual({ terms: { user: 'Member' } });
     expect(resolveTerminologyLabel(normalized, 'user', 'User')).toBe('Member');
     expect(resolveTerminologyLabel(normalized, 'match', 'Match')).toBe('Match');
   });
