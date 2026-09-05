@@ -33,6 +33,6 @@ function appliesToScope(
 ): boolean {
   if (restriction === 'none') return false;
   if (restriction === 'feature-restricted') return true;
-  if (restriction === 'suspended') return true;
+  if (restriction === 'suspended' || restriction === 'banned') return true;
   return scope === 'communication';
 }
