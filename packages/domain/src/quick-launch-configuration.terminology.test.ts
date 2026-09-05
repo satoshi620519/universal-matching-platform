@@ -7,7 +7,8 @@ describe('QuickLaunch terminology publication', () => {
     categories: [{ key: 'networking', displayName: 'Networking' }], enabledFeatures: [], onboarding: [],
   } as const;
   it('publishes normalized purchaser terminology without changing stable keys', () => {
-    const published = publishQuickLaunchConfiguration({ ...draft, terminology: { terms: { user: '  Member ', match: '   ' } } }, 1, '2026-01-01T00:00:00.000Z');
+    const terminology = { terms: { user: '  Member ', match: '   ' } } as const;
+    const published = publishQuickLaunchConfiguration({ ...draft, terminology }, 1, '2026-01-01T00:00:00.000Z');
     expect(published.terminology).toEqual({ terms: { user: 'Member' } });
     expect(Object.isFrozen(published.terminology)).toBe(true);
   });
