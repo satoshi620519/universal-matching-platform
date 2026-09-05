@@ -92,3 +92,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Fixed only those stale test constructor calls in commit `056ef01e7a2194155dc10fe46c021816ee996e79`.
 - Matching Concurrency Gate #611 was still running at the time of diagnosis.
 - Next exact action: verify CI triggered by `056ef01...`; do not change unrelated User Block code unless a new concrete diagnostic appears.
+
+
+## CI diagnostic checkpoint — 2026-09-05 (integration DI)
+- CI #2884: Typecheck and Lint passed; 144 test files passed, but HTTP application integration failed.
+- Exact runtime error: Nest could not resolve DiscoveryService argument index 0 because DiscoveryProfileRepository is a type-only domain contract and therefore has no runtime injection token.
+- Focused fix: explicitly inject the existing `DISCOVERY_PROFILE_REPOSITORY` provider token in DiscoveryService (commit d3de4e6e204e8c2a9cf2fc7419764dfddfd15b88).
+- Matching Concurrency Gate #611 passed.
+- Next exact action: verify CI for d3de4e6e...; do not modify unrelated User Block scope unless a concrete diagnostic appears.
