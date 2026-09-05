@@ -3,9 +3,13 @@ import type { ReportEvidenceKind, ReportTargetType } from '@universal/domain';
 import { randomUUID } from 'node:crypto';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { RequestRateLimiter } from '../common/rate-limit/request-rate-limiter.js';
+import { createAbuseControlPolicy } from '@universal/domain';
 import { SafetyModerationService } from './safety-moderation.service.js';
 
 @Controller('reports')
+const reportSubmissionPolicy = createAbuseControlPolicy({ key: 'safety-report', limit: 10, windowMs: 60_000 });
+const reportEvidencePolicy = createAbuseControlPolicy({ key: 'report-evidence', limit: 30, windowMs: 60_000 });
+
 export class SafetyReportController {
   constructor(
     private readonly principalResolver: RequestPrincipalResolver,
@@ -47,12 +51,12 @@ export class SafetyReportController {
   }
 
   private consumeReportQuota(accountId: string): void {
-    const decision = this.limiter.consume(`safety-report:${accountId}`, { limit: 10, windowMs: 60_000 });
+    const decision = this.limiter.consume(`${reportSubmissionPolicy.key}:${accountId}`, reportSubmissionPolicy);
     if (!decision.allowed) throw new HttpException('Report submission temporarily unavailable', HttpStatus.TOO_MANY_REQUESTS);
   }
 
   private consumeEvidenceQuota(accountId: string): void {
-    const decision = this.limiter.consume(`report-evidence:${accountId}`, { limit: 30, windowMs: 60_000 });
+    const decision = this.limiter.consume(`${reportEvidencePolicy.key}:${accountId}`, reportEvidencePolicy);
     if (!decision.allowed) throw new HttpException('Evidence submission temporarily unavailable', HttpStatus.TOO_MANY_REQUESTS);
   }
 
