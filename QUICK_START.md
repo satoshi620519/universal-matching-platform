@@ -18,7 +18,8 @@ pnpm install --no-frozen-lockfile
 ## 3. Configure and migrate
 
 ```bash
-export DATABASE_URL='postgresql://universal:universal@localhost:5432/universal_matching'
+cp .env.example .env
+set -a; . ./.env; set +a
 pnpm --filter @universal/database migrate
 ```
 
