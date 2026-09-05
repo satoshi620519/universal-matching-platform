@@ -6,10 +6,10 @@ import { RequestRateLimiter } from '../common/rate-limit/request-rate-limiter.js
 import { createAbuseControlPolicy } from '@universal/domain';
 import { SafetyModerationService } from './safety-moderation.service.js';
 
-@Controller('reports')
 const reportSubmissionPolicy = createAbuseControlPolicy({ key: 'safety-report', limit: 10, windowMs: 60_000 });
 const reportEvidencePolicy = createAbuseControlPolicy({ key: 'report-evidence', limit: 30, windowMs: 60_000 });
 
+@Controller('reports')
 export class SafetyReportController {
   constructor(
     private readonly principalResolver: RequestPrincipalResolver,
