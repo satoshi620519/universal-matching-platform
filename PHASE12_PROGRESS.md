@@ -211,3 +211,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added focused controller tests: authenticated actor propagation, submitted/triaged filtering, and limit bounds 1..100.
 - Commits: 799d1761619c192ea665446ea64b448312f29222, 20105b14318bc39c26acf24cd606fafbb61ae738.
 - Next exact action: run CI for moderation queue slice and fix only concrete diagnostics. Do not expand queue features or reopen completed Phase 12 slices while CI is unresolved.
+
+
+## Moderation queue CI diagnostic checkpoint — 2026-09-05
+- CI for 95e4e10c4909a1ee90e773356278a1a37bab691f failed at Typecheck; Matching Concurrency Gate itself passed.
+- Exact diagnostic: validated queue status was cast back to broad ReportStatus, but listModerationQueue accepts only submitted|triaged.
+- Focused fix commit 20625b7e71787a52317ad1a0acb4ab123e501a13 narrows the controller value to the canonical queue status union after validation.
+- No runtime behavior or subsystem was changed; this is a type-contract alignment only.
+- Next exact action: verify CI for 20625b7e... and fix only concrete diagnostics. Keep Moderation Queue scope frozen until green.
