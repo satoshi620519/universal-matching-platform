@@ -8,6 +8,7 @@ const restrictionPriority: Record<SafetyRestriction, number> = {
   'feature-restricted': 1,
   'communication-restricted': 2,
   suspended: 3,
+  banned: 4,
 };
 
 export function resolveEffectiveSafetyRestriction(
