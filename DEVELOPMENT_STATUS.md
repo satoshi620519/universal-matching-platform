@@ -4112,3 +4112,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - No persistence model, Account.role field, admin API, UI, or generic CRUD was added.
 - Commits: 9bba8396bff41e0e2bae5713cc1d95377413d07a, 3c5deb7248f277b8010bc4065c116599cff408b8, 4bcf66b7f2025126c371be821821e019fb6c2b0c.
 - Next exact action: connect this evaluator to the canonical Role/RoleAssignment persistence through the smallest read abstraction, including active/effective/expiry/revocation filtering, then add focused authorization tests before exposing any admin endpoint.
+
+
+## Phase 13 active-role boundary — 2026-09-05
+- Reconfirmed canonical RoleAssignment schema semantics before persistence integration: effectiveAt, expiresAt, revokedAt.
+- Added the smallest AdminRoleAssignmentRepository read abstraction rather than inventing role CRUD.
+- Added a pure active-assignment filter with focused tests proving future, expired-at-boundary and revoked assignments are denied.
+- Existing repository currently has no canonical Prisma data-access implementation to copy, so concrete database adapter wiring is deferred until the project's persistence composition pattern is identified; no speculative Prisma singleton/module was introduced.
+- Commits: d2f52b82e0802dd33e1267bcb2f5126e86c10242, ae4eac4b26705d3d4ae417e04a85206b18a2a790, 2d7e0860d2484a232a240091b111f2bccc458e2b.
+- Next exact action: inspect app bootstrap/database composition and existing migration/integration test setup to identify the canonical persistence adapter pattern; then implement only the concrete RoleAssignment reader needed for authorization.
