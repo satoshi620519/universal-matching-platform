@@ -4200,3 +4200,13 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - AdministrativeRoleManagementController delegates privileged checks to AdministrativeRoleManagementService. No duplicate transport check added.
 - Result: inspected concrete privileged surfaces are already protected either at transport or canonical service boundary. No speculative fixes introduced.
 - Next exact action: inspect remaining AppModule controllers that expose configuration/security-sensitive operations and distinguish ordinary self-service/public endpoints from administrative surfaces; only patch concrete privilege gaps.
+
+
+## Phase 13 remaining controller classification — 2026-09-05
+- Continued from the exact recorded controller-classification step; no privileged surface was re-audited.
+- VerificationAccessController is a pure verification-state evaluation endpoint and does not mutate privileged data.
+- CapabilityAccessController separates pure evaluation from authenticated self-context evaluation; neither is an administrative capability surface.
+- HealthController is operationally public/read-only.
+- AccountLookupController is the notable remaining exposure: it returns an account by arbitrary accountId without authentication in the current controller. This is not an administrative authorization issue but a potential privacy/data-exposure boundary requiring separate review of AccountLookupService response shape and intended discovery policy.
+- No admin capability check was incorrectly added to ordinary endpoints.
+- Next exact action: inspect AccountLookupService and returned DTO/entity fields plus discovery policy before deciding whether arbitrary account lookup is an intentional public API or a concrete privacy gap; patch only if sensitive account data can escape.
