@@ -3,11 +3,11 @@ import { NotificationChannelAdapter, NotificationChannelDispatch } from './notif
 
 @Injectable()
 export class NotificationChannelDispatchService {
-  constructor(private readonly adapters: readonly NotificationChannelAdapter[]) {}
+  constructor(private readonly adapter: NotificationChannelAdapter) {}
 
   async dispatch(input: NotificationChannelDispatch): Promise<void> {
     // Durable notification persistence precedes this boundary. A channel adapter
     // must never become the source of truth for notification existence.
-    await Promise.all(this.adapters.map(adapter => adapter.dispatch(input)));
+    await this.adapter.dispatch(input);
   }
 }
