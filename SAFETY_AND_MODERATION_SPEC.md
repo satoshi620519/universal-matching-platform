@@ -36,3 +36,12 @@ submitted -> triaged -> actioned | dismissed
 
 ### Boundary
 Do not build the moderation queue UI in this slice. First establish domain contracts, persistence, authenticated submission API, and focused verification.
+
+## Moderation actions slice checkpoint
+### Existing implementation found
+- SafetyModerationService already supports report triage, moderation cases, administrative capability checks, audit records, and enforcement restrictions.
+- SafetyModerationController already exposes authenticated administrative endpoints.
+- Existing actions include warning, feature restriction, communication restriction, suspension, and close-without-action.
+
+### Next verification boundary
+Do not recreate moderation actions. Inspect the existing domain action-to-restriction mapping, enforcement persistence, and tests to identify only missing invariants (especially expiry and irreversible/revocable enforcement semantics) before adding code.
