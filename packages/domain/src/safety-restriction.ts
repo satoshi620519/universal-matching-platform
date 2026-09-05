@@ -4,13 +4,14 @@ export type SafetyRestriction =
   | 'none'
   | 'feature-restricted'
   | 'communication-restricted'
-  | 'suspended';
+  | 'suspended'
+  | 'banned';
 
 export function blocksCapability(
   restriction: SafetyRestriction,
   capabilityScope: 'general' | 'communication',
 ): boolean {
-  if (restriction === 'suspended') return true;
+  if (restriction === 'suspended' || restriction === 'banned') return true;
   if (restriction === 'feature-restricted') return true;
   return restriction === 'communication-restricted' && capabilityScope === 'communication';
 }
@@ -19,5 +20,5 @@ export function effectiveAccountState(
   state: AccountState,
   restriction: SafetyRestriction,
 ): AccountState {
-  return restriction === 'suspended' ? 'suspended' : state;
+  return restriction === 'suspended' || restriction === 'banned' ? 'suspended' : state;
 }

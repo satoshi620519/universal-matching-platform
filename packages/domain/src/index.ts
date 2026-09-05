@@ -31,9 +31,9 @@ export * from './safety-enforcement.js';
 export * from './effective-safety-restriction.js';
 export * from './report.js';
 export * from './moderation-case.js';
-
 export * from './moderation-action.js';
 export * from './audit-record.js';
+export * from './user-block.js';
 export * from './administrative-role.js';
 export * from './analytics-event.js';
 export * from './metric-definition.js';
@@ -84,23 +84,19 @@ export * from './rule-based-match-strategy.js';
 export * from './match-transition.js';
 export * from './match-transition-state.js';
 export * from './conversation.js';
-
 export * from './quick-launch-configuration.js';
 export * from './quick-launch-domain-contract.js';
 export * from './matching-rules-configuration.js';
 export * from './notification-presentation-preferences.js';
 export * from './notification-delivery-preferences.js';
-
 export * from './branding-theme-configuration.js';
-
 export * from './localization-configuration.js';
-
 export * from './profile-schema-configuration.js';
-
 export * from './feature-visibility-configuration.js';
-
 export * from './password-credential.js';
-
 export * from './authentication-session.js';
-
 export * from './password-recovery.js';
+
+export * from './report-evidence.js';
+
+export * from './abuse-control.js';

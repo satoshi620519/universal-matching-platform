@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { SafetyReportController } from './safety/safety-report.controller.js';
 import { PaymentWebhookModule } from './payments/payment-webhook.module.js';
 import { AccountRepository } from './accounts/account.repository.js';
 import { AccountLookupController } from './accounts/account-lookup.controller.js';
@@ -90,6 +91,8 @@ import { SafetyEnforcementRepository } from './safety/safety-enforcement.reposit
 import { PrismaSafetyEnforcementRepository } from './safety/prisma-safety-enforcement.repository.js';
 import { EffectiveSafetyRestrictionService } from './safety/effective-safety-restriction.service.js';
 import { SafetyReportRepository } from './safety/safety-report.repository.js';
+import { ReportEvidenceRepository } from './safety/report-evidence.repository.js';
+import { PrismaReportEvidenceRepository } from './safety/prisma-report-evidence.repository.js';
 import { PrismaSafetyReportRepository } from './safety/prisma-safety-report.repository.js';
 import { SafetyModerationService } from './safety/safety-moderation.service.js';
 import { SafetyModerationController } from './safety/safety-moderation.controller.js';
@@ -124,6 +127,10 @@ import { PrismaDiscoveryProfileRepository } from './profiles/prisma-discovery-pr
 import { ProfileService } from './profiles/profile.service.js';
 import { DiscoveryService } from './profiles/discovery.service.js';
 import { AllowAllDiscoveryExclusionPolicy, DiscoveryExclusionPolicy } from './profiles/discovery-exclusion.policy.js';
+import { UserBlockDiscoveryExclusionPolicy } from './profiles/user-block-discovery-exclusion.policy.js';
+import { UserBlockRepository } from './safety/user-block.repository.js';
+import { UserBlockController } from './safety/user-block.controller.js';
+import { PrismaUserBlockRepository } from './safety/prisma-user-block.repository.js';
 import { CategoryService } from './profiles/category.service.js';
 import { PrismaCategoryRepository } from './profiles/prisma-category.repository.js';
 import { PrismaMatchTransitionRepository } from './matching/prisma-match-transition.repository.js';
@@ -145,8 +152,8 @@ import { RealtimeController } from './realtime/realtime.controller.js';
 
 @Module({
   imports: [DatabaseModule, PaymentWebhookModule],
-  controllers: [AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, SafetyModerationController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController, MessagingController, RealtimeController, ProfileDiscoveryController, QuickLaunchConfigurationController],
-  providers: [PrismaMatchTransitionRepository, PrismaConversationRepository, PrismaMessageRepository, PrismaNotificationRepository, MessageRealtimePublicationService, NotificationRealtimePublicationService, { provide: NotificationChannelAdapter, useExisting: InAppNotificationChannelAdapter }, InAppNotificationChannelAdapter, NotificationChannelDispatchService, NotificationCreationService, SseRealtimePublisher, AllowAllDiscoveryExclusionPolicy, DiscoveryService, PrismaDiscoveryProfileRepository, CategoryService, CategoryFieldSchemaService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, QuickLaunchConfigurationService, PrismaQuickLaunchConfigurationRepository, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, SafetyModerationService, PrismaSafetyReportRepository, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, EntitlementCapabilityAccessService, EntitlementService, PrismaEntitlementRepository, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
+  controllers: [SafetyReportController, UserBlockController, AdministrativeRoleManagementController, AdministrativeFailedEmailOutboxController, SafetyModerationController, HealthController, PasswordRegistrationController, EmailVerificationController, PasswordSignInController, SessionController, AccountActivationController, VerificationAccessController, CapabilityAccessController, AccountLookupController, AuthenticatedAccountLookupController, AuthenticatedAccountActivationController, AuthenticatedAccountDeletionRequestController, MessagingController, RealtimeController, ProfileDiscoveryController, QuickLaunchConfigurationController],
+  providers: [PrismaMatchTransitionRepository, PrismaConversationRepository, PrismaMessageRepository, PrismaNotificationRepository, MessageRealtimePublicationService, NotificationRealtimePublicationService, { provide: NotificationChannelAdapter, useExisting: InAppNotificationChannelAdapter }, InAppNotificationChannelAdapter, NotificationChannelDispatchService, NotificationCreationService, SseRealtimePublisher, AllowAllDiscoveryExclusionPolicy, UserBlockDiscoveryExclusionPolicy, PrismaUserBlockRepository, DiscoveryService, PrismaDiscoveryProfileRepository, CategoryService, CategoryFieldSchemaService, ProfileService, PrismaProfileRepository, PrismaCategoryRepository, ConfigurationReversionService, QuickLaunchConfigurationService, PrismaQuickLaunchConfigurationRepository, ConfigurationEffectiveValueService, PrismaConfigurationEffectiveValueRepository, ConfigurationDraftEditingService, PrismaConfigurationValueRepository, InMemoryConfigurationSettingDefinitionProvider, ConfigurationPublicationService, PrismaConfigurationVersionRepository, InitialAdministratorProvisioningService, AdministrativeRoleAccessService, PrivilegedFailedEmailOutboxService, AdministrativeCapabilityAccessService, AdministrativeRoleManagementService, RoleAssignmentMutationService, AuditRecordService, PrismaRoleAssignmentRepository, PrismaAuditRecordRepository, EffectiveSafetyRestrictionService, SafetyModerationService, PrismaSafetyReportRepository, PrismaReportEvidenceRepository, AuthenticatedCapabilityDecisionService, AuthenticatedCapabilityAccessService, EntitlementCapabilityAccessService, EntitlementService, PrismaEntitlementRepository, AuthenticatedAccountActivationService, AuthenticatedAccountDeletionRequestService, AuthenticatedAccountContextService, AccountDeletionRequestService,
     HealthStatusService, CapabilityAccessService, AccountActivationService, VerificationAccessService, AccountLookupService, RequestPrincipalResolver, PrismaAccountRepository, PrismaAuthenticationIdentityRepository, PrismaPasswordCredentialRepository, PrismaPasswordRecoveryRepository, PrismaPasswordRegistrationRepository, PasswordRegistrationService, PasswordRegistrationTransportService, PasswordSignInService, PasswordResetCompletionService, EmailVerificationService, EmailVerificationDeliveryService, EmailOutboxDispatchService, EmailOutboxWorker, EmailOutboxProcessService, FailedEmailOutboxReviewService, PrismaEmailOutboxRepository, PrismaFailedEmailOutboxRepository, LoggingOutboundEmailSender, EnvironmentEmailVerificationUrlPolicy, PrismaEmailVerificationTokenRepository, PasswordSignInTransportService, SessionIssuanceService, SessionRevocationService, PrismaSessionRepository, MinimumPasswordPolicy, InMemoryRequestRateLimiter, NodeScryptPasswordHasher, PrismaVerificationRepository, PrismaSafetyEnforcementRepository, VerificationService, VerificationLevelAccessService, VerificationCapabilityAccessService, AuthenticationIdentityService, AnonymousAuthenticationAdapter, OpaqueSessionAuthenticationAdapter, LocalizationConfigurationService, LocationPrecisionConfigurationService, DistancePresentationConfigurationService, DistanceMatchingConfigurationService, MatchingRulesConfigurationService,
     { provide: ConfigurationEffectiveValueRepository, useExisting: PrismaConfigurationEffectiveValueRepository },
     { provide: ConfigurationValueRepository, useExisting: PrismaConfigurationValueRepository },
@@ -158,6 +165,7 @@ import { RealtimeController } from './realtime/realtime.controller.js';
     { provide: AccountRepository, useExisting: PrismaAccountRepository },
     { provide: SafetyEnforcementRepository, useExisting: PrismaSafetyEnforcementRepository },
     { provide: SafetyReportRepository, useExisting: PrismaSafetyReportRepository },
+    { provide: ReportEvidenceRepository, useExisting: PrismaReportEvidenceRepository },
     { provide: VerificationRepository, useExisting: PrismaVerificationRepository },
     { provide: EntitlementRepository, useExisting: PrismaEntitlementRepository },
     { provide: AuthenticationIdentityRepository, useExisting: PrismaAuthenticationIdentityRepository },
@@ -173,6 +181,9 @@ import { RealtimeController } from './realtime/realtime.controller.js';
     { provide: PasswordPolicy, useExisting: MinimumPasswordPolicy },
     { provide: PasswordRegistrationRepository, useExisting: PrismaPasswordRegistrationRepository },
     { provide: PasswordHasher, useExisting: NodeScryptPasswordHasher },
+    { provide: UserBlockRepository, useExisting: PrismaUserBlockRepository },
+    { provide: 'DISCOVERY_PROFILE_REPOSITORY', useExisting: PrismaDiscoveryProfileRepository },
+    { provide: 'DISCOVERY_EXCLUSION_POLICIES', useFactory: (block: UserBlockDiscoveryExclusionPolicy, safety: AllowAllDiscoveryExclusionPolicy) => ({ block, safety }), inject: [UserBlockDiscoveryExclusionPolicy, AllowAllDiscoveryExclusionPolicy] },
     { provide: DiscoveryExclusionPolicy, useExisting: AllowAllDiscoveryExclusionPolicy },
     { provide: RealtimePublisher, useExisting: SseRealtimePublisher },
     { provide: RequestAuthenticationAdapter, useExisting: OpaqueSessionAuthenticationAdapter },

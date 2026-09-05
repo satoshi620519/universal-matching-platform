@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { canTransitionModerationCase, canTransitionReportStatus, type ModerationCase, type SafetyReport } from '@universal/domain';
+import { assertValidSafetyReportInput, canTransitionModerationCase, canTransitionReportStatus, type ModerationCase, type SafetyReport } from '@universal/domain';
 import { randomUUID } from 'node:crypto';
 import { DatabaseService } from '../database/database.service.js';
 import { SafetyReportRepository, type CreateSafetyReportInput } from './safety-report.repository.js';
@@ -8,11 +8,16 @@ import { SafetyReportRepository, type CreateSafetyReportInput } from './safety-r
 export class PrismaSafetyReportRepository extends SafetyReportRepository {
   constructor(private readonly database: DatabaseService) { super(); }
   async create(input: CreateSafetyReportInput): Promise<SafetyReport> {
+    assertValidSafetyReportInput(input);
     const record = await this.database.safetyReport.create({ data: { id: randomUUID(), reporterId: input.reporterId, targetId: input.targetId, targetType: input.targetType, reason: input.reason, status: 'submitted' } });
     return this.toReport(record);
   }
   async listForReporter(reporterId: string, limit = 50): Promise<readonly SafetyReport[]> {
     const records = await this.database.safetyReport.findMany({ where: { reporterId }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: Math.min(100, Math.max(1, limit)) });
+    return records.map(record => this.toReport(record));
+  }
+  async listForModeration(status?: SafetyReport['status'], limit = 50): Promise<readonly SafetyReport[]> {
+    const records = await this.database.safetyReport.findMany({ where: status ? { status } : undefined, orderBy: [{ createdAt: 'asc' }, { id: 'asc' }], take: Math.min(100, Math.max(1, limit)) });
     return records.map(record => this.toReport(record));
   }
   async findById(id: string): Promise<SafetyReport | null> {
