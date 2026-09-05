@@ -19,4 +19,11 @@
 - No repository implementation change was needed; the tests lock the current persistence contract in place.
 - Commit: 11f8673d567bda0fb3e83411d269cda33614f098.
 - Match and messaging boundaries were rechecked before any new enforcement work: both already perform bidirectional UserBlock checks, so no duplicate bypass patch was introduced.
-- Next exact action: inspect the current test/build/CI evidence for these latest commits; only patch a concrete failure or missing boundary.
+
+## Phase 13 CI/typecheck repair checkpoint — 2026-09-05
+- Latest GitHub Actions CI attempt for the branch's PR merge reported API typecheck failures in three already-touched boundaries: AccountLookupController tests used the pre-auth constructor, moderation queue test used the pre-authorization constructor, and SafetyModerationController referenced capability names not present in the canonical AdministrativeCapability union.
+- Verified the canonical policy exposes `manage-moderation`; corrected all moderation authorization calls to that existing capability rather than adding a duplicate capability definition.
+- Updated AccountLookup and moderation queue test fixtures to supply the existing authorization dependencies.
+- Commits: a570fa749b745099e00ffe93deaef6aa2bab13df, 156d8dd08058c6efeaeb127f74025ddb66e1e00e, 9267126f2c02fc46b09403ade776bd5bc816285a.
+- Database migration and matching-concurrency gate were successful in the observed CI attempt; typecheck was the failing gate, so full CI is not yet declared green.
+- Next exact action: verify the next CI result after these targeted typecheck repairs; if green, resume only the next recorded Phase 13/12 boundary task.
