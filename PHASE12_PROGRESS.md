@@ -393,3 +393,16 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Deliberately did not add endpoint wiring, decorators, third-party throttling packages, Redis, or transport-specific behavior before the core semantics are verified.
 - Commits: 858c0ff45893761f022d41993854a1ae14a4868b, 5d28eafff58a9fc338d98e5f15befc557130a17c, 84a6cb893a6dd512ae4fd9e1621dda5f06a74fa5.
 - Next exact action: run CI/typecheck for the abuse-control domain foundation and fix only concrete diagnostics; then inspect existing in-memory/repository patterns before selecting the smallest stateful enforcement adapter.
+
+
+## Abuse prevention domain foundation verification complete — 2026-09-05
+- CI for 7e44b3b4c8af18f8d46248a52effabdc591593e6 is fully green across migration verification, PostgreSQL integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Domain policy foundation is frozen: validated key/limit/window, deterministic decisions, remaining quota, retry-after, and window reset.
+
+## Abuse prevention stateful adapter checkpoint — 2026-09-05
+- Inspected existing repository abstraction conventions before implementation.
+- Added the smallest application boundary: AbuseControlRepository (get/put window state) and AbuseControlService (consume).
+- State is keyed by policy + subject, isolated per subject, resets on expiry, and rejected requests do not increment the counter.
+- Focused service tests use an in-memory repository only as a test double; no duplicate production in-memory subsystem or endpoint wiring was introduced.
+- Commits: b403e138cd75f593c2d89108f10b79db38855dfa, 5499221fb9f78ac87fd1cb28f45870c8f7b01624, 56fb2e8d1e4f52abe834e8838f2a3ad4e091e213.
+- Next exact action: run CI for the stateful adapter, fix only concrete diagnostics, then inspect DI/module and persistence conventions before choosing production repository wiring.
