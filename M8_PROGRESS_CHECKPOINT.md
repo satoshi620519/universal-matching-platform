@@ -182,3 +182,10 @@
 - Typed workflow boundary already contains profileSchema and featureVisibility at continuation inspection.
 - Purchaser UI commit: 338f4bb95e00db56d8e8833bac6bdcbb51d53818.
 - Exact next task: verify CI for current boundary/UI commits. After concrete green, add snapshot-derived Feature Visibility summaries to Published/History, then checkpoint domain completion. If CI fails, fix only concrete diagnostics; do not duplicate authorization.
+
+
+## Configuration Engine checkpoint — Feature Visibility publication summary verification
+- Re-synchronized against current `main` rather than reopening completed M7/M8 work.
+- Confirmed the existing publication summary already derives `visibleFeatureCount` and `visibleFeatureKeys` from immutable `featureVisibility.features` snapshots, and the Admin Published/History panel already renders those values.
+- Added only the missing focused regression test for that snapshot-derived Feature Visibility summary: `fcbce8112f0ce33a7880601579d92e3c653df34a`.
+- Exact next task: inspect CI for this regression checkpoint; if green, mark Feature Visibility configuration complete and move to the next unfinished configuration boundary without duplicating runtime authorization or Quick Launch lifecycle work.
