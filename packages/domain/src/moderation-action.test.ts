@@ -7,6 +7,7 @@ describe('moderation actions', () => {
     expect(restrictionForModerationAction('restrict-features')).toBe('feature-restricted');
     expect(restrictionForModerationAction('restrict-communication')).toBe('communication-restricted');
     expect(restrictionForModerationAction('suspend')).toBe('suspended');
+    expect(restrictionForModerationAction('ban')).toBe('banned');
     expect(restrictionForModerationAction('close-without-action')).toBe('none');
   });
 
@@ -14,5 +15,6 @@ describe('moderation actions', () => {
     expect(isEnforcementAction('warning')).toBe(false);
     expect(isEnforcementAction('close-without-action')).toBe(false);
     expect(isEnforcementAction('suspend')).toBe(true);
+    expect(isEnforcementAction('ban')).toBe(true);
   });
 });
