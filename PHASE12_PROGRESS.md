@@ -84,3 +84,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Registered UserBlockController in AppModule.
 - Authentication is resolved server-side; blocker identity is never accepted from the request body.
 - Controller tests are now added and the unblock endpoint returns a proper NotFoundException instead of embedding a status code in a success payload. Next exact action: run CI for the completed User Block slice and fix only concrete failures.
+
+
+## CI diagnostic checkpoint — 2026-09-05
+- CI #2884 failed at Typecheck, before lint/test/build.
+- Exact cause: DiscoveryService constructor was changed to an explicit `{ block, safety }` exclusion-policy pair, but `discovery.service.test.ts` still instantiated the old positional exclusion mocks.
+- Fixed only those stale test constructor calls in commit `056ef01e7a2194155dc10fe46c021816ee996e79`.
+- Matching Concurrency Gate #611 was still running at the time of diagnosis.
+- Next exact action: verify CI triggered by `056ef01...`; do not change unrelated User Block code unless a new concrete diagnostic appears.
