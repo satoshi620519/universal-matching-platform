@@ -384,3 +384,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Repository search found no existing rate limiting, throttling, or spam-control primitive; remaining explicit Phase 12 gap is abuse prevention.
 - Selected a reusable foundation first to avoid duplicating endpoint-specific rate-limit patches later.
 - Next exact action: inspect dependency/request identity conventions and implement the smallest deterministic abuse-control policy boundary with explicit key/window/rejection semantics, then focused tests before broad wiring.
+
+
+## Abuse prevention foundation implementation checkpoint — 2026-09-05
+- Inspected package/dependency conventions and searched for existing throttling primitives before implementation; none existed.
+- Added a framework-independent domain policy boundary: stable policy key, positive integer limit/window validation, deterministic allow/reject decision, remaining quota, retry-after, and exact window-expiry reset semantics.
+- Added focused domain tests in the same slice; exported through the canonical domain index.
+- Deliberately did not add endpoint wiring, decorators, third-party throttling packages, Redis, or transport-specific behavior before the core semantics are verified.
+- Commits: 858c0ff45893761f022d41993854a1ae14a4868b, 5d28eafff58a9fc338d98e5f15befc557130a17c, 84a6cb893a6dd512ae4fd9e1621dda5f06a74fa5.
+- Next exact action: run CI/typecheck for the abuse-control domain foundation and fix only concrete diagnostics; then inspect existing in-memory/repository patterns before selecting the smallest stateful enforcement adapter.
