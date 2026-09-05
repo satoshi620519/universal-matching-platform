@@ -143,3 +143,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Registered the controller in AppModule.
 - Next exact action: inspect existing domain/service test conventions, add focused tests for report invariants, lifecycle transitions, authenticated controller identity, and then run CI.
 - Continuation rule: do not reopen User Block or create duplicate report repository/service/controller paths unless a concrete regression requires it.
+
+
+## Reporting test checkpoint — 2026-09-05
+- Before testing, re-read PHASE12_PROGRESS.md and inspected existing report tests to avoid creating duplicates.
+- Replaced the stale `closed` lifecycle expectations in the existing report domain test with the current canonical lifecycle and invariant coverage.
+- Added SafetyReportController tests proving reporter identity comes from authentication and reporter listing is scoped to the authenticated account.
+- Commits: 04499f34d5d21e18a4bfee6d6bcaeaaaafaf34f4 (domain tests), baea805bca4bb59983222071be035234e316fef2 (controller tests).
+- Next exact action: run CI for the Reporting slice and fix only concrete diagnostics. Do not start moderation queue/admin UI while CI is unresolved.
