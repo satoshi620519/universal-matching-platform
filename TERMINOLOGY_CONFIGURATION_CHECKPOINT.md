@@ -14,3 +14,11 @@
 - Added focused domain and publication regression tests.
 - Commits: c736956d4460053c5febd428fab72accb8a32a51, 38d5d4024f82bb82ea1c6414e9e8e5f988b64ab0, b7aeb0ad0477742ee5af01a08c0aad4f4da725c1, 134e50fe77c8069c76404fa526c821b529d7ae17, 2d0d5cab86a53d25777d0989eae940958c210066.
 - Next exact action: CI verification, then connect terminology to the existing purchaser configuration API/UI only where absent; do not alter runtime entity names or localization ownership.
+
+
+## UI/API contract alignment checkpoint — 2026-09-05
+- CI #3221 completed SUCCESS across typecheck, lint, tests, concurrency integration and build.
+- Before expanding work, inspected the existing Admin Terminology step and publication summary.
+- Found the established purchaser payload shape is `terminology: { terms: { ... } }`; aligned the new domain contract to that existing shape instead of changing the already-wired Admin UI/API.
+- Updated focused tests accordingly. This prevents a duplicate UI rewrite and avoids a runtime validation mismatch.
+- Exact next action: verify CI for the compatibility alignment, then mark Terminology Configuration complete and move to the next documented unfinished boundary.
