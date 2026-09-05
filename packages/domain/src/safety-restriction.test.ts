@@ -12,8 +12,14 @@ describe('safety restriction policy', () => {
     expect(blocksCapability('communication-restricted', 'communication')).toBe(true);
   });
 
+  it('blocks all scoped capabilities for a ban', () => {
+    expect(blocksCapability('banned', 'general')).toBe(true);
+    expect(blocksCapability('banned', 'communication')).toBe(true);
+  });
+
   it('maps a suspension restriction to the account suspension state', () => {
     expect(effectiveAccountState('active', 'suspended')).toBe('suspended');
+    expect(effectiveAccountState('active', 'banned')).toBe('suspended');
   });
 
   it('does not change account state for non-suspension restrictions', () => {
