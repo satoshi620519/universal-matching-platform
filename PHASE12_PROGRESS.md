@@ -460,3 +460,13 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Decision: Phase 12 abuse prevention is complete for implemented surfaces. Spam-specific controls will be attached to concrete Phase 10 message-send boundaries when messaging exists.
 - Canonical AbuseControlPolicy + existing RequestRateLimiter are frozen; do not create another limiter/repository or speculative spam service.
 - Next exact action: perform a Phase 12 completion audit against the roadmap/spec and existing verified slices, identify only genuinely missing required deliverables, then decide whether to close Phase 12 or implement the smallest remaining gap.
+
+
+## Phase 12 completion audit — 2026-09-05
+- Audited MASTER_DEVELOPMENT_ROADMAP.md Phase 12 against current canonical implementation instead of adding speculative features.
+- Verified completed/implemented requirements: User Block, Reporting, report categories/domain validation, immutable Evidence/Context Capture, Moderation Queue, administrative actions (warning/restrictions/suspension/ban), and AuditRecord integration.
+- Abuse prevention is complete for concrete current write boundaries; messaging spam enforcement is explicitly deferred until the actual message-send transport exists.
+- Phase 12 is functionally complete for the currently implemented backend surface. Do not reopen completed slices without a concrete regression.
+- Completion audit recorded in SAFETY_AND_MODERATION_SPEC.md and DEVELOPMENT_STATUS.md.
+- Audit commits: 742b684316fb39c60281170bbc22dc64043151cd, 21b13c46cdcff8545a4a5ecb6155e8b41a393bad.
+- Next exact action: inspect roadmap dependency order and current implementation status to select the next highest-value phase; prefer Phase 10/11 backend foundations only if their existing data model/contracts can be extended without speculative duplication, otherwise continue the earliest missing prerequisite.
