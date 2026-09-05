@@ -4094,3 +4094,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added ADMIN_CONSOLE_SPEC.md defining capability-first, deny-by-default backend boundaries and delivery order.
 - Decision commit: 7006c9b256ee9fc271bc24fda8d022151bdb88df. Spec commit: cc93f8e13069ac01dbcce94946adcb832f83dd67.
 - Next exact action: inventory the current authentication/authorization model and existing canonical services that an admin boundary can safely expose; do not create UI or generic CRUD before explicit capability contracts exist.
+
+
+## Phase 13 authorization inventory — 2026-09-05
+- Inspected authentication, principal resolution and canonical Prisma schema before implementing Admin APIs.
+- Existing Role/RoleAssignment persistence is reusable and supports effective, expiry and revocation semantics.
+- Current RequestPrincipalResolver proves authentication only; no server-side administrative capability resolver exists.
+- Added ADMIN_AUTHORIZATION_SPEC.md defining capability-first, deny-by-default authorization and initial roles/capabilities.
+- No Account.role shortcut, client-trusted role claim, second admin-user model, or generic role CRUD was introduced.
+- Next exact action: inspect existing repository/service DI conventions and implement the smallest role-assignment read abstraction plus pure capability evaluator with focused deny-by-default tests.
