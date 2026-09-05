@@ -10,6 +10,7 @@ import {
 import { DatabaseService } from '../database/database.service.js';
 import { NotificationRealtimePublicationService } from '../messaging/notification-realtime-publication.service.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
+import { UserBlockRepository } from '../safety/user-block.repository.js';
 
 @Injectable()
 export class PrismaMatchTransitionRepository implements MatchTransitionRepository {
@@ -17,12 +18,14 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     private readonly database: DatabaseService,
     private readonly notificationRealtime: NotificationRealtimePublicationService,
     @Optional() private readonly safety?: EffectiveSafetyRestrictionService,
+    @Optional() private readonly blocks?: UserBlockRepository,
   ) {}
 
   async transition(input: MatchTransitionCommand): Promise<MatchTransitionResult> {
     const command = createMatchTransitionCommand(input);
     await this.assertMatchAllowed(command.actorAccountId);
     await this.assertMatchAllowed(command.targetAccountId);
+    await this.assertPairNotBlocked(command.actorAccountId, command.targetAccountId);
     const outcome = await this.database.$transaction(async (tx) => {
       await this.lockPair(tx, command.actorAccountId, command.targetAccountId);
       await this.lockIdempotency(tx, command.actorAccountId, command.idempotencyKey);
@@ -52,6 +55,15 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     if (!this.safety) return;
     const restriction = await this.safety.resolveForAccount(accountId, 'general');
     if (blocksCapability(restriction, 'general')) throw new ForbiddenException('account is restricted from matching');
+  }
+
+  private async assertPairNotBlocked(firstAccountId: string, secondAccountId: string): Promise<void> {
+    if (!this.blocks) return;
+    const [forward, reverse] = await Promise.all([
+      this.blocks.exists(firstAccountId, secondAccountId),
+      this.blocks.exists(secondAccountId, firstAccountId),
+    ]);
+    if (forward || reverse) throw new ForbiddenException('interaction is blocked between these accounts');
   }
 
   private async lockPair(tx: { $executeRaw: (strings: TemplateStringsArray, ...values: unknown[]) => Promise<unknown> }, firstAccountId: string, secondAccountId: string): Promise<void> {
