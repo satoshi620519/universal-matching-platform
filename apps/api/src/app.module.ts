@@ -178,6 +178,7 @@ import { RealtimeController } from './realtime/realtime.controller.js';
     { provide: PasswordRegistrationRepository, useExisting: PrismaPasswordRegistrationRepository },
     { provide: PasswordHasher, useExisting: NodeScryptPasswordHasher },
     { provide: UserBlockRepository, useExisting: PrismaUserBlockRepository },
+    { provide: 'DISCOVERY_PROFILE_REPOSITORY', useExisting: PrismaDiscoveryProfileRepository },
     { provide: 'DISCOVERY_EXCLUSION_POLICIES', useFactory: (block: UserBlockDiscoveryExclusionPolicy, safety: AllowAllDiscoveryExclusionPolicy) => ({ block, safety }), inject: [UserBlockDiscoveryExclusionPolicy, AllowAllDiscoveryExclusionPolicy] },
     { provide: DiscoveryExclusionPolicy, useExisting: AllowAllDiscoveryExclusionPolicy },
     { provide: RealtimePublisher, useExisting: SseRealtimePublisher },
