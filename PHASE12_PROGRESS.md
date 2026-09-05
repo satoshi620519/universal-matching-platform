@@ -100,3 +100,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Focused fix: explicitly inject the existing `DISCOVERY_PROFILE_REPOSITORY` provider token in DiscoveryService (commit d3de4e6e204e8c2a9cf2fc7419764dfddfd15b88).
 - Matching Concurrency Gate #611 passed.
 - Next exact action: verify CI for d3de4e6e...; do not modify unrelated User Block scope unless a concrete diagnostic appears.
+
+
+## CI diagnostic checkpoint — 2026-09-05 (provider registration)
+- CI for d3de4e6e... still failed only at the two HTTP application integration tests.
+- Typecheck/Lint passed and Matching Concurrency Gate passed.
+- The previous fix correctly added @Inject('DISCOVERY_PROFILE_REPOSITORY') to DiscoveryService, but AppModule did not yet register that token.
+- Focused provider registration added: DISCOVERY_PROFILE_REPOSITORY -> PrismaDiscoveryProfileRepository (commit a26cd6f663959d79cae437bc58a30819c468bfc9).
+- Next exact action: verify CI for a26cd6f...; do not change unrelated scope unless diagnostics identify another concrete issue.
