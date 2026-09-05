@@ -34,3 +34,12 @@
 - Baseline passed migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, matching concurrency integration/gate verification, and Build.
 - This closes the previously recorded typecheck-repair loop; no further fix was required and no duplicate implementation was introduced.
 - Next exact action: re-read the Phase 12 completion audit and current Phase 13 implementation status, then select the smallest genuinely missing admin-console/backend boundary. Inspect existing code before any implementation and do not reopen frozen safety slices without a concrete regression.
+
+## Phase 13 admin moderation-console API boundary checkpoint — 2026-09-05
+- Existing backend moderation operations are already protected by the canonical `manage-moderation` capability and audit through `SafetyModerationService`; no backend moderation authorization was duplicated.
+- Existing `apps/admin` was verified to be centered on Quick Launch, while the roadmap requires a professional administration console including moderation. The smallest concrete missing boundary was therefore the browser-side moderation API adapter, not a replacement admin architecture.
+- Added `apps/admin/src/browser-moderation-api.ts` using the existing `VITE_API_URL` and `VITE_ADMIN_AUTHORIZATION` conventions and the canonical `/safety/moderation/*` routes.
+- Added focused regression coverage for query construction, authorization propagation, report/case/action commands, URL encoding, and non-success response propagation.
+- Commits: 42c2a6e8f88b8d22508d414a93727da5a4a6351f and 1f5a02020f4126124e599d99b7669910fd5c4e8b.
+- No existing UserBlock, moderation authorization, AccountLookup, or canonical administration service was recreated or modified.
+- Next exact action: verify CI for this isolated admin-console boundary; if green, integrate the adapter into the existing admin UI as a focused moderation workspace rather than creating a parallel console shell.
