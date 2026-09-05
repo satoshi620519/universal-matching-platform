@@ -357,3 +357,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - No parallel enforcement model or API was introduced.
 - Fix commits: 8c8f977224dc85d4bd000f2d0b94ea34d686fc7a, 89d01c64c1673888520e5e13868fabf81994eb15.
 - Next exact action: verify CI for the precedence fix; repair only concrete diagnostics. If green, freeze Ban semantics and return to roadmap gap selection.
+
+
+## Ban semantics CI diagnostic checkpoint 2 — 2026-09-05
+- Latest CI passed Typecheck and Lint, then failed one focused effective-restriction test: ban priority existed but `appliesToScope` still treated only suspension as globally applicable.
+- Fixed the single missing scope invariant: `banned` now applies to every capability scope, matching the existing suspended boundary.
+- No new subsystem, persistence, or API changes were introduced.
+- Fix commit: cd0cfeca3c7f3f7906e835b90b79f4edfb42955f.
+- Next exact action: verify CI for this scope fix. If green, freeze Ban semantics and select the next roadmap gap from recorded progress.
