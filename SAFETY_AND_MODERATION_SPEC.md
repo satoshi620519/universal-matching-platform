@@ -76,3 +76,18 @@ Inspect domain conventions and Prisma migration patterns, then implement evidenc
 
 ### Next exact action
 Inspect SafetyEnforcement domain contracts, persistence schema, and existing moderation action mappings to identify the smallest concrete ban gap before changing code.
+
+
+## Next slice decision — Abuse prevention foundation
+### Why this slice
+- User Block, Reporting, Moderation Queue, Evidence Capture, and Ban semantics are CI-verified and frozen.
+- The remaining explicit Phase 12 gap is abuse prevention: rate limiting and spam controls.
+- Repository search found no existing rate-limit, throttling, or spam-control primitive, so duplication risk is low but scope must begin with a reusable foundation rather than endpoint-specific patches.
+
+### Scope boundary
+- First establish a canonical, deterministic abuse-control contract suitable for reuse by authentication, reporting, messaging, and discovery.
+- Separate policy definition from transport/framework adapters.
+- Do not add third-party infrastructure or broad endpoint wiring until the domain/application contract and focused tests establish semantics.
+
+### Next exact action
+Inspect dependency conventions and request identity seams, then implement the smallest in-memory/testable abuse-control policy boundary with explicit key, window, and rejection semantics.
