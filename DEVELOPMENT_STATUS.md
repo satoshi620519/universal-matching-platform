@@ -4121,3 +4121,13 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Existing repository currently has no canonical Prisma data-access implementation to copy, so concrete database adapter wiring is deferred until the project's persistence composition pattern is identified; no speculative Prisma singleton/module was introduced.
 - Commits: d2f52b82e0802dd33e1267bcb2f5126e86c10242, ae4eac4b26705d3d4ae417e04a85206b18a2a790, 2d7e0860d2484a232a240091b111f2bccc458e2b.
 - Next exact action: inspect app bootstrap/database composition and existing migration/integration test setup to identify the canonical persistence adapter pattern; then implement only the concrete RoleAssignment reader needed for authorization.
+
+
+## Phase 13 persistence pattern correction — 2026-09-05
+- Bootstrap inspection found a canonical administration persistence implementation already present: RoleAssignmentRepository + PrismaRoleAssignmentRepository backed by DatabaseModule/DatabaseService.
+- Therefore the newly created admin-specific repository abstraction would duplicate existing infrastructure and must not receive a concrete adapter.
+- Existing PrismaRoleAssignmentRepository already enforces effectiveAt <= now, revokedAt null, and expiresAt > now semantics for active assignments.
+- Refactored the new pure capability evaluator to derive decisions from one canonical roleCapabilities map and added unknown-role denial coverage.
+- No new persistence adapter, Prisma singleton, or database module was added.
+- Commits: f4736873bb0dfcd9200435ddfa4fac842a740e72, d151c1844031143c03debcc0a9f9fc216637c00f.
+- Next exact action: remove/retire the duplicate Phase 13 AdminRoleAssignmentRepository abstraction and filter after confirming no consumers, then compose a capability access service on top of existing RoleAssignmentRepository + evaluator with focused tests.
