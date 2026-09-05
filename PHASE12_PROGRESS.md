@@ -133,3 +133,13 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added invariant validation: reporter/target required, reason required, self-report prohibited for user targets.
 - Persistence create path now enforces the canonical domain invariant.
 - Next exact action: inspect existing report API/application surfaces and add authenticated submission only where missing; then add focused transition/invariant tests and run CI.
+
+
+## Reporting API checkpoint — 2026-09-05
+- Re-read the current progress log and inspected existing report/moderation code before changing anything to avoid duplicate work.
+- Found canonical SafetyModerationService already owns report submission and reporter listing; reused it instead of creating a parallel application service.
+- Added SafetyReportController with authenticated POST /reports and GET /reports/me.
+- Reporter identity is derived exclusively from RequestPrincipalResolver; request body cannot impersonate another reporter.
+- Registered the controller in AppModule.
+- Next exact action: inspect existing domain/service test conventions, add focused tests for report invariants, lifecycle transitions, authenticated controller identity, and then run CI.
+- Continuation rule: do not reopen User Block or create duplicate report repository/service/controller paths unless a concrete regression requires it.
