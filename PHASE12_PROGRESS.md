@@ -451,3 +451,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - No messaging subsystem or message-send write endpoint is present in the current implementation, so no speculative spam-control integration was added.
 - This prevents inventing infrastructure for an unavailable feature.
 - Next exact action: return to the recorded Phase 12 roadmap/spec gap list and select the next implemented-surface abuse boundary; only integrate where a concrete write action exists.
+
+
+## Abuse prevention completion decision — 2026-09-05
+- Re-read Phase 12 roadmap/spec after messaging inspection instead of inventing a new subsystem.
+- Confirmed concrete protected write surfaces: registration already limited (5/minute), report submission limited (10/minute/account), evidence capture limited (30/minute/account).
+- No messaging/message-send transport exists yet; no other concrete authenticated write transport was found in the current implementation.
+- Decision: Phase 12 abuse prevention is complete for implemented surfaces. Spam-specific controls will be attached to concrete Phase 10 message-send boundaries when messaging exists.
+- Canonical AbuseControlPolicy + existing RequestRateLimiter are frozen; do not create another limiter/repository or speculative spam service.
+- Next exact action: perform a Phase 12 completion audit against the roadmap/spec and existing verified slices, identify only genuinely missing required deliverables, then decide whether to close Phase 12 or implement the smallest remaining gap.
