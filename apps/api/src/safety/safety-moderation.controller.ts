@@ -6,7 +6,7 @@ import { SafetyModerationService } from './safety-moderation.service.js';
 const targetTypes = new Set<ReportTargetType>(['user', 'content', 'message']);
 const reportStatuses = new Set<ReportStatus>(['triaged', 'actioned', 'dismissed']);
 const caseStatuses = new Set<ModerationCaseStatus>(['under-review', 'actioned', 'closed']);
-const actions = new Set<ModerationActionType>(['warning', 'restrict-features', 'restrict-communication', 'suspend', 'close-without-action']);
+const actions = new Set<ModerationActionType>(['warning', 'restrict-features', 'restrict-communication', 'suspend', 'ban', 'close-without-action']);
 
 @Controller('safety')
 export class SafetyModerationController {
