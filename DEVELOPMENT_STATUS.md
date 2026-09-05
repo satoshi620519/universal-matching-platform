@@ -4103,3 +4103,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added ADMIN_AUTHORIZATION_SPEC.md defining capability-first, deny-by-default authorization and initial roles/capabilities.
 - No Account.role shortcut, client-trusted role claim, second admin-user model, or generic role CRUD was introduced.
 - Next exact action: inspect existing repository/service DI conventions and implement the smallest role-assignment read abstraction plus pure capability evaluator with focused deny-by-default tests.
+
+
+## Phase 13 capability foundation — 2026-09-05
+- Inspected repository conventions before implementation; existing code uses abstract domain repositories and pure domain/service boundaries, but no canonical role-assignment read implementation exists yet.
+- Added minimal admin capability vocabulary and pure evaluator with deny-by-default behavior.
+- Added focused tests for no-assignment denial, least-privilege moderator access, and platform-admin capability access.
+- No persistence model, Account.role field, admin API, UI, or generic CRUD was added.
+- Commits: 9bba8396bff41e0e2bae5713cc1d95377413d07a, 3c5deb7248f277b8010bc4065c116599cff408b8, 4bcf66b7f2025126c371be821821e019fb6c2b0c.
+- Next exact action: connect this evaluator to the canonical Role/RoleAssignment persistence through the smallest read abstraction, including active/effective/expiry/revocation filtering, then add focused authorization tests before exposing any admin endpoint.
