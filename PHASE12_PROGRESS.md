@@ -270,3 +270,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Scope remains persistence-only: no HTTP endpoint, upload/storage provider, or admin UI.
 - Commits: ec73fceac0e0434ea56460bb5c1959159350b126, 4c3e47fb95e3cf46842ca93c655e75680e00490c.
 - Next exact action: add focused repository tests for create/list deterministic ordering and report isolation, then run CI. Fix only concrete diagnostics before exposing any API.
+
+
+## Evidence persistence test checkpoint — 2026-09-05
+- Searched existing repository tests before adding coverage; no reusable Prisma safety repository spec pattern was found.
+- Added focused PrismaReportEvidenceRepository tests for canonical metadata persistence and report-scoped deterministic chronological reads.
+- Commit: d932cbd72f738597da436f3a8aa6ce472c79e7b7.
+- Next exact action: run CI for this evidence persistence slice and fix only concrete diagnostics. Do not expose evidence HTTP APIs until persistence is green.
