@@ -177,3 +177,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Updated existing moderation-action tests rather than creating a parallel suite, and extended existing safety-enforcement tests with the exact expiry-boundary invariant.
 - Commits: cf62747c0fa696bd92ff797d349904e72edcc386, dc48e0b432b390084b2b3b917c92982c5f9f4184.
 - Next exact action: run CI for these focused moderation-action verification changes. Fix only concrete diagnostics. Do not start moderation queue/admin UI or alter Reporting/User Block.
+
+
+## Moderation actions verification complete — 2026-09-05
+- CI for 788bf4f129246cbdcb40d71bed24d3dc75a9e624 is fully green.
+- Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration, concurrency gate, and Build.
+- Moderation action/enforcement invariants are verified, including canonical action mapping, enforcement/non-enforcement distinction, effectiveAt, exact expiry boundary, and revoked handling.
+- Freeze Moderation Actions as a completed vertical slice; do not reopen without a concrete regression.
+- Next exact action: inspect existing moderation queue/administration implementation and Phase 12 progress before selecting the smallest missing gap. Reuse existing moderation case/controller infrastructure where present; avoid parallel queue or admin subsystems.
