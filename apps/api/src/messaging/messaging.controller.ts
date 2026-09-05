@@ -8,10 +8,11 @@ import { MessageRealtimePublicationService } from './message-realtime-publicatio
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
 import { UserBlockRepository } from '../safety/user-block.repository.js';
+import { NotificationCreationService } from './notification-creation.service.js';
 
 @Controller('conversations')
 export class MessagingController {
-  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly safety?: EffectiveSafetyRestrictionService, @Optional() private readonly blocks?: UserBlockRepository) {}
+  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly notificationCreation?: NotificationCreationService, @Optional() private readonly safety?: EffectiveSafetyRestrictionService, @Optional() private readonly blocks?: UserBlockRepository) {}
 
   @Post()
   async createConversation(@Body() body: { participantAccountIds?: string[] }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
@@ -47,6 +48,13 @@ export class MessagingController {
     const created = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
     if (!created) return { statusCode: HttpStatus.NOT_FOUND };
     await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
+    if (this.notificationCreation) {
+      await Promise.all(created.recipientAccountIds.map((accountId) => this.notificationCreation.create({
+        accountId,
+        kind: 'message',
+        payload: { messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId },
+      })));
+    }
     return created.message;
   }
 

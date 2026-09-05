@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { MessagingController } from './messaging.controller.js';
 
 describe('MessagingController', () => {
+  const notifications = { create: vi.fn().mockResolvedValue({ id: 'n1' }) };
   const principalResolver = { requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'a1' }) };
 
   it('always adds the authenticated account when creating a conversation', async () => {
@@ -23,6 +24,7 @@ describe('MessagingController', () => {
     const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
     const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never);
     await controller.createMessage('c1', { body: 'hello' });
+    expect(notifications.create).toHaveBeenCalledWith({ accountId: 'a2', kind: 'message', payload: { messageId: 'm1', conversationId: 'c1', senderAccountId: 'a1' } });
     expect(createForParticipant).toHaveBeenCalledWith({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
   });
 
@@ -30,7 +32,7 @@ describe('MessagingController', () => {
     const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
     let restriction: 'none' | 'communication-restricted' = 'none';
     const safety = { resolveForAccount: vi.fn(async () => restriction) };
-    const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, safety as never);
+    const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, undefined, safety as never);
 
     await controller.createMessage('c1', { body: 'before restriction' });
     restriction = 'communication-restricted';
