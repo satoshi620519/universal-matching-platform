@@ -15,7 +15,7 @@ describe('DiscoveryService', () => {
       ],
       nextCursor: 'next',
     });
-    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const service = new DiscoveryService({ discover }, { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } });
     const result = await service.discover({
       subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope,
       limit: 20, projectionPolicy: policy,
@@ -28,7 +28,7 @@ describe('DiscoveryService', () => {
 
   it('passes a validated query to the repository', async () => {
     const discover = vi.fn().mockResolvedValue({ items: [] });
-    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const service = new DiscoveryService({ discover }, { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } });
     await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
     expect(discover).toHaveBeenCalledWith(expect.objectContaining({ limit: 10, categoryId: 'dating' }));
   });
@@ -37,7 +37,7 @@ describe('DiscoveryService', () => {
     const discover = vi.fn().mockResolvedValue({ items: [{ id: 'p2', accountId: 'a2', categoryId: 'dating', fields: { name: 'Hidden' }, geographicScope: scope }] });
     const block = { excludes: vi.fn().mockResolvedValue(true) };
     const safety = { excludes: vi.fn().mockResolvedValue(false) };
-    const service = new DiscoveryService({ discover }, block, safety);
+    const service = new DiscoveryService({ discover }, { block, safety });
     const result = await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
     expect(result.items).toEqual([]);
     expect(safety.excludes).not.toHaveBeenCalled();
@@ -51,8 +51,7 @@ describe('DiscoveryService', () => {
     const effectiveSafety = { resolveForAccount: vi.fn(async () => restriction) };
     const service = new DiscoveryService(
       { discover },
-      { excludes: vi.fn().mockResolvedValue(false) },
-      { excludes: vi.fn().mockResolvedValue(false) },
+      { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } },
       effectiveSafety as never,
     );
 
@@ -72,7 +71,7 @@ describe('DiscoveryService', () => {
         { id: 'miss', accountId: 'a3', categoryId: 'dating', fields: { role: 'developer' }, geographicScope: scope },
       ],
     });
-    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const service = new DiscoveryService({ discover }, { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } });
     const result = await service.discover({
       subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy,
       preferences: { filters: [{ field: 'role', operator: 'equals', value: 'designer' }] },
@@ -88,7 +87,7 @@ describe('DiscoveryService', () => {
         { id: 'miss', accountId: 'a3', categoryId: 'dating', fields: { name: 'Bob' }, geographicScope: scope },
       ],
     });
-    const service = new DiscoveryService({ discover }, { excludes: vi.fn().mockResolvedValue(false) }, { excludes: vi.fn().mockResolvedValue(false) });
+    const service = new DiscoveryService({ discover }, { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } });
     const result = await service.discover({
       subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy,
       search: { term: 'alice', fields: ['name'] },
@@ -102,7 +101,7 @@ describe('DiscoveryService', () => {
       { id:'high', accountId:'a3', categoryId:'dating', fields:{ role:'designer' }, geographicScope:scope },
     ]});
     const subject={ id:'subject', accountId:'a1', categoryId:'dating', fields:{ role:'designer' }, geographicScope:scope };
-    const service=new DiscoveryService({discover},{excludes:vi.fn().mockResolvedValue(false)},{excludes:vi.fn().mockResolvedValue(false)});
+    const service=new DiscoveryService({discover},{block:{excludes:vi.fn().mockResolvedValue(false)},safety:{excludes:vi.fn().mockResolvedValue(false)}});
     const result=await service.discover({subjectAccountId:'a1',categoryId:'dating',geographicScope:scope,limit:10,projectionPolicy:policy,subjectProfile:subject,matchingRules:{rules:[{key:'role',targetField:'role',operator:'equals',value:'designer',enabled:true}]},sort:{key:'compatibilityScore',direction:'desc'}});
     expect(result.items.map(item=>item.id)).toEqual(['high','low']);
   });
