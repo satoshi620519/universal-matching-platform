@@ -104,9 +104,23 @@ model SafetyReport {
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
   reporter Account @relation(fields: [reporterId], references: [id], onDelete: Cascade)
   moderationCase ModerationCase?
+  evidence ReportEvidence[]
   @@index([reporterId, createdAt])
   @@index([status, createdAt])
   @@map("safety_reports")
+}
+
+
+model ReportEvidence {
+  id String @id @db.Uuid
+  reportId String @map("report_id") @db.Uuid
+  kind String
+  context String
+  reference String?
+  capturedAt DateTime @map("captured_at") @db.Timestamptz(6)
+  report SafetyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  @@index([reportId, capturedAt, id])
+  @@map("report_evidence")
 }
 
 model ModerationCase {
