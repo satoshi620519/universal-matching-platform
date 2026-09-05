@@ -406,3 +406,9 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Focused service tests use an in-memory repository only as a test double; no duplicate production in-memory subsystem or endpoint wiring was introduced.
 - Commits: b403e138cd75f593c2d89108f10b79db38855dfa, 5499221fb9f78ac87fd1cb28f45870c8f7b01624, 56fb2e8d1e4f52abe834e8838f2a3ad4e091e213.
 - Next exact action: run CI for the stateful adapter, fix only concrete diagnostics, then inspect DI/module and persistence conventions before choosing production repository wiring.
+
+
+## Abuse prevention stateful adapter verification complete — 2026-09-05
+- CI for 34986eb92dde3f2a3cf47e6155a2090ec959bf0f is fully green across migration verification, PostgreSQL integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Stateful adapter is frozen: policy+subject isolation, expiry reset, allowed-only increment, deterministic decision reuse.
+- Next exact action: inspect existing Prisma schema/module DI patterns and choose the smallest production persistence implementation for AbuseControlRepository without adding duplicate infrastructure.
