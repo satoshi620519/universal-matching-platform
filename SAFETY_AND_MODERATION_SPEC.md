@@ -60,3 +60,19 @@ Do not recreate moderation actions. Inspect the existing domain action-to-restri
 
 ### Next exact action
 Inspect domain conventions and Prisma migration patterns, then implement evidence/context contracts and persistence as the next focused vertical slice.
+
+
+## Next slice decision — Irreversible ban semantics
+### Why this slice
+- Evidence Capture Write is CI-verified and frozen.
+- Existing moderation actions already cover warning, feature/communication restriction and suspension, so recreating the actions subsystem would duplicate work.
+- The roadmap explicitly requires ban, and the existing action checkpoint identifies irreversible/revocable enforcement semantics as the remaining invariant boundary.
+
+### Scope boundary
+- Inspect existing enforcement domain and action-to-restriction mapping first.
+- Add only the missing permanent/ban semantics and focused invariants.
+- Reuse existing administrative authorization, moderation case, enforcement persistence, and audit seams.
+- Do not build a second moderation action service or admin UI.
+
+### Next exact action
+Inspect SafetyEnforcement domain contracts, persistence schema, and existing moderation action mappings to identify the smallest concrete ban gap before changing code.
