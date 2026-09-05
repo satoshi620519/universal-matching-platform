@@ -13,6 +13,10 @@ export class SafetyModerationService {
     return this.reports.create({ ...input, reason: input.reason.trim() });
   }
   async listMyReports(accountId: string, limit?: number) { return this.reports.listForReporter(accountId, limit); }
+  async listModerationQueue(input: { actorId: string; status?: ReportStatus; limit?: number }) {
+    await this.admin.require(input.actorId, 'manage-moderation');
+    return this.reports.listForModeration(input.status, input.limit);
+  }
   async transitionReport(input: { actorId: string; reportId: string; status: ReportStatus; correlationId?: string }) {
     await this.admin.require(input.actorId, 'manage-moderation');
     const report = await this.reports.findById(input.reportId);
