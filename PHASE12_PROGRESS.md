@@ -160,3 +160,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - No new subsystem or duplicate controller was introduced; existing moderation controller was aligned with the domain contract.
 - Matching Concurrency Gate was still running during diagnosis.
 - Next exact action: verify CI for 1b4da406... and fix only new concrete diagnostics. Keep Reporting scope frozen until CI is green.
+
+
+## Reporting verification checkpoint — 2026-09-05
+- CI for e2ffccd39f403d5f22014b8057796e9a60433fa0 is fully green.
+- Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration, concurrency gate, and Build.
+- Reporting slice is now CI verified: canonical domain invariants/lifecycle, persistence enforcement, authenticated submission/listing API, controller identity coverage, and regression coverage.
+- Reporting implementation is frozen as a completed vertical slice; do not reopen it without a concrete regression.
+- Next exact action: inspect the current Phase 12 roadmap/spec and existing moderation infrastructure to select the smallest missing canonical moderation slice. Check existing code first to avoid duplicating any moderation case/action functionality.
