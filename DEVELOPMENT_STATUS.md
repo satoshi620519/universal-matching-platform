@@ -4131,3 +4131,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - No new persistence adapter, Prisma singleton, or database module was added.
 - Commits: f4736873bb0dfcd9200435ddfa4fac842a740e72, d151c1844031143c03debcc0a9f9fc216637c00f.
 - Next exact action: remove/retire the duplicate Phase 13 AdminRoleAssignmentRepository abstraction and filter after confirming no consumers, then compose a capability access service on top of existing RoleAssignmentRepository + evaluator with focused tests.
+
+
+## Phase 13 capability access composition — 2026-09-05
+- Confirmed the Phase 13 admin-specific role assignment abstraction/filter had no consumers.
+- Removed the duplicate abstraction instead of extending it.
+- Added AdminCapabilityAccessService composed strictly from existing RoleAssignmentRepository active-assignment reads and the canonical pure capability evaluator.
+- Added focused tests for deny-by-default and least-privilege capability evaluation.
+- No new persistence, role CRUD, admin endpoint, or UI added.
+- Next exact action: inspect administration module/provider composition and add the smallest authorization guard/decorator boundary that can enforce a required AdminCapability on future admin endpoints, with focused unauthorized/authorized tests before exposing endpoints.
