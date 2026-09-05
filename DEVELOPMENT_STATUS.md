@@ -51,3 +51,12 @@
 - Backend moderation behavior was re-inspected before integration: report/case transitions and actions are already capability-checked and audited in `SafetyModerationService`; no duplicate backend implementation was introduced.
 - Commit: 3e4d388c340a0329256434c9f330fd4a50d84f21.
 - Next exact action: inspect the remaining Phase 13 admin-console roadmap against existing backend surfaces and select the next smallest genuinely missing operational boundary; do not refactor the working moderation workspace or reopen completed safety slices without a concrete gap.
+
+## Phase 13 legacy account activation authorization checkpoint — 2026-09-05
+- Re-inspected account activation surfaces and found the older `PATCH /accounts/:accountId/activation` route was still exposed alongside the authenticated self-activation route.
+- The legacy route could activate an arbitrary account without authentication, while the canonical authenticated activation controller already restricts activation to the authenticated account context.
+- Secured the legacy route with the existing `RequestPrincipalResolver` and an account-id ownership check; unauthenticated requests are rejected and authenticated users cannot activate another account.
+- Added focused regression coverage for unauthenticated access, cross-account activation denial, authenticated self-activation, missing accounts, and persistence races.
+- Commits: 70c22465c45a379716a0f41811ece076c76b860a and ae8d603616258da294891e079bde41af4dbf5622.
+- No new authorization model or duplicate activation service was introduced; the existing authenticated activation boundary remains the canonical path.
+- Next exact action: verify CI for this targeted security repair, then continue the Phase 13 operational-boundary audit only after CI is green.
