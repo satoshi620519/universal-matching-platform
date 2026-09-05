@@ -105,3 +105,7 @@ export * from './password-credential.js';
 export * from './authentication-session.js';
 
 export * from './password-recovery.js';
+
+export * from './user-block.js';
+export * from './report-evidence.js';
+export * from './abuse-control.js';
