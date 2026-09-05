@@ -430,3 +430,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added per-authenticated-account quotas: report submission 10/minute; evidence capture 30/minute. Rejections use existing HTTP 429 semantics.
 - Commits: 1ebc6e3cee16fe49e47bf257490a63f46a60496d, 8461989bcaef6ae39bbd763a43f05f2824fb18ec.
 - Next exact action: add focused controller/service tests for quota boundaries and run CI; fix only concrete diagnostics. After green, inspect messaging write paths for the next smallest spam-control gap.
+
+
+## Abuse prevention report integration CI diagnostic — 2026-09-05
+- CI failed only at Typecheck with two concrete regressions from the integration change: controller decorator was accidentally placed before policy constants, and existing controller tests lacked the newly injected limiter dependency.
+- Applied only those two fixes; no behavior or quota changes.
+- Fix commits: 9df4f7e96b31a21671eb58ce3b00b27dfb4b2b5f, 8a81394fd427f7da2d3b7ca71766d01d80d5b5fd.
+- Next exact action: verify CI for these Typecheck fixes, then add explicit 429 quota-boundary tests only if the current suite lacks them.
