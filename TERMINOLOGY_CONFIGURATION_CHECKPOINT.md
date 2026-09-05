@@ -30,3 +30,11 @@
 - Applied the minimal test-only fix by preserving the terminology payload as an explicitly inferred immutable value before composing the draft.
 - Commit: b1b9d0867370633b7838cd446b73d399c28e2421.
 - Next exact action: wait for the latest CI chain on the repaired head; do not expand Terminology work until the green baseline is restored.
+
+
+## Completion checkpoint — 2026-09-05
+- CI #3227 completed SUCCESS across the full baseline after the terminology payload inference repair.
+- Terminology Configuration is complete for the documented scope: stable keys, purchaser-editable labels, validation, normalization/fallback behavior, immutable Quick Launch publication, and compatibility with the already-wired purchaser payload/UI shape.
+- No separate UI rewrite was needed because the purchaser terminology step already existed and used the compatible nested payload.
+- Terminology work is closed; do not reopen it unless a concrete regression or new approved requirement appears.
+- Next exact action: return to the master completion roadmap and identify only release-blocking unfinished items for the marketplace-ready finish line.
