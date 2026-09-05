@@ -45,3 +45,18 @@ Do not build the moderation queue UI in this slice. First establish domain contr
 
 ### Next verification boundary
 Do not recreate moderation actions. Inspect the existing domain action-to-restriction mapping, enforcement persistence, and tests to identify only missing invariants (especially expiry and irreversible/revocable enforcement semantics) before adding code.
+
+
+## Next slice decision — Evidence and context capture
+### Why this slice
+- User Block, Reporting, Moderation Actions, and Moderation Queue are CI-verified and frozen.
+- Roadmap still requires evidence/context capture, ban, audit logs, abuse prevention, rate limiting, and spam controls.
+- Repository search found no existing canonical evidence/context or attachment model, so this is the smallest missing upstream moderation primitive to establish before policy-heavy ban/rate/spam work.
+
+### Scope boundary
+- Add a reusable report evidence/context domain contract and persistence boundary.
+- Evidence metadata only; do not introduce a media-storage provider, upload pipeline, AI moderation, or admin UI in this slice.
+- Evidence must be tied to an existing report and preserve immutable capture metadata needed for later moderation review.
+
+### Next exact action
+Inspect domain conventions and Prisma migration patterns, then implement evidence/context contracts and persistence as the next focused vertical slice.
