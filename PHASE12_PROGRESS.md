@@ -261,3 +261,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Evidence remains metadata-only; storage/upload concerns are intentionally excluded.
 - Commits: 431bc33f8c13d68ba3b741e70c47ec88d27c91e2, 598e93c4bd6dfcd0093f11a41c2ebca34aacdbd7, 603a53130ee2fe873b7fde0b8d3cc217fca9544d.
 - Next exact action: inspect migration naming/history and add the matching PostgreSQL migration for report_evidence, then register the repository only where an existing DI token convention requires it. Add focused persistence tests before any HTTP API.
+
+
+## Evidence migration and DI checkpoint — 2026-09-05
+- Re-read current Phase 12 checkpoint and inspected concrete SafetyReport schema plus AppModule repository registration conventions.
+- Added PostgreSQL migration `20260905001000_create_report_evidence` with report FK, cascade delete, and `(report_id, captured_at, id)` index matching the repository ordering contract.
+- Registered PrismaReportEvidenceRepository through the canonical ReportEvidenceRepository DI boundary; no duplicate service/module was introduced.
+- Scope remains persistence-only: no HTTP endpoint, upload/storage provider, or admin UI.
+- Commits: ec73fceac0e0434ea56460bb5c1959159350b126, 4c3e47fb95e3cf46842ca93c655e75680e00490c.
+- Next exact action: add focused repository tests for create/list deterministic ordering and report isolation, then run CI. Fix only concrete diagnostics before exposing any API.
