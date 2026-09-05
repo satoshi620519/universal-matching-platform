@@ -12,7 +12,7 @@ docker compose up -d
 
 ```bash
 corepack enable
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
 ```
 
 ## 3. Configure and migrate
