@@ -219,3 +219,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Focused fix commit 20625b7e71787a52317ad1a0acb4ab123e501a13 narrows the controller value to the canonical queue status union after validation.
 - No runtime behavior or subsystem was changed; this is a type-contract alignment only.
 - Next exact action: verify CI for 20625b7e... and fix only concrete diagnostics. Keep Moderation Queue scope frozen until green.
+
+
+## Moderation queue second CI diagnostic checkpoint — 2026-09-05
+- CI for 20625b7e... still failed at Typecheck; Matching Concurrency Gate passed.
+- Exact remaining diagnostic was on the validation expression itself: `includes()` was still receiving `status as ReportStatus`, which is broader than the submitted|triaged tuple.
+- Focused fix commit 361ac57cfa47f99ec3913e787a3decf037ee3a21 narrows the validation argument to submitted|triaged, matching the already-narrow service call.
+- No behavioral change; only the remaining TypeScript contract mismatch was removed.
+- Next exact action: verify CI for 361ac57c...; if green, mark Moderation Queue complete and inspect only the next Phase 12 gap.
