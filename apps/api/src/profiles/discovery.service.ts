@@ -15,7 +15,7 @@ export type DiscoveryExclusionPolicies = Readonly<{ block: DiscoveryExclusionPol
 @Injectable()
 export class DiscoveryService {
   constructor(
-    private readonly profiles: DiscoveryProfileRepository,
+    @Inject('DISCOVERY_PROFILE_REPOSITORY') private readonly profiles: DiscoveryProfileRepository,
     @Inject('DISCOVERY_EXCLUSION_POLICIES') private readonly exclusions: DiscoveryExclusionPolicies,
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
   ) {}
