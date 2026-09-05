@@ -22,3 +22,11 @@
 - Found the established purchaser payload shape is `terminology: { terms: { ... } }`; aligned the new domain contract to that existing shape instead of changing the already-wired Admin UI/API.
 - Updated focused tests accordingly. This prevents a duplicate UI rewrite and avoids a runtime validation mismatch.
 - Exact next action: verify CI for the compatibility alignment, then mark Terminology Configuration complete and move to the next documented unfinished boundary.
+
+
+## CI repair checkpoint — 2026-09-05
+- CI #3223 exposed one TypeScript inference error in the terminology publication test after the nested payload alignment.
+- Root cause was the spread-expression contextual inference of the nested `terms` object, not a runtime contract failure.
+- Applied the minimal test-only fix by preserving the terminology payload as an explicitly inferred immutable value before composing the draft.
+- Commit: b1b9d0867370633b7838cd446b73d399c28e2421.
+- Next exact action: wait for the latest CI chain on the repaired head; do not expand Terminology work until the green baseline is restored.
