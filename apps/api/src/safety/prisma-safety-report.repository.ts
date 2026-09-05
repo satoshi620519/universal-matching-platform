@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { canTransitionModerationCase, canTransitionReportStatus, type ModerationCase, type SafetyReport } from '@universal/domain';
+import { assertValidSafetyReportInput, canTransitionModerationCase, canTransitionReportStatus, type ModerationCase, type SafetyReport } from '@universal/domain';
 import { randomUUID } from 'node:crypto';
 import { DatabaseService } from '../database/database.service.js';
 import { SafetyReportRepository, type CreateSafetyReportInput } from './safety-report.repository.js';
@@ -8,6 +8,7 @@ import { SafetyReportRepository, type CreateSafetyReportInput } from './safety-r
 export class PrismaSafetyReportRepository extends SafetyReportRepository {
   constructor(private readonly database: DatabaseService) { super(); }
   async create(input: CreateSafetyReportInput): Promise<SafetyReport> {
+    assertValidSafetyReportInput(input);
     const record = await this.database.safetyReport.create({ data: { id: randomUUID(), reporterId: input.reporterId, targetId: input.targetId, targetType: input.targetType, reason: input.reason, status: 'submitted' } });
     return this.toReport(record);
   }
