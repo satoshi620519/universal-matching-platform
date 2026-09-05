@@ -40,3 +40,10 @@ Audit the repository for existing installation/deployment material and create th
 - Added SECURITY.md defining vulnerability handling and deployment-owner security responsibilities without pretending configuration settings are authorization.
 - Added LICENSE_DECISION_REQUIRED.md instead of inventing legal terms. Commercial license selection is now explicitly tracked as an owner decision and release blocker.
 - Next exact action: inspect CI for the documentation commits, then perform a concrete clean-install/release verification audit and identify any remaining technical blocker without reopening completed feature work.
+
+
+## Release verification boundary checkpoint — 2026-09-05
+- Audited the actual CI workflow instead of duplicating its checks in release documentation.
+- CI already enforces packaged migration verification, PostgreSQL migration integration, typecheck, lint, tests, matching concurrency and build.
+- Added RELEASE_VERIFICATION.md to isolate the remaining evidence that cannot honestly be claimed from CI alone: disposable clean environment, Docker services, buyer install path, all three apps, full Quick Launch publication and package hygiene.
+- No feature work reopened. The next technical release task is execution/recording of the clean-environment verification, followed by resolving only concrete failures found there.
