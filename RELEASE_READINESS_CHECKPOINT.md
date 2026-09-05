@@ -75,3 +75,11 @@ Audit the repository for existing installation/deployment material and create th
 - Found a concrete documentation/runtime contradiction: Web and Admin expose `dev` scripts, but `@universal/api` currently does not expose `dev` (or another documented HTTP server startup script).
 - Corrected INSTALLATION, QUICK_START, RELEASE_CHECKLIST and RELEASE_VERIFICATION to stop claiming `pnpm --filter @universal/api dev` works.
 - Full three-application buyer launch is now explicitly tracked as a concrete technical release blocker. Next exact action: inspect the API source for the intended runtime entrypoint and add only the minimal package script/documentation required to make it reproducible.
+
+
+## API runtime-entrypoint resolution — 2026-09-05
+- Inspected `apps/api/src/main.ts` and confirmed an existing Nest/Fastify HTTP bootstrap already listens using runtime configuration.
+- The missing piece was package-level discoverability, not missing server implementation.
+- Added minimal `dev` (`tsx watch src/main.ts`) and `start` (`node dist/main.js`) scripts to `@universal/api`.
+- Restored accurate three-application startup instructions in release docs and removed the resolved API-entrypoint blocker.
+- Next exact action: CI-validate this runtime-script change, then continue clean-environment verification without reopening documentation work.
