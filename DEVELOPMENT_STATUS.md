@@ -60,3 +60,12 @@
 - Commits: 70c22465c45a379716a0f41811ece076c76b860a and ae8d603616258da294891e079bde41af4dbf5622.
 - No new authorization model or duplicate activation service was introduced; the existing authenticated activation boundary remains the canonical path.
 - Next exact action: verify CI for this targeted security repair, then continue the Phase 13 operational-boundary audit only after CI is green.
+
+
+## Phase 13 moderation workspace entrypoint checkpoint — 2026-09-05
+- Re-inspected the completed moderation workspace instead of creating another admin screen.
+- Found a concrete integration gap: `moderation-console.tsx` existed but was not imported by the Vite browser entrypoint, so its mount side effect could leave the implemented workspace unreachable in the production admin bundle.
+- Added the single entrypoint import in `apps/admin/src/main.tsx`; the existing Quick Launch shell and moderation implementation remain unchanged.
+- Added a focused integration regression test that locks the browser entrypoint import in place.
+- Commits: e2b66a9a77101a205d52cc06baa1eac036910ded, f98f932fdc9de0cfd6a1c0c4fc756b071df490d4.
+- Next exact action: verify CI for this minimal reachability repair; if green, continue the roadmap gap audit from the next operational boundary without reopening completed admin/safety work.
