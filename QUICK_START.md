@@ -22,14 +22,17 @@ export DATABASE_URL='postgresql://universal:universal@localhost:5432/universal_m
 pnpm --filter @universal/database migrate
 ```
 
-## 4. Start available applications
+## 4. Start the platform
+
+Use separate terminals:
 
 ```bash
+pnpm --filter @universal/api dev
 pnpm --filter @universal/web dev
 pnpm --filter @universal/admin dev
 ```
 
-The API package currently has no `dev` script. Full buyer launch cannot be claimed until a documented API runtime entrypoint exists.
+The API command uses the existing Nest/Fastify bootstrap in `src/main.ts`.
 
 ## 5. Complete Admin Quick Launch
 
