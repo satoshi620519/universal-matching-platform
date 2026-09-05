@@ -4176,3 +4176,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - This closes the planned test step for commit 9d153390 without adding a second authorization mechanism.
 - Test commit: bf47fb9ee5c3aaa2f5881218406f46d52b30d924.
 - Next exact action: run the repository's existing API test/typecheck/lint/build validation for the changed controller and inspect the next concrete admin-operable read surface only after this slice is green.
+
+
+## Validation checkpoint / continuation discipline — 2026-09-05
+- Reconfirmed canonical validation commands from root and API package: turbo test/typecheck/lint/build, with API-specific Vitest and matching concurrency integration scripts.
+- The current GitHub connector session can inspect repository contents but cannot execute the repository command suite; no false CI-green claim is made.
+- No workflow definition was identified through repository search, so validation evidence remains limited to previously recorded CI runs unless an executable environment is used.
+- Next exact action: inspect the next concrete admin-operable surface from existing controllers/services (audit records first), and add capability protection only if an actual exposed authorization gap exists. Do not re-audit moderation or recreate authorization infrastructure.
