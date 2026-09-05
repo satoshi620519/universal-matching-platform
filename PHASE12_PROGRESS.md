@@ -294,3 +294,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Reuses canonical `createReportEvidence` invariants and frozen ReportEvidenceRepository; no upload/storage provider added.
 - Commits: e9ad785e84c50c460567618b972440e61d59b03a, e0c5107bbacffd7cc8bbc6845ea90d11bd9bb8ad.
 - Next exact action: inspect constructor/test fallout caused by the new repository dependency, add focused ownership/domain validation tests for capture, then run CI. Do not add binary attachments or retrieval/admin APIs before the write slice is green.
+
+
+## Evidence capture focused test checkpoint — 2026-09-05
+- Inspected existing report controller tests and searched for reusable moderation-service test coverage before adding tests.
+- Updated controller mocks for the new moderation dependency and added authenticated identity propagation/server-generated evidence ID coverage.
+- Added focused service tests for owner-only capture and indistinguishable not-found behavior for missing vs foreign reports; failed ownership never writes evidence.
+- Commits: 6e00b151d8d1bf6f85cee51985a45cdb2bbfb9ba, e61aeec888782c584711b1eb60bd198b0e43936b.
+- Next exact action: run CI for the evidence capture write slice, then fix only concrete diagnostics. Do not add evidence retrieval, admin views, or binary uploads before this slice is green.
