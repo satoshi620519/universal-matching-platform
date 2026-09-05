@@ -373,3 +373,14 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Ban semantics are CI verified and frozen: canonical ban action, banned restriction, permanent enforcement via existing no-expiry model, strongest precedence, all-scope applicability, existing admin authorization and audit reuse.
 - Completed slices must not be reopened without a concrete regression.
 - Next exact action: re-read the remaining Phase 12 roadmap/spec requirements against current implementation and choose the next smallest missing vertical slice; avoid Reporting, Moderation Queue, Evidence Capture, and Ban semantics.
+
+
+## Ban semantics verification complete — 2026-09-05
+- CI for 74665278b05835beefbab389ec55907765b02cf6 is fully green across migration verification, PostgreSQL integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Ban semantics are frozen: canonical ban action, banned restriction, permanent no-expiry enforcement reuse, strongest precedence, all-scope applicability, existing admin authorization and audit seams.
+
+## Phase 12 next-slice decision — Abuse prevention foundation — 2026-09-05
+- Re-read roadmap/spec and current implementation after freezing Ban.
+- Repository search found no existing rate limiting, throttling, or spam-control primitive; remaining explicit Phase 12 gap is abuse prevention.
+- Selected a reusable foundation first to avoid duplicating endpoint-specific rate-limit patches later.
+- Next exact action: inspect dependency/request identity conventions and implement the smallest deterministic abuse-control policy boundary with explicit key/window/rejection semantics, then focused tests before broad wiring.
