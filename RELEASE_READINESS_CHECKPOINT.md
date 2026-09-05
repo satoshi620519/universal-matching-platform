@@ -68,3 +68,10 @@ Audit the repository for existing installation/deployment material and create th
 - This exposed a concrete contradiction in release docs: several buyer commands used `pnpm install --frozen-lockfile`, which cannot succeed without a lockfile.
 - Corrected INSTALLATION, QUICK_START, RELEASE_CHECKLIST and RELEASE_VERIFICATION to use the repository's current executable `--no-frozen-lockfile` behavior and explicitly record dependency reproducibility as an unresolved release-quality limitation until a maintained lockfile is intentionally introduced.
 - This is a documentation correctness repair, not a feature change. Next exact action: validate CI on the corrected baseline, then treat introduction of a lockfile as a concrete reproducibility decision rather than falsely claiming it is already solved.
+
+
+## API runtime-entrypoint audit checkpoint — 2026-09-05
+- Inspected actual package scripts before attempting the clean-environment launch.
+- Found a concrete documentation/runtime contradiction: Web and Admin expose `dev` scripts, but `@universal/api` currently does not expose `dev` (or another documented HTTP server startup script).
+- Corrected INSTALLATION, QUICK_START, RELEASE_CHECKLIST and RELEASE_VERIFICATION to stop claiming `pnpm --filter @universal/api dev` works.
+- Full three-application buyer launch is now explicitly tracked as a concrete technical release blocker. Next exact action: inspect the API source for the intended runtime entrypoint and add only the minimal package script/documentation required to make it reproducible.
