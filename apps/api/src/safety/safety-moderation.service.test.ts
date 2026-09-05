@@ -16,6 +16,7 @@ describe('SafetyModerationService authorization', () => {
     const audit = { append: vi.fn() };
     const service = new SafetyModerationService(
       reports as any,
+      {} as any,
       enforcement as any,
       { require: deny } as any,
       audit as any,
