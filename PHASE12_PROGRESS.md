@@ -311,3 +311,11 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - No production behavior changed. Fix commits: 81f980f18a006391e53b368909a7c1b056dc1ea5, 2cb65d7fda5380589a09ce2ebd8752035c6318bd.
 - Matching Concurrency Gate was still running independently at last check.
 - Next exact action: verify CI for the latest fix and repair only concrete diagnostics; keep Evidence Capture scope frozen until green.
+
+
+## Evidence capture write verification complete — 2026-09-05
+- CI for 006615bab7d76f6c8125deac03056d5ffd35c775 is fully green.
+- Passed: migration packaging verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Evidence Capture Write Slice is CI verified and frozen: authenticated identity, server-generated evidence IDs, report-owner boundary with indistinguishable not-found behavior, canonical domain validation, and persistence reuse.
+- Completed slices must not be reopened without a concrete regression.
+- Next exact action: re-read Phase 12 roadmap/spec and inspect current safety infrastructure for the next missing vertical slice, prioritizing existing roadmap order and avoiding overlap with frozen Reporting, Moderation Queue, and Evidence Capture.
