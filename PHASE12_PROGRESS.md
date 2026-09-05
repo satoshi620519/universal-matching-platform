@@ -437,3 +437,10 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Applied only those two fixes; no behavior or quota changes.
 - Fix commits: 9df4f7e96b31a21671eb58ce3b00b27dfb4b2b5f, 8a81394fd427f7da2d3b7ca71766d01d80d5b5fd.
 - Next exact action: verify CI for these Typecheck fixes, then add explicit 429 quota-boundary tests only if the current suite lacks them.
+
+
+## Abuse prevention report/evidence integration verification complete — 2026-09-05
+- CI for 8a81394fd427f7da2d3b7ca71766d01d80d5b5fd is fully green across migration verification, PostgreSQL integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Report/evidence abuse limits are frozen: existing RequestRateLimiter reused with canonical policy definitions and HTTP 429 rejection semantics.
+- Completed slices must not be reopened without a concrete regression.
+- Next exact action: inspect messaging write paths and existing anti-spam/rate-limit consumers to identify the smallest remaining Phase 12 abuse-prevention gap; do not rate-limit read paths or duplicate authentication controls.
