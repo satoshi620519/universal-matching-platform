@@ -4149,3 +4149,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Removed the newly created duplicate `apps/api/src/admin` capability evaluator/access-service path rather than adding another guard/decorator system.
 - No new authorization infrastructure was added. Future Admin Console work must consume AdministrativeCapabilityAccessService and existing protected services.
 - Next exact action: audit existing administrative/safety controllers for inconsistent authorization boundaries, starting with concrete moderation operations, and close only real gaps using the canonical AdministrativeCapabilityAccessService.
+
+
+## Phase 13 administrative boundary audit checkpoint — 2026-09-05
+- Began the planned audit from concrete administrative/moderation controller surfaces.
+- Repository search confirmed the canonical administration role-management controller/service is the currently identifiable protected privileged mutation boundary.
+- Broad searches for separate safety/moderation controllers returned no additional concrete controller surface under the searched implementation, so no speculative authorization integration was added.
+- This is consistent with the earlier completion decision: moderation domain infrastructure may exist without an independently exposed admin transport; Phase 13 must expose existing capabilities deliberately rather than assume endpoints exist.
+- Next exact action: inventory controller classes from application module imports/routes, then identify the first concrete admin-operable read surface (moderation queue or audit records) and add a capability-protected transport only if backed by an existing canonical service.
