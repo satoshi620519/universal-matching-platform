@@ -13,7 +13,7 @@ This guide installs the Universal Matching Platform from a clean checkout for lo
 git clone <your-repository-url> universal-matching-platform
 cd universal-matching-platform
 corepack enable
-pnpm install --frozen-lockfile
+pnpm install --no-frozen-lockfile
 ```
 
 If installing from a marketplace archive, extract it and run the last three commands from the project root.
