@@ -348,3 +348,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added assertions that `ban -> banned`, ban is an enforcement action, banned blocks both general and communication scopes, and banned maps through the existing suspended account-state boundary.
 - Commits: 5b80186af117bcea1e2aed94b4870e07da218f9e, e830381d8dba87ecb004eff887dce89e32ebe99c.
 - Next exact action: run CI for the Ban semantics slice and fix only concrete diagnostics. If green, freeze the slice and re-read the Phase 12 roadmap before selecting another missing requirement.
+
+
+## Ban semantics CI diagnostic checkpoint — 2026-09-05
+- CI for Ban tests failed at Domain Typecheck only; exact diagnostic identified the existing restriction precedence Record as non-exhaustive after adding `banned`.
+- Fixed only the missing canonical precedence entry: `banned: 4`, making ban stronger than suspension in effective restriction reduction.
+- Added a focused existing-suite assertion proving ban dominates suspension for both general and communication resolution.
+- No parallel enforcement model or API was introduced.
+- Fix commits: 8c8f977224dc85d4bd000f2d0b94ea34d686fc7a, 89d01c64c1673888520e5e13868fabf81994eb15.
+- Next exact action: verify CI for the precedence fix; repair only concrete diagnostics. If green, freeze Ban semantics and return to roadmap gap selection.
