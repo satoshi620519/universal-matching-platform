@@ -243,3 +243,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Selected Evidence and Context Capture as the smallest missing upstream moderation primitive.
 - Scope is deliberately metadata/persistence first: no media-storage provider, upload pipeline, AI moderation, duplicate queue, or admin UI.
 - Next exact action: inspect existing domain and Prisma migration conventions, then implement report evidence/context contracts and persistence with focused invariants before any API surface.
+
+
+## Evidence and context domain checkpoint — 2026-09-05
+- Re-read progress and inspected existing report/user-block domain conventions before implementation.
+- Added canonical ReportEvidence domain contract with explicit kind, report linkage, normalized context/reference metadata, and capturedAt validation.
+- Added focused domain invariant tests and exported the contract from the domain package.
+- Scope remains metadata-only: no upload/storage provider or admin UI introduced.
+- Commits: 7619dd3ee132ca4898f2b1c33f84b2fd504d3590, 30ac434dafdd2e456bea2632fddbd56a702fabf7, 3b5e8c912b2b95afe58b64b96a03fe17ec5b663c.
+- Next exact action: inspect the concrete existing SafetyReport persistence/migration conventions from repository paths and add the smallest foreign-keyed evidence persistence boundary. Do not expose HTTP upload APIs before persistence is verified.
