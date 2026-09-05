@@ -32,7 +32,7 @@ describe('MessagingController', () => {
     const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
     let restriction: 'none' | 'communication-restricted' = 'none';
     const safety = { resolveForAccount: vi.fn(async () => restriction) };
-    const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, notifications as never, notifications as never, safety as never);
+    const controller = new MessagingController(principalResolver as never, {} as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, notifications as never, safety as never);
 
     await controller.createMessage('c1', { body: 'before restriction' });
     restriction = 'communication-restricted';
