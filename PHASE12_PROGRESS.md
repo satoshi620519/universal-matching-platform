@@ -302,3 +302,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Added focused service tests for owner-only capture and indistinguishable not-found behavior for missing vs foreign reports; failed ownership never writes evidence.
 - Commits: 6e00b151d8d1bf6f85cee51985a45cdb2bbfb9ba, e61aeec888782c584711b1eb60bd198b0e43936b.
 - Next exact action: run CI for the evidence capture write slice, then fix only concrete diagnostics. Do not add evidence retrieval, admin views, or binary uploads before this slice is green.
+
+
+## Evidence capture CI diagnostic checkpoint — 2026-09-05
+- CI for dca4d877... failed at Typecheck only; failure was test-constructor fallout from adding ReportEvidenceRepository as the second SafetyModerationService dependency.
+- Exact diagnostics: two queue specs and one authorization spec still instantiated the service with four arguments.
+- Updated only those existing tests to inject the evidence placeholder in the canonical constructor position.
+- No production behavior changed. Fix commits: 81f980f18a006391e53b368909a7c1b056dc1ea5, 2cb65d7fda5380589a09ce2ebd8752035c6318bd.
+- Matching Concurrency Gate was still running independently at last check.
+- Next exact action: verify CI for the latest fix and repair only concrete diagnostics; keep Evidence Capture scope frozen until green.
