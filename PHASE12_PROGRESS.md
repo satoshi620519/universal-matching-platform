@@ -319,3 +319,15 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Evidence Capture Write Slice is CI verified and frozen: authenticated identity, server-generated evidence IDs, report-owner boundary with indistinguishable not-found behavior, canonical domain validation, and persistence reuse.
 - Completed slices must not be reopened without a concrete regression.
 - Next exact action: re-read Phase 12 roadmap/spec and inspect current safety infrastructure for the next missing vertical slice, prioritizing existing roadmap order and avoiding overlap with frozen Reporting, Moderation Queue, and Evidence Capture.
+
+
+## Evidence Capture Write verification complete — 2026-09-05
+- CI for 006615bab7d76f6c8125deac03056d5ffd35c775 is fully green.
+- Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration/gate, and Build.
+- Evidence Capture Write Slice is frozen: authenticated identity, server-generated evidence IDs, owner-only report boundary, canonical domain validation, and persistence reuse.
+
+## Phase 12 next-slice decision — Ban semantics — 2026-09-05
+- Re-read the roadmap/spec and current progress before selecting new work.
+- Existing moderation actions infrastructure already supports warnings, restrictions, suspension and enforcement persistence; recreating it would be duplicate work.
+- Selected the explicit remaining roadmap requirement: permanent/irreversible ban semantics.
+- Next exact action: inspect existing SafetyEnforcement domain contracts, schema, and action-to-restriction mapping to identify the smallest concrete missing invariant before implementation.
