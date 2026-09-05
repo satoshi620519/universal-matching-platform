@@ -234,3 +234,12 @@ Authenticated Block / Unblock API has been added using the existing RequestPrinc
 - Passed: migration verification, PostgreSQL migration integration, Typecheck, Lint, Test, Matching concurrency integration, concurrency gate, and Build.
 - Moderation Queue is CI verified and frozen: authenticated admin access, manage-moderation authorization, canonical submitted/triaged filtering, bounded limit 1..100, deterministic oldest-first reads, and focused service/controller coverage.
 - Next exact action: re-read Phase 12 roadmap/spec and inspect existing safety infrastructure for the next missing vertical slice. Do not reopen User Block, Reporting, Moderation Actions, or Moderation Queue without a concrete regression.
+
+
+## Phase 12 next-slice decision — Evidence and context — 2026-09-05
+- Moderation Queue is fully CI verified and frozen.
+- Re-read the Phase 12 roadmap/spec and searched the repository before selecting new work.
+- No existing canonical evidence/context capture, attachment model, rate/spam control, or ban-specific implementation was found in the inspected repository search.
+- Selected Evidence and Context Capture as the smallest missing upstream moderation primitive.
+- Scope is deliberately metadata/persistence first: no media-storage provider, upload pipeline, AI moderation, duplicate queue, or admin UI.
+- Next exact action: inspect existing domain and Prisma migration conventions, then implement report evidence/context contracts and persistence with focused invariants before any API surface.
