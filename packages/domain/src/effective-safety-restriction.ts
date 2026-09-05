@@ -8,6 +8,7 @@ const restrictionPriority: Record<SafetyRestriction, number> = {
   'feature-restricted': 1,
   'communication-restricted': 2,
   suspended: 3,
+  banned: 4,
 };
 
 export function resolveEffectiveSafetyRestriction(
@@ -32,6 +33,6 @@ function appliesToScope(
 ): boolean {
   if (restriction === 'none') return false;
   if (restriction === 'feature-restricted') return true;
-  if (restriction === 'suspended') return true;
+  if (restriction === 'suspended' || restriction === 'banned') return true;
   return scope === 'communication';
 }

@@ -40,4 +40,13 @@ describe('resolveEffectiveSafetyRestriction', () => {
     ];
     expect(resolveEffectiveSafetyRestriction(records, 'communication')).toBe('suspended');
   });
+
+  it('always lets a permanent ban dominate every other restriction', () => {
+    const records = [
+      { ...base, id: '1', restriction: 'suspended' as const },
+      { ...base, id: '2', restriction: 'banned' as const },
+    ];
+    expect(resolveEffectiveSafetyRestriction(records, 'general')).toBe('banned');
+    expect(resolveEffectiveSafetyRestriction(records, 'communication')).toBe('banned');
+  });
 });

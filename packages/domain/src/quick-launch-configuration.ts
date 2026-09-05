@@ -5,7 +5,6 @@ import { validateFeatureVisibilityConfiguration, type FeatureVisibilityConfigura
 import { validateMatchingRulesConfiguration, type MatchingRulesConfiguration } from './matching-rules-configuration.js';
 import { createMatchStrategyConfiguration, type MatchStrategyConfiguration } from './match-strategy-configuration.js';
 import { validateNotificationPresentationPreferences, resolveNotificationPresentationPreferences, type NotificationPresentationPreferences } from './notification-presentation-preferences.js';
-import { normalizeTerminologyConfiguration, type TerminologyConfiguration } from './terminology-configuration.js';
 
 export interface QuickLaunchCategory {
   readonly key: string;
@@ -28,8 +27,6 @@ export interface QuickLaunchDraft {
   readonly profileSchema?: ProfileSchemaConfiguration;
   /** Purchaser presentation visibility only; runtime authorization remains independent. */
   readonly featureVisibility?: FeatureVisibilityConfiguration;
-  /** Purchaser-editable presentation labels; implementation keys remain stable. */
-  readonly terminology?: TerminologyConfiguration;
   /** Public legal/support destinations; protected operational policies remain independent. */
   readonly legalSupport?: { readonly privacyPolicyUrl?: string; readonly termsOfServiceUrl?: string; readonly supportUrl?: string; readonly supportEmail?: string };
   /** Optional purchaser matching metadata; runtime interpretation remains matching-engine-owned. */
@@ -60,7 +57,6 @@ export function validateQuickLaunchDraft(draft: QuickLaunchDraft): void {
   if (draft.localization) validateLocalizationConfiguration({ ...draft.localization, supportedCountries: draft.supportedCountries });
   if (draft.profileSchema) validateProfileSchemaConfiguration(draft.profileSchema);
   if (draft.featureVisibility) validateFeatureVisibilityConfiguration(draft.featureVisibility);
-  if (draft.terminology) normalizeTerminologyConfiguration(draft.terminology);
   if (draft.matchingRules) validateMatchingRulesConfiguration(draft.matchingRules);
   if (draft.matchStrategy) createMatchStrategyConfiguration(draft.matchStrategy);
   if (draft.notificationPresentation) validateNotificationPresentationPreferences(draft.notificationPresentation);
@@ -99,7 +95,6 @@ export function publishQuickLaunchConfiguration(
     ...draft,
     ...(draft.legalSupport ? (() => { const privacyPolicyUrl=draft.legalSupport.privacyPolicyUrl?.trim()||undefined, termsOfServiceUrl=draft.legalSupport.termsOfServiceUrl?.trim()||undefined, supportUrl=draft.legalSupport.supportUrl?.trim()||undefined, supportEmail=draft.legalSupport.supportEmail?.trim().toLowerCase()||undefined; return privacyPolicyUrl||termsOfServiceUrl||supportUrl||supportEmail ? { legalSupport: Object.freeze({ ...(privacyPolicyUrl?{privacyPolicyUrl}:{}), ...(termsOfServiceUrl?{termsOfServiceUrl}:{}), ...(supportUrl?{supportUrl}:{}), ...(supportEmail?{supportEmail}:{}) }) } : {}; })() : {}),
     ...(draft.featureVisibility ? { featureVisibility: Object.freeze({ features: Object.freeze(draft.featureVisibility.features.map(feature => Object.freeze({ ...feature }))) }) } : {}),
-    ...(draft.terminology ? { terminology: normalizeTerminologyConfiguration(draft.terminology) } : {}),
     ...(draft.notificationPresentation ? { notificationPresentation: Object.freeze({ notifications: Object.freeze(resolveNotificationPresentationPreferences(draft.notificationPresentation)) }) } : {}),
     ...(draft.matchStrategy ? { matchStrategy: Object.freeze(createMatchStrategyConfiguration(draft.matchStrategy)) } : {}),
     ...(draft.matchingRules ? { matchingRules: Object.freeze({ rules: Object.freeze(draft.matchingRules.rules.map(rule => Object.freeze({ key: rule.key.trim(), targetField: rule.targetField.trim(), operator: rule.operator, value: rule.value, enabled: rule.enabled, ...(rule.weight !== undefined ? { weight: rule.weight } : {}) }))) }) } : {}),
