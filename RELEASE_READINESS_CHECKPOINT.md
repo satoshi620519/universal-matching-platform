@@ -47,3 +47,10 @@ Audit the repository for existing installation/deployment material and create th
 - CI already enforces packaged migration verification, PostgreSQL migration integration, typecheck, lint, tests, matching concurrency and build.
 - Added RELEASE_VERIFICATION.md to isolate the remaining evidence that cannot honestly be claimed from CI alone: disposable clean environment, Docker services, buyer install path, all three apps, full Quick Launch publication and package hygiene.
 - No feature work reopened. The next technical release task is execution/recording of the clean-environment verification, followed by resolving only concrete failures found there.
+
+
+## Documentation handoff checkpoint — 2026-09-05
+- Audited README and .gitignore while the latest CI runs were in progress.
+- Found the release documents were present but not discoverable from the repository entry point; updated README with a single buyer/release documentation index rather than adding another overlapping guide.
+- Confirmed `.env` and `.env.*` are ignored, while final archive inspection remains a manual release gate because ignore rules alone cannot prove package contents.
+- Next exact action: wait for the latest documentation CI baseline, then stop documentation expansion and move only to concrete clean-environment verification execution or remaining owner decisions (commercial license/version).
