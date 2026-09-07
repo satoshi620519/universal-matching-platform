@@ -5,13 +5,14 @@ import { PrismaConversationRepository } from './prisma-conversation.repository.j
 import { PrismaMessageRepository } from './prisma-message.repository.js';
 import { PrismaNotificationRepository } from './prisma-notification.repository.js';
 import { MessageRealtimePublicationService } from './message-realtime-publication.service.js';
+import { NotificationRealtimePublicationService } from './notification-realtime-publication.service.js';
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
 import { UserBlockRepository } from '../safety/user-block.repository.js';
 
 @Controller('conversations')
 export class MessagingController {
-  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly safety?: EffectiveSafetyRestrictionService, @Optional() private readonly blocks?: UserBlockRepository) {}
+  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly notificationRealtime: NotificationRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly safety?: EffectiveSafetyRestrictionService, @Optional() private readonly blocks?: UserBlockRepository) {}
 
   @Post()
   async createConversation(@Body() body: { participantAccountIds?: string[] }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
@@ -47,6 +48,7 @@ export class MessagingController {
     const created = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
     if (!created) return { statusCode: HttpStatus.NOT_FOUND };
     await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
+    if (created.notificationIds.length) void this.notificationRealtime.publishCreatedBestEffort({ notificationIds: created.notificationIds, recipientAccountIds: created.recipientAccountIds });
     return created.message;
   }
 
@@ -90,10 +92,7 @@ export class MessagingController {
     if (!this.blocks) return;
     for (const participantAccountId of participantAccountIds) {
       if (participantAccountId === actorAccountId) continue;
-      const [forward, reverse] = await Promise.all([
-        this.blocks.exists(actorAccountId, participantAccountId),
-        this.blocks.exists(participantAccountId, actorAccountId),
-      ]);
+      const [forward, reverse] = await Promise.all([this.blocks.exists(actorAccountId, participantAccountId), this.blocks.exists(participantAccountId, actorAccountId)]);
       if (forward || reverse) throw new ForbiddenException('communication is blocked between these accounts');
     }
   }
