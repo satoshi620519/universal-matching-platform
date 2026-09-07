@@ -22,9 +22,9 @@ export class PrismaAdministrativeModerationReadRepository extends Administrative
       take: input.limit + 1,
       ...(input.cursor ? { cursor: { id: input.cursor }, skip: 1 } : {}),
       orderBy: { id: 'asc' },
-      select: { id: true, reportId: true, status: true, createdAt: true },
+      select: { id: true, reportId: true, status: true, createdAt: true, report: { select: { targetId: true } } },
     });
-    const items = records.slice(0, input.limit);
+    const items = records.slice(0, input.limit).map(({ report, ...record }) => ({ ...record, targetId: report.targetId }));
     return { items, nextCursor: records.length > input.limit ? items.at(-1)?.id ?? null : null };
   }
 }
