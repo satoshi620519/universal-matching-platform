@@ -4120,3 +4120,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Service authorization is capability-bound: Moderation requires manage-moderation, while directory read models require view-dashboard. Limits are clamped server-side to 1..100.
 - Found no transport or capability inconsistency requiring implementation changes. Existing controller regression coverage was present for Users, Profiles, Moderation and Audit; added missing focused controller coverage for Matches and Conversations to complete the same boundary matrix.
 - Next exact task: inspect Phase 13 administrative mutation APIs (role management, moderation mutations, failed-email outbox and quick-launch) for capability authority, audit logging and browser/server contract consistency; do not duplicate existing mutation implementations.
+
+
+### 2026-09-07 — Phase 13 privileged mutation boundary audit
+- Audited administrative role assignment/revocation, failed-email outbox review/requeue, and Quick Launch configuration mutations against capability authority and audit boundaries.
+- Role mutations are authenticated, capability-gated by manage-administrative-roles, and successful assignments/revocations are audit-recorded with correlation support.
+- Failed-email review/requeue is capability-gated by review-failed-email-outbox and audits successful privileged operations without auditing authorization failures or no-op requeues.
+- Quick Launch controller is authenticated and gated by manage-quick-launch. Found one concrete browser/server transport inconsistency: its browser API omitted credentials include while the rest of the administrative browser APIs use credentialed requests.
+- Fixed Quick Launch transport to include browser credentials and added a regression assertion. No duplicate mutation implementation was introduced.
+- Next exact task: audit Quick Launch privileged mutation observability/correlation and existing administrative UI feature wiring, then reconcile Phase 13 acceptance criteria before adding any new surface area.
