@@ -11,6 +11,7 @@ import { DatabaseService } from '../database/database.service.js';
 import { NotificationRealtimePublicationService } from '../messaging/notification-realtime-publication.service.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
 import { UserBlockRepository } from '../safety/user-block.repository.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 @Injectable()
 export class PrismaMatchTransitionRepository implements MatchTransitionRepository {
@@ -19,6 +20,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     private readonly notificationRealtime: NotificationRealtimePublicationService,
     @Optional() private readonly safety?: EffectiveSafetyRestrictionService,
     @Optional() private readonly blocks?: UserBlockRepository,
+    @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
 
   async transition(input: MatchTransitionCommand): Promise<MatchTransitionResult> {
@@ -40,6 +42,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
       return { result, notifications };
     });
     if (outcome.notifications.length) void this.notificationRealtime.publishCreatedBestEffort({ notificationIds: outcome.notifications.map(notification => notification.id), recipientAccountIds: outcome.notifications.map(notification => notification.accountId) });
+    if (outcome.result.mutual && !outcome.result.replayed) void this.analytics?.recordBusinessEvent('match_created');
     return outcome.result;
   }
 
