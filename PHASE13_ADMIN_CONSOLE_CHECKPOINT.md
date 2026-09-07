@@ -55,3 +55,27 @@ CI must be run after implementation changes. Do not record a passing status with
 ## Continuity
 
 This file is a lightweight Phase 13 checkpoint so work can resume without repeating discovery or reimplementing existing foundations.
+
+
+## 2026-09-07 acceptance reconciliation
+
+Verified Phase 13 surfaces at the current checkpoint:
+
+- Dashboard: implemented through authenticated administrative read API.
+- Users / Profiles: implemented.
+- Reports / Moderation: implemented through the moderation directory and authoritative moderation workflow.
+- Matches: implemented.
+- Conversations metadata only: implemented; no privileged message-body convenience path was introduced.
+- Configuration / feature visibility / themes / localization / countries: implemented through the authenticated Quick Launch configuration workflow and immutable publication history.
+- Audit logs: implemented.
+- System health: implemented.
+- Analytics: intentionally not implemented inside Phase 13; Phase 14 owns business analytics.
+
+Concrete inconsistency fixed during reconciliation:
+- `admin-console-shell.ts` still described only the original three sections while the actual Admin application wires nine operational sections. The shared navigation model is now aligned with the real UI and regression-tested.
+
+Remaining explicit Phase 13 gap:
+- The roadmap calls out countries/regions. Country configuration exists, but no authoritative region-management administration surface or underlying region registry was found. Do not falsely mark region administration complete or invent a parallel geography store. The next task must reconcile this with the authoritative internationalization/location model before deciding whether the missing boundary belongs in Phase 13 or depends on a later location foundation.
+
+Completion rule:
+- Phase 13 can only be marked complete after the country/region administration boundary is explicitly resolved and a fresh executable validation result is available for the final checkpoint.
