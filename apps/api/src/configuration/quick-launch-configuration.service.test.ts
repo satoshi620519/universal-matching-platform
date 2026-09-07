@@ -23,6 +23,7 @@ class InMemoryRepository extends QuickLaunchConfigurationRepository {
     const next = { ...record, draft: value, updatedAt: new Date() }; this.records = this.records.map((item) => item.version === version ? next : item); return next;
   }
   async findDraft(version: number) { return this.records.find((record) => record.version === version && record.status === 'draft'); }
+  async findVersion(version: number) { return this.records.find((record) => record.version === version); }
   async findPublished() { return this.records.find((record) => record.status === 'published'); }
   async publish(version: number, published: NonNullable<QuickLaunchConfigurationRecord['published']>) {
     this.records = this.records.map((record) => record.status === 'published' ? { ...record, status: 'superseded' as const } : record);
@@ -38,6 +39,14 @@ describe('QuickLaunchConfigurationService', () => {
     const repository = new InMemoryRepository();
     const service = new QuickLaunchConfigurationService(repository);
     await expect(service.publish(99)).rejects.toThrow('quick launch draft is not publishable');
+  });
+
+  it('refuses editing a published version', async () => {
+    const repository = new InMemoryRepository();
+    const service = new QuickLaunchConfigurationService(repository);
+    const created = await service.createDraft(draft);
+    await service.publish(created.version);
+    await expect(service.saveDraft(created.version, { ...draft, applicationName: 'Mutated' })).rejects.toThrow('quick launch draft is not editable');
   });
 
   it('publishes an immutable snapshot and supersedes previous publication without mutating history', async () => {
