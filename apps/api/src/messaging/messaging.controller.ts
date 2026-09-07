@@ -45,6 +45,9 @@ export class MessagingController {
   async createMessage(@Param('conversationId') conversationId: string, @Body() body: { body?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'message-create' });
     await this.assertCommunicationAllowed(principal.accountId);
+    const conversation = await this.conversations.findForParticipant(conversationId, principal.accountId);
+    if (!conversation) return { statusCode: HttpStatus.NOT_FOUND };
+    await this.assertParticipantsNotBlocked(principal.accountId, conversation.participants.map((participant) => participant.accountId));
     const created = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
     if (!created) return { statusCode: HttpStatus.NOT_FOUND };
     await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
