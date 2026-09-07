@@ -16,7 +16,7 @@ export function createBrowserAdministrativeConversationsApi(): AdministrativeCon
       if (input.cursor) query.set('cursor', input.cursor);
       if (input.limit) query.set('limit', String(input.limit));
       const response = await fetch(`${baseUrl}/administration/conversations${query.size ? `?${query}` : ''}`, {
-        headers: { Accept: 'application/json' }, credentials: 'include',
+        headers: { Accept: 'application/json', ...(import.meta.env.VITE_ADMIN_AUTHORIZATION ? { authorization: import.meta.env.VITE_ADMIN_AUTHORIZATION as string } : {}) }, credentials: 'include',
       });
       if (!response.ok) throw new Error(`Unable to load conversations (${response.status}).`);
       return response.json();
