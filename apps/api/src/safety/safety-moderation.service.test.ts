@@ -103,3 +103,24 @@ describe('report lifecycle invariants', () => {
     await expect(service.openCase({ actorId: 'admin', reportId: 'r1' })).rejects.toThrow('terminal report');
   });
 });
+
+
+describe('moderation action lifecycle finalization', () => {
+  it('requires under-review and transitions the case to actioned after enforcement', async () => {
+    const reports = { findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', status: 'under-review' }), transitionCase: vi.fn().mockResolvedValue({ id: 'case-1', status: 'actioned' }) };
+    const enforcement = { create: vi.fn().mockResolvedValue({}) };
+    const admin = { require: vi.fn().mockResolvedValue(undefined) };
+    const audit = { append: vi.fn().mockResolvedValue(undefined) };
+    const service = new SafetyModerationService(reports as never, enforcement as never, admin as never, audit as never);
+    await service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'target-1', action: 'suspend', reasonCategory: 'policy' });
+    expect(reports.transitionCase).toHaveBeenCalledWith('case-1', 'actioned');
+    expect(enforcement.create).toHaveBeenCalledTimes(1);
+    expect(audit.append).toHaveBeenCalledTimes(1);
+  });
+  it('rejects an action while the case is merely open', async () => {
+    const reports = { findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', status: 'open' }), transitionCase: vi.fn() };
+    const service = new SafetyModerationService(reports as never, { create: vi.fn() } as never, { require: vi.fn().mockResolvedValue(undefined) } as never, { append: vi.fn() } as never);
+    await expect(service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'target-1', action: 'warning', reasonCategory: 'policy' })).rejects.toThrow('under review');
+    expect(reports.transitionCase).not.toHaveBeenCalled();
+  });
+});
