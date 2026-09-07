@@ -4077,3 +4077,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Exposed the already implemented bounded unread repository query through an authenticated unread endpoint with principal-scoping regression coverage.
 - Channel adapter/dispatch abstractions remain foundation contracts until an authoritative notification producer is introduced; they are not falsely treated as active delivery infrastructure.
 - Next exact task: confirm CI #2782 final Build result, then perform a focused Phase 11 acceptance audit covering durable creation ownership, event producers, adapter registration, retry/idempotency, and explicit deferred push/email/account-preference dependencies.
+
+## Current checkpoint — Phase 11 acceptance boundary
+- Reconciled current HEAD history through 95058f375367618954d7f4702978f45264aa1534.
+- Phase 11 durable creation, channel dispatch, in-app delivery, unread retrieval, delivery preference policy, and producer audit are implemented.
+- Subsequent notification hardening commits centralize best-effort realtime publication and preserve durable notification creation when delivery fails.
+- Matching safety coverage was additionally tightened with explicit target-account restriction regression coverage.
+- No observable CI/workflow execution result is inferred unless execution evidence is available through the integration.
+- Do not restart Phase 11 implementation. Next task: reconcile the roadmap's next explicitly defined phase against existing repository implementation before adding new features.
