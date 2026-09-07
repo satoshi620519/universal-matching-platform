@@ -47,10 +47,14 @@ export class SafetyModerationService {
     const caseRecord = await this.reports.findCaseById(input.caseId);
     if (!caseRecord) throw new NotFoundException('moderation case not found');
     if (caseRecord.status !== 'under-review') throw new BadRequestException('cannot apply action unless moderation case is under review');
+    const report = await this.reports.findById(caseRecord.reportId);
+    if (!report) throw new NotFoundException('report not found');
+    if (report.status !== 'triaged') throw new BadRequestException('cannot apply action unless report is triaged');
     if (!input.reasonCategory.trim()) throw new BadRequestException('reasonCategory is required');
     const restriction = restrictionForModerationAction(input.action);
     if (restriction !== 'none') await this.enforcement.create({ accountId: input.targetId, restriction, reasonCategory: input.reasonCategory.trim(), effectiveAt: new Date(), ...(input.expiresAt ? { expiresAt: input.expiresAt } : {}) });
     if (caseRecord.status === 'under-review') await this.reports.transitionCase(caseRecord.id, 'actioned');
+    await this.reports.transitionReport(report.id, 'actioned');
     await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `action.${input.action}`, targetId: input.targetId, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return { caseId: input.caseId, targetId: input.targetId, action: input.action, restriction };
   }
