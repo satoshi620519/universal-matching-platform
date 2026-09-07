@@ -4085,3 +4085,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Matching safety coverage was additionally tightened with explicit target-account restriction regression coverage.
 - No observable CI/workflow execution result is inferred unless execution evidence is available through the integration.
 - Do not restart Phase 11 implementation. Next task: reconcile the roadmap's next explicitly defined phase against existing repository implementation before adding new features.
+
+
+### 2026-09-07 — Phase 12 specification-first checkpoint
+- Reconciled the current repository checkpoint before adding features; Phase 11 remains complete and is not being restarted.
+- Created SAFETY_TRUST_MODERATION_SPEC.md as the authoritative Phase 12 acceptance contract.
+- The specification explicitly separates relationship-level blocking from account-wide SafetyEnforcement and requires reuse of existing SafetyReport, ModerationCase, SafetyEnforcement and AuditRecord foundations.
+- Prevented duplicate subsystem design: messaging must consume the future authoritative block policy rather than owning a local block list; speculative Redis infrastructure is deferred from Phase 12.
+- Next exact task: inspect the existing domain/repository layout and implement M12.1 relationship-block persistence and idempotent server-authorized transitions with focused regression tests.
