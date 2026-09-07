@@ -26,20 +26,16 @@ export class NotificationCreationService {
 
   async create(input: CreateNotificationInput): Promise<NotificationRecord> {
     const notification = await this.notifications.create(input);
+    const result = await this.dispatch.dispatch({
+      notificationId: notification.id,
+      accountId: notification.accountId,
+      kind: notification.kind,
+      payload: notification.payload,
+    });
 
-    try {
-      await this.dispatch.dispatch({
-        notificationId: notification.id,
-        accountId: notification.accountId,
-        kind: notification.kind,
-        payload: notification.payload,
-      });
-    } catch (error) {
-      // Delivery is a secondary concern. The notification is already durable and
-      // remains available through the in-app read model even when a channel fails.
-      // Future retry infrastructure can consume this failure boundary without
-      // changing notification creation semantics.
-      const message = error instanceof Error ? error.message : String(error);
+    if (!result.delivered) {
+      const message =
+        result.error instanceof Error ? result.error.message : String(result.error);
       this.logger.warn(
         `Notification ${notification.id} was persisted but channel dispatch failed: ${message}`,
       );
