@@ -19,7 +19,7 @@ export class AdministrativeDashboardService {
     await this.capabilities.require(accountId, 'view-dashboard');
     return {
       systemHealth: this.healthStatus.health(),
-      availableSections: ['dashboard', 'users', 'profiles', 'moderation', 'audit', 'system-health', 'quick-launch'],
+      availableSections: ['dashboard', 'users', 'profiles', 'moderation', 'audit', 'matches', 'conversations', 'system-health', 'quick-launch'],
     };
   }
 }
