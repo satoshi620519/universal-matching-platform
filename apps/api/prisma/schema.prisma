@@ -381,3 +381,17 @@ model QuickLaunchConfiguration {
   @@index([status, version])
   @@map("quick_launch_configurations")
 }
+
+
+model AnalyticsEvent {
+  id String @id @default(uuid()) @map("analytics_event_id") @db.Uuid
+  name String
+  version Int
+  occurredAt DateTime @map("occurred_at") @db.Timestamptz(6)
+  dataClassification String @map("data_classification")
+  payload Json @default("{}")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  @@index([name, occurredAt])
+  @@index([dataClassification, occurredAt])
+  @@map("analytics_events")
+}
