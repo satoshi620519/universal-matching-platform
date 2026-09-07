@@ -13,7 +13,7 @@ export class BusinessAnalyticsService {
   async reportEventCounts(accountId: string, period: ReportingPeriod, now = new Date()): Promise<readonly MetricReport[]> {
     await this.capabilities.require(accountId, 'view-analytics', now);
     const since = this.periodStart(period, now);
-    const events = await this.events.listRecent(100);
+    const events = await this.events.listSince(since);
     const counts = events
       .filter(event => event.occurredAt >= since && event.dataClassification === 'business')
       .reduce<Record<string, number>>((result, event) => {
