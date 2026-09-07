@@ -53,3 +53,12 @@ it('rejects an empty block target before repository access', async () => {
   await expect(controller.block('   ', 'Bearer token')).rejects.toThrow('accountId is required');
   expect(create).not.toHaveBeenCalled();
 });
+
+
+it('permits repeated block requests when the repository is idempotent', async () => {
+  const create = vi.fn().mockResolvedValue({ blockerAccountId: 'a1', blockedAccountId: 'a2' });
+  const controller = new UserBlockController({ requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'a1' }) } as never, { create } as never);
+  await controller.block('a2', 'Bearer token');
+  await controller.block('a2', 'Bearer token');
+  expect(create).toHaveBeenCalledTimes(2);
+});
