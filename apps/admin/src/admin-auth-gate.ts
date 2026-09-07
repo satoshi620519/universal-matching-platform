@@ -1,5 +1,6 @@
 const API_BASE_URL = ((import.meta.env.VITE_API_URL as string | undefined) ?? '').replace(/\/$/, '');
 const GATE_ID = 'universal-admin-auth-gate';
+const SESSION_CONTROLS_ID = 'universal-admin-session-controls';
 
 function apiUrl(path: string): string {
   return `${API_BASE_URL}${path}`;
@@ -9,9 +10,43 @@ function setLocked(locked: boolean): void {
   document.body.style.visibility = locked ? 'hidden' : 'visible';
 }
 
+function renderSessionControls(): void {
+  const existing = document.getElementById(SESSION_CONTROLS_ID);
+  if (existing) existing.remove();
+
+  const controls = document.createElement('div');
+  controls.id = SESSION_CONTROLS_ID;
+  controls.style.cssText = 'position:fixed;top:16px;right:16px;z-index:99998;display:flex;gap:8px;align-items:center;font-family:system-ui,sans-serif;';
+  controls.innerHTML = `
+    <button type="button" style="padding:8px 12px;border:1px solid #cfc7b8;border-radius:8px;background:white;color:#332f29;font-weight:600;cursor:pointer">Sign out</button>
+  `;
+  document.body.appendChild(controls);
+
+  const button = controls.querySelector('button') as HTMLButtonElement;
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    try {
+      const response = await fetch(apiUrl('/auth/sign-out'), {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Unable to sign out.');
+      }
+      controls.remove();
+      renderLogin();
+    } catch (errorValue) {
+      button.disabled = false;
+      window.alert(errorValue instanceof Error ? errorValue.message : 'Unable to sign out.');
+    }
+  });
+}
+
 function renderLogin(errorMessage = ''): void {
   const existing = document.getElementById(GATE_ID);
   if (existing) existing.remove();
+  const controls = document.getElementById(SESSION_CONTROLS_ID);
+  if (controls) controls.remove();
   document.body.style.visibility = 'visible';
 
   const gate = document.createElement('div');
@@ -83,6 +118,7 @@ async function boot(): Promise<void> {
   setLocked(true);
   if (await verifySession()) {
     setLocked(false);
+    renderSessionControls();
     return;
   }
   renderLogin();
