@@ -4146,3 +4146,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Found and fixed one concrete acceptance-model inconsistency: the shared admin-console navigation model still exposed only the original three sections despite nine operational sections already wired in the application. Expanded it to the real surface and added a regression test for exact section coverage.
 - Identified one explicit unresolved roadmap boundary: country configuration exists, but no authoritative region-management registry/API/UI exists. This is recorded as an acceptance gap rather than falsely marking countries/regions complete.
 - Next exact task: inspect the existing internationalization/location data model and configuration architecture to determine the authoritative place for region administration, then implement only that missing boundary or formally document the dependency if the platform model is absent.
+
+
+### 2026-09-07 — Phase 13 region authority resolution
+- Inspected the existing internationalization and location model before adding any region CRUD surface.
+- Confirmed an existing domain hierarchy in GeographicScope: global -> country -> region -> city. Country codes are ISO 3166-1 alpha-2; region/locality codes are normalized opaque identifiers.
+- Confirmed localization configuration is the authoritative country availability boundary, while no persistent/configuration-backed authoritative region registry currently exists.
+- Decision: do not invent a parallel region table or Admin-owned geography registry merely to satisfy a UI checklist. Region CRUD is deferred to a future authoritative geographic-data provider/foundation.
+- This resolves the Phase 13 Countries/Regions acceptance ambiguity without introducing duplicate authority. Phase 13 now has no known implementation acceptance gap at the current code checkpoint.
+- Next exact task: perform final Phase 13 validation reconciliation (tests/typecheck/lint/build evidence and changed-file regression review), repair only concrete failures, then record the Phase 13 completion gate and hand off to Phase 14 analytics.
