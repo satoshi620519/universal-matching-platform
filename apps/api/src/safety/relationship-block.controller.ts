@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Req, UnauthorizedException } from '@nestjs/common';
 import type { Request } from 'express';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { RelationshipBlockService } from './relationship-block.service.js';
@@ -14,4 +14,3 @@ export class RelationshipBlockController {
     return this.blocks.block({ blockerAccountId, blockedAccountId: body.accountId });
   }
 }
-import { BadRequestException } from '@nestjs/common';
