@@ -8,10 +8,8 @@ export function createBrowserQuickLaunchApi(): QuickLaunchApi {
         method: init.method ?? 'GET',
         headers: {
           ...(init.body !== undefined ? { 'content-type': 'application/json' } : {}),
-          ...(import.meta.env.VITE_ADMIN_AUTHORIZATION
-            ? { authorization: import.meta.env.VITE_ADMIN_AUTHORIZATION as string }
-            : {}),
         },
+        credentials: 'include',
         body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
       });
       if (!response.ok) {
