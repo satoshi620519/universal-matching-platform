@@ -50,6 +50,8 @@ export class SafetyModerationService {
     const report = await this.reports.findById(caseRecord.reportId);
     if (!report) throw new NotFoundException('report not found');
     if (report.status !== 'triaged') throw new BadRequestException('cannot apply action unless report is triaged');
+    if (report.targetType !== 'user') throw new BadRequestException('account enforcement requires a user-targeted report');
+    if (report.targetId !== input.targetId) throw new BadRequestException('moderation action target must match the report target');
     if (!input.reasonCategory.trim()) throw new BadRequestException('reasonCategory is required');
     const restriction = restrictionForModerationAction(input.action);
     if (restriction !== 'none') await this.enforcement.create({ accountId: input.targetId, restriction, reasonCategory: input.reasonCategory.trim(), effectiveAt: new Date(), ...(input.expiresAt ? { expiresAt: input.expiresAt } : {}) });
