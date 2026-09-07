@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { type ReportingPeriod } from '@universal/domain';
-import { RequestPrincipal } from '../auth/request-principal.decorator.js';
+import { Principal } from '../auth/request-principal.decorator.js';
 import { AnalyticsEventQueryService } from './analytics-event-query.service.js';
 import { BusinessAnalyticsService } from './business-analytics.service.js';
 import { SafetyAnalyticsService } from './safety-analytics.service.js';
@@ -16,17 +16,17 @@ export class AnalyticsController {
   ) {}
 
   @Get('events')
-  listRecent(@RequestPrincipal() principal: { accountId: string }, @Query('limit') limit?: string) {
+  listRecent(@Principal() principal: { accountId: string }, @Query('limit') limit?: string) {
     return this.events.listRecent(principal.accountId, limit === undefined ? 100 : Number(limit));
   }
 
   @Get('business/:period')
-  businessMetrics(@RequestPrincipal() principal: { accountId: string }, @Param('period') period: string) {
+  businessMetrics(@Principal() principal: { accountId: string }, @Param('period') period: string) {
     return this.business.reportEventCounts(principal.accountId, this.period(period));
   }
 
   @Get('safety/:period')
-  safetyMetrics(@RequestPrincipal() principal: { accountId: string }, @Param('period') period: string) {
+  safetyMetrics(@Principal() principal: { accountId: string }, @Param('period') period: string) {
     return this.safety.reportByTargetType(principal.accountId, this.period(period));
   }
 
