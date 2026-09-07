@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { MessagingController } from '../messaging/messaging.controller.js';
 
 describe('Realtime reconnect reconciliation contract', () => {
+  const matches = {} as never;
+
   it('can recover messages from the authoritative HTTP read after an SSE disconnect', async () => {
     const listForParticipant = vi.fn().mockResolvedValue([{ id: 'm1' }]);
     const controller = new MessagingController(
@@ -11,9 +13,9 @@ describe('Realtime reconnect reconciliation contract', () => {
       {} as never,
       {} as never,
       {} as never,
+      matches,
     );
 
-    // The SSE stream is intentionally transient; reconciliation re-reads durable state.
     const response = await controller.listMessages('c1');
 
     expect(response).toEqual({ messages: [{ id: 'm1' }] });
@@ -29,6 +31,7 @@ describe('Realtime reconnect reconciliation contract', () => {
       { listForAccount } as never,
       {} as never,
       {} as never,
+      matches,
     );
 
     await expect(controller.listNotifications()).resolves.toEqual({ notifications: [{ id: 'n1' }] });

@@ -37,23 +37,26 @@ describe('PrismaMessageRepository', () => {
     const findUnique = vi.fn().mockResolvedValue({ accountId: 'a1' });
     const create = vi.fn().mockResolvedValue({ id: 'm1', conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
     const findMany = vi.fn().mockResolvedValue([{ accountId: 'a2' }, { accountId: 'a3' }]);
-    const createMany = vi.fn().mockResolvedValue({ count: 2 });
+    const notificationCreate = vi.fn()
+      .mockResolvedValueOnce({ id: 'n2', accountId: 'a2' })
+      .mockResolvedValueOnce({ id: 'n3', accountId: 'a3' });
     const repository = new PrismaMessageRepository({
       $transaction: (operation: (tx: unknown) => unknown) => operation({
         conversationParticipant: { findUnique, findMany },
         message: { create },
-        notification: { createMany },
+        notification: { create: notificationCreate },
       }),
     } as never);
 
     await repository.createForParticipant({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
 
-    expect(createMany).toHaveBeenCalledWith({
-      data: expect.arrayContaining([
-        expect.objectContaining({ accountId: 'a2', kind: 'message.created' }),
-        expect.objectContaining({ accountId: 'a3', kind: 'message.created' }),
-      ]),
-    });
+    expect(notificationCreate).toHaveBeenCalledTimes(2);
+    expect(notificationCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ accountId: 'a2', kind: 'message.created' }),
+    }));
+    expect(notificationCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ accountId: 'a3', kind: 'message.created' }),
+    }));
   });
   it('marks read state only for an authorized participant row', async () => {
     const updateMany = vi.fn().mockResolvedValue({ count: 1 });
