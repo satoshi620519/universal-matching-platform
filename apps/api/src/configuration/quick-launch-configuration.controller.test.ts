@@ -27,8 +27,6 @@ describe('QuickLaunchConfigurationController', () => {
     expect(quickLaunch.saveDraft).not.toHaveBeenCalled();
     expect(quickLaunch.publish).not.toHaveBeenCalled();
   });
-});
-
 
   it('audits successful Quick Launch publish with correlation', async () => {
     const { controller, quickLaunch, audit } = setup();
@@ -43,3 +41,4 @@ describe('QuickLaunchConfigurationController', () => {
     await expect(controller.publish('2', 'Bearer token', 'corr-launch-2')).rejects.toThrow('publish failed');
     expect(audit.append).not.toHaveBeenCalled();
   });
+});
