@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { type MetricReport, type ReportingPeriod } from '@universal/domain';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 import { AnalyticsEventRepository } from './analytics-event.repository.js';
+import { analyticsMetricDefinitions } from './analytics-metric-definitions.js';
 
 @Injectable()
 export class BusinessAnalyticsService {
@@ -20,8 +21,9 @@ export class BusinessAnalyticsService {
         result[event.name] = (result[event.name] ?? 0) + 1;
         return result;
       }, {});
-    return Object.keys(counts).sort().map(name => ({
-      metricName: `business_events_${name}`,
+    const productEventNames = new Set(analyticsMetricDefinitions.flatMap(definition => definition.sourceEvents));
+    return Object.keys(counts).filter(name => productEventNames.has(name)).sort().map(name => ({
+      metricName: analyticsMetricDefinitions.find(definition => definition.sourceEvents.includes(name))!.name,
       metricVersion: 1,
       period,
       scope: 'global',
