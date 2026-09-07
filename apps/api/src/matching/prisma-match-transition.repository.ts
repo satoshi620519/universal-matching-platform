@@ -39,7 +39,7 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
       ]) : [];
       return { result, notifications };
     });
-    if (outcome.notifications.length) void this.notificationRealtime.publishCreated({ notificationIds: outcome.notifications.map(notification => notification.id), recipientAccountIds: outcome.notifications.map(notification => notification.accountId) }).catch(() => undefined);
+    if (outcome.notifications.length) void this.notificationRealtime.publishCreatedBestEffort({ notificationIds: outcome.notifications.map(notification => notification.id), recipientAccountIds: outcome.notifications.map(notification => notification.accountId) });
     return outcome.result;
   }
 
