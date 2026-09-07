@@ -17,6 +17,7 @@ class MemoryRepository extends QuickLaunchConfigurationRepository {
   async createDraft(value: QuickLaunchDraft) { const record: QuickLaunchConfigurationRecord = { version: this.records.length + 1, status: 'draft', draft: value, createdAt: new Date(), updatedAt: new Date() }; this.records.push(record); return record; }
   async saveDraft(version: number, value: QuickLaunchDraft) { const record = await this.findDraft(version); if (!record) throw new Error('missing draft'); Object.assign(record as object, { draft: value, updatedAt: new Date() }); return record; }
   async findDraft(version: number) { return this.records.find(x => x.version === version && x.status === 'draft'); }
+  async findVersion(version: number) { return this.records.find(x => x.version === version); }
   async findPublished() { return [...this.records].reverse().find(x => x.status === 'published'); }
   async publish(version: number, published: PublishedQuickLaunchConfiguration) { for (const record of this.records) if (record.status === 'published') (record as any).status = 'superseded'; const record = this.records.find(x => x.version === version)!; (record as any).status = 'published'; (record as any).published = published; return record; }
   async listHistory() { return this.records; }
