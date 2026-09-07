@@ -7,6 +7,11 @@ import { AnalyticsEventRepository } from './analytics-event.repository.js';
 @Injectable()
 export class PrismaAnalyticsEventRepository extends AnalyticsEventRepository {
   constructor(private readonly database: DatabaseService) { super(); }
+  async listSince(since: Date): Promise<readonly AnalyticsEventRecord[]> {
+    const records = await this.database.analyticsEvent.findMany({ where: { occurredAt: { gte: since } }, orderBy: [{ occurredAt: 'desc' }, { id: 'desc' }] });
+    return records.map(record => ({ name: record.name, version: record.version, occurredAt: record.occurredAt, dataClassification: record.dataClassification as AnalyticsEventRecord['dataClassification'], payload: record.payload as Record<string, unknown> }));
+  }
+
   async listRecent(limit: number): Promise<readonly AnalyticsEventRecord[]> {
     const records = await this.database.analyticsEvent.findMany({ take: limit, orderBy: [{ occurredAt: 'desc' }, { id: 'desc' }] });
     return records.map(record => ({ name: record.name, version: record.version, occurredAt: record.occurredAt, dataClassification: record.dataClassification as AnalyticsEventRecord['dataClassification'], payload: record.payload as Record<string, unknown> }));
