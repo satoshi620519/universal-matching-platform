@@ -1,5 +1,8 @@
 export type AdministrativeRole = 'administrator' | 'moderator';
 
+// Transport vocabulary intentionally matches the existing HTTP controller.
+// Bootstrap provisioning and unsupported domain-only roles remain outside this UI boundary.
+
 export type AdministrativeRoleManagementApi = Readonly<{
   assign(input: { accountId: string; role: AdministrativeRole; effectiveAt?: string; expiresAt?: string }): Promise<void>;
   revoke(input: { accountId: string; role: AdministrativeRole; revokedAt?: string }): Promise<boolean>;
