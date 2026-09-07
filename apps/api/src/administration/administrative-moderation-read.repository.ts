@@ -9,6 +9,7 @@ export interface AdministrativeModerationReportSummary {
 export interface AdministrativeModerationCaseSummary {
   readonly id: string;
   readonly reportId: string;
+  readonly targetId: string;
   readonly status: string;
   readonly createdAt: Date;
 }
