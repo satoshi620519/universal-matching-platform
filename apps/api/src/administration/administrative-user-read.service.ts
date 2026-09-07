@@ -14,7 +14,7 @@ export class AdministrativeUserReadService {
     readonly cursor?: string;
     readonly limit?: number;
   }): Promise<AdministrativeUserPage> {
-    await this.capabilityAccess.requireCapability(input.accountId, 'view-dashboard');
+    await this.capabilityAccess.require(input.accountId, 'view-dashboard');
     const limit = Math.min(Math.max(input.limit ?? 25, 1), 100);
     return this.users.list({ cursor: input.cursor, limit });
   }
