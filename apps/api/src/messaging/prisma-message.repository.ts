@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
 
-export type CreatedMessage = { message: MessageRecord; recipientAccountIds: string[]; };
+export type CreatedMessage = {
+  message: MessageRecord;
+  recipientAccountIds: string[];
+  notificationIds: string[];
+};
 
 export type MessageRecord = {
   id: string;
@@ -52,21 +56,26 @@ export class PrismaMessageRepository {
         select: { accountId: true },
       });
 
-      if (recipients.length > 0) {
-        await tx.notification.createMany({
-          data: recipients.map(({ accountId }) => ({
-            accountId,
-            kind: 'message.created',
-            payload: {
-              conversationId: message.conversationId,
-              messageId: message.id,
-              senderAccountId: message.senderAccountId,
+      const notifications = recipients.length > 0
+        ? await Promise.all(recipients.map(({ accountId }) => tx.notification.create({
+            data: {
+              accountId,
+              kind: 'message.created',
+              payload: {
+                conversationId: message.conversationId,
+                messageId: message.id,
+                senderAccountId: message.senderAccountId,
+              },
             },
-          })),
-        });
-      }
+            select: { id: true },
+          })))
+        : [];
 
-      return { message, recipientAccountIds: recipients.map(({ accountId }) => accountId) };
+      return {
+        message,
+        recipientAccountIds: recipients.map(({ accountId }) => accountId),
+        notificationIds: notifications.map(({ id }) => id),
+      };
     });
   }
 
@@ -91,21 +100,13 @@ export class PrismaMessageRepository {
     const records = await this.database.message.findMany({
       where: {
         conversationId: input.conversationId,
-        ...(input.before
-          ? {
-              OR: [
-                { createdAt: { lt: input.before.createdAt } },
-                { createdAt: input.before.createdAt, id: { lt: input.before.id } },
-              ],
-            }
-          : {}),
+        ...(input.before ? { OR: [{ createdAt: { lt: input.before.createdAt } }, { createdAt: input.before.createdAt, id: { lt: input.before.id } }] } : {}),
       },
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: limit,
     });
     return records.map((message: MessageRecord) => message.deletedAt ? { ...message, body: '' } : message);
   }
-
 
   async markReadForParticipant(input: { conversationId: string; accountId: string; at?: Date }): Promise<boolean> {
     const updated = await this.database.conversationParticipant.updateMany({
