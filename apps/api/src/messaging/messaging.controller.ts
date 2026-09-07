@@ -9,10 +9,11 @@ import { NotificationRealtimePublicationService } from './notification-realtime-
 import { PrismaMatchTransitionRepository } from '../matching/prisma-match-transition.repository.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
 import { UserBlockRepository } from '../safety/user-block.repository.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 @Controller('conversations')
 export class MessagingController {
-  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly notificationRealtime: NotificationRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly safety?: EffectiveSafetyRestrictionService, @Optional() private readonly blocks?: UserBlockRepository) {}
+  constructor(private readonly principalResolver: RequestPrincipalResolver, private readonly conversations: PrismaConversationRepository, private readonly messages: PrismaMessageRepository, private readonly notifications: PrismaNotificationRepository, private readonly messageRealtime: MessageRealtimePublicationService, private readonly notificationRealtime: NotificationRealtimePublicationService, private readonly matches: PrismaMatchTransitionRepository, @Optional() private readonly safety?: EffectiveSafetyRestrictionService, @Optional() private readonly blocks?: UserBlockRepository, @Optional() private readonly analytics?: AnalyticsEventRecordingService) {}
 
   @Post()
   async createConversation(@Body() body: { participantAccountIds?: string[] }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
@@ -20,7 +21,9 @@ export class MessagingController {
     await this.assertCommunicationAllowed(principal.accountId);
     await this.assertParticipantsNotBlocked(principal.accountId, body.participantAccountIds ?? []);
     const participantAccountIds = [...(body.participantAccountIds ?? []), principal.accountId];
-    return this.conversations.create(participantAccountIds);
+    const conversation = await this.conversations.create(participantAccountIds);
+    void this.analytics?.recordBusinessEvent('conversation_started');
+    return conversation;
   }
 
   @Post('from-mutual-match')
@@ -30,7 +33,9 @@ export class MessagingController {
     const targetAccountId = body.targetAccountId?.trim() ?? '';
     if (!targetAccountId || !(await this.matches.isMutualMatch(principal.accountId, targetAccountId))) return { statusCode: HttpStatus.NOT_FOUND };
     await this.assertParticipantsNotBlocked(principal.accountId, [targetAccountId]);
-    return this.conversations.createOrFindDirect(principal.accountId, targetAccountId);
+    const conversation = await this.conversations.createOrFindDirect(principal.accountId, targetAccountId);
+    void this.analytics?.recordBusinessEvent('conversation_started');
+    return conversation;
   }
 
   @Get(':conversationId/messages')
