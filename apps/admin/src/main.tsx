@@ -1,5 +1,6 @@
 import './moderation-console';
 import './administrative-workspace-navigation-ui';
+import './analytics-console';
 import './failed-email-outbox-console';
 import './administrative-roles-console';
 import React, { useMemo, useState } from 'react';
