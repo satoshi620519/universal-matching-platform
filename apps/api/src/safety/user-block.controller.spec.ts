@@ -38,3 +38,18 @@ describe('UserBlockController', () => {
     await expect(controller.unblock('22222222-2222-4222-8222-222222222222', 'Bearer token')).rejects.toBeInstanceOf(NotFoundException);
   });
 });
+
+
+it('rejects self blocking before repository access', async () => {
+  const create = vi.fn();
+  const controller = new UserBlockController({ requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'a1' }) } as never, { create } as never);
+  await expect(controller.block('a1', 'Bearer token')).rejects.toThrow('cannot block itself');
+  expect(create).not.toHaveBeenCalled();
+});
+
+it('rejects an empty block target before repository access', async () => {
+  const create = vi.fn();
+  const controller = new UserBlockController({ requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'a1' }) } as never, { create } as never);
+  await expect(controller.block('   ', 'Bearer token')).rejects.toThrow('accountId is required');
+  expect(create).not.toHaveBeenCalled();
+});
