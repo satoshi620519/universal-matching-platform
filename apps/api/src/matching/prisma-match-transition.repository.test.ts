@@ -100,6 +100,17 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
     expect(database.tx.notification.createMany).not.toHaveBeenCalled();
   });
 
+  it('rejects immediately when the target account is safety-restricted', async () => {
+    const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
+    const safety = { resolveForAccount: vi.fn(async (accountId: string) => accountId === 'a2' ? 'feature-restricted' : 'none') };
+    const repository = new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never, safety as never);
+
+    await expect(repository.transition(command)).rejects.toThrow('account is restricted from matching');
+    expect(database.tx.matchInteraction.create).not.toHaveBeenCalled();
+    expect(safety.resolveForAccount).toHaveBeenCalledWith('a1', 'general');
+    expect(safety.resolveForAccount).toHaveBeenCalledWith('a2', 'general');
+  });
+
   it('observes a newly applied safety restriction on the next transition immediately', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
     let restriction: 'none' | 'feature-restricted' = 'none';
