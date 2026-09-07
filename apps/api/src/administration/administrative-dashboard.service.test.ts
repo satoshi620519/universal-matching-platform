@@ -26,7 +26,7 @@ describe('AdministrativeDashboardService', () => {
 
     await expect(service.read('account-1')).resolves.toEqual({
       systemHealth: { status: 'ok', database: 'configured' },
-      availableSections: ['dashboard', 'users', 'profiles', 'moderation', 'quick-launch'],
+      availableSections: ['dashboard', 'users', 'profiles', 'moderation', 'audit', 'quick-launch'],
     });
   });
 });
