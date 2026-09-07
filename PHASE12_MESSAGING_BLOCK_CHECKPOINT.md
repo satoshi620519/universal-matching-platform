@@ -26,3 +26,9 @@ Focused regression tests cover blocked existing conversations. This environment 
 
 ## Next exact task
 Inspect realtime publication and notification paths for policy bypasses, then run the focused messaging test suite in an executable environment. Do not create another block persistence model or migration.
+
+
+## 2026-09-07 integration correction
+- AppModule was audited and corrected to register `UserBlockController`, `PrismaUserBlockRepository`, and `UserBlockDiscoveryExclusionPolicy`.
+- DiscoveryExclusionPolicy now resolves to the authoritative user-block policy rather than the permissive AllowAll adapter.
+- User block creation now honors the specification's idempotency requirement (`ON CONFLICT DO NOTHING` returns the requested block instead of surfacing a duplicate conflict).
