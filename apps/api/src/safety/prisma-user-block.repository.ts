@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { createUserBlock, type UserBlock } from '@universal/domain';
 import { DatabaseService } from '../database/database.service.js';
 import { UserBlockRepository } from './user-block.repository.js';
@@ -9,12 +9,11 @@ export class PrismaUserBlockRepository extends UserBlockRepository {
 
   async create(blockerAccountId: string, blockedAccountId: string, createdAt = new Date()): Promise<UserBlock> {
     const block = createUserBlock({ blockerAccountId, blockedAccountId }, createdAt.toISOString());
-    const inserted = await this.database.$executeRaw`
+    await this.database.$executeRaw`
       INSERT INTO "user_blocks" ("blocker_account_id", "blocked_account_id", "created_at")
       VALUES (${block.blockerAccountId}::uuid, ${block.blockedAccountId}::uuid, ${block.createdAt}::timestamptz)
       ON CONFLICT ("blocker_account_id", "blocked_account_id") DO NOTHING
     `;
-    if (inserted === 0) throw new ConflictException('user block already exists');
     return block;
   }
 
