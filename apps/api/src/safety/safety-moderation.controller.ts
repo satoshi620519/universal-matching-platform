@@ -1,6 +1,7 @@
-import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Headers, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import type { ModerationActionType, ModerationCaseStatus, ReportStatus, ReportTargetType } from '@universal/domain';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
+import { RequestRateLimiter } from '../common/rate-limit/request-rate-limiter.js';
 import { SafetyModerationService } from './safety-moderation.service.js';
 
 const targetTypes = new Set<ReportTargetType>(['user', 'content', 'message']);
@@ -10,11 +11,13 @@ const actions = new Set<ModerationActionType>(['warning', 'restrict-features', '
 
 @Controller('safety')
 export class SafetyModerationController {
-  constructor(private readonly principal: RequestPrincipalResolver, private readonly moderation: SafetyModerationService) {}
+  constructor(private readonly principal: RequestPrincipalResolver, private readonly moderation: SafetyModerationService, private readonly limiter: RequestRateLimiter) {}
 
   @Post('reports')
   async submit(@Body() body: { targetId?: unknown; targetType?: unknown; reason?: unknown }, @Headers('authorization') authorization?: string, @Headers('x-correlation-id') correlationId?: string) {
     const principal = await this.principal.requireAuthenticated({ authorization, requestId: correlationId ?? 'safety-report-submit' });
+    const decision = this.limiter.consume(`safety-report:${principal.accountId}`, { limit: 5, windowMs: 10 * 60_000 });
+    if (!decision.allowed) throw new HttpException('Report submission temporarily unavailable', HttpStatus.TOO_MANY_REQUESTS);
     if (typeof body?.targetId !== 'string' || !body.targetId.trim()) throw new BadRequestException('targetId is required');
     if (typeof body?.targetType !== 'string' || !targetTypes.has(body.targetType as ReportTargetType)) throw new BadRequestException('targetType is invalid');
     if (typeof body?.reason !== 'string' || !body.reason.trim()) throw new BadRequestException('reason is required');
