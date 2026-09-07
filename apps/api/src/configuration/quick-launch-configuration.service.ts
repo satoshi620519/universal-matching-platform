@@ -17,7 +17,9 @@ export class QuickLaunchConfigurationService {
     return this.repository.createDraft(draft);
   }
 
-  saveDraft(version: number, draft: QuickLaunchDraft): Promise<QuickLaunchConfigurationRecord> {
+  async saveDraft(version: number, draft: QuickLaunchDraft): Promise<QuickLaunchConfigurationRecord> {
+    const record = await this.repository.findDraft(version);
+    if (!record || record.status !== 'draft') throw new Error('quick launch draft is not editable');
     return this.repository.saveDraft(version, draft);
   }
 
