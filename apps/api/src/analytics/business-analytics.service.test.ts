@@ -5,7 +5,7 @@ import { AdministrativeCapabilityAccessService } from '../administration/adminis
 
 describe('BusinessAnalyticsService', () => {
   it('aggregates business events within the requested period', async () => {
-    const events = { listRecent: async () => [
+    const events = { listSince: async () => [
       { name: 'match_created', version: 1, occurredAt: new Date('2026-09-06T00:00:00Z'), dataClassification: 'business', payload: {} },
       { name: 'match_created', version: 1, occurredAt: new Date('2026-09-05T00:00:00Z'), dataClassification: 'business', payload: {} },
       { name: 'operational_ping', version: 1, occurredAt: new Date('2026-09-06T00:00:00Z'), dataClassification: 'operational', payload: {} },
