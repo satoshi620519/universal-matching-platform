@@ -11,6 +11,15 @@ export type ConversationRecord = {
 export class PrismaConversationRepository {
   constructor(private readonly database: DatabaseService) {}
 
+  async findDirect(accountA: string, accountB: string): Promise<ConversationRecord | null> {
+    const [low, high] = [accountA.trim(), accountB.trim()].sort();
+    const existing = await (this.database as any).directConversationPair.findUnique({
+      where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
+      include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
+    });
+    return existing?.conversation ?? null;
+  }
+
   async createOrFindDirect(accountA: string, accountB: string): Promise<ConversationRecord> {
     const [low, high] = [accountA.trim(), accountB.trim()].sort();
     if (!low || !high || low === high) throw new Error('A direct conversation requires two distinct participants');
