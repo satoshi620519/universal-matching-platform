@@ -14,5 +14,6 @@ export abstract class SafetyReportRepository {
   abstract transitionReport(id: string, status: SafetyReport['status']): Promise<SafetyReport>;
   abstract createCase(reportId: string): Promise<ModerationCase>;
   abstract findCaseByReportId(reportId: string): Promise<ModerationCase | null>;
+  abstract findCaseById(id: string): Promise<ModerationCase | null>;
   abstract transitionCase(id: string, status: ModerationCase['status']): Promise<ModerationCase>;
 }
