@@ -89,7 +89,7 @@ model RelationshipBlock {
   blocked Account @relation("RelationshipBlockTarget", fields: [blockedAccountId], references: [id], onDelete: Cascade)
   @@unique([blockerAccountId, blockedAccountId])
   @@index([blockedAccountId, blockerAccountId])
-  @@map("relationship_blocks")
+  @@map("user_blocks")
 }
 
 model SafetyEnforcement {
