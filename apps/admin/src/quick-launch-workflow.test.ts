@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createQuickLaunchWorkflow, type QuickLaunchDraftInput } from './quick-launch-workflow';
+import { createQuickLaunchWorkflow, quickLaunchSteps, type QuickLaunchDraftInput } from './quick-launch-workflow';
 
 const draft: QuickLaunchDraftInput = {
   applicationName: 'Test', primaryColor: '#000000', brandingTheme: { primaryColor: '#000000' },
@@ -23,5 +23,12 @@ describe('createQuickLaunchWorkflow', () => {
       '/administration/quick-launch/published',
       '/administration/quick-launch/history',
     ]);
+  });
+});
+
+
+describe('quickLaunchSteps', () => {
+  it('keeps purchaser-facing configuration domains in one workflow', () => {
+    expect(quickLaunchSteps).toEqual(['Branding','Regions','Categories','Profile Schema','Matching Categories','Features','Legal & Support','Terminology','Matching Rules','Onboarding','Review & Publish']);
   });
 });
