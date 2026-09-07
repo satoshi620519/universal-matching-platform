@@ -124,3 +124,14 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
     expect(safety.resolveForAccount).toHaveBeenCalledWith('a2', 'general');
   });
 });
+
+describe('PrismaMatchTransitionRepository block policy', () => {
+  it('rejects a transition before persistence when either direction is blocked', async () => {
+    const database = { matchInteraction: { findUnique: vi.fn() }, $transaction: vi.fn() };
+    const notifications = { publishCreatedBestEffort: vi.fn() };
+    const blocks = { exists: vi.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true) };
+    const repository = new PrismaMatchTransitionRepository(database as never, notifications as never, undefined, blocks as never);
+    await expect(repository.transition({ actorAccountId: 'a1', targetAccountId: 'a2', decision: 'like', idempotencyKey: 'k1' })).rejects.toThrow('interaction is blocked');
+    expect(database.$transaction).not.toHaveBeenCalled();
+  });
+});
