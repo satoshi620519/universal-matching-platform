@@ -13,11 +13,10 @@ export function createBrowserAdministrativeRoleManagementApi(
 ): AdministrativeRoleManagementApi {
   const configuredBaseUrl = import.meta.env.VITE_API_URL as string | undefined;
   const baseUrl = configuredBaseUrl ? configuredBaseUrl.replace(/\/$/, '') : '';
-  const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
-  const headers = { 'content-type': 'application/json', ...(authorization ? { authorization } : {}) };
+  const headers = { 'content-type': 'application/json' };
 
   async function request(url: string, body: object) {
-    const response = await fetchImpl(url, { method: 'POST', headers, body: JSON.stringify(body) });
+    const response = await fetchImpl(url, { method: 'POST', headers, credentials: 'include', body: JSON.stringify(body) });
     if (!response.ok) throw new Error((await response.text().catch(() => '')) || `Administrative role request failed (${response.status})`);
     return response.json();
   }
