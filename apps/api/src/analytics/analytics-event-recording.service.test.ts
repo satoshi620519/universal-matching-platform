@@ -9,6 +9,12 @@ describe('AnalyticsEventRecordingService', () => {
     const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: false });
     await expect(service.record(event)).resolves.toBeUndefined();
   });
+  it('rejects malformed events before persistence', async () => {
+    const repository = { record: async () => { throw new Error('must not persist'); } } as unknown as AnalyticsEventRepository;
+    const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: true });
+    await expect(service.record({ name: 'Invalid Name', version: 0, occurredAt: new Date('invalid'), dataClassification: 'business', payload: {} })).rejects.toThrow('Invalid analytics event');
+  });
+
   it('persists operational events even when non-essential analytics is disabled', async () => {
     const recorded: unknown[] = [];
     const repository = { record: async (value: unknown) => { recorded.push(value); } } as unknown as AnalyticsEventRepository;
