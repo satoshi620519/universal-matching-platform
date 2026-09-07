@@ -21,7 +21,7 @@ describe('MessagingController', () => {
   });
 
   it('uses the authenticated account for message writes', async () => {
-    const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
+    const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'], notificationIds: [] });
     const conversations = { findForParticipant: vi.fn().mockResolvedValue({ participants: [{ accountId: 'a1' }, { accountId: 'a2' }] }) };
     const controller = new MessagingController(principalResolver as never, conversations as never, { createForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, matches);
     await controller.createMessage('c1', { body: 'hello' });
@@ -38,7 +38,7 @@ describe('MessagingController', () => {
   });
 
   it('observes a newly applied communication restriction on the next message immediately', async () => {
-    const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'] });
+    const createForParticipant = vi.fn().mockResolvedValue({ message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1' }, recipientAccountIds: ['a2'], notificationIds: [] });
     const conversations = { findForParticipant: vi.fn().mockResolvedValue({ participants: [{ accountId: 'a1' }, { accountId: 'a2' }] }) };
     let restriction: 'none' | 'communication-restricted' = 'none';
     const safety = { resolveForAccount: vi.fn(async () => restriction) };
