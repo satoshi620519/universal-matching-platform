@@ -63,4 +63,61 @@ describe('request principal lifecycle', () => {
 
     expect(calls).toBe(1);
   });
+
+  it('uses the admin session cookie when authorization is absent', async () => {
+    let receivedAuthorization: string | undefined;
+
+    class CapturingAdapter extends RequestAuthenticationAdapter {
+      async authenticate(input: {
+        readonly authorization?: string;
+        readonly requestId: string;
+      }) {
+        receivedAuthorization = input.authorization;
+        return {
+          accountId: '00000000-0000-0000-0000-000000000001',
+          authenticationMethod: 'test',
+        };
+      }
+    }
+
+    const resolve = createRequestPrincipalResolver(new CapturingAdapter());
+    const request = {
+      headers: {
+        cookie: 'universal_admin_session=cookie-token',
+      },
+    } as never;
+
+    await resolve(request);
+
+    expect(receivedAuthorization).toBe('Bearer cookie-token');
+  });
+
+  it('prefers authorization when both authorization and the admin session cookie exist', async () => {
+    let receivedAuthorization: string | undefined;
+
+    class CapturingAdapter extends RequestAuthenticationAdapter {
+      async authenticate(input: {
+        readonly authorization?: string;
+        readonly requestId: string;
+      }) {
+        receivedAuthorization = input.authorization;
+        return {
+          accountId: '00000000-0000-0000-0000-000000000001',
+          authenticationMethod: 'test',
+        };
+      }
+    }
+
+    const resolve = createRequestPrincipalResolver(new CapturingAdapter());
+    const request = {
+      headers: {
+        authorization: 'Bearer header-token',
+        cookie: 'universal_admin_session=cookie-token',
+      },
+    } as never;
+
+    await resolve(request);
+
+    expect(receivedAuthorization).toBe('Bearer header-token');
+  });
 });
