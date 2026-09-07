@@ -4093,3 +4093,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - The specification explicitly separates relationship-level blocking from account-wide SafetyEnforcement and requires reuse of existing SafetyReport, ModerationCase, SafetyEnforcement and AuditRecord foundations.
 - Prevented duplicate subsystem design: messaging must consume the future authoritative block policy rather than owning a local block list; speculative Redis infrastructure is deferred from Phase 12.
 - Next exact task: inspect the existing domain/repository layout and implement M12.1 relationship-block persistence and idempotent server-authorized transitions with focused regression tests.
+
+
+## Phase 12 safety acceptance — COMPLETE (CI VERIFIED)
+- Current safety acceptance checkpoint commit a370ce53fbe2d815014c474ef76c3d20b5b8c0a5 completed the repository's authoritative CI workflow successfully (run 34098550787).
+- CI success confirms the repository verification chain including migration checks, typecheck, lint, tests, matching concurrency integration, and build for the current checkpoint.
+- Phase 12 audited boundaries are complete without duplicate persistence, authorization, enforcement, audit, or rate-limit implementations.
+- Completed acceptance coverage: block integration, report targets/evidence/context, moderation lifecycle, privileged actions, warning/suspension/ban enforcement reuse, audit records, and abuse/rate-limit boundaries.
+- Exact next action: begin Phase 14 Analytics and Business Insights by first auditing existing analytics/metrics/event infrastructure and implementing only the next missing roadmap capability.
