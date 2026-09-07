@@ -4093,3 +4093,13 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - The specification explicitly separates relationship-level blocking from account-wide SafetyEnforcement and requires reuse of existing SafetyReport, ModerationCase, SafetyEnforcement and AuditRecord foundations.
 - Prevented duplicate subsystem design: messaging must consume the future authoritative block policy rather than owning a local block list; speculative Redis infrastructure is deferred from Phase 12.
 - Next exact task: inspect the existing domain/repository layout and implement M12.1 relationship-block persistence and idempotent server-authorized transitions with focused regression tests.
+
+
+### 2026-09-07 — Phase 12 end-to-end authorization audit
+- Continued from M12.5 without restarting completed Phase 12 work; audited server-authority boundaries across report submission, moderation actions and block operations.
+- Existing controller tests confirm authenticated principal derivation and account-scoped report rate limiting; privileged moderation operations are capability-gated before repository mutation.
+- Found and fixed a concrete authority gap: moderation enforcement previously accepted a client-supplied targetId without binding it to the authoritative SafetyReport linked through the ModerationCase.
+- applyAction now requires the linked report to be triaged, user-targeted, and to have the exact same targetId as the requested enforcement. This prevents an unrelated account target from being substituted.
+- Added focused regressions for target substitution and non-user report enforcement rejection.
+- Phase 12 acceptance implementation is now covered through M12.1–M12.6 at the code/regression level. Fresh executable CI remains required before declaring runtime validation; do not infer test success solely from commits.
+- Next exact task: inspect fresh CI/workflow evidence for the Phase 12 checkpoint, repair only concrete failures, then record Phase 12 completion and begin Phase 13 specification/implementation reconciliation.
