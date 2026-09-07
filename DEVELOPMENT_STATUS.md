@@ -4129,3 +4129,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Quick Launch controller is authenticated and gated by manage-quick-launch. Found one concrete browser/server transport inconsistency: its browser API omitted credentials include while the rest of the administrative browser APIs use credentialed requests.
 - Fixed Quick Launch transport to include browser credentials and added a regression assertion. No duplicate mutation implementation was introduced.
 - Next exact task: audit Quick Launch privileged mutation observability/correlation and existing administrative UI feature wiring, then reconcile Phase 13 acceptance criteria before adding any new surface area.
+
+
+### 2026-09-07 — Phase 13 Quick Launch observability reconciliation
+- Audited Quick Launch UI wiring and confirmed the feature is fully wired into the Admin shell, workflow, draft save, immutable publish, published read and history surfaces; no duplicate UI was created.
+- Found a concrete observability gap: privileged Quick Launch create/save/publish mutations propagated correlation into authentication but produced no administrative audit records, unlike other privileged mutations.
+- Added success-only audit records for create draft, save draft and publish configuration, carrying the authenticated actor, version target and optional trimmed correlation ID.
+- Added regressions proving publish correlation reaches the audit record and failed persistence does not generate a success audit entry.
+- Next exact task: reconcile the complete Phase 13 acceptance checklist against existing implementation/checkpoints, identify only missing acceptance evidence or concrete gaps, then prepare the Phase 13 completion validation gate.
