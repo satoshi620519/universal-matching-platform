@@ -34,6 +34,12 @@ class InMemoryRepository extends QuickLaunchConfigurationRepository {
 }
 
 describe('QuickLaunchConfigurationService', () => {
+  it('refuses publishing a missing or non-draft version', async () => {
+    const repository = new InMemoryRepository();
+    const service = new QuickLaunchConfigurationService(repository);
+    await expect(service.publish(99)).rejects.toThrow('quick launch draft is not publishable');
+  });
+
   it('publishes an immutable snapshot and supersedes previous publication without mutating history', async () => {
     const repository = new InMemoryRepository();
     const service = new QuickLaunchConfigurationService(repository);
