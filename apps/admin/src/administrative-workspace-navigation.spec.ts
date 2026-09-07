@@ -1,22 +1,15 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { visibleAdministrativeWorkspaceTargets } from './administrative-workspace-navigation';
 
-import { createBrowserAdministrativeCapabilitiesApi } from './browser-administrative-capabilities-api';
+describe('visibleAdministrativeWorkspaceTargets', () => {
+  it('returns only targets backed by granted capabilities', () => {
+    expect(visibleAdministrativeWorkspaceTargets([
+      'manage-quick-launch',
+      'manage-moderation',
+    ]).map((target) => target.id)).toEqual(['quick-launch', 'moderation']);
+  });
 
-describe('administrative capability navigation contract', () => {
-  it('derives visible workspace targets only from granted server capabilities', async () => {
-    const api = createBrowserAdministrativeCapabilitiesApi(vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ capabilities: ['manage-quick-launch', 'manage-moderation'] }),
-    }) as any);
-
-    const granted = new Set(await api.list());
-    const targets = [
-      ['quick-launch', 'manage-quick-launch'],
-      ['moderation', 'manage-moderation'],
-      ['roles', 'manage-administrative-roles'],
-      ['failed-email', 'review-failed-email-outbox'],
-    ].filter(([, capability]) => granted.has(capability as any)).map(([target]) => target);
-
-    expect(targets).toEqual(['quick-launch', 'moderation']);
+  it('returns no targets without administrative capabilities', () => {
+    expect(visibleAdministrativeWorkspaceTargets([])).toEqual([]);
   });
 });
