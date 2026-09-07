@@ -14,12 +14,18 @@ describe('AnalyticsEventRecordingService', () => {
     const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: true });
     await expect(service.record({ name: 'Invalid Name', version: 0, occurredAt: new Date('invalid'), dataClassification: 'business', payload: {} })).rejects.toThrow('Invalid analytics event');
   });
-
   it('persists operational events even when non-essential analytics is disabled', async () => {
     const recorded: unknown[] = [];
     const repository = { record: async (value: unknown) => { recorded.push(value); } } as unknown as AnalyticsEventRepository;
     const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: false });
     await service.record({ ...event, dataClassification: 'operational' });
     expect(recorded).toHaveLength(1);
+  });
+  it('records a standardized business event', async () => {
+    const recorded: any[] = [];
+    const repository = { record: async (value: unknown) => { recorded.push(value); } } as unknown as AnalyticsEventRepository;
+    const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: true });
+    await service.recordBusinessEvent('match_created', { category: 'dating' }, new Date('2026-09-07T00:00:00Z'));
+    expect(recorded[0]).toMatchObject({ name: 'match_created', version: 1, dataClassification: 'business' });
   });
 });
