@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { countSafetyReportsByKind, type MetricReport, type ReportingPeriod } from '@universal/domain';
 import { SafetyReportRepository } from '../safety/safety-report.repository.js';
+import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 
 @Injectable()
 export class SafetyAnalyticsService {
-  constructor(private readonly reports: SafetyReportRepository) {}
+  constructor(
+    private readonly reports: SafetyReportRepository,
+    private readonly capabilities: AdministrativeCapabilityAccessService,
+  ) {}
 
-  async reportByTargetType(period: ReportingPeriod, now = new Date()): Promise<readonly MetricReport[]> {
+  async reportByTargetType(accountId: string, period: ReportingPeriod, now = new Date()): Promise<readonly MetricReport[]> {
+    await this.capabilities.require(accountId, 'view-analytics', now);
     const since = this.periodStart(period, now);
     const reports = await this.reports.listRecentForAnalytics(since);
     const counts = countSafetyReportsByKind(reports);
