@@ -22,7 +22,9 @@ function databaseFor(sequence: {
   return {
     $transaction: vi.fn(async (fn: (value: typeof tx) => unknown) => fn(tx)),
     tx,
-    notificationRealtime: { publishCreated: vi.fn().mockResolvedValue(undefined) },
+    notificationRealtime: {
+      publishCreatedBestEffort: vi.fn().mockResolvedValue(undefined),
+    },
   };
 }
 
@@ -45,10 +47,7 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
   });
 
   it('replays against the persisted interaction pair rather than a conflicting retry target', async () => {
-    const database = databaseFor({
-      byIdempotency: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' },
-      reciprocal: null,
-    });
+    const database = databaseFor({ byIdempotency: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: null });
     const conflictingRetry = { ...command, targetAccountId: 'a3' };
     const result = await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(conflictingRetry);
     expect(result).toMatchObject({ state: 'pending', replayed: true });
@@ -85,12 +84,12 @@ describe('PrismaMatchTransitionRepository executable transition scenarios', () =
   it('publishes persisted notification ids only after the transaction succeeds', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
     await new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command);
-    expect(database.notificationRealtime.publishCreated).toHaveBeenCalledWith({ notificationIds: ['n1', 'n2'], recipientAccountIds: ['a1', 'a2'] });
+    expect(database.notificationRealtime.publishCreatedBestEffort).toHaveBeenCalledWith({ notificationIds: ['n1', 'n2'], recipientAccountIds: ['a1', 'a2'] });
   });
 
   it('does not turn a successful match into a failure when realtime publication fails', async () => {
     const database = databaseFor({ create: { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' }, reciprocal: { decision: 'like', actorAccountId: 'a2', targetAccountId: 'a1' } });
-    database.notificationRealtime.publishCreated.mockRejectedValueOnce(new Error('offline'));
+    database.notificationRealtime.publishCreatedBestEffort.mockRejectedValueOnce(new Error('offline'));
     await expect(new PrismaMatchTransitionRepository(database as never, database.notificationRealtime as never).transition(command)).resolves.toMatchObject({ state: 'matched' });
   });
 
