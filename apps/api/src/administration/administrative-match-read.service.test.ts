@@ -10,4 +10,12 @@ describe('AdministrativeMatchReadService', () => {
     expect(access.require).toHaveBeenCalledWith('admin-1', 'view-dashboard');
     expect(matches.list).toHaveBeenCalledWith({ cursor: 'c1', limit: 100 });
   });
+
+  it('does not query interactions when authorization fails', async () => {
+    const access = { require: vi.fn().mockRejectedValue(new Error('denied')) };
+    const matches = { list: vi.fn() };
+    const service = new AdministrativeMatchReadService(access as never, matches as never);
+    await expect(service.list({ accountId: 'admin-1' })).rejects.toThrow('denied');
+    expect(matches.list).not.toHaveBeenCalled();
+  });
 });
