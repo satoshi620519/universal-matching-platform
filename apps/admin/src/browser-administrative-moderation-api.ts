@@ -6,6 +6,7 @@ export interface AdministrativeModerationCase {
 }
 export interface AdministrativeModerationPage<T> { readonly items: readonly T[]; readonly nextCursor: string | null; }
 export type ReportStatus = 'submitted' | 'triaged' | 'actioned' | 'dismissed';
+export type ModerationActionType = 'warning' | 'restrict-features' | 'restrict-communication' | 'suspend' | 'close-without-action';
 export type ModerationCaseStatus = 'under-review' | 'actioned' | 'closed';
 export interface AdministrativeModerationApi {
   listReports(input?: { cursor?: string; limit?: number }): Promise<AdministrativeModerationPage<AdministrativeModerationReport>>;
@@ -13,6 +14,7 @@ export interface AdministrativeModerationApi {
   transitionReport(id: string, status: ReportStatus): Promise<unknown>;
   openCase(reportId: string): Promise<unknown>;
   transitionCase(id: string, status: ModerationCaseStatus): Promise<unknown>;
+  applyAction(caseId: string, input: { targetId: string; action: ModerationActionType; reasonCategory: string }): Promise<unknown>;
 }
 export function createBrowserAdministrativeModerationApi(): AdministrativeModerationApi {
   const request = async <T,>(path: string, input: { cursor?: string; limit?: number } = {}): Promise<AdministrativeModerationPage<T>> => {
@@ -39,5 +41,6 @@ export function createBrowserAdministrativeModerationApi(): AdministrativeModera
     transitionReport: (id, status) => mutate(`/safety/moderation/reports/${id}/transition`, { status }),
     openCase: (reportId) => mutate(`/safety/moderation/reports/${reportId}/case`),
     transitionCase: (id, status) => mutate(`/safety/moderation/cases/${id}/transition`, { status }),
+    applyAction: (caseId, input) => mutate(`/safety/moderation/cases/${caseId}/actions`, input),
   };
 }
