@@ -2,31 +2,27 @@
 
 Date: 2026-09-07
 
-## Verified
-- Relationship-level `UserBlock` persistence and discovery exclusion already existed; no duplicate implementation was created.
-- Matching already rejects both directional block states.
-- Messaging conversation creation already rejected blocked participants.
+## Verified authoritative implementation
+- UserBlock persistence already exists on user_blocks.
+- UserBlockRepository is the authoritative directional persistence boundary.
+- Discovery exclusion checks both directions.
+- Matching rejects both directional block states.
+- Conversation creation rejects blocked participants.
+- Existing conversation message creation re-checks both directions before persistence and realtime publication.
 
-## Concrete defect found
-`POST /conversations/:conversationId/messages` checked account-wide communication restrictions but did not re-check the authoritative `UserBlockRepository` against the existing conversation participants.
+## Reconciliation performed
+A parallel RelationshipBlock boundary had been started during continuation work. Repository inspection confirmed this duplicated existing UserBlock persistence and policy enforcement.
 
-This meant an existing conversation could remain usable for messaging after either participant subsequently blocked the other.
+The duplicate AppModule registration was removed. No second migration was added. The existing user_blocks table and UserBlockRepository remain authoritative.
 
-## Fix
-- `MessagingController.createMessage` now resolves the authenticated participant's conversation first.
-- It applies the same authoritative bidirectional `UserBlockRepository` check used by conversation creation.
-- A blocked relationship is rejected before message persistence/realtime publication.
-- Missing/non-participant conversations return 404 before attempting a message write.
+## Concrete messaging regression already fixed
+Existing conversations are re-checked after a new block:
+1. resolve the authenticated participant's conversation;
+2. check authoritative bidirectional block policy;
+3. reject before message persistence and realtime publication.
 
-## Regression test
-Added a controller test proving that when the other participant has blocked the authenticated sender, an existing conversation cannot be used to create another message.
-
-## Commits
-- `9269a6a731a96f63bacaf716f80e39aa35759e70` — fix(messaging): enforce user blocks on existing conversations
-- `f30f7ff2cac9fb5a1c395578e072839b9008f57b` — test(messaging): cover block enforcement on existing conversations
-
-## Verification state
-Code/test changes are committed to `main`. This environment does not execute the repository test suite, so no test pass is claimed without an actual runner result.
+## Verification
+Focused regression tests cover blocked existing conversations. This environment has not executed the repository test runner, so no unverified test-pass claim is made.
 
 ## Next exact task
-Inspect realtime/message-publication paths for any bypass of the same block policy, then run the focused messaging test suite in an executable environment. Do not duplicate the already-complete UserBlock persistence or discovery work.
+Inspect realtime publication and notification paths for policy bypasses, then run the focused messaging test suite in an executable environment. Do not create another block persistence model or migration.
