@@ -40,6 +40,9 @@ export class SafetyModerationService {
   }
   async applyAction(input: { actorId: string; caseId: string; targetId: string; action: ModerationActionType; reasonCategory: string; expiresAt?: Date; correlationId?: string }) {
     await this.admin.require(input.actorId, 'manage-moderation');
+    const caseRecord = await this.reports.findCaseById(input.caseId);
+    if (!caseRecord) throw new NotFoundException('moderation case not found');
+    if (caseRecord.status === 'closed') throw new BadRequestException('cannot apply action to a closed moderation case');
     if (!input.reasonCategory.trim()) throw new BadRequestException('reasonCategory is required');
     const restriction = restrictionForModerationAction(input.action);
     if (restriction !== 'none') await this.enforcement.create({ accountId: input.targetId, restriction, reasonCategory: input.reasonCategory.trim(), effectiveAt: new Date(), ...(input.expiresAt ? { expiresAt: input.expiresAt } : {}) });
