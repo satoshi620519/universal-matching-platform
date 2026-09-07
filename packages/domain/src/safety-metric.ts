@@ -28,3 +28,8 @@ export function areDistinctSafetyMetricKinds(
 ): boolean {
   return new Set(kinds).size === kinds.length;
 }
+
+
+export function countSafetyReportsByKind(reports: readonly { readonly targetType: string }[]): Readonly<Record<string, number>> {
+  return reports.reduce<Record<string, number>>((counts, report) => { counts[report.targetType] = (counts[report.targetType] ?? 0) + 1; return counts; }, {});
+}
