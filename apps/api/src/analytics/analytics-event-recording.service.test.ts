@@ -22,10 +22,17 @@ describe('AnalyticsEventRecordingService', () => {
     expect(recorded).toHaveLength(1);
   });
   it('records a standardized business event', async () => {
-    const recorded: any[] = [];
+    const recorded: unknown[] = [];
     const repository = { record: async (value: unknown) => { recorded.push(value); } } as unknown as AnalyticsEventRepository;
     const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: true });
     await service.recordBusinessEvent('match_created', { category: 'dating' }, new Date('2026-09-07T00:00:00Z'));
     expect(recorded[0]).toMatchObject({ name: 'match_created', version: 1, dataClassification: 'business' });
+  });
+  it('records a standardized operational event', async () => {
+    const recorded: unknown[] = [];
+    const repository = { record: async (value: unknown) => { recorded.push(value); } } as unknown as AnalyticsEventRepository;
+    const service = new AnalyticsEventRecordingService(repository, { retentionDays: 30, nonEssentialAnalyticsEnabled: false });
+    await service.recordOperationalEvent('authenticated_session_started', { source: 'password_sign_in' }, new Date('2026-09-07T00:00:00Z'));
+    expect(recorded[0]).toMatchObject({ name: 'authenticated_session_started', version: 1, dataClassification: 'operational', payload: { source: 'password_sign_in' } });
   });
 });
