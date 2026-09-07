@@ -42,7 +42,6 @@ function mountWorkspaceNavigation() {
         aria-current={active === target.id ? 'page' : undefined}
         onClick={() => {
           setActive(target.id);
-          if (target.id === 'moderation') document.querySelector<HTMLButtonElement>('#moderation-console-root')?.closest('body');
           document.dispatchEvent(new CustomEvent('universal-admin-workspace', { detail: target.id }));
         }}
         style={{padding:'10px 12px',border:'1px solid #536150',background:active===target.id?'rgba(255,255,255,.12)':'transparent',color:'#e9eee6',borderRadius:8,textAlign:'left',cursor:'pointer',font:'inherit',fontSize:11,letterSpacing:1.2}}
