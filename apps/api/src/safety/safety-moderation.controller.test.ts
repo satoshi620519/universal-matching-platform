@@ -18,6 +18,13 @@ describe('SafetyModerationController', () => {
     consume: vi.fn().mockReturnValue({ allowed: true, remaining: 4, retryAfterMs: 0 }),
   };
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+    principal.requireAuthenticated.mockResolvedValue({ accountId: '11111111-1111-4111-8111-111111111111' });
+    moderation.submitReport.mockResolvedValue({ id: 'report-1' });
+    limiter.consume.mockReturnValue({ allowed: true, remaining: 4, retryAfterMs: 0 });
+  });
+
   it('derives reporter identity from the authenticated principal and rate-limits by account', async () => {
     const controller = new SafetyModerationController(principal as never, moderation as never, limiter as never);
 
