@@ -1,5 +1,5 @@
 import { BadRequestException, Controller, Get, Query, Req, UnauthorizedException } from '@nestjs/common';
-import type { Request } from 'express';
+type Request = { readonly headers?: { readonly authorization?: string | readonly string[] | undefined } };
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { AdministrativeUserReadService } from './administrative-user-read.service.js';
 
