@@ -2,10 +2,11 @@ export type AdministrativeCapability =
   | 'manage-administrative-roles'
   | 'review-failed-email-outbox'
   | 'manage-moderation'
-  | 'manage-quick-launch';
+  | 'manage-quick-launch'
+  | 'view-analytics';
 
 export type AdministrativeWorkspaceTarget = Readonly<{
-  id: 'quick-launch' | 'moderation' | 'roles' | 'failed-email';
+  id: 'quick-launch' | 'moderation' | 'roles' | 'failed-email' | 'analytics';
   label: string;
   capability: AdministrativeCapability;
 }>;
@@ -15,6 +16,7 @@ export const administrativeWorkspaceTargets: readonly AdministrativeWorkspaceTar
   { id: 'moderation', label: 'Moderation', capability: 'manage-moderation' },
   { id: 'roles', label: 'Roles', capability: 'manage-administrative-roles' },
   { id: 'failed-email', label: 'Failed email', capability: 'review-failed-email-outbox' },
+  { id: 'analytics', label: 'Analytics', capability: 'view-analytics' },
 ];
 
 export function visibleAdministrativeWorkspaceTargets(
