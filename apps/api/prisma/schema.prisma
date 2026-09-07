@@ -15,6 +15,8 @@ model Account {
   authenticationIdentities AuthenticationIdentity[]
   verificationRequests VerificationRequest[]
   safetyEnforcements SafetyEnforcement[]
+  initiatedBlocks RelationshipBlock[] @relation("RelationshipBlockInitiator")
+  receivedBlocks RelationshipBlock[] @relation("RelationshipBlockTarget")
   safetyReports SafetyReport[]
   authenticationSessions AuthenticationSession[]
   emailVerificationTokens EmailVerificationToken[]
@@ -75,6 +77,19 @@ model VerificationOutcome {
   verificationRequest VerificationRequest @relation(fields: [verificationRequestId], references: [id])
   @@index([verificationRequestId])
   @@map("verification_outcomes")
+}
+
+
+model RelationshipBlock {
+  id String @id @default(uuid()) @db.Uuid
+  blockerAccountId String @map("blocker_account_id") @db.Uuid
+  blockedAccountId String @map("blocked_account_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  blocker Account @relation("RelationshipBlockInitiator", fields: [blockerAccountId], references: [id], onDelete: Cascade)
+  blocked Account @relation("RelationshipBlockTarget", fields: [blockedAccountId], references: [id], onDelete: Cascade)
+  @@unique([blockerAccountId, blockedAccountId])
+  @@index([blockedAccountId, blockerAccountId])
+  @@map("relationship_blocks")
 }
 
 model SafetyEnforcement {
