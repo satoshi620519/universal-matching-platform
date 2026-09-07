@@ -53,6 +53,18 @@ describe('MessagingController', () => {
     expect(createForParticipant).toHaveBeenCalledTimes(1);
     expect(safety.resolveForAccount).toHaveBeenCalledWith('a1', 'communication');
   });
+  it('does not count an existing direct conversation as a new start', async () => {
+    const existing = { id: 'existing' };
+    const findDirect = vi.fn().mockResolvedValue(existing);
+    const createOrFindDirect = vi.fn();
+    const analytics = { recordBusinessEvent: vi.fn() };
+    const matchRepository = { isMutualMatch: vi.fn().mockResolvedValue(true) };
+    const controller = new MessagingController(principalResolver as never, { findDirect, createOrFindDirect } as never, {} as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, matchRepository as never, undefined, undefined, analytics as never);
+    await expect(controller.createConversationFromMutualMatch({ targetAccountId: 'a2' })).resolves.toEqual(existing);
+    expect(createOrFindDirect).not.toHaveBeenCalled();
+    expect(analytics.recordBusinessEvent).not.toHaveBeenCalled();
+  });
+
   it('uses authenticated participant identity for read state', async () => {
     const markReadForParticipant = vi.fn().mockResolvedValue(true);
     const controller = new MessagingController(principalResolver as never, {} as never, { markReadForParticipant } as never, {} as never, { publishRecipients: vi.fn() } as never, {} as never, matches);
