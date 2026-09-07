@@ -36,6 +36,10 @@ export class PrismaSafetyReportRepository extends SafetyReportRepository {
     const record = await this.database.moderationCase.findUnique({ where: { id } });
     return record ? this.toCase(record) : null;
   }
+  async listRecentForAnalytics(since: Date): Promise<readonly SafetyReport[]> {
+    const records = await this.database.safetyReport.findMany({ where: { createdAt: { gte: since } }, orderBy: [{ createdAt: 'asc' }, { id: 'asc' }] });
+    return records.map(record => this.toReport(record));
+  }
   async transitionCase(id: string, status: ModerationCase['status']): Promise<ModerationCase> {
     const current = await this.database.moderationCase.findUnique({ where: { id } });
     if (!current) throw new NotFoundException('moderation case not found');
