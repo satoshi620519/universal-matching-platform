@@ -18,6 +18,12 @@ describe('createBrowserAdministrativeModerationApi', () => {
     expect(fetchMock).toHaveBeenCalledWith('/safety/moderation/reports/report-1/transition', expect.objectContaining({ method: 'POST', body: JSON.stringify({ status: 'triaged' }), credentials: 'include' }));
   });
 
+  it('posts enforcement actions with required moderation context', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
+    vi.stubGlobal('fetch', fetchMock);
+    await createBrowserAdministrativeModerationApi().applyAction('case-1', { targetId: 'account-1', action: 'suspend', reasonCategory: 'policy-violation' });
+    expect(fetchMock).toHaveBeenCalledWith('/safety/moderation/cases/case-1/actions', expect.objectContaining({ method: 'POST', body: JSON.stringify({ targetId: 'account-1', action: 'suspend', reasonCategory: 'policy-violation' }) }));
+  });
   it('surfaces workflow failures safely', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 403 }));
     await expect(createBrowserAdministrativeModerationApi().openCase('report-1')).rejects.toThrow('Unable to update moderation data (403).');
