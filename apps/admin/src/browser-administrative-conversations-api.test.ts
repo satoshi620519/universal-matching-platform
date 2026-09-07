@@ -7,6 +7,6 @@ describe('createBrowserAdministrativeConversationsApi', () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ items: [], nextCursor: null }) });
     vi.stubGlobal('fetch', fetchMock);
     await createBrowserAdministrativeConversationsApi().list({ cursor: 'c1', limit: 25 });
-    expect(fetchMock).toHaveBeenCalledWith('/administration/conversations?cursor=c1&limit=25', expect.objectContaining({ credentials: 'include' }));
+    expect(fetchMock).toHaveBeenCalledWith('/administration/conversations?cursor=c1&limit=25', expect.objectContaining({ credentials: 'include', headers: expect.objectContaining({ Accept: 'application/json' }) }));
   });
 });
