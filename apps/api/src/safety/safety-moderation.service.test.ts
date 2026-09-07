@@ -8,6 +8,7 @@ describe('SafetyModerationService authorization', () => {
     const reports = {
       findById: vi.fn(),
       findCaseByReportId: vi.fn(),
+      findCaseById: vi.fn(),
       transitionReport: vi.fn(),
       createCase: vi.fn(),
       transitionCase: vi.fn(),
@@ -58,9 +59,72 @@ describe('SafetyModerationService authorization', () => {
     expect(deny).toHaveBeenNthCalledWith(4, 'unprivileged-account', 'manage-moderation');
     expect(reports.findById).not.toHaveBeenCalled();
     expect(reports.findCaseByReportId).not.toHaveBeenCalled();
+    expect(reports.findCaseById).not.toHaveBeenCalled();
     expect(reports.transitionReport).not.toHaveBeenCalled();
     expect(reports.createCase).not.toHaveBeenCalled();
     expect(reports.transitionCase).not.toHaveBeenCalled();
+    expect(enforcement.create).not.toHaveBeenCalled();
+    expect(audit.append).not.toHaveBeenCalled();
+  });
+
+  it('rejects an action for a missing moderation case before enforcement or audit mutation', async () => {
+    const reports = {
+      findCaseById: vi.fn().mockResolvedValue(null),
+    };
+    const enforcement = { create: vi.fn() };
+    const audit = { append: vi.fn() };
+    const require = vi.fn().mockResolvedValue(undefined);
+    const service = new SafetyModerationService(
+      reports as any,
+      enforcement as any,
+      { require } as any,
+      audit as any,
+    );
+
+    await expect(
+      service.applyAction({
+        actorId: 'moderator-1',
+        caseId: 'missing-case',
+        targetId: 'target-1',
+        action: 'suspension',
+        reasonCategory: 'policy-violation',
+      }),
+    ).rejects.toThrow('moderation case not found');
+
+    expect(require).toHaveBeenCalledWith('moderator-1', 'manage-moderation');
+    expect(enforcement.create).not.toHaveBeenCalled();
+    expect(audit.append).not.toHaveBeenCalled();
+  });
+
+  it('rejects an action for a closed moderation case before enforcement or audit mutation', async () => {
+    const reports = {
+      findCaseById: vi.fn().mockResolvedValue({
+        id: 'case-1',
+        reportId: 'report-1',
+        status: 'closed',
+      }),
+    };
+    const enforcement = { create: vi.fn() };
+    const audit = { append: vi.fn() };
+    const require = vi.fn().mockResolvedValue(undefined);
+    const service = new SafetyModerationService(
+      reports as any,
+      enforcement as any,
+      { require } as any,
+      audit as any,
+    );
+
+    await expect(
+      service.applyAction({
+        actorId: 'moderator-1',
+        caseId: 'case-1',
+        targetId: 'target-1',
+        action: 'suspension',
+        reasonCategory: 'policy-violation',
+      }),
+    ).rejects.toThrow('cannot apply action to a closed moderation case');
+
+    expect(require).toHaveBeenCalledWith('moderator-1', 'manage-moderation');
     expect(enforcement.create).not.toHaveBeenCalled();
     expect(audit.append).not.toHaveBeenCalled();
   });
