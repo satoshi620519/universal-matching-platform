@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { canTransitionReportStatus, restrictionForModerationAction, type ModerationActionType, type ModerationCaseStatus, type ReportStatus, type ReportTargetType } from '@universal/domain';
+import { canTransitionModerationCase, canTransitionReportStatus, restrictionForModerationAction, type ModerationActionType, type ModerationCaseStatus, type ReportStatus, type ReportTargetType } from '@universal/domain';
 import { AuditRecordService } from '../administration/audit-record.service.js';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 import { SafetyEnforcementRepository } from './safety-enforcement.repository.js';
@@ -34,7 +34,10 @@ export class SafetyModerationService {
   }
   async transitionCase(input: { actorId: string; caseId: string; status: ModerationCaseStatus; correlationId?: string }) {
     await this.admin.require(input.actorId, 'manage-moderation');
-    const updated = await this.reports.transitionCase(input.caseId, input.status);
+    const current = await this.reports.findCaseById(input.caseId);
+    if (!current) throw new NotFoundException('moderation case not found');
+    if (!canTransitionModerationCase(current.status, input.status)) throw new BadRequestException('invalid moderation case transition');
+    const updated = await this.reports.transitionCase(current.id, input.status);
     await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `case.${input.status}`, targetId: updated.id, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return updated;
   }
