@@ -25,7 +25,7 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   });
 
   it('does not duplicate directed interactions under concurrent identical requests', async () => {
-    const notificationRealtime = { publishCreated: async () => undefined };
+    const notificationRealtime = { publishCreatedBestEffort: async () => undefined };
     const repository = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never, safety as never);
     const command = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'same-request' };
     const results = await Promise.allSettled([repository.transition(command), repository.transition(command)]);
@@ -38,7 +38,7 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   });
 
   it('serializes the same actor idempotency key even when conflicting targets race', async () => {
-    const notificationRealtime = { publishCreated: async () => undefined };
+    const notificationRealtime = { publishCreatedBestEffort: async () => undefined };
     const repository = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never, safety as never);
     const first = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'shared-key' };
     const conflicting = { ...first, targetAccountId: accountC };
@@ -46,12 +46,12 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
     expect(results.every((result) => result.status === 'fulfilled')).toBe(true);
     const fulfilled = results.filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof repository.transition>>> => result.status === 'fulfilled');
     expect(fulfilled.filter((result) => result.value.replayed)).toHaveLength(1);
-    expect(fulfilled.filter((result) => !result.value.replayed)).toHaveLength(1);
+    expect(fulfilled.filter((result) => !result.replayed)).toHaveLength(1);
     expect(await prisma!.matchInteraction.count({ where: { actorAccountId: accountA, idempotencyKey: 'shared-key' } })).toBe(1);
   });
 
   it('rejects a second directed interaction with a different idempotency key', async () => {
-    const notificationRealtime = { publishCreated: async () => undefined };
+    const notificationRealtime = { publishCreatedBestEffort: async () => undefined };
     const repository = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never, safety as never);
     await repository.transition({
       actorAccountId: accountA,
@@ -71,7 +71,7 @@ integration('PrismaMatchTransitionRepository PostgreSQL concurrency', () => {
   });
 
   it('serializes reciprocal likes into one pending then one matched transition', async () => {
-    const notificationRealtime = { publishCreated: async () => undefined };
+    const notificationRealtime = { publishCreatedBestEffort: async () => undefined };
     const repositoryA = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never, safety as never);
     const repositoryB = new PrismaMatchTransitionRepository(prisma as never, notificationRealtime as never, safety as never);
     const a = { actorAccountId: accountA, targetAccountId: accountB, decision: 'like' as const, idempotencyKey: 'a-to-b' };
