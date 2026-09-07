@@ -10,20 +10,23 @@ describe('PasswordSignInTransportService', () => {
       accountId: 'account-1',
     });
     const sessions = { issue: vi.fn().mockResolvedValue({ credential: 'opaque' }) };
+    const analytics = { recordOperationalEvent: vi.fn() };
     return {
       limiter,
       signIn,
       sessions,
+      analytics,
       service: new PasswordSignInTransportService(
         limiter as any,
         { signIn } as any,
         sessions as any,
+        analytics as any,
       ),
     };
   }
 
   it('issues a session only after successful credential verification', async () => {
-    const { service, sessions } = createService();
+    const { service, sessions, analytics } = createService();
 
     await expect(service.signInRequest({
       email: 'user@example.test',
@@ -35,6 +38,7 @@ describe('PasswordSignInTransportService', () => {
       accountId: 'account-1',
       authenticationMethod: 'password',
     });
+    expect(analytics.recordOperationalEvent).toHaveBeenCalledWith('authenticated_session_started');
   });
 
   it('does not issue a session for rejected credentials', async () => {
