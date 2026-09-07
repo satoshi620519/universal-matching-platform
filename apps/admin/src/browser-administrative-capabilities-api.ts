@@ -13,12 +13,11 @@ export function createBrowserAdministrativeCapabilitiesApi(
 ): AdministrativeCapabilitiesApi {
   const configuredBaseUrl = import.meta.env.VITE_API_URL as string | undefined;
   const baseUrl = configuredBaseUrl ? configuredBaseUrl.replace(/\/$/, '') : '';
-  const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
 
   return {
     async list() {
       const response = await fetchImpl(`${baseUrl}/administration/me/capabilities`, {
-        headers: authorization ? { authorization } : {},
+        credentials: 'include',
       });
       if (!response.ok) {
         const detail = await response.text().catch(() => '');
