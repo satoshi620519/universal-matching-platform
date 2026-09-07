@@ -107,13 +107,14 @@ describe('report lifecycle invariants', () => {
 
 describe('moderation action lifecycle finalization', () => {
   it('requires under-review and transitions the case to actioned after enforcement', async () => {
-    const reports = { findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', status: 'under-review' }), transitionCase: vi.fn().mockResolvedValue({ id: 'case-1', status: 'actioned' }) };
+    const reports = { findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', reportId: 'report-1', status: 'under-review' }), findById: vi.fn().mockResolvedValue({ id: 'report-1', status: 'triaged' }), transitionCase: vi.fn().mockResolvedValue({ id: 'case-1', status: 'actioned' }), transitionReport: vi.fn().mockResolvedValue({ id: 'report-1', status: 'actioned' }) };
     const enforcement = { create: vi.fn().mockResolvedValue({}) };
     const admin = { require: vi.fn().mockResolvedValue(undefined) };
     const audit = { append: vi.fn().mockResolvedValue(undefined) };
     const service = new SafetyModerationService(reports as never, enforcement as never, admin as never, audit as never);
     await service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'target-1', action: 'suspend', reasonCategory: 'policy' });
     expect(reports.transitionCase).toHaveBeenCalledWith('case-1', 'actioned');
+    expect(reports.transitionReport).toHaveBeenCalledWith('report-1', 'actioned');
     expect(enforcement.create).toHaveBeenCalledTimes(1);
     expect(audit.append).toHaveBeenCalledTimes(1);
   });
@@ -123,4 +124,14 @@ describe('moderation action lifecycle finalization', () => {
     await expect(service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'target-1', action: 'warning', reasonCategory: 'policy' })).rejects.toThrow('under review');
     expect(reports.transitionCase).not.toHaveBeenCalled();
   });
+});
+
+
+it('rejects enforcement when the linked report is not triaged', async () => {
+  const reports = { findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', reportId: 'report-1', status: 'under-review' }), findById: vi.fn().mockResolvedValue({ id: 'report-1', status: 'submitted' }), transitionCase: vi.fn(), transitionReport: vi.fn() };
+  const enforcement = { create: vi.fn() };
+  const service = new SafetyModerationService(reports as never, enforcement as never, { require: vi.fn().mockResolvedValue(undefined) } as never, { append: vi.fn() } as never);
+  await expect(service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'target-1', action: 'suspend', reasonCategory: 'policy' })).rejects.toThrow('report is triaged');
+  expect(enforcement.create).not.toHaveBeenCalled();
+  expect(reports.transitionCase).not.toHaveBeenCalled();
 });
