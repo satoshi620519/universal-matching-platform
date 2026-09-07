@@ -13,6 +13,7 @@ export function createBrowserQuickLaunchApi(): QuickLaunchApi {
             : {}),
         },
         body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
+        credentials: 'include',
       });
       if (!response.ok) {
         const detail = await response.text().catch(() => '');
