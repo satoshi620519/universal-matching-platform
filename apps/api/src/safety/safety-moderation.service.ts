@@ -46,11 +46,11 @@ export class SafetyModerationService {
     await this.admin.require(input.actorId, 'manage-moderation');
     const caseRecord = await this.reports.findCaseById(input.caseId);
     if (!caseRecord) throw new NotFoundException('moderation case not found');
-    if (caseRecord.status !== 'under-review' && caseRecord.status !== 'open') throw new BadRequestException('cannot apply action to a non-active moderation case');
-    if (caseRecord.status === 'closed') throw new BadRequestException('cannot apply action to a closed moderation case');
+    if (caseRecord.status !== 'under-review') throw new BadRequestException('cannot apply action unless moderation case is under review');
     if (!input.reasonCategory.trim()) throw new BadRequestException('reasonCategory is required');
     const restriction = restrictionForModerationAction(input.action);
     if (restriction !== 'none') await this.enforcement.create({ accountId: input.targetId, restriction, reasonCategory: input.reasonCategory.trim(), effectiveAt: new Date(), ...(input.expiresAt ? { expiresAt: input.expiresAt } : {}) });
+    if (caseRecord.status === 'under-review') await this.reports.transitionCase(caseRecord.id, 'actioned');
     await this.audit.append({ actorId: input.actorId, area: 'moderation', action: `action.${input.action}`, targetId: input.targetId, ...(input.correlationId ? { correlationId: input.correlationId } : {}), occurredAt: new Date().toISOString() });
     return { caseId: input.caseId, targetId: input.targetId, action: input.action, restriction };
   }
