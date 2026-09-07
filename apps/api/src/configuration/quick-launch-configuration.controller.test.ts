@@ -6,10 +6,11 @@ describe('QuickLaunchConfigurationController', () => {
   const setup = () => {
     const principals = { requireAuthenticated: vi.fn().mockResolvedValue({ accountId: 'admin-1' }) };
     const access = { require: vi.fn().mockResolvedValue(undefined) };
+    const audit = { append: vi.fn().mockResolvedValue(undefined) };
     const quickLaunch = {
       createDraft: vi.fn(), saveDraft: vi.fn(), publish: vi.fn(), findPublished: vi.fn(), listHistory: vi.fn(),
     };
-    return { principals, access, quickLaunch, controller: new QuickLaunchConfigurationController(principals as never, access as never, quickLaunch as never) };
+    return { principals, access, quickLaunch, audit, controller: new QuickLaunchConfigurationController(principals as never, access as never, quickLaunch as never, audit as never) };
   };
 
   it('requires manage-quick-launch before writes', async () => {
@@ -27,3 +28,18 @@ describe('QuickLaunchConfigurationController', () => {
     expect(quickLaunch.publish).not.toHaveBeenCalled();
   });
 });
+
+
+  it('audits successful Quick Launch publish with correlation', async () => {
+    const { controller, quickLaunch, audit } = setup();
+    quickLaunch.publish.mockResolvedValue({ version: 3 });
+    await controller.publish('3', 'Bearer token', 'corr-launch-1');
+    expect(audit.append).toHaveBeenCalledWith(expect.objectContaining({ actorId: 'admin-1', action: 'publish-quick-launch-configuration', targetId: '3', correlationId: 'corr-launch-1' }));
+  });
+
+  it('does not audit failed Quick Launch persistence', async () => {
+    const { controller, quickLaunch, audit } = setup();
+    quickLaunch.publish.mockRejectedValue(new Error('publish failed'));
+    await expect(controller.publish('2', 'Bearer token', 'corr-launch-2')).rejects.toThrow('publish failed');
+    expect(audit.append).not.toHaveBeenCalled();
+  });
