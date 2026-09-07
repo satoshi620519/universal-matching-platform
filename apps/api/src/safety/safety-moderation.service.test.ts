@@ -135,3 +135,32 @@ it('rejects enforcement when the linked report is not triaged', async () => {
   expect(enforcement.create).not.toHaveBeenCalled();
   expect(reports.transitionCase).not.toHaveBeenCalled();
 });
+
+
+describe('moderation action target authority', () => {
+  it('rejects a client-supplied enforcement target that differs from the report target', async () => {
+    const reports = {
+      findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', reportId: 'report-1', status: 'under-review' }),
+      findById: vi.fn().mockResolvedValue({ id: 'report-1', status: 'triaged', targetType: 'user', targetId: 'target-a' }),
+      transitionCase: vi.fn(),
+      transitionReport: vi.fn(),
+    };
+    const enforcement = { create: vi.fn() };
+    const service = new SafetyModerationService(reports as never, enforcement as never, { require: vi.fn().mockResolvedValue(undefined) } as never, { append: vi.fn() } as never);
+    await expect(service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'target-b', action: 'suspend', reasonCategory: 'policy' })).rejects.toThrow('must match the report target');
+    expect(enforcement.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects account enforcement for a non-user report target', async () => {
+    const reports = {
+      findCaseById: vi.fn().mockResolvedValue({ id: 'case-1', reportId: 'report-1', status: 'under-review' }),
+      findById: vi.fn().mockResolvedValue({ id: 'report-1', status: 'triaged', targetType: 'message', targetId: 'message-1' }),
+      transitionCase: vi.fn(),
+      transitionReport: vi.fn(),
+    };
+    const enforcement = { create: vi.fn() };
+    const service = new SafetyModerationService(reports as never, enforcement as never, { require: vi.fn().mockResolvedValue(undefined) } as never, { append: vi.fn() } as never);
+    await expect(service.applyAction({ actorId: 'moderator', caseId: 'case-1', targetId: 'message-1', action: 'suspend', reasonCategory: 'policy' })).rejects.toThrow('user-targeted report');
+    expect(enforcement.create).not.toHaveBeenCalled();
+  });
+});
