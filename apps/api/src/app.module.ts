@@ -157,6 +157,7 @@ import { RealtimeController } from './realtime/realtime.controller.js';
     { provide: RoleAssignmentRepository, useExisting: PrismaRoleAssignmentRepository },
     { provide: AdministrativeUserReadRepository, useExisting: PrismaAdministrativeUserReadRepository },
     { provide: AdministrativeProfileReadRepository, useExisting: PrismaAdministrativeProfileReadRepository },
+    { provide: AdministrativeModerationReadRepository, useExisting: PrismaAdministrativeModerationReadRepository },
     { provide: AccountRepository, useExisting: PrismaAccountRepository },
     { provide: SafetyEnforcementRepository, useExisting: PrismaSafetyEnforcementRepository },
     { provide: SafetyReportRepository, useExisting: PrismaSafetyReportRepository },
