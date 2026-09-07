@@ -59,6 +59,7 @@ describe('authenticated account activation service', () => {
       contextFor(),
       new AccountActivationService(),
       repository,
+      analyticsFor(),
     );
 
     await expect(service.activate(principal)).rejects.toBeInstanceOf(NotFoundException);
