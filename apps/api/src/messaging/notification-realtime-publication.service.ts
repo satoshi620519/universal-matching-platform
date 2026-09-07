@@ -19,4 +19,8 @@ export class NotificationRealtimePublicationService {
       }),
     ));
   }
+
+  async publishCreatedBestEffort(input: { notificationIds: string[]; recipientAccountIds: string[] }): Promise<void> {
+    await this.publishCreated(input).catch(() => undefined);
+  }
 }
