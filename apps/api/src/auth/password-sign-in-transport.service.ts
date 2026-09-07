@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PasswordSignInService } from './password-sign-in.service.js';
 import { SessionIssuanceService } from './session-issuance.service.js';
 import { RequestRateLimiter } from '../common/rate-limit/request-rate-limiter.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 export interface PasswordSignInTransportInput {
   readonly email: string;
@@ -20,6 +21,7 @@ export class PasswordSignInTransportService {
     private readonly limiter: RequestRateLimiter,
     private readonly signIn: PasswordSignInService,
     private readonly sessions: SessionIssuanceService,
+    private readonly analytics: AnalyticsEventRecordingService,
   ) {}
 
   async signInRequest(
@@ -48,6 +50,7 @@ export class PasswordSignInTransportService {
       authenticationMethod: 'password',
     });
 
+    void this.analytics.recordOperationalEvent('authenticated_session_started');
     return { kind: 'accepted', credential: issued.credential };
   }
 }
