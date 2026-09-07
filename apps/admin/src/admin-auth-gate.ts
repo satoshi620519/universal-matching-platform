@@ -6,26 +6,28 @@ function apiUrl(path: string): string {
 }
 
 function setLocked(locked: boolean): void {
-  document.documentElement.dataset.adminAuthLocked = locked ? 'true' : 'false';
+  document.body.style.visibility = locked ? 'hidden' : 'visible';
 }
 
 function renderLogin(errorMessage = ''): void {
   const existing = document.getElementById(GATE_ID);
   if (existing) existing.remove();
+  document.body.style.visibility = 'visible';
 
   const gate = document.createElement('div');
   gate.id = GATE_ID;
   gate.setAttribute('role', 'dialog');
   gate.setAttribute('aria-modal', 'true');
+  gate.style.cssText = 'position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:#f5f2ea;padding:24px;box-sizing:border-box;';
   gate.innerHTML = `
-    <div class="admin-auth-card">
-      <h1>Universal Admin</h1>
-      <p>Sign in to continue.</p>
-      <form>
-        <label>Email<input name="email" type="email" autocomplete="username" required /></label>
-        <label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
-        <button type="submit">Sign in</button>
-        <p class="admin-auth-error" role="alert" hidden></p>
+    <div style="width:min(420px,100%);background:white;border:1px solid #ddd6c8;border-radius:16px;padding:28px;box-sizing:border-box;box-shadow:0 20px 60px rgba(0,0,0,.12);font-family:system-ui,sans-serif">
+      <h1 style="margin:0 0 8px">Universal Admin</h1>
+      <p style="margin:0 0 20px;color:#665f55">Sign in to continue.</p>
+      <form style="display:grid;gap:14px">
+        <label style="display:grid;gap:6px">Email<input name="email" type="email" autocomplete="username" required style="padding:10px;border:1px solid #cfc7b8;border-radius:8px" /></label>
+        <label style="display:grid;gap:6px">Password<input name="password" type="password" autocomplete="current-password" required style="padding:10px;border:1px solid #cfc7b8;border-radius:8px" /></label>
+        <button type="submit" style="padding:11px;border:0;border-radius:8px;background:#2e5c45;color:white;font-weight:600;cursor:pointer">Sign in</button>
+        <p class="admin-auth-error" role="alert" hidden style="margin:0;color:#a32929"></p>
       </form>
     </div>
   `;
