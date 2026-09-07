@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { BadRequestException, HttpException } from '@nestjs/common';
 import { SafetyModerationController } from './safety-moderation.controller.js';
 
