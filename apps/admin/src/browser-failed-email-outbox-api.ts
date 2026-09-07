@@ -13,7 +13,7 @@ export function createBrowserFailedEmailOutboxApi(
 ): FailedEmailOutboxApi {
   const baseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '');
   const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
-  const headers = authorization ? { authorization } : {};
+  const headers: HeadersInit = authorization ? { authorization } : {};
 
   return {
     async list(limit = 50) {
