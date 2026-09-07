@@ -4,6 +4,7 @@ import { AccountActivationService } from './account-activation.service.js';
 import { AuthenticatedAccountActivationService } from './authenticated-account-activation.service.js';
 import { AuthenticatedAccountContextService } from './authenticated-account-context.service.js';
 import { AccountRepository } from './account.repository.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 describe('authenticated account activation service', () => {
   const principal = { accountId: 'account-1', authenticationMethod: 'test' } as const;
@@ -13,6 +14,10 @@ describe('authenticated account activation service', () => {
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+
+  function analyticsFor() {
+    return { recordBusinessEvent: async () => undefined } as unknown as AnalyticsEventRecordingService;
+  }
 
   function contextFor() {
     return {
@@ -36,6 +41,7 @@ describe('authenticated account activation service', () => {
       contextFor(),
       new AccountActivationService(),
       repository,
+      analyticsFor(),
     );
 
     await expect(service.activate(principal)).resolves.toEqual({
