@@ -11,4 +11,8 @@ export class AnalyticsEventRecordingService {
     if (event.dataClassification !== 'operational' && !shouldCollectNonEssentialAnalytics(this.policy)) return;
     await this.repository.record(event);
   }
+
+  async recordBusinessEvent(name: string, payload: Readonly<Record<string, unknown>> = {}, now = new Date()): Promise<void> {
+    await this.record({ name, version: 1, occurredAt: now, dataClassification: 'business', payload });
+  }
 }
