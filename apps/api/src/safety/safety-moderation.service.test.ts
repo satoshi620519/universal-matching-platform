@@ -85,3 +85,21 @@ describe('SafetyModerationService authorization', () => {
     expect(audit.append).not.toHaveBeenCalled();
   });
 });
+
+
+describe('report lifecycle invariants', () => {
+  const admin = { require: vi.fn().mockResolvedValue(undefined) };
+  const audit = { append: vi.fn().mockResolvedValue(undefined) };
+  const enforcement = { create: vi.fn() };
+  it('rejects self reports before persistence', async () => {
+    const reports = { create: vi.fn() };
+    const service = new SafetyModerationService(reports as never, enforcement as never, admin as never, audit as never);
+    await expect(service.submitReport({ reporterId: 'a1', targetId: 'a1', targetType: 'user', reason: 'x' })).rejects.toThrow('cannot report yourself');
+    expect(reports.create).not.toHaveBeenCalled();
+  });
+  it('does not open cases for terminal reports', async () => {
+    const reports = { findById: vi.fn().mockResolvedValue({ id: 'r1', status: 'dismissed' }) };
+    const service = new SafetyModerationService(reports as never, enforcement as never, admin as never, audit as never);
+    await expect(service.openCase({ actorId: 'admin', reportId: 'r1' })).rejects.toThrow('terminal report');
+  });
+});
