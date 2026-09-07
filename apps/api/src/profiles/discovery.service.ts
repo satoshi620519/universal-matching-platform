@@ -2,6 +2,7 @@ import { Inject, Injectable, Optional } from '@nestjs/common';
 import { blocksCapability, type SafetyRestriction } from '@universal/domain';
 import { DiscoveryExclusionPolicy } from './discovery-exclusion.policy.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 import {
   createDiscoveryQuery, evaluateDiscoveryEligibility, projectProfile,
   type DiscoveryProfileRepository, type DistanceConstraint, type GeographicScope,
@@ -18,6 +19,7 @@ export class DiscoveryService {
     @Inject('DISCOVERY_PROFILE_REPOSITORY') private readonly profiles: DiscoveryProfileRepository,
     @Inject('DISCOVERY_EXCLUSION_POLICIES') private readonly exclusions: DiscoveryExclusionPolicies,
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
+    @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
 
   async discover(input: { subjectAccountId: string; categoryId: string; geographicScope: GeographicScope; limit: number; cursor?: string; distanceConstraint?: DistanceConstraint; projectionPolicy: ProfileProjectionPolicy; locationPolicy?: LocationPrecisionPolicy; preferences?: DiscoveryPreferences; sort?: DiscoverySort; search?: { term: string; fields: readonly string[] }; matchingRules?: MatchingRulesConfiguration; subjectProfile?: Profile }): Promise<{ items: readonly ProjectedProfile[]; nextCursor?: string }> {
@@ -44,6 +46,7 @@ export class DiscoveryService {
       ? rankDiscoveryCandidates(input.subjectProfile, candidates, input.matchingRules, query.sort).map((entry) => entry.profile)
       : candidates;
     const items = ordered.map((candidate) => projectProfile(candidate, { accountId: input.subjectAccountId }, input.projectionPolicy, {}, input.locationPolicy));
+    void this.analytics?.recordBusinessEvent('discovery_viewed');
     return { items, ...(page.nextCursor ? { nextCursor: page.nextCursor } : {}) };
   }
 }
