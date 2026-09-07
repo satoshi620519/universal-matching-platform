@@ -4163,3 +4163,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Fixed the browser contract only, aligning it with the existing server response rather than inventing a new data path or weakening server authority checks.
 - Triggered rerun of failed CI jobs for the existing run (attempt 2). Validation is currently in progress; do not mark Phase 13 complete until the rerun reaches a completed successful conclusion.
 - Next exact task: inspect CI attempt 2 conclusion and logs. If successful, record Phase 13 completion and hand off to Phase 14. If failed, repair only the concrete reported failure and repeat the gate.
+
+
+### 2026-09-07 — Phase 13 CI gate attempt 2 failure analysis and concrete repairs
+- CI attempt 2 reached the corrected Admin typecheck, confirming the moderation case browser contract issue was resolved, but exposed pre-existing API typecheck inconsistencies accumulated in the branch.
+- Restored a compatibility `resolveAccountId` boundary on RequestPrincipalResolver using the existing authoritative authentication adapter; unauthenticated requests return null while non-authentication failures still propagate.
+- Removed undeclared Express type imports from seven controllers by using the minimal structural request header type required by the codebase's Fastify-based runtime, avoiding an unnecessary Express dependency.
+- Repaired Quick Launch controller audit tests so new cases remain inside the describe scope, and completed the in-memory repository test double with the newly required findVersion contract.
+- These changes address concrete compiler diagnostics only; no new product surface was added.
+- Next exact task: inspect the new CI run triggered by these commits and continue from its first concrete failure or record a successful full validation gate.
