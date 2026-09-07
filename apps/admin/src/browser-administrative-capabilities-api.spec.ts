@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { createBrowserAdministrativeCapabilitiesApi } from './browser-administrative-capabilities-api';
 
 describe('createBrowserAdministrativeCapabilitiesApi', () => {
-  it('returns the server-authoritative granted capabilities', async () => {
+  it('uses the browser session instead of a build-time authorization secret', async () => {
     const fetchImpl = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ capabilities: ['manage-moderation', 'manage-quick-launch'] }),
@@ -14,8 +14,9 @@ describe('createBrowserAdministrativeCapabilitiesApi', () => {
     await expect(api.list()).resolves.toEqual(['manage-moderation', 'manage-quick-launch']);
     expect(fetchImpl).toHaveBeenCalledWith(
       '/administration/me/capabilities',
-      expect.objectContaining({ headers: expect.any(Object) }),
+      expect.objectContaining({ credentials: 'include' }),
     );
+    expect((fetchImpl.mock.calls[0]?.[1] as RequestInit).headers).toBeUndefined();
   });
 
   it('rejects failed capability discovery', async () => {
