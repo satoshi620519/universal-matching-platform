@@ -79,3 +79,20 @@ Remaining explicit Phase 13 gap:
 
 Completion rule:
 - Phase 13 can only be marked complete after the country/region administration boundary is explicitly resolved and a fresh executable validation result is available for the final checkpoint.
+
+
+## 2026-09-07 region boundary resolution
+
+Internationalization/location inspection found an existing domain-level hierarchy:
+
+`global -> country -> region -> city` via `GeographicScope`.
+
+Country identifiers are ISO 3166-1 alpha-2 codes. Region and locality identifiers are deliberately opaque normalized codes; there is currently no authoritative region registry in the persistence or configuration model.
+
+Decision for Phase 13:
+- Do not invent a second region table/registry solely for the Admin Console.
+- Keep country availability authoritative in published localization configuration.
+- Treat region codes as domain-scoped identifiers whose registry/provider is a future location-data foundation, not an Admin UI-owned mutable list.
+- Phase 13 satisfies the administration requirement by exposing country configuration now and preserving the existing region-aware domain model; explicit CRUD region administration is deferred until an authoritative geographic data source is introduced.
+
+This resolves the acceptance ambiguity without creating duplicate geography authority.
