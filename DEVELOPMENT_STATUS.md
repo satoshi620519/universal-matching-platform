@@ -4155,3 +4155,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Decision: do not invent a parallel region table or Admin-owned geography registry merely to satisfy a UI checklist. Region CRUD is deferred to a future authoritative geographic-data provider/foundation.
 - This resolves the Phase 13 Countries/Regions acceptance ambiguity without introducing duplicate authority. Phase 13 now has no known implementation acceptance gap at the current code checkpoint.
 - Next exact task: perform final Phase 13 validation reconciliation (tests/typecheck/lint/build evidence and changed-file regression review), repair only concrete failures, then record the Phase 13 completion gate and hand off to Phase 14 analytics.
+
+
+### 2026-09-07 — Phase 13 final CI gate: concrete failure repair
+- Located the actual GitHub Actions CI run for the Phase 13 checkpoint (run 34093780223) through the Actions API. Attempt 1 failed at admin Typecheck; lint/test/build were consequently skipped.
+- Root cause: `AdministrativeModerationCase` browser contract omitted `targetId`, while the authoritative server-side moderation case read model already selected and returned `report.targetId` and the UI consumed it for the existing enforcement workflow.
+- Fixed the browser contract only, aligning it with the existing server response rather than inventing a new data path or weakening server authority checks.
+- Triggered rerun of failed CI jobs for the existing run (attempt 2). Validation is currently in progress; do not mark Phase 13 complete until the rerun reaches a completed successful conclusion.
+- Next exact task: inspect CI attempt 2 conclusion and logs. If successful, record Phase 13 completion and hand off to Phase 14. If failed, repair only the concrete reported failure and repeat the gate.
