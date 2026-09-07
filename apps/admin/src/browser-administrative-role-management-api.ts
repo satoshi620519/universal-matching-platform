@@ -11,7 +11,8 @@ export type AdministrativeRoleManagementApi = Readonly<{
 export function createBrowserAdministrativeRoleManagementApi(
   fetchImpl: typeof fetch = fetch,
 ): AdministrativeRoleManagementApi {
-  const baseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '');
+  const configuredBaseUrl = import.meta.env.VITE_API_URL as string | undefined;
+  const baseUrl = configuredBaseUrl ? configuredBaseUrl.replace(/\/$/, '') : '';
   const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
   const headers = { 'content-type': 'application/json', ...(authorization ? { authorization } : {}) };
 
