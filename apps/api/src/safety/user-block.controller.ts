@@ -1,4 +1,4 @@
-import { Controller, Delete, Headers, HttpStatus, NotFoundException, Param, Post } from '@nestjs/common';
+import { BadRequestException, Controller, Delete, Headers, HttpStatus, NotFoundException, Param, Post } from '@nestjs/common';
 import { RequestPrincipalResolver } from '../auth/request-principal-resolver.js';
 import { UserBlockRepository } from './user-block.repository.js';
 
@@ -20,6 +20,8 @@ export class UserBlockController {
       requestId: requestId ?? 'user-block-create',
     });
     const blockedAccountId = accountId.trim();
+    if (!blockedAccountId) throw new BadRequestException('accountId is required');
+    if (blockedAccountId === principal.accountId) throw new BadRequestException('an account cannot block itself');
     const block = await this.blocks.create(principal.accountId, blockedAccountId);
     return { block };
   }
