@@ -153,7 +153,7 @@ import { PrismaProfileRepository } from './profiles/prisma-profile.repository.js
 import { PrismaDiscoveryProfileRepository } from './profiles/prisma-discovery-profile.repository.js';
 import { ProfileService } from './profiles/profile.service.js';
 import { DiscoveryService } from './profiles/discovery.service.js';
-import { AllowAllDiscoveryExclusionPolicy, DiscoveryExclusionPolicy } from './profiles/discovery-exclusion.policy.js';
+import { DiscoveryExclusionPolicy } from './profiles/discovery-exclusion.policy.js';
 import { CategoryService } from './profiles/category.service.js';
 import { PrismaCategoryRepository } from './profiles/prisma-category.repository.js';
 import { PrismaMatchTransitionRepository } from './matching/prisma-match-transition.repository.js';
