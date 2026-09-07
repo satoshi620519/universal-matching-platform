@@ -3,9 +3,8 @@ export type AnalyticsApi = Readonly<{ business(period: ReportingPeriod): Promise
 export function createBrowserAnalyticsApi(fetchImpl: typeof fetch = fetch): AnalyticsApi {
   const configured = import.meta.env.VITE_API_URL as string | undefined;
   const baseUrl = configured ? configured.replace(/\/$/, '') : '';
-  const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
   const request = async (path: string) => {
-    const response = await fetchImpl(baseUrl + path, { headers: authorization ? { authorization } : {} });
+    const response = await fetchImpl(baseUrl + path, { credentials: 'include' });
     if (!response.ok) throw new Error((await response.text().catch(() => '')) || `Analytics request failed (${response.status})`);
     return response.json();
   };
