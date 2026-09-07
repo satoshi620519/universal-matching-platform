@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { canTransitionModerationCase, canTransitionReportStatus, restrictionForModerationAction, type ModerationActionType, type ModerationCaseStatus, type ReportStatus, type ReportTargetType } from '@universal/domain';
+import { assertValidSafetyReportInput, canTransitionModerationCase, canTransitionReportStatus, restrictionForModerationAction, type ModerationActionType, type ModerationCaseStatus, type ReportStatus, type ReportTargetType } from '@universal/domain';
 import { AuditRecordService } from '../administration/audit-record.service.js';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 import { SafetyEnforcementRepository } from './safety-enforcement.repository.js';
@@ -9,7 +9,7 @@ import { SafetyReportRepository } from './safety-report.repository.js';
 export class SafetyModerationService {
   constructor(private readonly reports: SafetyReportRepository, private readonly enforcement: SafetyEnforcementRepository, private readonly admin: AdministrativeCapabilityAccessService, private readonly audit: AuditRecordService) {}
   async submitReport(input: { reporterId: string; targetId: string; targetType: ReportTargetType; reason: string }) {
-    if (!input.targetId.trim() || !input.reason.trim()) throw new BadRequestException('targetId and reason are required');
+    try { assertValidSafetyReportInput(input); } catch (error) { throw new BadRequestException(error instanceof Error ? error.message : 'invalid report'); }
     return this.reports.create({ ...input, reason: input.reason.trim() });
   }
   async listMyReports(accountId: string, limit?: number) { return this.reports.listForReporter(accountId, limit); }
@@ -26,6 +26,7 @@ export class SafetyModerationService {
     await this.admin.require(input.actorId, 'manage-moderation');
     const report = await this.reports.findById(input.reportId);
     if (!report) throw new NotFoundException('report not found');
+    if (report.status === 'dismissed' || report.status === 'actioned') throw new BadRequestException('cannot open a case for a terminal report');
     const existing = await this.reports.findCaseByReportId(report.id);
     if (existing) return existing;
     const created = await this.reports.createCase(report.id);
@@ -45,6 +46,7 @@ export class SafetyModerationService {
     await this.admin.require(input.actorId, 'manage-moderation');
     const caseRecord = await this.reports.findCaseById(input.caseId);
     if (!caseRecord) throw new NotFoundException('moderation case not found');
+    if (caseRecord.status !== 'under-review' && caseRecord.status !== 'open') throw new BadRequestException('cannot apply action to a non-active moderation case');
     if (caseRecord.status === 'closed') throw new BadRequestException('cannot apply action to a closed moderation case');
     if (!input.reasonCategory.trim()) throw new BadRequestException('reasonCategory is required');
     const restriction = restrictionForModerationAction(input.action);
