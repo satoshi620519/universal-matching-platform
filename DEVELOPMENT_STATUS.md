@@ -4111,3 +4111,12 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Recorded the distinction between repository-integrated validation evidence and unavailable workflow visibility; Phase 12 implementation is complete at the current repository checkpoint, with external workflow observability still pending.
 - Reconciled Phase 13 checkpoint files before starting new work. Existing Admin Console shell and dashboard read-model boundaries already exist; do not recreate them.
 - Next exact task: inspect existing administration APIs/read models and connect the Phase 13 dashboard boundary to an authenticated server-side administration read API, reusing authorization and repositories.
+
+
+### 2026-09-07 — Phase 13 administrative directory boundary audit
+- Audited Users, Profiles, Moderation, Audit, Matches and Conversations from browser API through Nest controllers and capability-bound services.
+- All six browser APIs use the same authenticated transport pattern: API base URL, optional development authorization header, and credentials include; no browser-to-database path exists.
+- All six server controllers derive account identity from RequestPrincipalResolver and reject unauthenticated access before reads; pagination validation occurs before service access.
+- Service authorization is capability-bound: Moderation requires manage-moderation, while directory read models require view-dashboard. Limits are clamped server-side to 1..100.
+- Found no transport or capability inconsistency requiring implementation changes. Existing controller regression coverage was present for Users, Profiles, Moderation and Audit; added missing focused controller coverage for Matches and Conversations to complete the same boundary matrix.
+- Next exact task: inspect Phase 13 administrative mutation APIs (role management, moderation mutations, failed-email outbox and quick-launch) for capability authority, audit logging and browser/server contract consistency; do not duplicate existing mutation implementations.
