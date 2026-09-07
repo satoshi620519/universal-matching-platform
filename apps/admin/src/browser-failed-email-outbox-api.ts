@@ -13,20 +13,18 @@ export function createBrowserFailedEmailOutboxApi(
 ): FailedEmailOutboxApi {
   const configuredBaseUrl = import.meta.env.VITE_API_URL as string | undefined;
   const baseUrl = configuredBaseUrl ? configuredBaseUrl.replace(/\/$/, '') : '';
-  const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
-  const headers: HeadersInit = authorization ? { authorization } : {};
 
   return {
     async list(limit = 50) {
       if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('limit must be an integer between 1 and 100');
-      const response = await fetchImpl(`${baseUrl}/administration/failed-email-outbox?limit=${limit}`, { headers });
+      const response = await fetchImpl(`${baseUrl}/administration/failed-email-outbox?limit=${limit}`, { credentials: 'include' });
       if (!response.ok) throw new Error((await response.text().catch(() => '')) || `Failed email outbox request failed (${response.status})`);
       const value = await response.json();
       return Array.isArray(value) ? value.filter((item): item is FailedEmailOutboxItem => !!item && typeof item === 'object' && typeof (item as any).id === 'string') : [];
     },
     async requeue(id) {
       if (!id.trim()) throw new Error('id is required');
-      const response = await fetchImpl(`${baseUrl}/administration/failed-email-outbox/${encodeURIComponent(id)}/requeue`, { method: 'POST', headers });
+      const response = await fetchImpl(`${baseUrl}/administration/failed-email-outbox/${encodeURIComponent(id)}/requeue`, { method: 'POST', credentials: 'include' });
       if (!response.ok) throw new Error((await response.text().catch(() => '')) || `Failed email requeue failed (${response.status})`);
       const value = await response.json() as { requeued?: unknown };
       return value.requeued === true;
