@@ -15,4 +15,8 @@ export class AnalyticsEventRecordingService {
   async recordBusinessEvent(name: string, payload: Readonly<Record<string, unknown>> = {}, now = new Date()): Promise<void> {
     await this.record({ name, version: 1, occurredAt: now, dataClassification: 'business', payload });
   }
+
+  async recordOperationalEvent(name: string, payload: Readonly<Record<string, unknown>> = {}, now = new Date()): Promise<void> {
+    await this.record({ name, version: 1, occurredAt: now, dataClassification: 'operational', payload });
+  }
 }
