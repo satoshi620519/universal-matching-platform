@@ -11,7 +11,8 @@ export type FailedEmailOutboxApi = Readonly<{
 export function createBrowserFailedEmailOutboxApi(
   fetchImpl: typeof fetch = fetch,
 ): FailedEmailOutboxApi {
-  const baseUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '');
+  const configuredBaseUrl = import.meta.env.VITE_API_URL as string | undefined;
+  const baseUrl = configuredBaseUrl ? configuredBaseUrl.replace(/\/$/, '') : '';
   const authorization = import.meta.env.VITE_ADMIN_AUTHORIZATION as string | undefined;
   const headers: HeadersInit = authorization ? { authorization } : {};
 
