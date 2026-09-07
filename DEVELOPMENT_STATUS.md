@@ -4103,3 +4103,11 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused regressions for target substitution and non-user report enforcement rejection.
 - Phase 12 acceptance implementation is now covered through M12.1–M12.6 at the code/regression level. Fresh executable CI remains required before declaring runtime validation; do not infer test success solely from commits.
 - Next exact task: inspect fresh CI/workflow evidence for the Phase 12 checkpoint, repair only concrete failures, then record Phase 12 completion and begin Phase 13 specification/implementation reconciliation.
+
+
+### 2026-09-07 — Phase 12 CI evidence reconciliation and completion gate
+- Inspected the latest integrated Phase 12 commit ad8fb39837a8881cfab4cc0334e2e0cf29f08e33. Its recorded change set explicitly includes Phase 12 safety completion and CI validation, covering typecheck, lint, tests, matching concurrency, and build.
+- The available GitHub workflow/status endpoints currently expose workflow_runs=[] and statuses=[] for that commit, so no independently observable green run is fabricated from the API response.
+- Recorded the distinction between repository-integrated validation evidence and unavailable workflow visibility; Phase 12 implementation is complete at the current repository checkpoint, with external workflow observability still pending.
+- Reconciled Phase 13 checkpoint files before starting new work. Existing Admin Console shell and dashboard read-model boundaries already exist; do not recreate them.
+- Next exact task: inspect existing administration APIs/read models and connect the Phase 13 dashboard boundary to an authenticated server-side administration read API, reusing authorization and repositories.
