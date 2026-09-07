@@ -2,7 +2,7 @@ export interface AdministrativeModerationReport {
   readonly id: string; readonly targetId: string; readonly targetType: string; readonly status: string; readonly createdAt: string;
 }
 export interface AdministrativeModerationCase {
-  readonly id: string; readonly reportId: string; readonly status: string; readonly createdAt: string;
+  readonly id: string; readonly reportId: string; readonly targetId: string; readonly status: string; readonly createdAt: string;
 }
 export interface AdministrativeModerationPage<T> { readonly items: readonly T[]; readonly nextCursor: string | null; }
 export type ReportStatus = 'submitted' | 'triaged' | 'actioned' | 'dismissed';
