@@ -19,3 +19,13 @@ describe('MessageRealtimePublicationService', () => {
     expect(publishToAccount).toHaveBeenCalledWith('a2', expect.objectContaining({ eventType:'conversation.typing', resource:{ type:'conversation', id:'c1' }, payload:expect.objectContaining({ isTyping:true }) }));
   });
 });
+
+describe('recipient boundary', () => {
+  it('publishes only to explicit recipients', async () => {
+    const publishToAccount = vi.fn().mockResolvedValue(undefined);
+    const service = new MessageRealtimePublicationService({ publishToAccount } as never);
+    await service.publishRecipients({ messageId: 'm1', conversationId: 'c1', senderAccountId: 'a1', recipientAccountIds: ['a2'] });
+    expect(publishToAccount).toHaveBeenCalledTimes(1);
+    expect(publishToAccount).toHaveBeenCalledWith('a2', expect.objectContaining({ eventType: 'message.created' }));
+  });
+});
