@@ -1,4 +1,5 @@
 import './moderation-console';
+import './administrative-workspace-navigation-ui';
 import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createQuickLaunchWorkflow, quickLaunchSteps, type QuickLaunchDraftInput } from './quick-launch-workflow';
