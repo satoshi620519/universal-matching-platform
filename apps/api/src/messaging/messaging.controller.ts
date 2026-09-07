@@ -33,8 +33,9 @@ export class MessagingController {
     const targetAccountId = body.targetAccountId?.trim() ?? '';
     if (!targetAccountId || !(await this.matches.isMutualMatch(principal.accountId, targetAccountId))) return { statusCode: HttpStatus.NOT_FOUND };
     await this.assertParticipantsNotBlocked(principal.accountId, [targetAccountId]);
-    const conversation = await this.conversations.createOrFindDirect(principal.accountId, targetAccountId);
-    void this.analytics?.recordBusinessEvent('conversation_started');
+    const existing = await this.conversations.findDirect(principal.accountId, targetAccountId);
+    const conversation = existing ?? await this.conversations.createOrFindDirect(principal.accountId, targetAccountId);
+    if (!existing) void this.analytics?.recordBusinessEvent('conversation_started');
     return conversation;
   }
 
