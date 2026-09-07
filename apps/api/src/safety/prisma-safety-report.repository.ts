@@ -32,6 +32,10 @@ export class PrismaSafetyReportRepository extends SafetyReportRepository {
     const record = await this.database.moderationCase.findUnique({ where: { reportId } });
     return record ? this.toCase(record) : null;
   }
+  async findCaseById(id: string): Promise<ModerationCase | null> {
+    const record = await this.database.moderationCase.findUnique({ where: { id } });
+    return record ? this.toCase(record) : null;
+  }
   async transitionCase(id: string, status: ModerationCase['status']): Promise<ModerationCase> {
     const current = await this.database.moderationCase.findUnique({ where: { id } });
     if (!current) throw new NotFoundException('moderation case not found');
