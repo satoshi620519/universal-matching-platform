@@ -31,6 +31,11 @@ export class PrismaQuickLaunchConfigurationRepository extends QuickLaunchConfigu
     return row ? this.map(row) : undefined;
   }
 
+  async findVersion(version: number): Promise<QuickLaunchConfigurationRecord | undefined> {
+    const row = await this.database.quickLaunchConfiguration.findUnique({ where: { version } });
+    return row ? this.map(row) : undefined;
+  }
+
   async findPublished(): Promise<QuickLaunchConfigurationRecord | undefined> {
     const row = await this.database.quickLaunchConfiguration.findFirst({ where: { status: 'published' }, orderBy: { version: 'desc' } });
     return row ? this.map(row) : undefined;
