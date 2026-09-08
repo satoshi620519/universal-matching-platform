@@ -1,3 +1,11 @@
+## Current checkpoint — Version 1.0 RC1 selected
+
+- CI #4040 and #4041 completed successfully.
+- Selected Version 1.0 RC1 as immutable commit 6122475dba34a44ac03b67b9a6a528d46fc0f532, representing the complete repository-side Phase 27/28 release-preparation state before this selection record update.
+- CI #4042 for the immediately preceding status checkpoint was still in progress at inspection time; RC1 promotion remains conditional on exact-candidate CI evidence and all manual/owner gates.
+- Bound remaining evidence to one candidate: clean install, docs walkthrough, Buyer Quick Launch, advanced customization, clean archive/checksum, and verified visuals/demo.
+- Next exact task: verify the exact candidate CI state, then prepare executable evidence capture templates without inventing evidence or changing product functionality.
+
 ## Current checkpoint — CI convergence before release-candidate selection
 
 - Recheck confirmed CI #4038 and #4039 completed successfully.
