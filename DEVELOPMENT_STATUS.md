@@ -4496,3 +4496,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Upload/media audit confirmed no authoritative ownership-checked storage/scanning subsystem exists, so arbitrary upload support remains deliberately unavailable rather than creating an unsafe placeholder.
 - Secrets/webhook/privacy audit confirmed environment-isolated provider secrets, exact raw-body HMAC verification, timing-safe signature comparison, and signed-context projection; added length-mismatch regression coverage.
 - Remaining Phase 19 acceptance work: dependency/release hygiene audit, then fresh CI.
+
+## Phase 19 audit checkpoint — dependency and release hygiene
+- Audited package metadata and existing release documentation; package-manager pinning, runtime/dev dependency separation, immutable migration packaging, and executable CI release gates are present.
+- Added DEPENDENCY_AND_RELEASE_HYGIENE.md to make upgrade, clean-install, credential review, and source-product release responsibilities explicit.
+- Dependency vulnerability scanning is intentionally documented as an optional environment-backed CI enhancement rather than a speculative network-dependent gate.
+- Phase 19 implementation/audit acceptance is complete; next exact task is fresh CI against all hardening changes.
