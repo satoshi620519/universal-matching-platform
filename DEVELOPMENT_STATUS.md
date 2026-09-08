@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.4 profile loading and editing
+- Audited the existing profile controller/service contracts before implementation; GET /profiles/me and PATCH /profiles/me already own profile retrieval, validation, geography, category, and field-schema rules.
+- Added a thin MobileProfileService that delegates to those authoritative endpoints without reproducing profile validation or domain rules on-device.
+- Added a native Profile tab with explicit loading, recoverable error/retry, ready, and saving states plus an accessible biography editing control.
+- This is the first incremental profile editor surface; category-specific dynamic field editing and media upload remain dependent on their existing API/schema boundaries and should be connected incrementally rather than guessed.
+- Next exact task: finish M16.4 by auditing account/settings and category schema contracts, then connect only the missing native account/profile surfaces required before discovery.
+
 ## Current checkpoint — Phase 16 M16.4 authentication and session restoration
 - Audited the authoritative API contracts before connecting mobile authentication: POST /auth/sign-in returns an optional credential and GET /accounts/authenticated is the server-authoritative session/account check.
 - Added MobileAuthService over the existing secure credential and runtime-neutral API boundaries; successful sign-in persists only through SecureStore and then restores account state from the server.
