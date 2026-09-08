@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 14 intended verification mechanism recovered
+- Recovered the repository's actual toolchain configuration after the earlier search surface missed it.
+- Root is a pnpm@10 monorepo with Turbo tasks: build, typecheck, lint, and test.
+- apps/api and packages/domain explicitly use Vitest; API typecheck also requires prisma:generate.
+- Therefore executable verification is not architecturally absent. The evidence gap is that the available GitHub integration cannot execute shell commands and GitHub has no CI runs/statuses for the checkpoint.
+- Do not add a speculative test framework or duplicate CI stack. The intended verification commands are already defined: pnpm typecheck, pnpm lint, pnpm test, and pnpm build (with DATABASE_URL available for tests that require it).
+- Next exact task: use an execution-capable project environment (Codex/GitHub-connected workspace) if available to run the existing commands; meanwhile perform a targeted source-level preflight for likely TypeScript errors introduced by Phase 14 changes.
+
 ## Current checkpoint — Phase 14 verification evidence boundary
 - Completed another focused static audit of the Phase 14 analytics/auth provider graph and contract surfaces; no additional demonstrated defect was found in this pass.
 - Rechecked the latest implementation commit for executable verification evidence: GitHub reports zero workflow runs and zero combined commit statuses.
