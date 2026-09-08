@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 15 network boundary audit
+- Continued the performance audit from the realtime lifecycle checkpoint.
+- Existing discovery pagination already uses cursor-based incremental loading and deduplicates accounts across pages.
+- Found one small avoidable network boundary: the internal paginated discovery path could still be invoked with more=true after the server had exhausted nextCursor.
+- Added an early guard so exhausted pagination performs no request. Added focused regression coverage.
+- No virtualization or new caching layer was introduced because current page size is explicitly bounded at 20 and no verified large-list bottleneck exists.
+- Next exact task: perform final Phase 15 acceptance reconciliation against roadmap requirements and current implementation; fix only any concrete remaining gaps, otherwise mark Phase 15 complete and record the next phase checkpoint.
+
 ## Current checkpoint — Phase 15 realtime effect lifecycle audit
 - Audited existing React effects and accessibility primitives instead of introducing a duplicate state-management or accessibility framework.
 - Verified overlay primitives already provide Escape handling, focus containment, focus restoration, keyboard activation paths, and reduced-motion handling.
