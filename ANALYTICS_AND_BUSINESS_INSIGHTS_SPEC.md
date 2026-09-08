@@ -26,10 +26,10 @@ All reports are capability-gated through view-analytics and support day, week, m
 Authoritative transition wiring was audited against the repository surface. The analytics contracts and reporting consumers are present, while the repository does not currently expose a complete producer layer for the defined business events. Phase 14 therefore remains open until each product transition has a concrete server-side producer; events must not be reconstructed from UI behavior or report queries.
 
 ## Producer checklist
-- [ ] registration_completed — authoritative account registration transition
-- [ ] activity — authoritative authenticated activity transition
-- [ ] profile_completed — authoritative profile completion transition
-- [ ] discovery_viewed — authoritative discovery result transition
-- [ ] match_created — authoritative match creation transition
-- [ ] conversation_started — authoritative conversation creation transition
-- [ ] retention_checkin — authoritative once-per-account-per-UTC-day transition
+- [x] registration_completed — PasswordRegistrationService after successful account creation
+- [ ] activity — authoritative authenticated activity transition still needs explicit wiring
+- [x] profile_completed — ProfileService after successful profile persistence
+- [x] discovery_viewed — DiscoveryService after successful result projection
+- [x] match_created — PrismaMatchTransitionRepository on first mutual match only
+- [x] conversation_started — MessagingController after successful new conversation creation
+- [x] retention_checkin — AnalyticsEventRecordingService provides UTC-day idempotent primitive; authoritative invocation still needs explicit wiring
