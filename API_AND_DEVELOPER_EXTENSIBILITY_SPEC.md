@@ -42,6 +42,6 @@ Delivery implementations must be replaceable, failure-isolated, and idempotency-
 - [x] Existing provider and webhook abstractions inventoried.
 - [x] Compatibility and versioning policy documented.
 - [x] Extension boundary rules documented.
-- [ ] Outbound extension event contract implemented with tests.
-- [ ] Developer documentation indexes supported extension points.
+- [x] Outbound extension event contract implemented with tests.
+- [x] Developer documentation indexes supported extension points.
 - [ ] CI validates Phase 18 additions without reopening passed gates.
