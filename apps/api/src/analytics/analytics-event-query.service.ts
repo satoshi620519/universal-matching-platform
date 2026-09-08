@@ -13,6 +13,7 @@ export class AnalyticsEventQueryService {
   async listRecent(accountId: string, limit = 100, now = new Date()): Promise<readonly AnalyticsEventRecord[]> {
     await this.capabilities.require(accountId, 'view-analytics', now);
     const boundedLimit = Math.min(Math.max(Math.trunc(limit), 1), 100);
-    return this.events.listRecent(boundedLimit);
+    const events = await this.events.listRecent(boundedLimit);
+    return events.map(({ payload: _payload, ...event }) => event);
   }
 }
