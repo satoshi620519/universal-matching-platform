@@ -25,6 +25,9 @@ This repository is the persistent project record and development source of truth
 - SECURITY.md — vulnerability handling and deployment security responsibilities
 - LICENSE_DECISION_REQUIRED.md — commercial license selection blocker before source distribution
 - MOBILE_ACCEPTANCE_CHECKLIST.md — reproducible iOS/Android source-product acceptance flow
+- COMMERCIAL_PACKAGING.md — included capabilities, buyer responsibilities, and external-cost boundaries
+- MARKETPLACE_LISTING.md — reusable marketplace listing draft
+- SUPPORT_SCOPE.md — documented support and buyer-operation boundaries
 
 ## Project records
 - PROJECT_MASTER.md — vision and core concept
