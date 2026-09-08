@@ -31,3 +31,6 @@ describe('mobile profile boundary',()=>{it('uses the authoritative profile endpo
 
 
 describe('mobile profile schema boundary',()=>{it('loads category field schemas from the authoritative API instead of hardcoding fields',()=>{const source=readFileSync(resolve(__dirname,'profile-service.ts'),'utf8');expect(source).toContain("'/profile-categories'");const screen=readFileSync(resolve(__dirname,'../app/profile.tsx'),'utf8');expect(screen).toContain('category?.fieldSchema');});});
+
+
+describe('mobile discovery and matching boundary',()=>{it('uses bounded authoritative discovery and idempotent match decisions',()=>{const source=readFileSync(resolve(__dirname,'discovery-service.ts'),'utf8');expect(source).toContain("limit:'20'");expect(source).toContain("'/matches/decision'");expect(source).toContain('idempotencyKey');});});
