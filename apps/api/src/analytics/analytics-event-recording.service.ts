@@ -16,6 +16,10 @@ export class AnalyticsEventRecordingService {
     await this.record({ name: 'activity', version: 1, occurredAt: now, dataClassification: 'business', payload: { ...payload, accountId } });
   }
 
+  async recordRetentionCheckin(accountId: string, now = new Date()): Promise<void> {
+    await this.record({ name: 'retention_checkin', version: 1, occurredAt: now, dataClassification: 'business', payload: { accountId } });
+  }
+
   async recordBusinessEvent(name: string, payload: Readonly<Record<string, unknown>> = {}, now = new Date()): Promise<void> {
     await this.record({ name, version: 1, occurredAt: now, dataClassification: 'business', payload });
   }
