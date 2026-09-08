@@ -11,6 +11,9 @@ This matrix distinguishes checks already enforced by repository CI from checks t
 - Matching concurrency integration gate
 - Production build
 
+## Mobile CI/manual boundary
+The repository CI explicitly invokes mobile typecheck, test and build and retains diagnostics. A release verifier must still perform the purchaser-facing flow in MOBILE_ACCEPTANCE_CHECKLIST.md against a reachable API.
+
 ## Manual release verification required
 - Fresh machine or disposable environment
 - Docker Compose PostgreSQL and Redis startup
