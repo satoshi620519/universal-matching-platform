@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.6 authenticated lifecycle integration
+- Audited current Phase 10 reconciliation tests and confirmed the durable recovery contracts exposed today are per-conversation message reads and account-scoped notification reads; no authoritative conversation-list endpoint was found and none was fabricated.
+- Extended MobileMessagingService with the durable notification read boundary.
+- Connected MobileRealtimeService lifecycle to authenticated app state only, with cleanup on auth-state transition/unmount; anonymous sessions do not maintain a realtime connection.
+- Reconciliation remains durable-state oriented. The current lifecycle callback refreshes authoritative auth state while feature surfaces use their dedicated HTTP reads; no SSE event is persisted as authoritative client state.
+- Kept Conversations UI minimal because an arbitrary conversation-id input is not a production acceptance surface. Next work should derive entry points from mutual-match/notification payload contracts rather than inventing a list endpoint.
+- Next exact task: audit notification payload shapes and match decision response contracts to connect legitimate conversation entry/navigation, then implement per-conversation message loading/send/read UI with explicit reconciliation.
+
 ## Current checkpoint — Phase 16 M16.6 realtime lifecycle and reconciliation foundation
 - Audited Phase 10 realtime contracts before implementation. SSE events are account-scoped envelopes and are explicitly non-authoritative; durable HTTP reads recover missed messages/notifications after disconnect.
 - Added MobileRealtimeService as a lifecycle boundary with authenticated connection construction, explicit stop cleanup, bounded reconnect delay, and reconciliation before reconnect completion.
