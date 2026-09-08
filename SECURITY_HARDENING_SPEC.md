@@ -38,7 +38,7 @@ Phase 19 performs evidence-based security hardening without duplicating the plat
 - [x] Rate-limit abuse audit completed (contract preserved; invalid zero/negative/non-finite policies now fail closed with regression coverage).
 - [x] Upload/media boundary explicitly verified and safely deferred (no authorized storage/scanning/ownership contract exists; arbitrary uploads remain intentionally unavailable).
 - [x] Secrets/webhook/privacy audit completed (environment-isolated webhook secret, exact raw-body HMAC verification, timing-safe comparison, signed metadata projection, correlation-aware error boundary).
-- [ ] Dependency/release hygiene documented.
+- [x] Dependency/release hygiene documented (lockfile/package-manager discipline, dependency boundaries, clean-environment release checklist, and credential review responsibilities documented).
 - [ ] Fresh CI passes after demonstrated hardening changes.
 
 ## Non-goals
