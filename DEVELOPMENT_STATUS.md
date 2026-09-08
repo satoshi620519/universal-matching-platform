@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 analytics deployment-policy enforcement
+- Audited the collection-policy requirement against the concrete persistence path.
+- Found a concrete gap: AnalyticsDeploymentPolicy existed only as a domain contract and non-essential business events were not gated before persistence.
+- Classified business-classified analytics events as non-essential and wired deployment-policy enforcement into the authoritative repository record boundary.
+- When nonEssentialAnalyticsEnabled is false, business events are deliberately not persisted; operational events remain subject to validation and persistence.
+- Added an explicit repository policy setter as the integration boundary for deployment configuration rather than duplicating a configuration subsystem.
+- Commits: 9cfdb99a6207e0c0768d572ef8f523b31a785de4, 204ccdb5c33dc803b4171c97776ced5255092574.
+- Next exact task: add focused regression coverage for privacy-safe payload rejection, raw-payload query suppression, and disabled non-essential collection; then audit report privacy-control application and close only genuinely satisfied Phase 14 acceptance requirements.
+
 ## Current checkpoint — Phase 14 analytics query exposure hardening
 - Audited the concrete admin query/report path after persistence-boundary hardening.
 - Capability authorization is already enforced server-side by AdministrativeCapabilityAccessService for raw event access and both business/safety reports.
