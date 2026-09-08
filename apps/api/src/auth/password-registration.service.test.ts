@@ -10,11 +10,13 @@ describe('PasswordRegistrationService', () => {
       authenticationIdentity: { id: 'identity-1', accountId: 'account-1', providerType: 'email-password', providerSubject: 'user@example.test', status: 'active', createdAt: new Date(), updatedAt: new Date() },
     });
     const enqueue = vi.fn().mockResolvedValue(undefined);
+    const recordBusinessEvent = vi.fn().mockResolvedValue(undefined);
 
     const service = new PasswordRegistrationService(
       { hash } as any,
       { create } as any,
       { enqueue } as any,
+      { recordBusinessEvent } as any,
     );
 
     await service.register({
@@ -34,6 +36,7 @@ describe('PasswordRegistrationService', () => {
       emailAddress: 'user@example.test',
       kind: 'email-verification',
     });
+    expect(recordBusinessEvent).toHaveBeenCalledWith('registration_completed');
   });
 
   it('does not persist anything when hashing fails', async () => {
