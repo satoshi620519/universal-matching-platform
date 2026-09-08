@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { getAuthenticatedAccount, register, signIn, verifyEmail, createConversation, listMessages, sendMessage, API_BASE_URL, listProfileCategories, createMyProfile, discoverProfiles, decideMatch, createConversationFromMutualMatch, listNotifications, markNotificationRead, getMyProfile, updateMyProfile, type Account, type Message, type RealtimeEvent, type ProfileCategory, type DiscoveryProfile } from './api';
 import './styles.css';
 import { Button, Card, Field, List, ListRow, StatusMessage, TextArea, TextInput } from './components/AccessiblePrimitives';
-import { HeaderNavigation } from './components/NavigationPrimitives';
+import { ResponsiveNavigation } from './components/NavigationPrimitives';
 import { DiscoveryPresentation, type DiscoveryPresentationMode } from './components/DiscoveryPresentation';
 
 type Feature = { icon: string; title: string; text: string };
@@ -51,7 +51,7 @@ function Dashboard({ account, loading, error, onSignOut }: { account: Account | 
  async function openConversation(e:React.FormEvent){e.preventDefault();setMessageStatus('');try{const created=await createConversation([participantId]);setConversationId(created.id);const result=await listMessages(created.id);setMessages(result.messages.slice().reverse());setMessageStatus('Conversation ready.');}catch(err){setMessageStatus(err instanceof Error?err.message:'Unable to create conversation.');}}
  async function submitMessage(e:React.FormEvent){e.preventDefault();if(!conversationId)return;try{const sent=await sendMessage(conversationId,body);setMessages(items=>[...items,sent]);setBody('');}catch(err){setMessageStatus(err instanceof Error?err.message:'Message failed.');}}
  return <main className="dashboard">
- <HeaderNavigation ariaLabel="Dashboard navigation" brand={<div className="brand"><span className="brandMark">C</span>connect</div>} items={[{ href: '#dashboard', label: 'Dashboard', active: true }, { href: '#discovery', label: 'Discover' }, { href: '#notifications', label: 'Activity' }, { href: '#conversations', label: 'Conversations' }]} />
+ <ResponsiveNavigation ariaLabel="Dashboard navigation" brand={<div className="brand"><span className="brandMark">C</span>connect</div>} items={[{ href: '#dashboard', label: 'Dashboard', active: true }, { href: '#discovery', label: 'Discover' }, { href: '#notifications', label: 'Activity' }, { href: '#conversations', label: 'Conversations' }]} />
  <div className="dashboardActions"><Button className="ghost" onClick={onSignOut}>Sign out</Button></div>
  <section id="dashboard" className="dashboardHero" aria-labelledby="dashboard-title"><div><div className="eyebrow">YOUR SPACE</div><h1 id="dashboard-title">Welcome to<br/><em>Connect.</em></h1><p>Your account is securely connected to the platform.</p></div><div className="accountPanel" aria-live="polite">{loading?<><span className="panelLabel">ACCOUNT</span><p>Loading your account…</p></>:error?<><h2>We couldn't load your account.</h2><StatusMessage tone="error">{error}</StatusMessage></>:account?<><span className="panelLabel">ACCOUNT STATUS</span><strong>{account.status}</strong><span className="panelLabel">MEMBER SINCE</span><p>{new Date(account.createdAt).toLocaleDateString()}</p><span className="panelLabel">ACCOUNT ID</span><code>{account.id}</code></>:null}</div></section>
  <div id="notifications"><NotificationInbox /></div>
