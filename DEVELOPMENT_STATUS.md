@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.6 authoritative conversation handoff reconciliation
+- Audited notification publication and messaging contracts again. Realtime notification payloads contain notificationId only; durable notification records must be fetched before interpreting payload. They do not provide a safe fabricated conversation-list substitute.
+- Confirmed the authoritative mutual-match conversation path is POST /conversations/from-mutual-match, which returns an existing or newly created direct conversation only after server-side mutual-match, safety and block checks.
+- Updated mobile contract types to preserve an optional server-provided conversationId on matching results without inventing one client-side.
+- Reworked the Conversations route to accept an explicit routed conversationId parameter and use the existing per-conversation durable read/send/read-ack flow. The manual ID input remains only as a development fallback when no routed parameter is supplied.
+- Next exact task: audit the actual match-decision response shape and discovery navigation integration. If it does not expose a conversationId, add a thin post-mutual-match call to the existing createConversationFromMutualMatch API and route only the returned authoritative id; then close M16.6 acceptance.
+
 ## Current checkpoint — Phase 16 M16.6 durable messaging entry and conversation reconciliation
 - Audited notification and mutual-match contracts. Notifications are durable, account-scoped records with kind/payload and explicit acknowledgement; realtime notification events contain notificationId only and must be reconciled through HTTP.
 - Confirmed no authoritative conversation-list endpoint exists. Mobile therefore does not fabricate a local conversation index or pretend notifications are conversations.
