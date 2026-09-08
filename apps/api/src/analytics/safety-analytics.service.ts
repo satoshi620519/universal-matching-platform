@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { countSafetyReportsByKind, type MetricReport, type ReportingPeriod } from '@universal/domain';
+import { countSafetyReportsByKind, resolveReportPrivacyControl, type MetricReport, type ReportingPeriod } from '@universal/domain';
 import { SafetyReportRepository } from '../safety/safety-report.repository.js';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 
@@ -15,14 +15,13 @@ export class SafetyAnalyticsService {
     const since = this.periodStart(period, now);
     const reports = await this.reports.listRecentForAnalytics(since);
     const counts = countSafetyReportsByKind(reports);
-    return Object.keys(counts).sort().map(targetType => ({
-      metricName: `safety_reports_${targetType}`,
-      metricVersion: 1,
-      period,
-      scope: 'global',
-      availability: 'available' as const,
-      value: counts[targetType],
-    }));
+    return Object.keys(counts).sort().map(targetType => {
+      const value = counts[targetType];
+      const privacy = resolveReportPrivacyControl({ cohortSize: value, minimumCohortSize: 5, containsSensitiveData: false });
+      return privacy === 'visible'
+        ? { metricName: `safety_reports_${targetType}`, metricVersion: 1, period, scope: 'global' as const, availability: 'available' as const, value }
+        : { metricName: `safety_reports_${targetType}`, metricVersion: 1, period, scope: 'global' as const, availability: 'unavailable' as const };
+    });
   }
 
   private periodStart(period: ReportingPeriod, now: Date): Date {
