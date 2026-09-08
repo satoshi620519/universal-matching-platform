@@ -8,6 +8,12 @@ describe('demo reset command boundary', () => {
     ).toThrow('Demo reset is refused');
   });
 
+  it('requires an explicit demo environment and never relies on NODE_ENV alone', () => {
+    expect(() =>
+      assertDemoResetEnvironment({ NODE_ENV: 'demo' }),
+    ).toThrow('Demo reset is refused');
+  });
+
   it('allows the command boundary only for explicitly marked demo environments', () => {
     expect(() =>
       assertDemoResetEnvironment({ NODE_ENV: 'demo', DEMO_MODE: 'true' }),
