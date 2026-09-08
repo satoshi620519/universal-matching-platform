@@ -34,6 +34,7 @@ export function createRequestPrincipalResolver(
         principal,
       );
       void analytics?.recordActivity(principal.accountId, { source: 'authenticated_request' });
+      void analytics?.recordRetentionCheckin(principal.accountId);
     }
   };
 }
