@@ -26,6 +26,18 @@ describe('DiscoveryService', () => {
     expect(result.nextCursor).toBe('next');
   });
 
+  it('records discovery activity after authoritative discovery processing', async () => {
+    const recordBusinessEvent = vi.fn().mockResolvedValue(undefined);
+    const service = new DiscoveryService(
+      { discover: vi.fn().mockResolvedValue({ items: [] }) },
+      { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } },
+      undefined,
+      { recordBusinessEvent } as any,
+    );
+    await service.discover({ subjectAccountId: 'a1', categoryId: 'dating', geographicScope: scope, limit: 10, projectionPolicy: policy });
+    expect(recordBusinessEvent).toHaveBeenCalledWith('discovery_viewed');
+  });
+
   it('passes a validated query to the repository', async () => {
     const discover = vi.fn().mockResolvedValue({ items: [] });
     const service = new DiscoveryService({ discover }, { block: { excludes: vi.fn().mockResolvedValue(false) }, safety: { excludes: vi.fn().mockResolvedValue(false) } });
