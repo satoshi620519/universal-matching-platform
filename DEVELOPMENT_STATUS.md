@@ -1,3 +1,11 @@
+## Current checkpoint — Release evidence capture templates prepared
+
+- Latest inspection found CI #4042, #4043 and #4044 still in progress; exact-candidate promotion remains pending CI completion.
+- Added RELEASE_EVIDENCE_CAPTURE_TEMPLATES.md with blank, non-fabricated records for clean install, documentation walkthrough, Buyer Quick Launch, advanced customization, archive/checksum and visual/demo evidence.
+- Templates intentionally separate preparation from execution so no release evidence can be accidentally claimed before it exists.
+- No product functionality was changed and no duplicate tests were added.
+- Next exact task: recheck CI #4042/#4043/#4044. If the selected immutable candidate's exact SHA is confirmed by successful CI, begin real execution evidence collection; otherwise resolve any CI failure before promotion.
+
 ## Current checkpoint — Version 1.0 RC1 selected
 
 - CI #4040 and #4041 completed successfully.
