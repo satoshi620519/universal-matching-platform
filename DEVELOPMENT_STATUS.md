@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.5 discovery continuation and configuration
+- Reconciled the current mobile discovery implementation against existing authoritative contracts instead of restarting M16.5.
+- Removed the hardcoded 'default' category from the native flow; categories are now loaded through the existing profile-category transport and the selected server-issued category id is passed to discovery.
+- Added server-driven cursor continuation. The client stores only the opaque nextCursor returned by the API and requests the next bounded page only when the current page is consumed.
+- No client-generated pagination cursor, compatibility ranking, duplicate filtering engine, or category taxonomy was introduced.
+- Added focused source-contract regression coverage for configured categories and opaque cursor continuation.
+- Next exact task: perform focused M16.5 acceptance against discovery/match failure and exhaustion behavior; fix only concrete gaps, then begin M16.6 messaging by reconciling the already completed Phase 10 authoritative conversation/realtime contracts.
+
 ## Current checkpoint — Phase 16 M16.5 discovery and matching foundation
 - Closed the M16.4 audit boundary: authentication/session restoration and schema-driven profile loading/editing now consume authoritative server contracts; settings remains correctly deferred to its dedicated roadmap surface.
 - Audited the discovery controller before implementation. Existing GET /discovery owns authenticated subject identity, projection, geography, matching rules, search/sort and bounded cursor behavior; POST /matches/decision owns reciprocal/idempotent match transitions.
