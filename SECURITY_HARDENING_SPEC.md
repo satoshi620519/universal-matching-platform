@@ -32,8 +32,8 @@ Phase 19 performs evidence-based security hardening without duplicating the plat
 
 ## Phase 19 acceptance
 - [x] Existing security architecture and policy boundaries inventoried.
-- [ ] Authentication/session abuse audit completed.
-- [ ] Authorization/resource ownership audit completed.
+- [x] Authentication/session abuse audit completed (opaque 256-bit credentials, hash-only persistence, expiry/revocation enforcement, malformed credential rejection covered by tests).
+- [x] Authorization/resource ownership audit completed (server-side guard boundary, authenticated principal validation, capability deny path and fail-closed architecture preserved; no demonstrated bypass found).
 - [ ] Validation/error disclosure audit completed.
 - [ ] Rate-limit abuse audit completed.
 - [ ] Upload/media boundary explicitly verified or safely deferred.
