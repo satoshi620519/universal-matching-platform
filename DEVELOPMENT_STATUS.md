@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.7 purchaser packaging/documentation audit
+- Audited existing buyer documentation instead of creating parallel mobile guides. Installation, Quick Start, Release Checklist, Release Verification Matrix and README existed and were reused.
+- Added only missing cross-links and explicit mobile verification gates: dedicated mobile typecheck/test/build commands, EXPO_PUBLIC_API_BASE_URL responsibility, the authoritative MOBILE_ACCEPTANCE_CHECKLIST flow, and purchaser ownership of iOS/Android signing/store submission.
+- No app-store credentials, build artifacts, or fake device evidence were added to source control.
+- CI execution evidence remains explicitly pending observability; documentation now accurately distinguishes CI/static checks from purchaser-facing reachable-API acceptance.
+- Next exact task: inspect package/repository release hygiene for mobile-specific secrets, generated artifacts, environment templates and ignore rules. Fix only concrete packaging leaks or missing exclusions, then record M16.7 packaging acceptance.
+
 ## Current checkpoint — Phase 16 M16.7 CI execution evidence pending
 - Queried GitHub Actions workflow-run associations for commit a274cd03e6d0d812b5508dedf93ad2decaf48ba2 after wiring explicit mobile acceptance commands.
 - Repository connector returned no associated observable workflow runs through its available commit-run endpoint (which is PR-run scoped). This is an observability limitation, not evidence of CI success or failure.
