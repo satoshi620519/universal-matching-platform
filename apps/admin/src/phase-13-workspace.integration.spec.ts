@@ -10,6 +10,7 @@ describe('admin Phase 13 workspace integration', () => {
     expect(source).toContain("import './moderation-console';");
     expect(source).toContain("import './failed-email-outbox-console';");
     expect(source).toContain("import './administrative-roles-console';");
+    expect(source).toContain("import './analytics-console';");
   });
 
   it('keeps workspace capabilities centralized in the navigation model', () => {
@@ -19,5 +20,6 @@ describe('admin Phase 13 workspace integration', () => {
     expect(source).toContain("'manage-moderation'");
     expect(source).toContain("'manage-administrative-roles'");
     expect(source).toContain("'review-failed-email-outbox'");
+    expect(source).toContain("'view-analytics'");
   });
 });
