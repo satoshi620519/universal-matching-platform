@@ -4,6 +4,8 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
 import { requireDemoEnvironment } from './demo-environment-guard.js';
+import { DemoDatabaseResetService } from './demo-database-reset.service.js';
+import { DemoSeedService } from './demo-seed.service.js';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module.js';
 
