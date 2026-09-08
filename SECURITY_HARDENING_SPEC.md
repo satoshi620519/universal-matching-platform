@@ -34,10 +34,10 @@ Phase 19 performs evidence-based security hardening without duplicating the plat
 - [x] Existing security architecture and policy boundaries inventoried.
 - [x] Authentication/session abuse audit completed (opaque 256-bit credentials, hash-only persistence, expiry/revocation enforcement, malformed credential rejection covered by tests).
 - [x] Authorization/resource ownership audit completed (server-side guard boundary, authenticated principal validation, capability deny path and fail-closed architecture preserved; no demonstrated bypass found).
-- [ ] Validation/error disclosure audit completed.
-- [ ] Rate-limit abuse audit completed.
-- [ ] Upload/media boundary explicitly verified or safely deferred.
-- [ ] Secrets/webhook/privacy audit completed.
+- [x] Validation/error disclosure audit completed (centralized production-safe unexpected-error response, correlation ID returned, HTTP boundary preserved; no raw internal stack exposure found).
+- [x] Rate-limit abuse audit completed (contract preserved; invalid zero/negative/non-finite policies now fail closed with regression coverage).
+- [x] Upload/media boundary explicitly verified and safely deferred (no authorized storage/scanning/ownership contract exists; arbitrary uploads remain intentionally unavailable).
+- [x] Secrets/webhook/privacy audit completed (environment-isolated webhook secret, exact raw-body HMAC verification, timing-safe comparison, signed metadata projection, correlation-aware error boundary).
 - [ ] Dependency/release hygiene documented.
 - [ ] Fresh CI passes after demonstrated hardening changes.
 
