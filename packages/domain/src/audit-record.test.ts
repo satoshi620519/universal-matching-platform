@@ -8,10 +8,15 @@ describe('audit record', () => {
     area: 'moderation' as const,
     action: 'suspend-user',
     targetId: 'user-1',
+    correlationId: 'request-1',
     occurredAt: '2026-08-31T00:00:00.000Z',
   };
 
   it('accepts a complete sensitive action record', () => {
+    expect(isSensitiveActionAuditable(validRecord)).toBe(true);
+  });
+
+  it('allows correlation identifiers to travel with valid audit records', () => {
     expect(isSensitiveActionAuditable(validRecord)).toBe(true);
   });
 
