@@ -4471,3 +4471,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added DEVELOPER_EXTENSIBILITY.md documenting provider adapters, domain strategies, outbound event safety, configuration boundaries, API compatibility, and unsupported customization patterns.
 - Indexed the developer contract from README and reconciled the Phase 18 acceptance checklist without reopening existing payment webhook ingestion.
 - Remaining Phase 18 gate: run fresh repository CI against the latest extension/documentation commits and fix only demonstrated failures.
+
+## Current checkpoint — Phase 18 complete
+- CI #3951 completed SUCCESS after the Phase 18 implementation/documentation work and the migration-test isolation fixes.
+- All baseline gates passed: packaged migrations, PostgreSQL integration, typecheck, lint, tests, matching concurrency, mobile acceptance, and build.
+- Phase 18 acceptance contract is complete; do not reopen this phase unless a regression is demonstrated.
+- Next exact task: reconcile the roadmap and select the next incomplete phase after Phase 18, starting with repository evidence rather than speculative implementation.
