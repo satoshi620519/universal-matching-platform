@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.6 mutual-match to conversation handoff closed
+- Audited the actual match-decision implementation and tests. POST /matches/decision returns transition state including mutual/replayed semantics; it does not return a conversationId.
+- Corrected the mobile contract accordingly instead of preserving a speculative conversationId field.
+- Discovery now calls POST /conversations/from-mutual-match only after the authoritative match transition reports mutual=true. The server rechecks mutual status, communication restrictions, blocks, and returns an existing-or-created direct conversation.
+- Navigation uses only the conversation.id returned by that server endpoint. No client-generated conversation identifier or inferred notification payload is used.
+- This closes the intended M16.6 entry handoff boundary. Next exact task: focused M16.6 acceptance across reconnect, notification recovery, mutual-match handoff, message load/send/read/delete, and auth cleanup; fix only demonstrated gaps, then advance to M16.7.
+
 ## Current checkpoint — Phase 16 M16.6 authoritative conversation handoff reconciliation
 - Audited notification publication and messaging contracts again. Realtime notification payloads contain notificationId only; durable notification records must be fetched before interpreting payload. They do not provide a safe fabricated conversation-list substitute.
 - Confirmed the authoritative mutual-match conversation path is POST /conversations/from-mutual-match, which returns an existing or newly created direct conversation only after server-side mutual-match, safety and block checks.
