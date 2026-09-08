@@ -7,7 +7,7 @@ import { isAuthenticatedPrincipal, type RequestPrincipal } from './request-princ
 export class RequestPrincipalResolver {
   constructor(
     private readonly authentication: RequestAuthenticationAdapter,
-    private readonly analytics: AnalyticsEventRecordingService,
+    private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
 
   async requireAuthenticated(input: {
@@ -20,7 +20,7 @@ export class RequestPrincipalResolver {
       throw new UnauthorizedException('authentication is required');
     }
 
-    await this.analytics.recordAuthenticatedLifecycle(principal.accountId);
+    await this.analytics?.recordAuthenticatedLifecycle(principal.accountId);
     return principal;
   }
 }
