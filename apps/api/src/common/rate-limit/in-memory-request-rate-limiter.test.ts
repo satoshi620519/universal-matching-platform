@@ -29,6 +29,12 @@ describe('InMemoryRequestRateLimiter', () => {
     vi.useRealTimers();
   });
 
+  it('does not allow a zero or negative limit to create an invalid allowance', () => {
+    const limiter = new InMemoryRequestRateLimiter();
+    expect(limiter.consume('zero', { limit: 0, windowMs: 60_000 })).toMatchObject({ allowed: false, remaining: 0 });
+    expect(limiter.consume('negative', { limit: -1, windowMs: 60_000 })).toMatchObject({ allowed: false, remaining: 0 });
+  });
+
   it('keeps independent keys isolated', () => {
     const limiter = new InMemoryRequestRateLimiter();
     const policy = { limit: 1, windowMs: 60_000 };
