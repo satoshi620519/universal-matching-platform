@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 import { EmailOutboxRepository } from './email-outbox.repository.js';
 import { PasswordHasher } from './password-hasher.js';
@@ -18,6 +19,7 @@ export class PasswordRegistrationService {
     private readonly passwordHasher: PasswordHasher,
     private readonly registrations: PasswordRegistrationRepository,
     private readonly outbox: EmailOutboxRepository,
+    private readonly analytics: AnalyticsEventRecordingService,
   ) {}
 
   async register(
@@ -37,6 +39,8 @@ export class PasswordRegistrationService {
       emailAddress: input.providerSubject,
       kind: 'email-verification',
     });
+
+    await this.analytics.recordBusinessEvent('registration_completed');
 
     return registration;
   }
