@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 14 authoritative producer audit
+- Audited the explicit acceptance requirement for business-event producers after completing privacy, persistence, query, deployment-policy, and report controls.
+- Repository-level inspection did not find concrete server-side producers for registration_completed, activity, profile_completed, discovery_viewed, match_created, conversation_started, or retention_checkin.
+- Do not fabricate UI-derived analytics or mark Phase 14 complete: the missing producer layer is now recorded explicitly as the remaining acceptance blocker.
+- Added an authoritative-transition producer checklist to ANALYTICS_AND_BUSINESS_INSIGHTS_SPEC.md (commit 46f0f08d43892d05bbf1617f542e31f64785f713).
+- Next exact task: map the actual authoritative account/profile/discovery/matching/conversation transition files in the repository, then wire producers only at those transitions with focused tests. If a transition module itself is absent, record that dependency rather than inventing a parallel implementation.
+
 ## Current checkpoint — Phase 14 report privacy-control enforcement
 - Audited ReportPrivacyControl usage and found the domain privacy contract was defined but not applied by either concrete business or safety reporting service.
 - Wired small-cohort suppression into BusinessAnalyticsService and SafetyAnalyticsService with a minimum cohort size of 5.
