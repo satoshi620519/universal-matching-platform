@@ -9,6 +9,11 @@ describe('web baseline', () => {
     expect(source).toContain('property="og:title"');
     expect(source).toContain('name="robots"');
   });
+  it('captures the active conversation id for realtime effect cleanup boundaries', () => {
+    const source = readFileSync(resolve(__dirname, 'main.tsx'), 'utf8');
+    expect(source).toContain('const activeConversationId=conversationId');
+    expect(source).toContain("controller.abort()");
+  });
   it('keeps a mobile navigation path available when the header navigation collapses', () => {
     const source = readFileSync(resolve(__dirname, 'components/NavigationPrimitives.tsx'), 'utf8');
     expect(source).toContain('ResponsiveNavigation');
