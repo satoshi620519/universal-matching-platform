@@ -8,3 +8,14 @@ coverage
 .env
 .env.*
 !.env.example
+# Mobile / Expo generated and signing artifacts
+apps/mobile/.expo
+apps/mobile/dist
+apps/mobile/web-build
+apps/mobile/android
+apps/mobile/ios
+*.keystore
+*.jks
+*.p8
+*.mobileprovision
+*.pem
