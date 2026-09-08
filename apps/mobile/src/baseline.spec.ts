@@ -61,3 +61,6 @@ describe('M16.6 acceptance boundary',()=>{it('covers routed auto-load, durable s
 
 
 describe('M16.7 mobile acceptance inventory',()=>{it('keeps all primary routes registered and purchaser verification scripts available',()=>{const layout=readFileSync(resolve(__dirname,'../app/_layout.tsx'),'utf8');for(const route of['index','discover','conversations','activity','profile','sign-in'])expect(layout).toContain('name="'+route+'"');const pkg=readFileSync(resolve(__dirname,'../package.json'),'utf8');for(const script of['"typecheck"','"test"','"build"'])expect(pkg).toContain(script);});});
+
+
+describe('M16.7 executable CI evidence',()=>{it('requires dedicated mobile acceptance commands in the baseline workflow',()=>{const ci=readFileSync(resolve(__dirname,'../../../.github/workflows/ci.yml'),'utf8');for(const command of['pnpm --filter @universal/mobile typecheck','pnpm --filter @universal/mobile test','pnpm --filter @universal/mobile build'])expect(ci).toContain(command);expect(ci).toContain('mobile-acceptance-diagnostics');});});
