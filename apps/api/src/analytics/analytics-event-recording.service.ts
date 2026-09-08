@@ -12,7 +12,7 @@ export const ANALYTICS_DEPLOYMENT_POLICY = Symbol('ANALYTICS_DEPLOYMENT_POLICY')
 
 @Injectable()
 export class AnalyticsEventRecordingService {
-  constructor(private readonly repository: AnalyticsEventRepository, @Inject(ANALYTICS_DEPLOYMENT_POLICY) private readonly policy: AnalyticsDeploymentPolicy) {}
+  constructor(@Inject(AnalyticsEventRepository) private readonly repository: AnalyticsEventRepository, @Inject(ANALYTICS_DEPLOYMENT_POLICY) private readonly policy: AnalyticsDeploymentPolicy) {}
 
   async record(event: AnalyticsEventRecord): Promise<void> {
     if (!isValidAnalyticsEventRecord(event)) throw new BadRequestException('Invalid analytics event');
