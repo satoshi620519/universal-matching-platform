@@ -63,6 +63,18 @@ Keep the first evaluation intentionally simple:
 - Leave terminology at defaults unless adapting the product to a different matching market
 - Configure real legal/support destinations before public use
 
+## Mobile verification
+
+Configure `EXPO_PUBLIC_API_BASE_URL` for the API being evaluated, then:
+
+```bash
+pnpm --filter @universal/mobile typecheck
+pnpm --filter @universal/mobile test
+pnpm --filter @universal/mobile build
+```
+
+Use `MOBILE_ACCEPTANCE_CHECKLIST.md` for authentication, discovery, matching, messaging, reconnect, and sign-out acceptance.
+
 ## Verify before handoff
 
 ```bash
