@@ -12,6 +12,11 @@ export class AnalyticsEventRecordingService {
     await this.repository.record(event);
   }
 
+  async recordAuthenticatedLifecycle(accountId: string, now = new Date()): Promise<void> {
+    await this.recordActivity(accountId, {}, now);
+    await this.recordRetentionCheckin(accountId, now);
+  }
+
   async recordActivity(accountId: string, payload: Readonly<Record<string, unknown>> = {}, now = new Date()): Promise<void> {
     await this.record({ name: 'activity', version: 1, occurredAt: now, dataClassification: 'business', payload: { ...payload, accountId } });
   }
