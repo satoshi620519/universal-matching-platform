@@ -29,12 +29,12 @@ Critical journeys:
 
 ## Phase 20 acceptance
 - [x] Existing critical-journey performance contract inventoried.
-- [ ] Baseline latency targets documented for every critical journey.
-- [ ] Database/query hot-path audit completed.
-- [ ] API latency and dependency attribution boundary documented.
-- [ ] Concurrent matching/realtime behavior audited against scale assumptions.
-- [ ] Media handling explicitly bounded until a secure storage pipeline exists.
-- [ ] Scaling strategy documented with replaceable infrastructure boundaries.
+- [x] Baseline latency targets documented for every critical journey (PERFORMANCE_BASELINES.md).
+- [x] Database/query hot-path audit completed (cursor pagination, limit+1 retrieval, transactional match serialization; distance filtering explicitly identified as evidence-triggered optimization candidate).
+- [x] API latency and dependency attribution boundary documented (client/API/database/third-party dimensions and p95 baseline interpretation).
+- [x] Concurrent matching/realtime behavior audited against scale assumptions (PostgreSQL advisory-lock correctness gate; process-local SSE explicitly bounded to single-instance semantics).
+- [x] Media handling explicitly bounded until a secure storage pipeline exists (no speculative media pipeline added; see Phase 19 boundary).
+- [x] Scaling strategy documented with replaceable infrastructure boundaries (application contracts retained; distributed fan-out/cache/queue introduced only behind contracts when workload evidence requires).
 - [ ] Fresh CI validates demonstrated performance/scale changes.
 
 ## Non-goals
