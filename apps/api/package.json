@@ -14,7 +14,8 @@
     "administrator:provision": "tsx src/administration/initial-administrator-provisioning.main.ts",
     "dev": "tsx watch src/main.ts",
     "start": "node dist/main.js",
-    "demo:reset": "tsx src/demo/demo-reset.main.ts"
+    "demo:reset": "tsx src/demo/demo-reset.main.ts",
+    "demo:seed": "tsx src/demo/demo-seed.main.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
