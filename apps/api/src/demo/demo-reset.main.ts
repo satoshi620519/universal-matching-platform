@@ -4,7 +4,8 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
 import { requireDemoEnvironment } from './demo-environment-guard.js';
-import { runDemoSeed } from './demo-seed.main.js';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from '../app.module.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -25,16 +26,17 @@ export async function runDemoReset(): Promise<void> {
     throw new Error('Demo reset is refused unless DEMO_DATABASE_RESET_APPROVED=true is explicitly set');
   }
 
-  await execFileAsync(
-    'pnpm',
-    ['--filter', '@universal/database', 'migrate'],
-    {
-      env: process.env,
-      stdio: 'inherit',
-    },
-  );
+  await execFileAsync('pnpm', ['--filter', '@universal/database', 'migrate'], {
+    env: process.env,
+  });
 
-  await runDemoSeed();
+  const app = await NestFactory.createApplicationContext(AppModule);
+  try {
+    await app.get(DemoDatabaseResetService).clear();
+    await app.get(DemoSeedService).seed();
+  } finally {
+    await app.close();
+  }
 }
 
 if (process.env.VITEST !== 'true') {
