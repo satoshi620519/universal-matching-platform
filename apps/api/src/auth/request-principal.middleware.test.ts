@@ -37,6 +37,14 @@ describe('request principal lifecycle', () => {
     });
   });
 
+  it('records authenticated activity centrally without re-authenticating', async () => {
+    const recordActivity = vi.fn().mockResolvedValue(undefined);
+    class Adapter extends RequestAuthenticationAdapter { async authenticate() { return { accountId: 'account-analytics', authenticationMethod: 'test' }; } }
+    const resolve = createRequestPrincipalResolver(new Adapter(), { recordActivity } as any);
+    await resolve({ headers: {} } as never);
+    expect(recordActivity).toHaveBeenCalledWith('account-analytics', { source: 'authenticated_request' });
+  });
+
   it('does not resolve authentication again when guards consume the principal', async () => {
     let calls = 0;
 
