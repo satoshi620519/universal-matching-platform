@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.2 secure session and API boundary
+- Established an OS-backed credential abstraction using expo-secure-store; credentials are no longer designed around browser sessionStorage.
+- Added a small MobileSession boundary and runtime-neutral MobileApiClient with injected base URL and fetch implementation.
+- Authorization headers are derived per request from secure storage; 401/403 responses clear the local credential while preserving server authority.
+- Added focused regression coverage for unauthorized-session invalidation.
+- Did not copy the web API module or force the currently empty shared api-client package into premature abstraction.
+- Next exact task: M16.3 establish native tab/stack navigation shell and accessibility baseline, then connect authentication incrementally through this boundary.
+
 ## Current checkpoint — Phase 16 M16.1 mobile runtime boundary
 - Audited workspace/tooling and API-client compatibility before implementation.
 - Root uses pnpm workspaces; apps/mobile was TypeScript-only and packages/api-client is currently an empty placeholder, so forcing a premature shared API abstraction would add indirection without reuse value.
