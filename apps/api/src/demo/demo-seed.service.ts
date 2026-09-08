@@ -42,9 +42,9 @@ export class DemoSeedService {
   }
 
   private async ensureCategory() {
-    const key = 'demo-general';
+    const key = 'community';
     const existing = (await this.categories.list()).find((category) => category.key === key);
-    return existing ?? this.categories.create({ key, displayName: 'Demo General' });
+    return existing ?? this.categories.create({ key, displayName: 'Demo Community' });
   }
 
   plan() {
