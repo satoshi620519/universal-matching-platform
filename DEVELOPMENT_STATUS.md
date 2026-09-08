@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 authenticated lifecycle producer wiring
+- Located the shared authoritative authenticated boundary: RequestPrincipalResolver.requireAuthenticated.
+- Wired activity emission immediately after successful server-side principal resolution, so analytics is not reconstructed from UI endpoints.
+- Wired retention_checkin through the same lifecycle via a UTC-day-idempotent AnalyticsEventRecordingService method.
+- Centralized the paired lifecycle emission in recordAuthenticatedLifecycle to avoid endpoint-specific duplication.
+- Producer checklist is now fully checked in ANALYTICS_AND_BUSINESS_INSIGHTS_SPEC.md.
+- Commits: cfec883cce1d14c74a04a82fa2822eab39ff006c, da77b69acd09504b5d72317f5a23d2b7a5041979, 888cd0765b463f68c3d88367d1764dc4039e872d.
+- Next exact task: run focused regression/build verification for Phase 14 and resolve only demonstrated failures before formally closing the phase.
+
 ## Current checkpoint — Phase 14 authoritative producer reconciliation
 - Located the actual transition layer through AppModule wiring and direct source inspection; the earlier repository search was incomplete.
 - Verified authoritative producers already exist for registration_completed, profile_completed, discovery_viewed, match_created, and conversation_started.
