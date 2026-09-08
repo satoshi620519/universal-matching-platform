@@ -3,6 +3,10 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 describe('web baseline', () => {
+  it('guards paginated discovery from unnecessary requests without a next cursor', () => {
+    const source = readFileSync(resolve(__dirname, 'main.tsx'), 'utf8');
+    expect(source).toContain('if(more&&!nextCursor)return');
+  });
   it('defines public metadata without coupling authenticated dashboard state to SEO', () => {
     const source = readFileSync(resolve(__dirname, '../index.html'), 'utf8');
     expect(source).toContain('name="description"');
