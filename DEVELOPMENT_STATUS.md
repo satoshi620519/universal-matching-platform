@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.1 mobile runtime boundary
+- Audited workspace/tooling and API-client compatibility before implementation.
+- Root uses pnpm workspaces; apps/mobile was TypeScript-only and packages/api-client is currently an empty placeholder, so forcing a premature shared API abstraction would add indirection without reuse value.
+- Established the missing Expo/React Native runtime boundary with Expo Router, safe-area provider, typed route support, platform identifiers, and executable iOS/Android/Web scripts.
+- Added a minimal route composition and placeholder sign-in route only to prove executable navigation; no web flow or backend logic was duplicated.
+- Existing web API client remains browser-bound because it uses import.meta.env and sessionStorage; mobile will require a runtime-neutral API/credential boundary in the next step rather than copying it.
+- Next exact task: M16.2 establish a secure credential/session adapter and runtime-neutral API request boundary, then connect authentication incrementally.
+
 ## Current checkpoint — Phase 16 iOS strategy reconciliation
 - Reconciled Phase 16 against current HEAD before implementation.
 - No existing iOS/Swift/Xcode or React Native/Expo application implementation exists; apps/mobile is only a TypeScript foundation.
