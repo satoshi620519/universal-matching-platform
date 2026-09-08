@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.5 acceptance closed / M16.6 messaging boundary started
+- Focused M16.5 acceptance found no additional concrete discovery or matching gap after configured category and opaque cursor continuation; no duplicate client ranking/filtering logic was added.
+- Reconciled Phase 10 messaging against current HEAD before adding mobile work. Existing authoritative API owns conversation authorization, mutual-match entry, block/safety enforcement, durable messages, read state, soft deletion, notifications and SSE event delivery.
+- Started M16.6 with a thin MobileMessagingService over those REST contracts only; no mobile-local conversation state machine or authorization rules were introduced.
+- Kept the existing Conversations screen intentionally minimal until the authoritative conversation-list/reconciliation contract is identified; do not fabricate an endpoint or fake local list.
+- Next exact task: audit Phase 10 reconnect/reconciliation and realtime event contracts, then connect mobile SSE through a lifecycle-safe adapter and add only supported conversation/message loading surfaces.
+
 ## Current checkpoint — Phase 16 M16.5 discovery continuation and configuration
 - Reconciled the current mobile discovery implementation against existing authoritative contracts instead of restarting M16.5.
 - Removed the hardcoded 'default' category from the native flow; categories are now loaded through the existing profile-category transport and the selected server-issued category id is passed to discovery.
