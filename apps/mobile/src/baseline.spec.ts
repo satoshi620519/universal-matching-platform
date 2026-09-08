@@ -28,3 +28,6 @@ describe('mobile authentication service',()=>{it('restores an authenticated acco
 
 
 describe('mobile profile boundary',()=>{it('uses the authoritative profile endpoints without duplicating profile rules',()=>{const source=readFileSync(resolve(__dirname,'profile-service.ts'),'utf8');expect(source).toContain("'/profiles/me'");expect(source).toContain("method:'PATCH'");});});
+
+
+describe('mobile profile schema boundary',()=>{it('loads category field schemas from the authoritative API instead of hardcoding fields',()=>{const source=readFileSync(resolve(__dirname,'profile-service.ts'),'utf8');expect(source).toContain("'/profile-categories'");const screen=readFileSync(resolve(__dirname,'../app/profile.tsx'),'utf8');expect(screen).toContain('category?.fieldSchema');});});
