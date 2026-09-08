@@ -78,6 +78,22 @@ jobs:
           name: test-diagnostics
           path: test.log
           if-no-files-found: warn
+      - name: Mobile acceptance commands
+        run: |
+          set -o pipefail
+          pnpm --filter @universal/mobile typecheck 2>&1 | tee mobile-typecheck.log
+          pnpm --filter @universal/mobile test 2>&1 | tee mobile-test.log
+          pnpm --filter @universal/mobile build 2>&1 | tee mobile-build.log
+      - name: Upload mobile acceptance diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-acceptance-diagnostics
+          path: |
+            mobile-typecheck.log
+            mobile-test.log
+            mobile-build.log
+          if-no-files-found: warn
       - name: Build
         run: set -o pipefail; pnpm build 2>&1 | tee build.log
       - name: Upload build diagnostics
