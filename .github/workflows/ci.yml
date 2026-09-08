@@ -44,8 +44,19 @@ jobs:
         run: pnpm --filter @universal/database verify:migrations-build
       - name: Verify CI infrastructure parity
         run: |
-          pg_isready -h localhost -U postgres -d universal_matching
-          redis-cli -h localhost ping
+          node - <<'NODE'
+          const net = require('node:net');
+          const check = (port) => new Promise((resolve, reject) => {
+            const socket = net.connect({ host: '127.0.0.1', port });
+            socket.setTimeout(5000);
+            socket.once('connect', () => { socket.end(); resolve(); });
+            socket.once('timeout', () => reject(new Error('timeout on port ' + port)));
+            socket.once('error', reject);
+          });
+          Promise.all([check(5432), check(6379)])
+            .then(() => console.log('PostgreSQL and Redis TCP endpoints reachable'))
+            .catch((error) => { console.error(error); process.exit(1); });
+          NODE
       - name: PostgreSQL migration command integration
         run: DATABASE_URL="$DATABASE_URL" pnpm --filter @universal/database migrate
       - name: Typecheck
