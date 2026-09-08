@@ -36,6 +36,11 @@ describe('StripePaymentWebhookTransport', () => {
     await expect(transport.verifyAndParse({ signature, payload })).rejects.toThrow('missing raw Stripe webhook body');
   });
 
+  it('rejects timing-unsafe signature length mismatches', async () => {
+    const transport = new StripePaymentWebhookTransport({ getSecret: () => secret });
+    await expect(transport.verifyAndParse({ signature: 'v1=abc', rawBody, payload })).rejects.toThrow('invalid Stripe webhook signature');
+  });
+
   it('rejects events without signed account context metadata', async () => {
     const missingMetadata = { ...payload, data: { object: { ...payload.data.object, metadata: {} } } };
     const missingRawBody = JSON.stringify(missingMetadata);
