@@ -9,6 +9,7 @@ const capabilities: readonly AdministrativeCapability[] = [
   'review-failed-email-outbox',
   'manage-moderation',
   'manage-quick-launch',
+  'view-analytics',
 ];
 
 @Controller('administration/me')
