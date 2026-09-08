@@ -1,9 +1,11 @@
 export type AdministrativeRoleKey =
+  | 'support'
   | 'moderator'
   | 'administrator'
   | 'auditor';
 
 const administrativeRoleKeys: readonly AdministrativeRoleKey[] = [
+  'support',
   'moderator',
   'administrator',
   'auditor',
