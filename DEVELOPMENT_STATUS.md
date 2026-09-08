@@ -1,3 +1,11 @@
+## Current checkpoint — Repository-side preparation frozen pending real RC execution
+
+- CI recheck confirmed #4044 and #4046 completed successfully; #4045 and newer #4047 were still in progress at inspection.
+- Repository-side release preparation has reached a deliberate freeze: no more speculative docs, features, tests, or workflows should be added merely to create activity.
+- Remaining work is evidence execution against the immutable RC1 SHA and owner/external decisions.
+- Exact execution queue remains: exact-candidate CI confirmation → clean installation → documentation walkthrough → Buyer Quick Launch → advanced customization → archive/secret scan/checksum → verified visual/demo capture → commercial LICENSE → marketplace publication checks.
+- Next exact task: recheck in-flight CI. Once the exact candidate evidence baseline is confirmed, move to actual environment execution; do not simulate PASS results in the repository.
+
 ## Current checkpoint — RC evidence preparation CI recheck
 
 - Rechecked CI after evidence-template commits: #4043 completed successfully.
