@@ -13,6 +13,7 @@ This repository is the persistent project record and development source of truth
 - CHANGELOG.md — buyer-facing release history and versioning policy
 - SECURITY.md — vulnerability handling and deployment security responsibilities
 - LICENSE_DECISION_REQUIRED.md — commercial license selection blocker before source distribution
+- MOBILE_ACCEPTANCE_CHECKLIST.md — reproducible iOS/Android source-product acceptance flow
 
 ## Project records
 - PROJECT_MASTER.md — vision and core concept
