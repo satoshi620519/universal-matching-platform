@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.7 mobile acceptance inventory and reproducibility
+- Audited the mobile project surface rather than adding new feature scope: Expo Router entry, typed routes, iOS/Android identifiers, secure-store dependency, and explicit start/ios/android/web/typecheck/lint/test/build scripts are present.
+- Audited route inventory: Home/auth gate, Sign in, Profile, Discover, Conversations, and Activity are registered under the authenticated provider shell; sign-in remains outside primary tab navigation.
+- Added MOBILE_ACCEPTANCE_CHECKLIST.md as a purchaser-reproducible verification sequence covering auth, profile schema, discovery cursoring, matching, mutual-match conversation handoff, durable messaging, reconnect reconciliation, and auth cleanup.
+- Added regression coverage for primary route registration and verification script inventory.
+- M16.7 acceptance evidence is now structurally documented. Actual device/build execution evidence must be produced in CI or a purchaser environment; it is not fabricated from source inspection.
+- Next exact task: inspect repository CI workflows for whether apps/mobile typecheck/test/build are currently executed. If absent, add the smallest authoritative CI coverage for those scripts and fix only resulting concrete failures; then close M16.7 with executable evidence.
+
 ## Current checkpoint — Phase 16 M16.6 focused acceptance closed
 - Performed focused acceptance against the implemented mobile boundary rather than restarting Phase 10/11 infrastructure.
 - Routed authoritative conversationId now auto-loads its durable message history; no manual action is required after a mutual-match handoff.
