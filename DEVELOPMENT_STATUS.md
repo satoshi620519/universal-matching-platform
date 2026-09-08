@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 14 report privacy-control enforcement
+- Audited ReportPrivacyControl usage and found the domain privacy contract was defined but not applied by either concrete business or safety reporting service.
+- Wired small-cohort suppression into BusinessAnalyticsService and SafetyAnalyticsService with a minimum cohort size of 5.
+- Reports below the privacy threshold now return unavailable without a value rather than exposing small aggregate counts.
+- Existing capability gating and server-side period calculation remain unchanged.
+- Commits: 9ffbaffd84f325be78635cf4e679944676e1be18, 6745a097d4ebc173f091659fb363961a31d58c8b.
+- Next exact task: reconcile focused regression coverage and verify the explicit Phase 14 acceptance requirement that every defined business event is emitted from its authoritative domain transition; wire only missing producers.
+
 ## Current checkpoint — Phase 14 analytics deployment-policy enforcement
 - Audited the collection-policy requirement against the concrete persistence path.
 - Found a concrete gap: AnalyticsDeploymentPolicy existed only as a domain contract and non-essential business events were not gated before persistence.
