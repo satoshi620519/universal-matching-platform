@@ -1,3 +1,13 @@
+## Current checkpoint — Phase 25 commercial packaging in progress
+
+- Phase 24 documentation checkpoint has executable CI evidence: GitHub Actions run #4015 completed successfully.
+- Commercial packaging materials added: COMMERCIAL_PACKAGING.md, MARKETPLACE_LISTING.md, SUPPORT_SCOPE.md, with README discovery links.
+- Product boundaries explicitly distinguish included source capabilities from buyer-operated hosting, legal, moderation, provider accounts, and external service costs.
+- Marketplace listing copy and demo boundary reuse existing canonical documentation rather than duplicating operational instructions.
+- Remaining Phase 25 gap: assemble verified visual/demo evidence. Do not fabricate screenshots or claim a reachable public demo without an actual deployment.
+- License remains an owner-approved commercial-release blocker and has not been invented.
+- Next exact task: inventory any existing screenshot/demo assets and UI capture path; if none exist, define the capture checklist rather than manufacturing product screenshots.
+
 ## Current checkpoint — Phase 24 documentation package assembled
 
 - Documentation inventory audit completed.
