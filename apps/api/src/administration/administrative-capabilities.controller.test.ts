@@ -15,6 +15,7 @@ describe('AdministrativeCapabilitiesController', () => {
         'manage-quick-launch',
         'view-analytics',
         'view-system-health',
+        'lookup-accounts',
       ],
     });
     expect(resolver.requireAuthenticated).toHaveBeenCalledWith({
