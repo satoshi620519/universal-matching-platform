@@ -1,3 +1,11 @@
+## Current checkpoint — Release candidate immutability prepared
+
+- Rechecked GitHub Actions: CI #4036 completed successfully; newer #4038 and #4039 were still in progress at inspection time.
+- Therefore no moving main commit has been prematurely declared a Version 1.0 release candidate.
+- Added RELEASE_CANDIDATE_SELECTION.md to enforce exact-SHA selection, exact-SHA CI evidence, and anti-drift rules.
+- Once the latest intended documentation commits pass CI, select one immutable SHA and attach all remaining Phase 27/28 manual evidence to that same candidate.
+- Next exact task: recheck #4038/#4039 completion; if successful, select the latest clean SHA and begin evidence execution without adding speculative product features.
+
 ## Current checkpoint — Phase 28 Version 1.0 preflight matrix completed
 
 - Added PHASE_28_RELEASE_PREFLIGHT.md mapping every Version 1.0 criterion to prepared evidence, execution-required evidence, or owner/external decisions.
