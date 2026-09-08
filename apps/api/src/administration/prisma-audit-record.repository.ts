@@ -30,6 +30,7 @@ export class PrismaAuditRecordRepository extends AuditRecordRepository {
       area: row.area as AuditRecord['area'],
       action: row.action,
       ...(row.targetId ? { targetId: row.targetId } : {}),
+      ...(row.correlationId ? { correlationId: row.correlationId } : {}),
       occurredAt: row.occurredAt.toISOString(),
     };
   }
