@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.6 realtime lifecycle and reconciliation foundation
+- Audited Phase 10 realtime contracts before implementation. SSE events are account-scoped envelopes and are explicitly non-authoritative; durable HTTP reads recover missed messages/notifications after disconnect.
+- Added MobileRealtimeService as a lifecycle boundary with authenticated connection construction, explicit stop cleanup, bounded reconnect delay, and reconciliation before reconnect completion.
+- Event delivery also invokes reconciliation before handing the event to feature state, preserving the server's durable state as authority rather than treating SSE as a mutation stream.
+- Added regression coverage asserting authenticated realtime endpoint usage, reconciliation, reconnect scheduling, and explicit lifecycle stop.
+- Did not add a second websocket/SSE server, client-local event persistence, or speculative conversation list endpoint.
+- Next exact task: connect the realtime lifecycle to the authenticated app shell and implement supported conversation message loading/reconciliation UI; first verify whether the current API exposes a conversation-list read contract or requires an existing notification-driven entry path.
+
 ## Current checkpoint — Phase 16 M16.5 acceptance closed / M16.6 messaging boundary started
 - Focused M16.5 acceptance found no additional concrete discovery or matching gap after configured category and opaque cursor continuation; no duplicate client ranking/filtering logic was added.
 - Reconciled Phase 10 messaging against current HEAD before adding mobile work. Existing authoritative API owns conversation authorization, mutual-match entry, block/safety enforcement, durable messages, read state, soft deletion, notifications and SSE event delivery.
