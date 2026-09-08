@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createRequestPrincipalResolver } from './request-principal.middleware.js';
 import { RequestAuthenticationAdapter } from './authentication-adapter.js';
 import { getRequestPrincipal } from './authenticated-request.js';
