@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 14 analytics privacy-boundary hardening
+- Audited the existing analytics domain contracts instead of rebuilding reporting infrastructure.
+- Found a concrete gap: AnalyticsEventRecord validation checked event metadata but did not reject privacy-sensitive or nested payload structures.
+- Hardened the shared domain boundary so analytics payloads reject credential/secret/token, message-body/body, biography/bio, precise-coordinate, verification, and report-evidence field names; nested objects are rejected to prevent accidental structured leakage.
+- Existing deployment-policy, reporting-period, privacy-control, and analytics-governance contracts remain reused and unchanged.
+- Commit: 46181a09f6b62baf015462672b176460e6407b1a.
+- Next exact task: add or reconcile focused regression coverage for the privacy-safe AnalyticsEvent contract, then audit the concrete query/report service path for deployment-policy enforcement, period boundaries, and capability authorization before Phase 14 closure.
+
 ## Current checkpoint — Phase 14 business-event regression acceptance
 - Added focused regression coverage to the existing producer tests rather than creating a parallel analytics test harness.
 - registration_completed is asserted after successful activation persistence.
