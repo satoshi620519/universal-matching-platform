@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.6 durable messaging entry and conversation reconciliation
+- Audited notification and mutual-match contracts. Notifications are durable, account-scoped records with kind/payload and explicit acknowledgement; realtime notification events contain notificationId only and must be reconciled through HTTP.
+- Confirmed no authoritative conversation-list endpoint exists. Mobile therefore does not fabricate a local conversation index or pretend notifications are conversations.
+- Added notification unread/read boundaries and a native messaging surface that refreshes durable notifications, acknowledges them server-side, loads messages only for an explicit authorized conversation id, marks the conversation read after load, and appends server-created messages after send.
+- Message state remains recoverable through GET /conversations/:id/messages; notification state remains recoverable through GET /notifications.
+- Next exact task: replace the temporary explicit conversation-id entry with a legitimate navigation handoff only if an existing notification payload or mutual-match flow exposes a stable conversationId. If not, leave that contract boundary intact and proceed to M16.7 mobile acceptance rather than inventing data.
+
 ## Current checkpoint — Phase 16 M16.6 authenticated lifecycle integration
 - Audited current Phase 10 reconciliation tests and confirmed the durable recovery contracts exposed today are per-conversation message reads and account-scoped notification reads; no authoritative conversation-list endpoint was found and none was fabricated.
 - Extended MobileMessagingService with the durable notification read boundary.
