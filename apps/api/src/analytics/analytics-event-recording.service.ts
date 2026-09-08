@@ -1,8 +1,14 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { isValidAnalyticsEventRecord, shouldCollectNonEssentialAnalytics, type AnalyticsDeploymentPolicy, type AnalyticsEventRecord } from '@universal/domain';
+import {
+  isValidAnalyticsEventRecord,
+  shouldCollectNonEssentialAnalytics,
+  type AnalyticsDeploymentPolicy,
+  type AnalyticsEventRecord,
+} from '@universal/domain';
+
+import { AnalyticsEventRepository } from './analytics-event.repository.js';
 
 export const ANALYTICS_DEPLOYMENT_POLICY = Symbol('ANALYTICS_DEPLOYMENT_POLICY');
-import { AnalyticsEventRepository } from './analytics-event.repository.js';
 
 @Injectable()
 export class AnalyticsEventRecordingService {
