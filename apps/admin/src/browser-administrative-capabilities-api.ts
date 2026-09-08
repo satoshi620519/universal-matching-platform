@@ -3,7 +3,8 @@ export type AdministrativeCapability =
   | 'review-failed-email-outbox'
   | 'manage-moderation'
   | 'manage-quick-launch'
-  | 'view-analytics';
+  | 'view-analytics'
+  | 'view-system-health';
 
 export type AdministrativeCapabilitiesApi = Readonly<{
   list(): Promise<AdministrativeCapability[]>;
