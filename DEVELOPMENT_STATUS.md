@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 runtime dependency verification fix
+- Began focused Phase 14 verification by tracing runtime dependency construction, because GitHub Actions evidence is still unavailable (no workflow runs/statuses for the checkpoint commit).
+- Found a demonstrated NestJS runtime injection defect: AnalyticsEventRecordingService depended on the TypeScript interface AnalyticsDeploymentPolicy, which has no runtime provider token.
+- Replaced the interface-only injection with an explicit ANALYTICS_DEPLOYMENT_POLICY token and registered the current default policy in AppModule.
+- This fixes a concrete bootstrap/runtime failure introduced/exposed by the Phase 14 deployment-policy wiring.
+- Commits: b3ffe04fd357919bcfaab44ea74a2e0369f970fa, 371959eddc8da27a299b86110dc1597c253fe4f1.
+- Verification status: static dependency audit continues; CI success must not be claimed until executable evidence exists.
+- Next exact task: continue focused constructor/provider audit for the modified analytics/auth lifecycle graph, then add only targeted regression tests for demonstrated Phase 14 boundaries.
+
 ## Current checkpoint — Phase 14 authenticated lifecycle producer wiring
 - Located the shared authoritative authenticated boundary: RequestPrincipalResolver.requireAuthenticated.
 - Wired activity emission immediately after successful server-side principal resolution, so analytics is not reconstructed from UI endpoints.
