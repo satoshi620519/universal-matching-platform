@@ -13,6 +13,13 @@ Use this checklist to decide whether a build is ready to package for marketplace
 
 - [ ] Dependency reproducibility is not claimed until a maintained lockfile is intentionally introduced.
 
+## Mobile acceptance
+- [ ] `@universal/mobile typecheck` succeeds.
+- [ ] `@universal/mobile test` succeeds.
+- [ ] `@universal/mobile build` succeeds.
+- [ ] MOBILE_ACCEPTANCE_CHECKLIST.md is completed against a reachable API.
+- [ ] iOS/Android packaging credentials and store submission responsibilities are owned by the deployment purchaser.
+
 ## Infrastructure
 - [ ] PostgreSQL starts from the documented Compose configuration.
 - [ ] Redis starts from the documented Compose configuration.
