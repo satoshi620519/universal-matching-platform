@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 16 iOS strategy reconciliation
+- Reconciled Phase 16 against current HEAD before implementation.
+- No existing iOS/Swift/Xcode or React Native/Expo application implementation exists; apps/mobile is only a TypeScript foundation.
+- ARCHITECTURE.md already selected React Native/Expo as the mobile strategy, so a second native-only iOS codebase would be architectural duplication and increase marketplace purchaser maintenance.
+- Created IOS_APPLICATION_STRATEGY.md as the Phase 16 implementation contract before adding mobile runtime code.
+- The strategy fixes the boundaries for native-quality navigation/accessibility, secure credential storage, API/realtime authority, notification integration, and shared-code reuse.
+- Next exact task: audit workspace/tooling and API-client compatibility, then establish only the Expo/React Native runtime boundary (M16.1). Do not recreate web UI or backend functionality.
+
+
 ## Current checkpoint — Phase 15 final acceptance reconciliation
 - Reconciled the complete Phase 15 roadmap requirements against current HEAD after focused audits, without restarting existing web implementation.
 - Responsive coverage: desktop/tablet layouts already existed; mobile navigation gap was fixed by composing the existing accessible BottomNavigation and safe-area spacing.
