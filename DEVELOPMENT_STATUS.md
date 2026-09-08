@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 14 analytics infrastructure reconciliation
+- Corrected the earlier audit conclusion: a substantial Analytics foundation already exists and Phase 14 must not recreate it.
+- Existing authoritative components found: append-only AnalyticsEvent persistence, event contract validation, deployment-policy gating, daily retention deduplication, capability-gated event query, business metric aggregation, safety-report aggregation, admin analytics controller, and admin console.
+- Created ANALYTICS_AND_BUSINESS_INSIGHTS_SPEC.md to define the reuse boundary and explicitly forbid copying credentials, message bodies, biographies, precise location, verification secrets, or report evidence into analytics payloads.
+- Reconciled roadmap metrics against existing definitions and added the missing explicit moderation_reports metric definition while retaining authoritative moderation aggregation as its source.
+- The remaining real Phase 14 gap is producer coverage: verify each business metric event is emitted at the authoritative domain transition. Do not fabricate analytics from client navigation or reconstruct metrics from unrelated UI events.
+- Next exact task: trace registration_completed, profile_completed, discovery_viewed, match_created, and conversation_started producers through the API services; wire only missing authoritative producers and add focused regression tests.
+
 ## Current checkpoint — Phase 16 M16.7 mobile release hygiene acceptance
 - Audited repository ignore rules, mobile app configuration and tracked packaging surface for secrets/generated artifacts.
 - Existing .gitignore already excluded root node_modules, build output, Expo state and private .env files while permitting .env.example.
