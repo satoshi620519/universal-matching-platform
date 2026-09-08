@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 27 final execution order consolidated
+
+- Added PHASE_27_FINAL_EXECUTION_PLAN.md to consolidate all remaining non-duplicative release-candidate evidence into one exact order.
+- Latest acceptance-document CI runs #4031, #4033 and #4034 were still in progress at inspection time; do not claim pass/fail until completion.
+- Phase 27 repository-side preparation is substantially complete. Remaining gates require evidence against one selected release commit or owner decisions rather than speculative new implementation.
+- Hard release blockers remain: approved commercial LICENSE, clean-environment execution record, final candidate CI evidence, Quick Launch/customization walkthrough execution, clean archive checksum, and verified screenshots/demo evidence.
+- Next exact task: check completion of CI #4031/#4033/#4034, then inspect the roadmap for any post-Phase-27 work that can be prepared without bypassing these evidence gates.
+
 ## Current checkpoint — Phase 27 Buyer Quick Launch acceptance prepared
 
 - Audited the existing Quick Launch implementation and focused lifecycle/integration coverage rather than adding duplicate configuration UI.
