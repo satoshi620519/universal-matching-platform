@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 authoritative business-event producer audit
+- Traced all five roadmap business events to server-side authoritative transitions; no new producer infrastructure was needed.
+- registration_completed: emitted only after account activation persistence succeeds.
+- profile_completed: emitted after validated profile persistence succeeds.
+- discovery_viewed: emitted by the discovery service after authoritative query/filter/projection processing.
+- match_created: emitted only for a new mutual match, excluding idempotent replays.
+- conversation_started: emitted only when a new direct conversation is created; existing/raced winners do not increment the metric.
+- Existing implementation therefore already satisfies the core producer-coverage requirement. Next task is focused regression verification of these exact semantics and payload/data-boundary behavior, without duplicating producers.
+
 ## Current checkpoint — Phase 14 analytics infrastructure reconciliation
 - Corrected the earlier audit conclusion: a substantial Analytics foundation already exists and Phase 14 must not recreate it.
 - Existing authoritative components found: append-only AnalyticsEvent persistence, event contract validation, deployment-policy gating, daily retention deduplication, capability-gated event query, business metric aggregation, safety-report aggregation, admin analytics controller, and admin console.
