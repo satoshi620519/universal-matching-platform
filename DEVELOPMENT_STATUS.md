@@ -4489,3 +4489,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added focused regression coverage proving malformed/non-Bearer credentials do not reach repository lookup and raw issued credentials are not persisted as credentialHash.
 - Authorization audit found the server-side authentication/capability guard boundary and fail-closed architecture already established; no concrete resource-ownership bypass was demonstrated, so no speculative rewrite was added.
 - Next exact task: audit validation/error disclosure, rate-limit abuse, upload/media boundary, and secrets/webhook/privacy paths against SECURITY_HARDENING_SPEC.md.
+
+## Phase 19 audit checkpoint — boundary hardening
+- Validation/error audit confirmed centralized unexpected-error sanitization and correlation IDs; no raw internal stack disclosure path was found at the API boundary.
+- Rate-limit audit found a concrete fail-open edge for invalid policy values; the in-memory adapter now rejects zero, negative, and non-finite limit/window values with focused regression coverage.
+- Upload/media audit confirmed no authoritative ownership-checked storage/scanning subsystem exists, so arbitrary upload support remains deliberately unavailable rather than creating an unsafe placeholder.
+- Secrets/webhook/privacy audit confirmed environment-isolated provider secrets, exact raw-body HMAC verification, timing-safe signature comparison, and signed-context projection; added length-mismatch regression coverage.
+- Remaining Phase 19 acceptance work: dependency/release hygiene audit, then fresh CI.
