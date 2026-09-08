@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 27 release-candidate gate audit started
+
+- Roadmap transition confirmed: Phase 27 is the next phase and is a release-candidate evidence gate, not a new feature phase.
+- Existing CI workflow was audited and already runs PostgreSQL-backed migration checks, typecheck, lint, tests, matching concurrency integration, mobile acceptance commands, and build.
+- Phase 27 work should therefore reuse this verification pipeline rather than invent a second release CI.
+- Current demonstrated release blockers remain: approved buyer-facing commercial LICENSE, verified clean-environment installation evidence, verified documentation-from-zero evidence, verified buyer Quick Launch evidence, verified advanced-customization path evidence, and verified visual/demo evidence.
+- Next exact task: convert these Phase 27 requirements into a concrete evidence matrix mapped to existing docs/tests/CI, then identify only genuinely missing executable or reproducible checks.
+
 ## Current checkpoint — Phase 26 release-readiness baseline completed
 
 - Verified the prior failed bulk operation made no partial changes before retrying.
