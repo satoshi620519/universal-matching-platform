@@ -1,3 +1,11 @@
+## Current checkpoint — RC evidence preparation CI recheck
+
+- Rechecked CI after evidence-template commits: #4043 completed successfully.
+- Newer #4045 and #4046 were still in progress at this inspection, covering the evidence-template and status-record commits.
+- No manual PASS evidence was fabricated while CI remains in flight.
+- Repository-side preparation is at its practical boundary; further progress now depends on actual execution against the immutable candidate and owner decisions, not more speculative documentation.
+- Next exact task: recheck #4045/#4046; if successful, freeze repository-side preparation and begin only executable RC evidence collection. If unavailable in this environment, preserve the exact handoff and do not simulate execution.
+
 ## Current checkpoint — Release evidence capture templates prepared
 
 - Latest inspection found CI #4042, #4043 and #4044 still in progress; exact-candidate promotion remains pending CI completion.
