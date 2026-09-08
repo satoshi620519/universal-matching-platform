@@ -22,5 +22,18 @@ export function isValidAnalyticsEventDefinition(definition: AnalyticsEventDefini
 }
 
 export function isValidAnalyticsEventRecord(event: AnalyticsEventRecord): boolean {
-  return /^[a-z][a-z0-9_]*$/.test(event.name) && Number.isInteger(event.version) && event.version > 0 && event.occurredAt instanceof Date && !Number.isNaN(event.occurredAt.getTime());
+  return /^[a-z][a-z0-9_]*$/.test(event.name) && Number.isInteger(event.version) && event.version > 0 && event.occurredAt instanceof Date && !Number.isNaN(event.occurredAt.getTime()) && hasPrivacySafeAnalyticsPayload(event.payload);
+}
+
+
+const forbiddenAnalyticsPayloadField = /(?:^|_)(?:password|credential|secret|token|message_body|body|biography|bio|latitude|longitude|coordinate|verification|report_evidence|evidence)(?:$|_)/i;
+
+export function hasPrivacySafeAnalyticsPayload(
+  payload: Readonly<Record<string, unknown>>,
+): boolean {
+  return Object.entries(payload).every(([key, value]) => {
+    if (forbiddenAnalyticsPayloadField.test(key)) return false;
+    if (value !== null && typeof value === 'object') return false;
+    return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null;
+  });
 }
