@@ -11,7 +11,7 @@ export function MobileAuthProvider({children}:{children:React.ReactNode}){
  const session=useMemo(()=>new MobileSession(secureCredentialStore),[]); const service=useMemo(()=>new MobileAuthService(new MobileApiClient({baseUrl},session),session),[session]);
  const [state,setState]=useState<AuthState>({kind:'restoring'});
  useEffect(()=>{let active=true;void service.restore().then(next=>{if(active)setState(next);}).catch(()=>{if(active)setState({kind:'error',message:'Unable to restore session'});});return()=>{active=false};},[service]);
- useEffect(()=>{if(state.kind!=='authenticated')return; const realtime=new MobileRealtimeService(baseUrl,session,()=>({close(){}}),async()=>{await service.restore();}); void realtime.start(()=>{}); return()=>realtime.stop();},[state.kind,service,session]);
+ useEffect(()=>{if(state.kind!=='authenticated')return; const realtime=new MobileRealtimeService(baseUrl,session,()=>({close(){}}),async()=>{await service.restore();}); void realtime.start(()=>{void service.restore();}); return()=>realtime.stop();},[state.kind,service,session]);
  const value=useMemo(()=>({state,signIn:async(email:string,password:string)=>{setState({kind:'restoring'});try{setState(await service.signIn(email,password));}catch(error){setState({kind:'error',message:error instanceof Error?error.message:'Unable to sign in'});}},signOut:async()=>{await service.signOut();setState({kind:'anonymous'});}}),[state,service]);
  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
