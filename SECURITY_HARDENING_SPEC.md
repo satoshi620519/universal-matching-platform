@@ -39,7 +39,7 @@ Phase 19 performs evidence-based security hardening without duplicating the plat
 - [x] Upload/media boundary explicitly verified and safely deferred (no authorized storage/scanning/ownership contract exists; arbitrary uploads remain intentionally unavailable).
 - [x] Secrets/webhook/privacy audit completed (environment-isolated webhook secret, exact raw-body HMAC verification, timing-safe comparison, signed metadata projection, correlation-aware error boundary).
 - [x] Dependency/release hygiene documented (lockfile/package-manager discipline, dependency boundaries, clean-environment release checklist, and credential review responsibilities documented).
-- [ ] Fresh CI passes after demonstrated hardening changes.
+- [x] Fresh CI passes after demonstrated hardening changes (CI run 34189575643 SUCCESS: migrations, PostgreSQL integration, typecheck, lint, tests, concurrency, mobile acceptance, build).
 
 ## Non-goals
 Do not rewrite mature subsystems merely to satisfy a checklist. Implement only concrete gaps demonstrated by repository evidence or tests.
