@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 16 M16.6 focused acceptance closed
+- Performed focused acceptance against the implemented mobile boundary rather than restarting Phase 10/11 infrastructure.
+- Routed authoritative conversationId now auto-loads its durable message history; no manual action is required after a mutual-match handoff.
+- Verified message send/read flow remains server-authoritative and added the existing soft-delete API to the native conversation surface with local rendering updated only after successful server acknowledgement.
+- Realtime lifecycle remains authenticated-only with explicit stop cleanup and reconciliation; event transport is not treated as client authority.
+- Focused regression coverage now asserts routed auto-load, durable send/read/delete and realtime lifecycle reconciliation boundaries.
+- M16.6 acceptance is closed at the currently exposed backend contract. The remaining absence of an authoritative conversation-list endpoint is explicitly preserved as a product/API gap, not hidden with fabricated local state.
+- Next exact task: begin M16.7 mobile acceptance by auditing current mobile project scripts, route coverage and build/test evidence; fix only concrete compile/test/navigation gaps and record a reproducible purchaser-facing acceptance checklist.
+
 ## Current checkpoint — Phase 16 M16.6 mutual-match to conversation handoff closed
 - Audited the actual match-decision implementation and tests. POST /matches/decision returns transition state including mutual/replayed semantics; it does not return a conversationId.
 - Corrected the mobile contract accordingly instead of preserving a speculative conversationId field.
