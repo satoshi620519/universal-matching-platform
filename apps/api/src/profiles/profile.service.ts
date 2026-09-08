@@ -17,6 +17,7 @@ import {
   type PrivateLocation,
 } from '@universal/domain';
 import { CategoryFieldSchemaService } from './category-field-schema.service.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 @Injectable()
 export class ProfileService {
@@ -24,6 +25,7 @@ export class ProfileService {
     private readonly profiles: ProfileRepository,
     private readonly categories: CategoryRepository,
     @Optional() private readonly categoryFieldSchemas?: CategoryFieldSchemaService,
+    @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
 
   async create(input: {
@@ -58,6 +60,7 @@ export class ProfileService {
       verificationStatus: input.verificationStatus,
     });
     await this.profiles.save(profile);
+    void this.analytics?.recordBusinessEvent('profile_completed');
     return profile;
   }
 
