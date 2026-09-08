@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS verification_requests (
   expires_at TIMESTAMPTZ(6)
 );
 
-CREATE INDEX verification_requests_account_status_idx
+CREATE INDEX IF NOT EXISTS verification_requests_account_status_idx
   ON verification_requests(account_id, status);
 
 CREATE TABLE IF NOT EXISTS verification_outcomes (
@@ -24,5 +24,5 @@ CREATE TABLE IF NOT EXISTS verification_outcomes (
   updated_at TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX verification_outcomes_request_idx
+CREATE INDEX IF NOT EXISTS verification_outcomes_request_idx
   ON verification_outcomes(verification_request_id);
