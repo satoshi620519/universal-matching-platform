@@ -27,9 +27,9 @@ Authoritative transition wiring was audited against the repository surface. The 
 
 ## Producer checklist
 - [x] registration_completed — PasswordRegistrationService after successful account creation
-- [ ] activity — authoritative authenticated activity transition still needs explicit wiring
+- [x] activity — RequestPrincipalResolver after successful authenticated principal resolution
 - [x] profile_completed — ProfileService after successful profile persistence
 - [x] discovery_viewed — DiscoveryService after successful result projection
 - [x] match_created — PrismaMatchTransitionRepository on first mutual match only
 - [x] conversation_started — MessagingController after successful new conversation creation
-- [x] retention_checkin — AnalyticsEventRecordingService provides UTC-day idempotent primitive; authoritative invocation still needs explicit wiring
+- [x] retention_checkin — RequestPrincipalResolver authenticated lifecycle invokes UTC-day-idempotent recorder
