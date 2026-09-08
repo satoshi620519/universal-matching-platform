@@ -32,6 +32,14 @@ describe('OpaqueSessionAuthenticationAdapter', () => {
     });
   });
 
+  it('rejects malformed bearer credentials before repository lookup', async () => {
+    const { adapter, sessions } = createAdapter();
+    for (const authorization of ['Bearer', 'Bearer    ', 'Basic secret', ' bearer secret']) {
+      await expect(adapter.authenticate({ authorization, requestId: 'r' })).resolves.toBeUndefined();
+    }
+    expect(sessions.findByCredentialHash).not.toHaveBeenCalled();
+  });
+
   it('rejects missing, revoked and expired sessions', async () => {
     const { adapter: missing } = createAdapter();
     await expect(missing.authenticate({ requestId: 'r' })).resolves.toBeUndefined();
