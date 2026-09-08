@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { type MetricReport, type ReportingPeriod } from '@universal/domain';
+import { resolveReportPrivacyControl, type MetricReport, type ReportingPeriod } from '@universal/domain';
 import { AdministrativeCapabilityAccessService } from '../administration/administrative-capability-access.service.js';
 import { AnalyticsEventRepository } from './analytics-event.repository.js';
 import { analyticsMetricDefinitions } from './analytics-metric-definitions.js';
@@ -21,14 +21,13 @@ export class BusinessAnalyticsService {
       return result;
     }, {});
     const activeAccountIds = new Set(relevantEvents.filter(event => event.name === 'activity').map(event => event.payload.accountId).filter((accountId): accountId is string => typeof accountId === 'string'));
-    return analyticsMetricDefinitions.map(definition => ({
-      metricName: definition.name,
-      metricVersion: definition.version,
-      period,
-      scope: 'global',
-      availability: 'available' as const,
-      value: definition.sourceEvents.includes('activity') ? activeAccountIds.size : definition.sourceEvents.reduce((total, name) => total + (counts[name] ?? 0), 0),
-    }));
+    return analyticsMetricDefinitions.map(definition => {
+      const value = definition.sourceEvents.includes('activity') ? activeAccountIds.size : definition.sourceEvents.reduce((total, name) => total + (counts[name] ?? 0), 0);
+      const privacy = resolveReportPrivacyControl({ cohortSize: value, minimumCohortSize: 5, containsSensitiveData: definition.scope === 'safety' });
+      return privacy === 'visible'
+        ? { metricName: definition.name, metricVersion: definition.version, period, scope: 'global' as const, availability: 'available' as const, value }
+        : { metricName: definition.name, metricVersion: definition.version, period, scope: 'global' as const, availability: 'unavailable' as const };
+    });
   }
 
   private periodStart(period: ReportingPeriod, now: Date): Date {
