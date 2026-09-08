@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { isNonEssentialAnalyticsEvent, isValidAnalyticsEventRecord, shouldCollectNonEssentialAnalytics, type AnalyticsDeploymentPolicy, type AnalyticsEventRecord } from '@universal/domain';
+import { isValidAnalyticsEventRecord, type AnalyticsEventRecord } from '@universal/domain';
 import { randomUUID } from 'node:crypto';
 import { DatabaseService } from '../database/database.service.js';
 import { AnalyticsEventRepository } from './analytics-event.repository.js';
@@ -7,11 +7,6 @@ import { AnalyticsEventRepository } from './analytics-event.repository.js';
 @Injectable()
 export class PrismaAnalyticsEventRepository extends AnalyticsEventRepository {
   constructor(private readonly database: DatabaseService) { super(); }
-  private policy: AnalyticsDeploymentPolicy = { retentionDays: 90, nonEssentialAnalyticsEnabled: true };
-
-  setDeploymentPolicy(policy: AnalyticsDeploymentPolicy): void {
-    this.policy = policy;
-  }
   async listSince(since: Date): Promise<readonly AnalyticsEventRecord[]> {
     const records = await this.database.analyticsEvent.findMany({ where: { occurredAt: { gte: since } }, orderBy: [{ occurredAt: 'desc' }, { id: 'desc' }] });
     return records.map(record => ({ name: record.name, version: record.version, occurredAt: record.occurredAt, dataClassification: record.dataClassification as AnalyticsEventRecord['dataClassification'], payload: record.payload as Record<string, unknown> }));
@@ -30,9 +25,6 @@ export class PrismaAnalyticsEventRepository extends AnalyticsEventRepository {
   async record(event: AnalyticsEventRecord): Promise<void> {
     if (!isValidAnalyticsEventRecord(event)) {
       throw new Error('Invalid or privacy-unsafe analytics event');
-    }
-    if (isNonEssentialAnalyticsEvent(event) && !shouldCollectNonEssentialAnalytics(this.policy)) {
-      return;
     }
     await this.database.analyticsEvent.create({
       data: {
