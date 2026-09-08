@@ -4519,3 +4519,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Existing repository evidence already contains a domain-level critical user journey performance contract and explicit latency dimensions; Phase 20 will extend measurable baselines rather than invent a parallel performance model.
 - Created PERFORMANCE_AND_SCALE_SPEC.md as the specification-first acceptance contract.
 - Next exact task: inventory database/API hot paths and existing concurrency/realtime contracts, then define concrete baseline targets and implement only measurable instrumentation or safeguards that are currently missing.
+
+## Phase 20 audit checkpoint — hot paths and baselines
+- Added PERFORMANCE_BASELINES.md with explicit initial p95 targets for every critical journey and latency attribution across client/API/database/third-party dimensions.
+- Database audit verified cursor pagination and limit+1 retrieval for discovery, plus transactional PostgreSQL advisory-lock serialization for concurrent matching.
+- Identified distance-constrained discovery's multi-page in-memory filtering as an evidence-triggered future optimization candidate, not a reason for premature infrastructure.
+- Realtime audit confirmed SSE is process-local and therefore bounded to development/single-instance semantics; future distributed fan-out must replace the adapter behind the existing publisher contract.
+- Phase 20 implementation/audit acceptance is complete; next exact task is fresh CI against the baseline documentation and any contract changes.
