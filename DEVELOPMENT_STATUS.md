@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 28 release criteria preflight
+
+- Roadmap inspection confirms Phase 28 is VERSION 1.0 RELEASE, gated by production-quality functionality, platform strategy, administration, safety, documentation, demo, reproducible installation, and commercial package completion.
+- Latest documentation-related CI runs are queued/in progress at this checkpoint; no premature success claim is made.
+- Phase 28 must consume the Phase 27 evidence bundle rather than triggering new speculative feature work.
+- A Version 1.0 release cannot be truthfully declared while the Phase 27 real-world blockers remain unresolved: final candidate CI evidence, clean-environment installation, actual demo/verified captures, approved commercial license, archive checksum, and executed buyer walkthrough records.
+- Next exact task: prepare a Phase 28 release preflight matrix mapping each criterion to its Phase 27 evidence source and identifying only missing owner/execution actions.
+
 ## Current checkpoint — Phase 27 final execution order consolidated
 
 - Added PHASE_27_FINAL_EXECUTION_PLAN.md to consolidate all remaining non-duplicative release-candidate evidence into one exact order.
