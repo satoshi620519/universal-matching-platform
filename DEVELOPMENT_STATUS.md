@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 26 release-readiness baseline completed
+
+- Verified the prior failed bulk operation made no partial changes before retrying.
+- Added RELEASE_READINESS_CHECKLIST.md with reproducibility, package-integrity, buyer-experience, marketplace, and evidence gates.
+- Added RELEASE_ARCHIVE_MANIFEST.md defining clean archive inclusions, exclusions, and release evidence metadata.
+- Latest marketplace candidate evaluation CI #4024 is still in progress at this checkpoint; earlier #4023 completed successfully.
+- Commercial LICENSE remains owner approval dependent.
+- Next exact task: inspect the roadmap for the next phase after Phase 26 and audit repository evidence against its first unmet acceptance criterion.
+
 ## Current checkpoint — Phase 25 commercial packaging in progress
 
 - Phase 24 documentation checkpoint has executable CI evidence: GitHub Actions run #4015 completed successfully.
