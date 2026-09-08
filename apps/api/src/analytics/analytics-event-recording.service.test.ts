@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { AnalyticsEventRecordingService } from './analytics-event-recording.service.js';
 import { AnalyticsEventRepository } from './analytics-event.repository.js';
 
