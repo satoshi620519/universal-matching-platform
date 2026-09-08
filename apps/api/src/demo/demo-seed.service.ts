@@ -10,6 +10,13 @@ import { PrismaMessageRepository } from '../messaging/prisma-message.repository.
 import { InitialAdministratorProvisioningService } from '../administration/initial-administrator-provisioning.service.js';
 import { createDemoSeedPlan } from './demo-seed-plan.js';
 
+export const DEMO_ACCOUNT_IDS = {
+  memberA: '00000000-0000-4000-8000-0000000000a1',
+  memberB: '00000000-0000-4000-8000-0000000000b2',
+  memberC: '00000000-0000-4000-8000-0000000000c3',
+  administrator: '00000000-0000-4000-8000-0000000000d4',
+} as const;
+
 @Injectable()
 export class DemoSeedService {
   constructor(
@@ -24,12 +31,8 @@ export class DemoSeedService {
 
   async seed(): Promise<void> {
     const category = await this.ensureCategory();
-    const ids = {
-      memberA: randomUUID(),
-      memberB: randomUUID(),
-      memberC: randomUUID(),
-      administrator: randomUUID(),
-    };
+    const ids = DEMO_ACCOUNT_IDS;
+    await this.assertBaselineIsEmpty(Object.values(ids));
     await Promise.all(Object.values(ids).map((id) => this.accounts.create({ id, status: 'active' })));
     await this.profiles.create({ accountId: ids.memberA, categoryId: category.id, fields: { displayName: 'Demo Member A' }, geographicScope: createGeographicScope({ kind: 'country', countryCode: 'JP' }) });
     await this.profiles.create({ accountId: ids.memberB, categoryId: category.id, fields: { displayName: 'Demo Member B' }, geographicScope: createGeographicScope({ kind: 'country', countryCode: 'JP' }) });
@@ -39,6 +42,13 @@ export class DemoSeedService {
     const conversation = await this.conversations.createOrFindDirect(ids.memberA, ids.memberB);
     await this.messages.createForParticipant({ conversationId: conversation.id, senderAccountId: ids.memberA, body: 'Welcome to the fictional demo.' });
     await this.administrators.provision(ids.administrator);
+  }
+
+  private async assertBaselineIsEmpty(accountIds: readonly string[]): Promise<void> {
+    const existing = await Promise.all(accountIds.map((id) => this.accounts.findById(id)));
+    if (existing.some(Boolean)) {
+      throw new Error('demo baseline already exists; use the guarded demo reset workflow before reseeding');
+    }
   }
 
   private async ensureCategory() {
