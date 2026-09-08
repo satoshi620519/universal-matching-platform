@@ -4465,3 +4465,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Roadmap reconciliation selects Phase 18 as the next incomplete milestone after the completed mobile application phase work.
 - Initial repository audit found mature NestJS/Fastify HTTP controllers and centralized error/correlation handling, but no explicit OpenAPI/developer API contract, versioning policy, or documented extension-point surface.
 - Next exact task: create the Phase 18 specification-first acceptance contract, then inventory existing API/auth/error/webhook boundaries and implement only missing extensibility capabilities without duplicating payment webhooks or existing provider abstractions.
+
+## Current checkpoint — Phase 18 developer extensibility documentation
+- Added the outbound extension event contract with a safe no-op default and Nest DI registration; external delivery remains opt-in.
+- Added DEVELOPER_EXTENSIBILITY.md documenting provider adapters, domain strategies, outbound event safety, configuration boundaries, API compatibility, and unsupported customization patterns.
+- Indexed the developer contract from README and reconciled the Phase 18 acceptance checklist without reopening existing payment webhook ingestion.
+- Remaining Phase 18 gate: run fresh repository CI against the latest extension/documentation commits and fix only demonstrated failures.
