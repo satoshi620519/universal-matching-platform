@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.4 dynamic profile schema reconciliation
+- Audited the authoritative profile transport and category contracts before extending the native editor.
+- GET /profile-categories already returns purchaser-configurable categories together with fieldSchema; Mobile now consumes that contract instead of hardcoding category-specific fields.
+- Extended MobileProfileService and Profile screen to load the profile and categories together, render string/number/boolean fields from the active schema, and submit fields back through the existing PATCH /profiles/me validation boundary.
+- No client-side duplication of required/length/visibility validation was added; backend remains authoritative and native UI remains schema-driven.
+- Account activation/deletion endpoints exist, but a generic settings model is not yet required for M16.4 acceptance and should be handled with the later settings surface rather than adding a premature duplicate screen.
+- Next exact task: close M16.4 with a focused auth/profile acceptance audit, then begin M16.5 discovery and matching using existing GET /discovery and POST /matches/decision contracts.
+
 ## Current checkpoint — Phase 16 M16.4 profile loading and editing
 - Audited the existing profile controller/service contracts before implementation; GET /profiles/me and PATCH /profiles/me already own profile retrieval, validation, geography, category, and field-schema rules.
 - Added a thin MobileProfileService that delegates to those authoritative endpoints without reproducing profile validation or domain rules on-device.
