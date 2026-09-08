@@ -19,7 +19,7 @@ describe('PasswordSignInController', () => {
     expect(signInRequest).toHaveBeenCalledWith({
       email: 'admin@example.com',
       password: 'secret',
-      rateLimitKey: '127.0.0.1',
+      rateLimitKey: expect.stringMatching(/^registration:/),
     });
     expect(reply.header).toHaveBeenCalledWith(
       'set-cookie',
