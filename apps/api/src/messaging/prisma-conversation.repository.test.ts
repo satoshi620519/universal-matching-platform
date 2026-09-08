@@ -41,6 +41,14 @@ describe('PrismaConversationRepository', () => {
     await expect(repository.createOrFindDirect('a1', 'a2')).rejects.toBe(conflict);
   });
 
+  it('records analytics only when a new direct conversation is created', async () => {
+    const recordBusinessEvent = vi.fn().mockResolvedValue(undefined);
+    const database = { directConversationPair: { findUnique: vi.fn().mockResolvedValueOnce(null) }, $transaction: vi.fn(async (fn: any) => fn({ directConversationPair: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn() }, conversation: { create: vi.fn().mockResolvedValue({ id: 'c-new', participants: [] }) } })) };
+    const repository = new PrismaConversationRepository(database as never, { recordBusinessEvent } as any);
+    await repository.createOrFindDirect('a1', 'a2');
+    expect(recordBusinessEvent).toHaveBeenCalledWith('conversation_started');
+  });
+
   it('creates one participant record per distinct account', async () => {
     const create = vi.fn().mockResolvedValue({ id: 'c1', createdAt: new Date(), participants: [] });
     const repository = new PrismaConversationRepository({ conversation: { create } } as never);
