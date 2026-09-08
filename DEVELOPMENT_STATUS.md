@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 27 Buyer Quick Launch acceptance prepared
+
+- Audited the existing Quick Launch implementation and focused lifecycle/integration coverage rather than adding duplicate configuration UI.
+- Confirmed repository evidence for workflow, draft lifecycle, summary integration, and backend configuration service contracts.
+- Added BUYER_QUICK_LAUNCH_ACCEPTANCE.md with a reproducible buyer path covering all 11 configuration sections, draft save, review, publish, active version, history, and immutable subsequent publication.
+- Automated evidence and real release-candidate walkthrough evidence remain explicitly separated.
+- Next exact task: consolidate Phase 27 remaining non-automatable evidence into a final execution order and inspect CI status for the latest acceptance-document commits.
+
 ## Current checkpoint — Phase 27 advanced customization acceptance prepared
 
 - Audited extension surfaces and confirmed existing executable contracts/tests for provider adapters, outbound events, configuration providers, payment/verification/auth adapters, and domain match strategies.
