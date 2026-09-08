@@ -98,7 +98,7 @@ import { SafetyModerationController } from './safety/safety-moderation.controlle
 import { SafetyAnalyticsService } from './analytics/safety-analytics.service.js';
 import { AnalyticsEventRepository } from './analytics/analytics-event.repository.js';
 import { PrismaAnalyticsEventRepository } from './analytics/prisma-analytics-event.repository.js';
-import { AnalyticsEventRecordingService } from './analytics/analytics-event-recording.service.js';
+import { ANALYTICS_DEPLOYMENT_POLICY, AnalyticsEventRecordingService } from './analytics/analytics-event-recording.service.js';
 import { AnalyticsEventQueryService } from './analytics/analytics-event-query.service.js';
 import { BusinessAnalyticsService } from './analytics/business-analytics.service.js';
 import { AnalyticsController } from './analytics/analytics.controller.js';
@@ -188,6 +188,7 @@ import { RealtimeController } from './realtime/realtime.controller.js';
     { provide: 'DISCOVERY_EXCLUSION_POLICIES', useFactory: (policy: DiscoveryExclusionPolicy) => [policy], inject: [DiscoveryExclusionPolicy] },
     { provide: RealtimePublisher, useExisting: SseRealtimePublisher },
     { provide: RequestAuthenticationAdapter, useExisting: OpaqueSessionAuthenticationAdapter },
+    { provide: ANALYTICS_DEPLOYMENT_POLICY, useValue: { retentionDays: 90, nonEssentialAnalyticsEnabled: true } },
   ],
 })
 export class AppModule {}
