@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
 import { AccountActivationService } from './account-activation.service.js';
 import { AuthenticatedAccountActivationService } from './authenticated-account-activation.service.js';
