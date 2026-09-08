@@ -17,13 +17,17 @@ describe('ProfileService', () => {
 
   it('creates only after category existence is confirmed', async () => {
     const save = vi.fn();
+    const recordBusinessEvent = vi.fn().mockResolvedValue(undefined);
     const service = new ProfileService(
       { save, findById: vi.fn(), delete: vi.fn() },
       { findById: vi.fn().mockResolvedValue(category), findByKey: vi.fn(), list: vi.fn(), save: vi.fn() },
+      undefined,
+      { recordBusinessEvent } as any,
     );
     const profile = await service.create({ accountId: 'a1', categoryId: 'c1', fields: { displayName: 'Satoshi' }, fieldSchema: schema, geographicScope: scope });
     expect(profile.categoryId).toBe('c1');
     expect(save).toHaveBeenCalledWith(profile);
+    expect(recordBusinessEvent).toHaveBeenCalledWith('profile_completed');
   });
 
   it('uses the category schema when profile creation omits an explicit field schema', async () => {
