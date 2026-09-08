@@ -17,6 +17,8 @@ export class AnalyticsEventRecordingService {
   }
 
   async recordRetentionCheckin(accountId: string, now = new Date()): Promise<void> {
+    const startOfUtcDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    if (await this.repository.hasEventSince('retention_checkin', accountId, startOfUtcDay)) return;
     await this.record({ name: 'retention_checkin', version: 1, occurredAt: now, dataClassification: 'business', payload: { accountId } });
   }
 
