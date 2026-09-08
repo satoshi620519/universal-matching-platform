@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 authoritative producer reconciliation
+- Located the actual transition layer through AppModule wiring and direct source inspection; the earlier repository search was incomplete.
+- Verified authoritative producers already exist for registration_completed, profile_completed, discovery_viewed, match_created, and conversation_started.
+- Verified match_created avoids replay duplication and conversation_started avoids duplicate emission for an existing direct conversation.
+- AnalyticsEventRecordingService already provides a UTC-day-idempotent retention_checkin primitive.
+- Remaining concrete acceptance gaps are activity and the authoritative invocation point for retention_checkin; do not duplicate existing producers.
+- Reconciled the producer checklist in ANALYTICS_AND_BUSINESS_INSIGHTS_SPEC.md (commit 94e97f30f2640a9e85272eb7cd682860cc80abb5).
+- Next exact task: identify the authenticated request/activity lifecycle boundary and wire activity plus daily retention_checkin there, preserving server-side authority and avoiding endpoint-specific duplication.
+
 ## Current checkpoint — Phase 14 authoritative producer audit
 - Audited the explicit acceptance requirement for business-event producers after completing privacy, persistence, query, deployment-policy, and report controls.
 - Repository-level inspection did not find concrete server-side producers for registration_completed, activity, profile_completed, discovery_viewed, match_created, conversation_started, or retention_checkin.
