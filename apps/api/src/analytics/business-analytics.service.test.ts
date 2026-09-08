@@ -16,8 +16,13 @@ describe('BusinessAnalyticsService', () => {
     const capabilities = { require: async () => undefined } as unknown as AdministrativeCapabilityAccessService;
     const service = new BusinessAnalyticsService(events, capabilities);
     await expect(service.reportEventCounts('admin', 'week', new Date('2026-09-07T00:00:00Z'))).resolves.toEqual([
+      { metricName: 'registrations', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 0 },
       { metricName: 'active_users', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 2 },
+      { metricName: 'profile_completion', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 0 },
+      { metricName: 'discovery_activity', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 0 },
       { metricName: 'matches', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 2 },
+      { metricName: 'conversation_starts', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 0 },
+      { metricName: 'retention_events', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 0 },
     ]);
   });
 });
