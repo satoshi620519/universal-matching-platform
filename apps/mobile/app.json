@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Universal Matching",
+    "slug": "universal-matching",
+    "version": "0.0.1",
+    "scheme": "universalmatching",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.universal.matching"
+    },
+    "android": {
+      "package": "com.universal.matching"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
