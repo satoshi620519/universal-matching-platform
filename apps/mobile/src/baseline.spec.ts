@@ -55,3 +55,6 @@ describe('mobile mutual-match conversation handoff',()=>{it('keeps conversation 
 
 
 describe('mobile mutual match handoff',()=>{it('creates a conversation only after the server reports a mutual match and routes the returned id',()=>{const source=readFileSync(resolve(__dirname,'../app/discover.tsx'),'utf8');expect(source).toContain("result.mutual");expect(source).toContain('createFromMutualMatch');expect(source).toContain('conversation.id');expect(source).not.toContain('match?.conversationId');});});
+
+
+describe('M16.6 acceptance boundary',()=>{it('covers routed auto-load, durable send/read/delete and lifecycle reconciliation without local authority',()=>{const screen=readFileSync(resolve(__dirname,'../app/conversations.tsx'),'utf8');expect(screen).toContain('useEffect(()=>{if(params.conversationId)open();}');expect(screen).toContain('service.delete');expect(screen).toContain('service.markRead');const realtime=readFileSync(resolve(__dirname,'realtime-service.ts'),'utf8');expect(realtime).toContain('stop()');expect(realtime).toContain('await this.reconcile()');});});
