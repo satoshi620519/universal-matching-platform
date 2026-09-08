@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 27 evidence matrix completed
+
+- Added PHASE_27_RELEASE_CANDIDATE_EVIDENCE.md mapping every roadmap Phase 27 gate to existing CI, tests, documentation, or required real-world evidence.
+- Confirmed existing CI already covers the automated QA baseline; no duplicate release pipeline is justified.
+- Distinguished documented procedures from actual release evidence to avoid falsely claiming marketplace readiness.
+- Hard blockers requiring real-world/owner action remain: commercial LICENSE decision, clean-environment execution record, documentation walkthrough record, buyer Quick Launch walkthrough record, advanced customization acceptance example, and verified visual/demo capture.
+- Next exact task: audit whether a reproducible advanced-customization example already exists; if absent, add the smallest supported example and focused test rather than broad new functionality.
+
 ## Current checkpoint — Phase 27 release-candidate gate audit started
 
 - Roadmap transition confirmed: Phase 27 is the next phase and is a release-candidate evidence gate, not a new feature phase.
