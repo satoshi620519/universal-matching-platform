@@ -1,3 +1,14 @@
+## Current checkpoint — Phase 22 Demo Deployment baseline completed
+
+- Phase 22 implementation checkpoint is complete and the latest CI evidence is successful.
+- GitHub Actions CI run #4004 (commit 493ad079e4ae071c426643b183bd69fa8b7645af, `docs(demo): add concrete deployment and reset procedure`) completed with conclusion `success`.
+- Demo deployment now has an explicit isolated-environment contract, guarded seed command, deterministic fictional baseline identities, scoped cleanup, and explicit reset approval.
+- Safety boundary: demo operations require `NODE_ENV=demo` and `DEMO_MODE=true`; reset additionally requires `DEMO_DATABASE_RESET_APPROVED=true`.
+- Reset is intentionally scoped to the fixed fictional baseline rather than implementing a general database wipe.
+- Deployment/operator procedure and pre-demo verification checklist are documented in `DEMO_DEPLOYMENT_SPEC.md`.
+- Phase 22 closure rule: do not reopen this work unless a demonstrated defect or acceptance failure is found; avoid duplicating demo infrastructure in later phases.
+- Next exact task: read the roadmap's next unfinished phase and continue from that phase's first unmet acceptance criterion.
+
 ## Current checkpoint — Phase 14 intended verification mechanism recovered
 - Recovered the repository's actual toolchain configuration after the earlier search surface missed it.
 - Root is a pnpm@10 monorepo with Turbo tasks: build, typecheck, lint, and test.
