@@ -28,6 +28,10 @@ export function isValidAnalyticsEventRecord(event: AnalyticsEventRecord): boolea
 
 const forbiddenAnalyticsPayloadField = /(?:^|_)(?:password|credential|secret|token|message_body|body|biography|bio|latitude|longitude|coordinate|verification|report_evidence|evidence)(?:$|_)/i;
 
+export function isNonEssentialAnalyticsEvent(event: AnalyticsEventRecord): boolean {
+  return event.dataClassification === 'business';
+}
+
 export function hasPrivacySafeAnalyticsPayload(
   payload: Readonly<Record<string, unknown>>,
 ): boolean {
