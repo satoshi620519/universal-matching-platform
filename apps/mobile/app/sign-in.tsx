@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { ActivityIndicator, Button, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text } from 'react-native';
-export default function SignInScreen(){return <SafeAreaView style={{flex:1,padding:24}}><Text accessibilityRole="header">Sign in</Text></SafeAreaView>;}
+import { useMobileAuth } from '../src/auth-context';
+export default function SignInScreen(){const {state,signIn}=useMobileAuth();const[email,setEmail]=useState('');const[password,setPassword]=useState('');const busy=state.kind==='restoring';return <SafeAreaView style={{flex:1,padding:24,justifyContent:'center'}}><View style={{gap:12}}><Text accessibilityRole="header" style={{fontSize:28,fontWeight:'700'}}>Sign in</Text><TextInput accessibilityLabel="Email" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} editable={!busy}/><TextInput accessibilityLabel="Password" secureTextEntry value={password} onChangeText={setPassword} editable={!busy}/>{state.kind==='error'&&<Text accessibilityRole="alert">{state.message}</Text>}{busy?<ActivityIndicator accessibilityLabel="Signing in"/>:<Button title="Sign in" onPress={()=>void signIn(email,password)}/>}</View></SafeAreaView>;}
