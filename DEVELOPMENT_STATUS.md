@@ -1,3 +1,10 @@
+## Current checkpoint — CI convergence before release-candidate selection
+
+- Recheck confirmed CI #4038 and #4039 completed successfully.
+- Newer CI #4040 and #4041 are now running for the immutable candidate-selection record and its status checkpoint.
+- Do not select a candidate from an older SHA while newer intended release-preparation commits are still awaiting CI; this would immediately create evidence drift.
+- Next exact task: wait for/recheck #4040 and #4041. If both succeed, select the latest SHA containing the complete Phase 27/28 release-preparation records and record it as the immutable release candidate.
+
 ## Current checkpoint — Release candidate immutability prepared
 
 - Rechecked GitHub Actions: CI #4036 completed successfully; newer #4038 and #4039 were still in progress at inspection time.
