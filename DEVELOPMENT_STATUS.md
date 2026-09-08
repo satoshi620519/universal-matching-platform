@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 14 reconciliation after implementation
+- Reconciled the roadmap checkpoint against current HEAD before starting new work to prevent duplicate implementation.
+- Phase 14 is no longer only an infrastructure audit: the repository now contains analytics event persistence, privacy/deployment-policy gated recording, authenticated privileged reporting, business and safety aggregation, operational activity instrumentation, and an authorized Admin Analytics workspace.
+- Existing Phase 14 work was retained rather than recreated. The earlier infrastructure-audit document is now historical and must not be treated as the current implementation state.
+- Remaining exact task: perform a focused Phase 14 acceptance audit against the roadmap metrics (registrations, active users, profile completion, discovery activity, matches, conversation starts, retention events, moderation statistics), identify only concrete missing instrumentation/aggregation gaps, and add regression coverage for those gaps.
+- Do not restart Analytics, System Health, Users & Profiles, or Audit foundations while performing this audit.
+
 ## Milestone 4 CI input completeness — WORKSPACE DEPENDENCY SURFACE COVERAGE
 - Queried the latest corrected executable workflow commit 5bb05804af28e7ff4b604fc83a4e3769ffe797a2: workflow_runs=[] and statuses=[] through the available GitHub integration; no execution result was inferred.
 - Reviewed the actual runner/package/workspace inputs and found a concrete trigger gap: the workflow installs the entire pnpm workspace and depends on the database workspace for Prisma migration behavior, but root package metadata, pnpm workspace configuration and database workspace changes were not fully in the trigger surface.
