@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 14 provider-graph consistency audit
+- Continued static constructor/provider verification after fixing the explicit deployment-policy DI token.
+- Found duplicate, divergent policy enforcement: AnalyticsEventRecordingService used the injected runtime policy, while PrismaAnalyticsEventRepository carried an independent mutable default policy that AppModule never configured.
+- Removed the unreachable repository-local policy gate and kept non-essential collection enforcement at the authoritative recording boundary, while repository remains responsible for persistence validation.
+- This avoids two sources of truth where a future configuration change could silently produce inconsistent collection behavior.
+- Commit: 9561c0aad68e2964dfcbbe32a325cd828f97628c.
+- Next exact task: complete focused regression coverage/static audit of the modified analytics contracts (privacy rejection, disabled collection, query payload suppression, cohort suppression, authenticated lifecycle idempotency), then record Phase 14 verification outcome without claiming CI unless executable evidence exists.
+
 ## Current checkpoint — Phase 14 runtime dependency verification fix
 - Began focused Phase 14 verification by tracing runtime dependency construction, because GitHub Actions evidence is still unavailable (no workflow runs/statuses for the checkpoint commit).
 - Found a demonstrated NestJS runtime injection defect: AnalyticsEventRecordingService depended on the TypeScript interface AnalyticsDeploymentPolicy, which has no runtime provider token.
