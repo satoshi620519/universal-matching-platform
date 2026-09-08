@@ -13,7 +13,7 @@ describe('AnalyticsEventRecordingService', () => {
   it('does not duplicate a retention check-in within the same UTC day', async () => {
     const record = vi.fn().mockResolvedValue(undefined);
     const hasEventSince = vi.fn().mockResolvedValue(true);
-    const service = new AnalyticsEventRecordingService({ record, hasEventSince } as any, { mode: 'enabled' } as any);
+    const service = new AnalyticsEventRecordingService({ record, hasEventSince } as any, { retentionDays: 30, nonEssentialAnalyticsEnabled: true } as any);
     await service.recordRetentionCheckin('account-1', new Date('2026-09-08T12:00:00.000Z'));
     expect(hasEventSince).toHaveBeenCalled();
     expect(record).not.toHaveBeenCalled();
@@ -21,7 +21,7 @@ describe('AnalyticsEventRecordingService', () => {
 
   it('records activity with the permitted account identity for distinct-user metrics', async () => {
     const recorded: any[] = [];
-    const service = new AnalyticsEventRecordingService({ record: async (event: any) => recorded.push(event) } as any, { mode: 'enabled' } as any);
+    const service = new AnalyticsEventRecordingService({ record: async (event: any) => recorded.push(event) } as any, { retentionDays: 30, nonEssentialAnalyticsEnabled: true } as any);
     await service.recordActivity('account-1', { source: 'authenticated_request' }, new Date('2026-09-08T00:00:00.000Z'));
     expect(recorded[0]).toMatchObject({ name: 'activity', dataClassification: 'business', payload: { accountId: 'account-1', source: 'authenticated_request' } });
   });
