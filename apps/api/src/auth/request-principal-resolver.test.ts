@@ -29,6 +29,7 @@ describe('RequestPrincipalResolver', () => {
         authenticationMethod: 'test',
         verificationLevel: '2',
       }),
+      { recordAuthenticatedLifecycle: async () => undefined } as any,
     );
 
     await expect(
