@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 15 realtime effect lifecycle audit
+- Audited existing React effects and accessibility primitives instead of introducing a duplicate state-management or accessibility framework.
+- Verified overlay primitives already provide Escape handling, focus containment, focus restoration, keyboard activation paths, and reduced-motion handling.
+- Verified notification polling already clears intervals and focus listeners on cleanup.
+- Tightened the realtime message effect by capturing the active conversation identifier inside the effect lifecycle, ensuring asynchronous stream callbacks remain scoped to the connection they were created for while AbortController cleanup owns stream shutdown.
+- Added focused regression coverage. No backend contract or completed UI flow was recreated.
+- Next exact task: inspect remaining Phase 15 performance boundaries (large render lists and unnecessary network refreshes) and fix only measured/verified issues before final Phase 15 acceptance reconciliation.
+
 ## Current checkpoint — Phase 15 public metadata and state audit
 - Continued the Phase 15 acceptance audit from the responsive navigation checkpoint without recreating existing web flows.
 - Existing authenticated flows already provide explicit loading, error, and empty states for account, notifications, discovery, and conversation/message surfaces; no duplicate state framework was introduced.
