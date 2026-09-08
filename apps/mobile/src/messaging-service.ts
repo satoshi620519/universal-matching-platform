@@ -1,5 +1,6 @@
 import { MobileApiClient } from './api-client';
 export type MobileConversation={id:string;participants?:{accountId:string}[]};
+export type ConversationEntry={conversationId:string;targetAccountId?:string};
 export type MobileMessage={id:string;conversationId:string;senderAccountId:string;body:string;createdAt?:string;deletedAt?:string|null};
 export type MobileNotification={id:string;kind:string;payload:Record<string,unknown>;createdAt?:string;readAt?:string|null};
 export class MobileMessagingService{
