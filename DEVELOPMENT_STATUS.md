@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 15 Web application reconciliation
+- Reconciled the roadmap's next phase against current HEAD before implementation to avoid restarting completed work.
+- Phase 15 already has a functional Vite/React web client with registration, email verification, authentication, authenticated account loading, profile creation/update, discovery, matching decisions, mutual-match conversation creation, messaging, realtime refresh, notifications, responsive presentation modes, and accessibility primitives.
+- Therefore Phase 15 must proceed as an acceptance/completeness audit, not a greenfield web-app build.
+- Next exact task: audit existing web flows against Phase 15 requirements (responsive desktop/tablet/mobile, accessible navigation, performance, SEO where relevant) and identify only concrete missing production-quality gaps.
+- Do not recreate existing authentication, profile, discovery, matching, messaging, notification, or shared UI foundations.
+
 ## Current checkpoint — Phase 14 analytics acceptance reconciliation
 - Audited instrumentation and aggregation against every roadmap product metric without recreating existing analytics infrastructure.
 - Concrete fixes completed: registration_completed instrumentation, profile_completed instrumentation, conversation_started instrumentation, centralized authenticated activity instrumentation, daily deduplicated retention_checkin instrumentation, and distinct-account active user aggregation.
