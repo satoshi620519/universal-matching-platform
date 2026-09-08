@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { type AnalyticsEventRecord } from '@universal/domain';
+import { isValidAnalyticsEventRecord, type AnalyticsEventRecord } from '@universal/domain';
 import { randomUUID } from 'node:crypto';
 import { DatabaseService } from '../database/database.service.js';
 import { AnalyticsEventRepository } from './analytics-event.repository.js';
@@ -23,6 +23,9 @@ export class PrismaAnalyticsEventRepository extends AnalyticsEventRepository {
   }
 
   async record(event: AnalyticsEventRecord): Promise<void> {
+    if (!isValidAnalyticsEventRecord(event)) {
+      throw new Error('Invalid or privacy-unsafe analytics event');
+    }
     await this.database.analyticsEvent.create({
       data: {
         id: randomUUID(),
