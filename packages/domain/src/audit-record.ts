@@ -12,6 +12,7 @@ export interface AuditRecord {
   readonly area: SensitiveActionArea;
   readonly action: string;
   readonly targetId?: string;
+  readonly correlationId?: string;
   readonly occurredAt: string;
 }
 
