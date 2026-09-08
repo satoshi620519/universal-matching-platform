@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.4 authentication and session restoration
+- Audited the authoritative API contracts before connecting mobile authentication: POST /auth/sign-in returns an optional credential and GET /accounts/authenticated is the server-authoritative session/account check.
+- Added MobileAuthService over the existing secure credential and runtime-neutral API boundaries; successful sign-in persists only through SecureStore and then restores account state from the server.
+- Added root-level MobileAuthProvider with explicit restoring/authenticated/anonymous/error states and effect cleanup.
+- Connected the native sign-in screen and home route redirect/loading/error behavior. Local credential presence is never treated as authorization without the authenticated-account request.
+- Added focused regression coverage for secure-session restoration.
+- Profile editing remains the next M16.4 increment; do not duplicate the existing backend profile domain.
+
 ## Current checkpoint — Phase 16 M16.3 native navigation and accessibility baseline
 - Replaced the single placeholder stack shell with an iOS-appropriate primary tab composition while retaining Expo Router as the route authority.
 - Added explicit primary destinations for Home, Discover, Conversations, and Activity; authentication remains routable but is intentionally excluded from the primary tab bar.
