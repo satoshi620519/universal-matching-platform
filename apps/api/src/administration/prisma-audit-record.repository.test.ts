@@ -31,6 +31,7 @@ describe('PrismaAuditRecordRepository', () => {
       area: 'moderation',
       action: 'action.suspend',
       targetId: 'target-1',
+      correlationId: 'corr-1',
       occurredAt: occurredAt.toISOString(),
     });
 
