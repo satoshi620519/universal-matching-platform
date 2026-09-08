@@ -112,3 +112,48 @@ Before Phase 22 can close, verify:
 - no hardcoded marketplace credentials
 - no public production reset endpoint
 - no replacement of the existing migration/auth/admin architecture
+
+
+## Operator procedure
+
+### 1. Create an isolated demo environment
+
+Provision a dedicated database and deployment configuration. Do not reuse a production or purchaser database.
+
+Required markers:
+
+- `NODE_ENV=demo`
+- `DEMO_MODE=true`
+
+### 2. Apply schema and seed
+
+After the normal database configuration is present:
+
+```sh
+pnpm --filter @universal/database migrate
+NODE_ENV=demo DEMO_MODE=true pnpm --filter @universal/api demo:seed
+```
+
+The seed command refuses to run unless both demo markers are explicitly present.
+
+### 3. Reset the fictional baseline
+
+Reset is intentionally explicit:
+
+```sh
+NODE_ENV=demo DEMO_MODE=true DEMO_DATABASE_RESET_APPROVED=true pnpm --filter @universal/api demo:reset
+```
+
+The workflow is scoped to the fixed fictional demo identities and then reseeds the baseline. It is not a general production database wipe command.
+
+### 4. Pre-demo verification
+
+Verify the following before sharing a demo URL:
+
+- member authentication works using deployment-provisioned demo credentials
+- discovery returns fictional profiles
+- the seeded mutual-match journey is reachable
+- the seeded conversation is visible to its participants
+- administrative access follows normal authorization
+- no production secret or real personal data is present
+- reset refuses missing or incorrect demo markers
