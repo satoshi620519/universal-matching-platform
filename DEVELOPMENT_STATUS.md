@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 15 public metadata and state audit
+- Continued the Phase 15 acceptance audit from the responsive navigation checkpoint without recreating existing web flows.
+- Existing authenticated flows already provide explicit loading, error, and empty states for account, notifications, discovery, and conversation/message surfaces; no duplicate state framework was introduced.
+- Found one concrete public-shell gap: the Vite entry HTML had only the document title and lacked baseline description, social preview metadata, robots policy, and theme color.
+- Added static public metadata only. Authenticated dashboard content remains runtime/private and is intentionally not presented as crawlable route-specific SEO content.
+- Added focused regression coverage for the metadata contract.
+- Next exact task: continue Phase 15 acceptance audit with concrete performance and accessibility checks (bundle boundaries, effect cleanup, focus/keyboard behavior) and modify only verified gaps.
+
 ## Current checkpoint — Phase 15 responsive navigation audit
 - Audited the existing Web client instead of recreating completed flows.
 - Found one concrete mobile gap: HeaderNavigation intentionally hides its link list at <=40rem, while BottomNavigation existed only as an unused primitive, leaving dashboard section navigation unavailable on mobile.
