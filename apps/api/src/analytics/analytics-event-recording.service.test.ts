@@ -5,7 +5,7 @@ import { AnalyticsEventRepository } from './analytics-event.repository.js';
 describe('AnalyticsEventRecordingService', () => {
   it('records a retention check-in with account identity', async () => {
     const recorded: any[] = [];
-    const service = new AnalyticsEventRecordingService({ record: async (event: any) => recorded.push(event) } as any, { mode: 'enabled' } as any);
+    const service = new AnalyticsEventRecordingService({ record: async (event: any) => recorded.push(event), hasEventSince: async () => false } as any, { retentionDays: 30, nonEssentialAnalyticsEnabled: true } as any);
     await service.recordRetentionCheckin('account-1', new Date('2026-09-08T00:00:00.000Z'));
     expect(recorded[0]).toMatchObject({ name: 'retention_checkin', dataClassification: 'business', payload: { accountId: 'account-1' } });
   });
