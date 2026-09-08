@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 analytics query exposure hardening
+- Audited the concrete admin query/report path after persistence-boundary hardening.
+- Capability authorization is already enforced server-side by AdministrativeCapabilityAccessService for raw event access and both business/safety reports.
+- Reporting periods are explicitly whitelisted at the controller boundary and period starts are computed server-side.
+- Found a concrete privacy gap: the admin events endpoint returned complete raw AnalyticsEventRecord payloads. Even with ingestion validation, raw payload exposure was broader than the reporting requirement.
+- Hardened AnalyticsEventQueryService to return event metadata only and omit payload entirely from the query surface.
+- Commit: 4d2ebefc328e5614b092e7040cbc90d151909469.
+- Next exact task: audit analytics deployment-policy enforcement at producer/recording boundaries and reconcile period/report privacy controls with focused regression coverage before Phase 14 acceptance closure.
+
 ## Current checkpoint — Phase 14 analytics persistence-boundary enforcement
 - Continued the privacy audit through the concrete Prisma persistence path.
 - Found that the hardened AnalyticsEvent domain validator was not yet invoked before database persistence, leaving direct repository callers able to store unsafe payloads.
