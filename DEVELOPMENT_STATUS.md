@@ -4477,3 +4477,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - All baseline gates passed: packaged migrations, PostgreSQL integration, typecheck, lint, tests, matching concurrency, mobile acceptance, and build.
 - Phase 18 acceptance contract is complete; do not reopen this phase unless a regression is demonstrated.
 - Next exact task: reconcile the roadmap and select the next incomplete phase after Phase 18, starting with repository evidence rather than speculative implementation.
+
+## Current checkpoint — Phase 19 security hardening start
+- Roadmap reconciliation after Phase 18 selects Phase 19 as the next incomplete milestone.
+- Existing repository evidence already includes centralized authorization architecture, request rate-limit boundaries, deployment secret policy, and webhook/provider isolation; these must be audited and strengthened rather than duplicated.
+- Created SECURITY_HARDENING_SPEC.md as the specification-first acceptance contract.
+- Next exact task: audit authentication/session and authorization/resource-ownership execution paths against the Phase 19 contract, then implement only demonstrated gaps with regression tests.
