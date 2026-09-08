@@ -46,3 +46,6 @@ describe('mobile realtime reconciliation',()=>{it('treats SSE as a hint and reco
 
 
 describe('mobile messaging reconciliation reads',()=>{it('uses durable notification and message reads as realtime recovery paths',()=>{const source=readFileSync(resolve(__dirname,'messaging-service.ts'),'utf8');expect(source).toContain("'/notifications'");expect(source).toContain('/messages');});});
+
+
+describe('mobile messaging entry and reconciliation',()=>{it('uses durable notification acknowledgement and per-conversation reads instead of inventing a conversation list',()=>{const source=readFileSync(resolve(__dirname,'messaging-service.ts'),'utf8');expect(source).toContain('/notifications/unread');expect(source).toContain('markNotificationRead');const screen=readFileSync(resolve(__dirname,'../app/conversations.tsx'),'utf8');expect(screen).toContain('listNotifications()');expect(screen).toContain('listMessages');expect(screen).toContain('markRead');});});
