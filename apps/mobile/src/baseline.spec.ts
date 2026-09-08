@@ -37,3 +37,6 @@ describe('mobile discovery and matching boundary',()=>{it('uses bounded authorit
 
 
 describe('mobile discovery continuation',()=>{it('uses server-provided category ids and cursor continuation without inventing client pagination',()=>{const source=readFileSync(resolve(__dirname,'../app/discover.tsx'),'utf8');expect(source).toContain('profiles.listCategories()');expect(source).toContain('page.nextCursor');expect(source).toContain('load(cursor)');});});
+
+
+describe('mobile messaging boundary',()=>{it('delegates conversation authorization, messages, read state and deletion to Phase 10 APIs',()=>{const source=readFileSync(resolve(__dirname,'messaging-service.ts'),'utf8');expect(source).toContain('/conversations/from-mutual-match');expect(source).toContain('/read');expect(source).toContain("method:'DELETE'");});});
