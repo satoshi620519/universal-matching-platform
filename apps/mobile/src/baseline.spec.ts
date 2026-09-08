@@ -34,3 +34,6 @@ describe('mobile profile schema boundary',()=>{it('loads category field schemas 
 
 
 describe('mobile discovery and matching boundary',()=>{it('uses bounded authoritative discovery and idempotent match decisions',()=>{const source=readFileSync(resolve(__dirname,'discovery-service.ts'),'utf8');expect(source).toContain("limit:'20'");expect(source).toContain("'/matches/decision'");expect(source).toContain('idempotencyKey');});});
+
+
+describe('mobile discovery continuation',()=>{it('uses server-provided category ids and cursor continuation without inventing client pagination',()=>{const source=readFileSync(resolve(__dirname,'../app/discover.tsx'),'utf8');expect(source).toContain('profiles.listCategories()');expect(source).toContain('page.nextCursor');expect(source).toContain('load(cursor)');});});
