@@ -1,3 +1,11 @@
+## Current checkpoint — CI evidence boundary confirmed
+
+- CI #4045 and #4046 completed successfully.
+- Newer #4047 and #4048 were still in progress at inspection, and correspond only to status/freeze-record commits rather than product functionality changes.
+- Repository-side release preparation remains frozen; repeated status-only commits should not be allowed to create an endless CI-chasing loop.
+- The immutable RC1 evidence target remains the previously selected SHA. Manual evidence must be executed against that target, not against moving main.
+- Next exact task: stop creating repository changes solely for progress recording and begin real RC execution evidence collection when a runnable environment is available; owner decisions remain commercial LICENSE and deployment/demo.
+
 ## Current checkpoint — Repository-side preparation frozen pending real RC execution
 
 - CI recheck confirmed #4044 and #4046 completed successfully; #4045 and newer #4047 were still in progress at inspection.
