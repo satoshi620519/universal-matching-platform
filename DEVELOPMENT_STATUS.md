@@ -4458,3 +4458,10 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Phase 12 audited boundaries are complete without duplicate persistence, authorization, enforcement, audit, or rate-limit implementations.
 - Completed acceptance coverage: block integration, report targets/evidence/context, moderation lifecycle, privileged actions, warning/suspension/ban enforcement reuse, audit records, and abuse/rate-limit boundaries.
 - Exact next action: begin Phase 14 Analytics and Business Insights by first auditing existing analytics/metrics/event infrastructure and implementing only the next missing roadmap capability.
+
+## Current checkpoint — Phase 18 API and Developer Extensibility audit start
+- CI #3938 completed SUCCESS on HEAD 1a3b0916, validating migrations, PostgreSQL integration, typecheck, lint, tests, matching concurrency, mobile acceptance, and build.
+- Phase 16 release hygiene/acceptance work is therefore backed by executable CI evidence; do not reopen passed CI repairs.
+- Roadmap reconciliation selects Phase 18 as the next incomplete milestone after the completed mobile application phase work.
+- Initial repository audit found mature NestJS/Fastify HTTP controllers and centralized error/correlation handling, but no explicit OpenAPI/developer API contract, versioning policy, or documented extension-point surface.
+- Next exact task: create the Phase 18 specification-first acceptance contract, then inventory existing API/auth/error/webhook boundaries and implement only missing extensibility capabilities without duplicating payment webhooks or existing provider abstractions.
