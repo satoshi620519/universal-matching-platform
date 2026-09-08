@@ -14,6 +14,7 @@ describe('AdministrativeCapabilitiesController', () => {
         'review-failed-email-outbox',
         'manage-quick-launch',
         'view-analytics',
+        'view-system-health',
       ],
     });
     expect(resolver.requireAuthenticated).toHaveBeenCalledWith({
