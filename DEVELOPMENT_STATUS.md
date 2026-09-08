@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.5 discovery and matching foundation
+- Closed the M16.4 audit boundary: authentication/session restoration and schema-driven profile loading/editing now consume authoritative server contracts; settings remains correctly deferred to its dedicated roadmap surface.
+- Audited the discovery controller before implementation. Existing GET /discovery owns authenticated subject identity, projection, geography, matching rules, search/sort and bounded cursor behavior; POST /matches/decision owns reciprocal/idempotent match transitions.
+- Added a thin MobileDiscoveryService and native Discover flow that delegate to those contracts, with loading/error/retry/empty/decision states.
+- Discovery requests remain bounded at 20 and match decisions always carry a generated idempotency key.
+- No client-side compatibility algorithm, reciprocal-match state machine, or duplicate filtering engine was introduced.
+- Next exact task: extend M16.5 only where existing discovery contracts support it (configured category selection and cursor continuation), then perform discovery/matching acceptance before messaging.
+
 ## Current checkpoint — Phase 16 M16.4 dynamic profile schema reconciliation
 - Audited the authoritative profile transport and category contracts before extending the native editor.
 - GET /profile-categories already returns purchaser-configurable categories together with fieldSchema; Mobile now consumes that contract instead of hardcoding category-specific fields.
