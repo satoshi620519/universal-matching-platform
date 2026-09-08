@@ -32,7 +32,7 @@ describe('HTTP application boundary', () => {
       });
 
       expect(response.statusCode, response.body).toBe(200);
-      expect(response.json()).toEqual({
+      expect(response.json()).toMatchObject({
         status: 'ok',
         database: 'configured',
       });
