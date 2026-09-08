@@ -9,10 +9,14 @@ describe('BusinessAnalyticsService', () => {
       { name: 'match_created', version: 1, occurredAt: new Date('2026-09-06T00:00:00Z'), dataClassification: 'business', payload: {} },
       { name: 'match_created', version: 1, occurredAt: new Date('2026-09-05T00:00:00Z'), dataClassification: 'business', payload: {} },
       { name: 'operational_ping', version: 1, occurredAt: new Date('2026-09-06T00:00:00Z'), dataClassification: 'operational', payload: {} },
+      { name: 'activity', version: 1, occurredAt: new Date('2026-09-06T00:00:00Z'), dataClassification: 'business', payload: { accountId: 'a1' } },
+      { name: 'activity', version: 1, occurredAt: new Date('2026-09-06T01:00:00Z'), dataClassification: 'business', payload: { accountId: 'a1' } },
+      { name: 'activity', version: 1, occurredAt: new Date('2026-09-06T02:00:00Z'), dataClassification: 'business', payload: { accountId: 'a2' } },
     ] } as unknown as AnalyticsEventRepository;
     const capabilities = { require: async () => undefined } as unknown as AdministrativeCapabilityAccessService;
     const service = new BusinessAnalyticsService(events, capabilities);
     await expect(service.reportEventCounts('admin', 'week', new Date('2026-09-07T00:00:00Z'))).resolves.toEqual([
+      { metricName: 'active_users', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 2 },
       { metricName: 'matches', metricVersion: 1, period: 'week', scope: 'global', availability: 'available', value: 2 },
     ]);
   });
