@@ -4,7 +4,8 @@ export type AdministrativeCapability =
   | 'manage-moderation'
   | 'manage-quick-launch'
   | 'view-analytics'
-  | 'view-system-health';
+  | 'view-system-health'
+  | 'lookup-accounts';
 
 export type AdministrativeCapabilitiesApi = Readonly<{
   list(): Promise<AdministrativeCapability[]>;
