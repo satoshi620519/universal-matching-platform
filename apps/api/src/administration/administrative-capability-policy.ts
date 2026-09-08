@@ -5,7 +5,8 @@ export type AdministrativeCapability =
   | 'review-failed-email-outbox'
   | 'manage-moderation'
   | 'manage-quick-launch'
-  | 'view-analytics';
+  | 'view-analytics'
+  | 'view-system-health';
 
 const capabilityRoles: Readonly<Record<AdministrativeCapability, readonly AdministrativeRoleKey[]>> = {
   'manage-administrative-roles': ['administrator'],
@@ -13,6 +14,7 @@ const capabilityRoles: Readonly<Record<AdministrativeCapability, readonly Admini
   'manage-moderation': ['moderator', 'administrator'],
   'manage-quick-launch': ['administrator'],
   'view-analytics': ['administrator'],
+  'view-system-health': ['administrator'],
 };
 
 export function rolesForAdministrativeCapability(
