@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 28 Version 1.0 preflight matrix completed
+
+- Added PHASE_28_RELEASE_PREFLIGHT.md mapping every Version 1.0 criterion to prepared evidence, execution-required evidence, or owner/external decisions.
+- Explicitly prevented documentation growth from being mistaken for execution evidence.
+- CI #4035, #4036 and #4037 were observed as in progress during the latest inspection; no success claim is made until completion.
+- Repository-side release preparation is now consolidated. The next productive work is evidence verification, not additional speculative features.
+- Next exact task: recheck latest CI completion and then select the latest clean candidate commit only after CI success; do not tag Version 1.0 before the remaining execution/owner gates are satisfied.
+
 ## Current checkpoint — Phase 28 release criteria preflight
 
 - Roadmap inspection confirms Phase 28 is VERSION 1.0 RELEASE, gated by production-quality functionality, platform strategy, administration, safety, documentation, demo, reproducible installation, and commercial package completion.
