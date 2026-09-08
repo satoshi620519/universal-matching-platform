@@ -52,3 +52,6 @@ describe('mobile messaging entry and reconciliation',()=>{it('uses durable notif
 
 
 describe('mobile mutual-match conversation handoff',()=>{it('keeps conversation creation server-authoritative and accepts a routed conversation id',()=>{const discovery=readFileSync(resolve(__dirname,'discovery-service.ts'),'utf8');expect(discovery).toContain('MatchDecisionResult');const screen=readFileSync(resolve(__dirname,'../app/conversations.tsx'),'utf8');expect(screen).toContain('useLocalSearchParams');expect(screen).toContain('params.conversationId');});});
+
+
+describe('mobile mutual match handoff',()=>{it('creates a conversation only after the server reports a mutual match and routes the returned id',()=>{const source=readFileSync(resolve(__dirname,'../app/discover.tsx'),'utf8');expect(source).toContain("result.mutual");expect(source).toContain('createFromMutualMatch');expect(source).toContain('conversation.id');expect(source).not.toContain('match?.conversationId');});});
