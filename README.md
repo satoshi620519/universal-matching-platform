@@ -11,6 +11,13 @@ This repository is the persistent project record and development source of truth
 
 ## Buyer and release documentation
 - INSTALLATION.md — clean-environment installation and local infrastructure
+- ADMIN_GUIDE.md — administrator operation and Quick Launch publication
+- USER_GUIDE.md — standard member journey
+- CUSTOMIZATION_GUIDE.md — no-code and advanced customization boundaries
+- DEVELOPER_GUIDE.md — source development workflow and extension rules
+- DEPLOYMENT_GUIDE.md — production and demo deployment procedures
+- TROUBLESHOOTING.md — common installation and operation failures
+- FAQ.md — buyer-oriented frequently asked questions
 - QUICK_START.md — shortest path through the existing buyer Quick Launch flow
 - RELEASE_CHECKLIST.md — marketplace release sign-off
 - RELEASE_VERIFICATION.md — CI versus manual clean-environment evidence
