@@ -50,6 +50,14 @@ describe('authenticated account activation service', () => {
     });
   });
 
+  it('records registration_completed only after activation persistence succeeds', async () => {
+    const recordBusinessEvent = vi.fn().mockResolvedValue(undefined);
+    const repository = { updateStatus: vi.fn().mockResolvedValue({ ...account, status: 'active' as const }) } as unknown as AccountRepository;
+    const service = new AuthenticatedAccountActivationService(contextFor(), new AccountActivationService(), repository, { recordBusinessEvent } as unknown as AnalyticsEventRecordingService);
+    await service.activate(principal);
+    expect(recordBusinessEvent).toHaveBeenCalledWith('registration_completed');
+  });
+
   it('rejects when the account disappears before persistence', async () => {
     const repository = {
       updateStatus: async () => null,
