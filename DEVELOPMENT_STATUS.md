@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 14 business-event regression acceptance
+- Added focused regression coverage to the existing producer tests rather than creating a parallel analytics test harness.
+- registration_completed is asserted after successful activation persistence.
+- profile_completed was already asserted after validated profile save and retained unchanged.
+- discovery_viewed now has explicit producer coverage after authoritative discovery processing.
+- match_created/idempotent replay semantics remain covered by the existing transition suite and were not duplicated.
+- conversation_started is asserted only through new direct-conversation creation, preserving existing/race idempotency semantics.
+- Next exact task: audit AnalyticsEvent payload and query/report boundaries for privacy leakage, deployment-policy behavior, period aggregation, and capability authorization; fix only concrete gaps before Phase 14 acceptance closure.
+
 ## Current checkpoint — Phase 14 authoritative business-event producer audit
 - Traced all five roadmap business events to server-side authoritative transitions; no new producer infrastructure was needed.
 - registration_completed: emitted only after account activation persistence succeeds.
