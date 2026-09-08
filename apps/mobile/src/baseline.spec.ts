@@ -10,3 +10,14 @@ describe('mobile session boundary', () => {
     expect(store.clear).toHaveBeenCalledOnce();
   });
 });
+
+
+describe('native navigation baseline', () => {
+  it('uses platform tabs and keeps authentication outside primary destinations', () => {
+    const source = readFileSync(resolve(__dirname, '../app/_layout.tsx'), 'utf8');
+    expect(source).toContain("from 'expo-router'");
+    expect(source).toContain('<Tabs');
+    expect(source).toContain('tabBarHideOnKeyboard');
+    expect(source).toContain('options={{ href: null }}');
+  });
+});
