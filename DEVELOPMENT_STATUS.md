@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 14 analytics acceptance reconciliation
+- Audited instrumentation and aggregation against every roadmap product metric without recreating existing analytics infrastructure.
+- Concrete fixes completed: registration_completed instrumentation, profile_completed instrumentation, conversation_started instrumentation, centralized authenticated activity instrumentation, daily deduplicated retention_checkin instrumentation, and distinct-account active user aggregation.
+- Final aggregation reconciliation now returns every defined product metric for the requested period, including explicit zero values when no source events exist; dashboards no longer need to infer missing metrics from absent rows.
+- Safety/moderation statistics remain provided by the separate authorized SafetyAnalyticsService and are intentionally not mixed into product-event aggregation.
+- Phase 14 implementation acceptance is complete at the current architecture boundary. Next exact task: reconcile the roadmap's next defined phase against current HEAD before starting new implementation; do not restart Phase 14.
+
 ## Current checkpoint — Phase 14 reconciliation after implementation
 - Reconciled the roadmap checkpoint against current HEAD before starting new work to prevent duplicate implementation.
 - Phase 14 is no longer only an infrastructure audit: the repository now contains analytics event persistence, privacy/deployment-policy gated recording, authenticated privileged reporting, business and safety aggregation, operational activity instrumentation, and an authorized Admin Analytics workspace.
