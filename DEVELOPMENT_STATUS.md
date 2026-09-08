@@ -1,3 +1,11 @@
+## Current checkpoint — Phase 16 M16.3 native navigation and accessibility baseline
+- Replaced the single placeholder stack shell with an iOS-appropriate primary tab composition while retaining Expo Router as the route authority.
+- Added explicit primary destinations for Home, Discover, Conversations, and Activity; authentication remains routable but is intentionally excluded from the primary tab bar.
+- Enabled keyboard-aware tab behavior and retained SafeAreaProvider ownership at the root.
+- Added accessible screen headings and minimal semantic summaries as the baseline for subsequent feature screens.
+- Did not copy web navigation components or implement fake feature logic behind placeholder screens.
+- Next exact task: M16.4 connect authentication and authenticated account/profile loading incrementally through the existing secure session/API boundary, including loading, recoverable error, and session-restoration states.
+
 ## Current checkpoint — Phase 16 M16.2 secure session and API boundary
 - Established an OS-backed credential abstraction using expo-secure-store; credentials are no longer designed around browser sessionStorage.
 - Added a small MobileSession boundary and runtime-neutral MobileApiClient with injected base URL and fetch implementation.
