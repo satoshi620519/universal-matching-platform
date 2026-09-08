@@ -13,6 +13,7 @@ describe('AdministrativeCapabilitiesController', () => {
         'manage-administrative-roles',
         'review-failed-email-outbox',
         'manage-quick-launch',
+        'view-analytics',
       ],
     });
     expect(resolver.requireAuthenticated).toHaveBeenCalledWith({
