@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 export type ConversationRecord = {
   id: string;
@@ -9,7 +10,7 @@ export type ConversationRecord = {
 
 @Injectable()
 export class PrismaConversationRepository {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: DatabaseService, private readonly analytics?: AnalyticsEventRecordingService) {}
 
   async findDirect(accountA: string, accountB: string): Promise<ConversationRecord | null> {
     const [low, high] = [accountA.trim(), accountB.trim()].sort();
@@ -34,6 +35,7 @@ export class PrismaConversationRepository {
         if (raced) return raced.conversation;
         const conversation = await tx.conversation.create({ data: { participants: { create: [{ accountId: low }, { accountId: high }] } }, include: { participants: { orderBy: { joinedAt: 'asc' } } } });
         await (tx as any).directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
+        void this.analytics?.recordBusinessEvent('conversation_started');
         return conversation;
       });
     } catch (error) {
