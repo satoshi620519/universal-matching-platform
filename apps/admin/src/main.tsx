@@ -4,6 +4,7 @@ import './analytics-console';
 import './failed-email-outbox-console';
 import './administrative-roles-console';
 import './system-health-console';
+import './administrative-accounts-console';
 import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createQuickLaunchWorkflow, quickLaunchSteps, type QuickLaunchDraftInput } from './quick-launch-workflow';
