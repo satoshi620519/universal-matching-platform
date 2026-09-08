@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { MobileSession } from './session';
+import { MobileAuthService } from './auth-service';
 import { MobileApiClient, MobileApiError } from './api-client';
 
 describe('mobile session boundary', () => {
@@ -21,3 +22,6 @@ describe('native navigation baseline', () => {
     expect(source).toContain('options={{ href: null }}');
   });
 });
+
+
+describe('mobile authentication service',()=>{it('restores an authenticated account from the secure credential boundary',async()=>{const store={get:async()=> 'token',set:async()=>{},clear:async()=>{}};const session=new MobileSession(store);const client=new MobileApiClient({baseUrl:'https://api.test'},session,async()=>({ok:true,json:async()=>({id:'a',status:'active',createdAt:'x',updatedAt:'x'})}) as any);const service=new MobileAuthService(client,session);expect((await service.restore()).kind).toBe('authenticated');});});
