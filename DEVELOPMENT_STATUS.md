@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.7 executable CI evidence wired
+- Audited existing CI and found workspace-wide typecheck/test/build already ran, but mobile acceptance was not explicitly attested as a dedicated evidence surface.
+- Added the smallest CI extension: explicit @universal/mobile typecheck, test, and build commands with combined diagnostics artifact.
+- This avoids duplicating infrastructure or introducing a second workflow while making M16.7 evidence purchaser/reviewer-visible.
+- Added regression coverage that guards the three mobile CI commands and artifact against accidental removal.
+- Next exact task: inspect the latest GitHub Actions run for the new commits. Record actual pass/fail evidence if available; if execution cannot be observed from repository access, do not claim success and leave the checkpoint as CI-wired pending execution evidence.
+
 ## Current checkpoint — Phase 16 M16.7 mobile acceptance inventory and reproducibility
 - Audited the mobile project surface rather than adding new feature scope: Expo Router entry, typed routes, iOS/Android identifiers, secure-store dependency, and explicit start/ios/android/web/typecheck/lint/test/build scripts are present.
 - Audited route inventory: Home/auth gate, Sign in, Profile, Discover, Conversations, and Activity are registered under the authenticated provider shell; sign-in remains outside primary tab navigation.
