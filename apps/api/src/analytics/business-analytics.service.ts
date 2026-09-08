@@ -21,14 +21,13 @@ export class BusinessAnalyticsService {
       return result;
     }, {});
     const activeAccountIds = new Set(relevantEvents.filter(event => event.name === 'activity').map(event => event.payload.accountId).filter((accountId): accountId is string => typeof accountId === 'string'));
-    const productEventNames = new Set(analyticsMetricDefinitions.flatMap(definition => definition.sourceEvents));
-    return Object.keys(counts).filter(name => productEventNames.has(name)).sort().map(name => ({
-      metricName: analyticsMetricDefinitions.find(definition => definition.sourceEvents.includes(name))!.name,
-      metricVersion: 1,
+    return analyticsMetricDefinitions.map(definition => ({
+      metricName: definition.name,
+      metricVersion: definition.version,
       period,
       scope: 'global',
       availability: 'available' as const,
-      value: name === 'activity' ? activeAccountIds.size : counts[name],
+      value: definition.sourceEvents.includes('activity') ? activeAccountIds.size : definition.sourceEvents.reduce((total, name) => total + (counts[name] ?? 0), 0),
     }));
   }
 
