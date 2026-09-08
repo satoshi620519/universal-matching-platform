@@ -3,6 +3,12 @@ import { AnalyticsEventRecordingService } from './analytics-event-recording.serv
 import { AnalyticsEventRepository } from './analytics-event.repository.js';
 
 describe('AnalyticsEventRecordingService', () => {
+  it('records activity with the permitted account identity for distinct-user metrics', async () => {
+    const recorded: any[] = [];
+    const service = new AnalyticsEventRecordingService({ record: async (event: any) => recorded.push(event) } as any, { mode: 'enabled' } as any);
+    await service.recordActivity('account-1', { source: 'authenticated_request' }, new Date('2026-09-08T00:00:00.000Z'));
+    expect(recorded[0]).toMatchObject({ name: 'activity', dataClassification: 'business', payload: { accountId: 'account-1', source: 'authenticated_request' } });
+  });
   const event = { name: 'match_created', version: 1, occurredAt: new Date('2026-09-07T00:00:00Z'), dataClassification: 'business' as const, payload: { category: 'dating' } };
   it('does not persist non-essential events when disabled', async () => {
     const repository = { record: async () => { throw new Error('must not persist'); } } as unknown as AnalyticsEventRepository;
