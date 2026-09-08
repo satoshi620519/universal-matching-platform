@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 16 M16.7 CI execution evidence pending
+- Queried GitHub Actions workflow-run associations for commit a274cd03e6d0d812b5508dedf93ad2decaf48ba2 after wiring explicit mobile acceptance commands.
+- Repository connector returned no associated observable workflow runs through its available commit-run endpoint (which is PR-run scoped). This is an observability limitation, not evidence of CI success or failure.
+- No fabricated pass result was recorded and no code was changed solely to chase unavailable execution telemetry.
+- CI wiring, acceptance checklist, and regression guards remain committed; executable evidence is pending an observable GitHub Actions run or CI log access.
+- Next exact task: continue non-duplicative Phase 16 work by auditing M16.7 purchaser packaging/documentation gaps while leaving CI execution status explicitly pending. Revisit CI evidence when a run becomes observable.
+
 ## Current checkpoint — Phase 16 M16.7 executable CI evidence wired
 - Audited existing CI and found workspace-wide typecheck/test/build already ran, but mobile acceptance was not explicitly attested as a dedicated evidence surface.
 - Added the smallest CI extension: explicit @universal/mobile typecheck, test, and build commands with combined diagnostics artifact.
