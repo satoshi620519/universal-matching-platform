@@ -40,3 +40,6 @@ describe('mobile discovery continuation',()=>{it('uses server-provided category 
 
 
 describe('mobile messaging boundary',()=>{it('delegates conversation authorization, messages, read state and deletion to Phase 10 APIs',()=>{const source=readFileSync(resolve(__dirname,'messaging-service.ts'),'utf8');expect(source).toContain('/conversations/from-mutual-match');expect(source).toContain('/read');expect(source).toContain("method:'DELETE'");});});
+
+
+describe('mobile realtime reconciliation',()=>{it('treats SSE as a hint and reconciles durable state before and after reconnect',async()=>{const source=readFileSync(resolve(__dirname,'realtime-service.ts'),'utf8');expect(source).toContain('await this.reconcile()');expect(source).toContain("'/realtime/events'");expect(source).toContain('setTimeout');expect(source).toContain('stop()');});});
