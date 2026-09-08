@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 27 advanced customization acceptance prepared
+
+- Audited extension surfaces and confirmed existing executable contracts/tests for provider adapters, outbound events, configuration providers, payment/verification/auth adapters, and domain match strategies.
+- Avoided creating speculative duplicate extensibility infrastructure.
+- Added ADVANCED_CUSTOMIZATION_ACCEPTANCE.md using the existing domain match-strategy contract as the smallest reproducible buyer-facing acceptance path.
+- The walkthrough preserves authorization and persistence boundaries and points back to standard repository verification gates.
+- Final execution evidence remains release-candidate dependent; it must be run against the selected commit rather than claimed in advance.
+- Next exact task: audit the Buyer Quick Launch path for an equally concise reproducible acceptance walkthrough, reusing existing lifecycle tests and documentation.
+
 ## Current checkpoint — Phase 27 evidence matrix completed
 
 - Added PHASE_27_RELEASE_CANDIDATE_EVIDENCE.md mapping every roadmap Phase 27 gate to existing CI, tests, documentation, or required real-world evidence.
