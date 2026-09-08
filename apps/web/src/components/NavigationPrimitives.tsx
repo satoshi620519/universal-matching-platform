@@ -48,6 +48,13 @@ export function HeaderNavigation({ items, brand, ariaLabel = 'Primary navigation
   );
 }
 
+export function ResponsiveNavigation({ items, brand, ariaLabel = 'Primary navigation', className = '' }: NavigationProps) {
+  return <>
+    <HeaderNavigation items={items} brand={brand} ariaLabel={ariaLabel} className={className} />
+    <BottomNavigation items={items} ariaLabel={ariaLabel} className={className} />
+  </>;
+}
+
 export function BottomNavigation({ items, ariaLabel = 'Primary navigation', className = '' }: NavigationProps) {
   return (
     <nav className={`ui-bottom-navigation${className ? ` ${className}` : ''}`} aria-label={ariaLabel}>
