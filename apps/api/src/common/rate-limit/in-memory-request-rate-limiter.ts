@@ -1,46 +1,32 @@
-import { describe, expect, it, vi } from 'vitest';
+import { Injectable } from '@nestjs/common';
 
-import { InMemoryRequestRateLimiter } from './in-memory-request-rate-limiter.js';
+import { type RateLimitDecision, type RequestRateLimit, RequestRateLimiter } from './request-rate-limiter.js';
 
-describe('InMemoryRequestRateLimiter', () => {
-  it('rejects requests after the configured limit inside the window', () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2026-08-31T00:00:00.000Z'));
-    const limiter = new InMemoryRequestRateLimiter();
-    const policy = { limit: 2, windowMs: 60_000 };
+type WindowState = { readonly startedAt: number; count: number };
 
-    expect(limiter.consume('key', policy)).toMatchObject({ allowed: true, remaining: 1 });
-    expect(limiter.consume('key', policy)).toMatchObject({ allowed: true, remaining: 0 });
-    expect(limiter.consume('key', policy)).toMatchObject({ allowed: false, remaining: 0 });
+@Injectable()
+export class InMemoryRequestRateLimiter extends RequestRateLimiter {
+  private readonly windows = new Map<string, WindowState>();
 
-    vi.useRealTimers();
-  });
+  consume(key: string, limit: RequestRateLimit): RateLimitDecision {
+    if (!Number.isFinite(limit.limit) || !Number.isFinite(limit.windowMs) || limit.limit <= 0 || limit.windowMs <= 0) {
+      return { allowed: false, retryAfterMs: 0, remaining: 0 };
+    }
 
-  it('allows requests again after the window expires', () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2026-08-31T00:00:00.000Z'));
-    const limiter = new InMemoryRequestRateLimiter();
-    const policy = { limit: 1, windowMs: 1_000 };
+    const now = Date.now();
+    const current = this.windows.get(key);
+    const state = !current || now - current.startedAt >= limit.windowMs
+      ? { startedAt: now, count: 0 }
+      : current;
 
-    limiter.consume('key', policy);
-    vi.advanceTimersByTime(1_001);
+    state.count += 1;
+    this.windows.set(key, state);
 
-    expect(limiter.consume('key', policy)).toMatchObject({ allowed: true });
-    vi.useRealTimers();
-  });
-
-  it('does not allow a zero or negative limit to create an invalid allowance', () => {
-    const limiter = new InMemoryRequestRateLimiter();
-    expect(limiter.consume('zero', { limit: 0, windowMs: 60_000 })).toMatchObject({ allowed: false, remaining: 0 });
-    expect(limiter.consume('negative', { limit: -1, windowMs: 60_000 })).toMatchObject({ allowed: false, remaining: 0 });
-  });
-
-  it('keeps independent keys isolated', () => {
-    const limiter = new InMemoryRequestRateLimiter();
-    const policy = { limit: 1, windowMs: 60_000 };
-
-    limiter.consume('a', policy);
-
-    expect(limiter.consume('b', policy)).toMatchObject({ allowed: true });
-  });
-});
+    const allowed = state.count <= limit.limit;
+    return {
+      allowed,
+      remaining: Math.max(0, limit.limit - state.count),
+      retryAfterMs: allowed ? 0 : Math.max(0, limit.windowMs - (now - state.startedAt)),
+    };
+  }
+}
