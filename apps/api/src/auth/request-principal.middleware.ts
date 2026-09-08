@@ -9,9 +9,11 @@ import {
   resolveCorrelationId,
 } from '../observability/request-context.js';
 import { readAdminSessionCookie } from './session-cookie.js';
+import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 export function createRequestPrincipalResolver(
   adapter: RequestAuthenticationAdapter,
+  analytics?: AnalyticsEventRecordingService,
 ) {
   return async (request: FastifyRequest): Promise<void> => {
     const correlationId = resolveCorrelationId(
@@ -31,6 +33,7 @@ export function createRequestPrincipalResolver(
         request as AuthenticatedFastifyRequest,
         principal,
       );
+      void analytics?.recordActivity(principal.accountId, { source: 'authenticated_request' });
     }
   };
 }
