@@ -4502,3 +4502,8 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Added DEPENDENCY_AND_RELEASE_HYGIENE.md to make upgrade, clean-install, credential review, and source-product release responsibilities explicit.
 - Dependency vulnerability scanning is intentionally documented as an optional environment-backed CI enhancement rather than a speculative network-dependent gate.
 - Phase 19 implementation/audit acceptance is complete; next exact task is fresh CI against all hardening changes.
+
+## Phase 19 CI incident checkpoint
+- CI run 34189406504 failed at Typecheck before downstream gates due to a repository file-content regression in the in-memory rate limiter: the implementation file contained test content and therefore exported no limiter class.
+- Artifact diagnostics identified the exact two TS2459 import/export errors; restored the production RequestRateLimiter implementation and retained the Phase 19 invalid-policy fail-closed behavior.
+- Commit 7ee7047647a059ef089f629692e634df43c88a67 is the minimal corrective change. Next exact task: verify the newly triggered CI; do not modify unrelated Phase 19 work unless a concrete failure appears.
