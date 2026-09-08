@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 15 responsive navigation audit
+- Audited the existing Web client instead of recreating completed flows.
+- Found one concrete mobile gap: HeaderNavigation intentionally hides its link list at <=40rem, while BottomNavigation existed only as an unused primitive, leaving dashboard section navigation unavailable on mobile.
+- Added ResponsiveNavigation composition that renders the existing header plus the existing accessible BottomNavigation, and wired the Dashboard to that composition.
+- Added safe-area-aware bottom spacing and focused regression coverage. No authentication, discovery, messaging, notification, or backend behavior was duplicated.
+- Next exact task: continue Phase 15 acceptance audit with concrete checks for loading/error/empty states and public-page metadata/SEO relevance; modify only verified gaps.
+
 ## Current checkpoint — Phase 15 Web application reconciliation
 - Reconciled the roadmap's next phase against current HEAD before implementation to avoid restarting completed work.
 - Phase 15 already has a functional Vite/React web client with registration, email verification, authentication, authenticated account loading, profile creation/update, discovery, matching decisions, mutual-match conversation creation, messaging, realtime refresh, notifications, responsive presentation modes, and accessibility primitives.
