@@ -10,6 +10,7 @@ const capabilities: readonly AdministrativeCapability[] = [
   'manage-moderation',
   'manage-quick-launch',
   'view-analytics',
+  'view-system-health',
 ];
 
 @Controller('administration/me')
