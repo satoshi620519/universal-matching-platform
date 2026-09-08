@@ -43,3 +43,21 @@ Use the isolated workflow documented in DEMO_DEPLOYMENT_SPEC.md. Demo reset is s
 ## Release blocker
 
 A reviewed commercial LICENSE must be selected before marketplace source distribution. See LICENSE_DECISION_REQUIRED.md.
+
+
+## Verified screenshot capture checklist
+
+No repository screenshot assets or release assets are currently treated as verified marketing evidence. Capture these only from a running build of the current release candidate:
+
+1. Web discovery/profile experience
+2. Mutual-match result
+3. Member conversation
+4. Admin Quick Launch overview
+5. Branding configuration
+6. Region/localization configuration
+7. Matching/profile configuration
+8. Review and Publish
+9. Published configuration history
+10. Mobile representative flow, if the mobile build has passed its acceptance checklist
+
+For each asset, record the commit/version, capture date, viewport/device, and whether fictional demo data was used. Do not use mockups as evidence of implemented functionality without labeling them as illustrative.
