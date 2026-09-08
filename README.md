@@ -5,6 +5,10 @@ A commercially oriented, internationally adaptable matching platform designed fo
 ## Repository role
 This repository is the persistent project record and development source of truth.
 
+## Developer extensibility
+- DEVELOPER_EXTENSIBILITY.md — supported customization boundaries, API compatibility, and extension workflow
+- API_AND_DEVELOPER_EXTENSIBILITY_SPEC.md — Phase 18 extension contract and acceptance criteria
+
 ## Buyer and release documentation
 - INSTALLATION.md — clean-environment installation and local infrastructure
 - QUICK_START.md — shortest path through the existing buyer Quick Launch flow
