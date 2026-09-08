@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 15 final acceptance reconciliation
+- Reconciled the complete Phase 15 roadmap requirements against current HEAD after focused audits, without restarting existing web implementation.
+- Responsive coverage: desktop/tablet layouts already existed; mobile navigation gap was fixed by composing the existing accessible BottomNavigation and safe-area spacing.
+- Accessible navigation: semantic navigation, keyboard-accessible controls, field labeling/error semantics, dialog/drawer Escape handling, focus containment/restoration, and reduced-motion support are present.
+- Performance: discovery remains cursor-bounded to 20 items, duplicate accounts are removed, exhausted pagination no longer makes requests, and realtime/notification effects have cleanup boundaries.
+- SEO: relevant public-shell metadata is present; authenticated dashboard content is intentionally private/runtime-only.
+- Loading/error/empty states were already implemented across core authenticated flows and were not duplicated.
+- Phase 15 implementation acceptance is complete at the current architecture boundary. Next exact task: reconcile Phase 16 iOS strategy against current HEAD before implementing anything; do not restart Phase 15.
+
 ## Current checkpoint — Phase 15 network boundary audit
 - Continued the performance audit from the realtime lifecycle checkpoint.
 - Existing discovery pagination already uses cursor-based incremental loading and deduplicates accounts across pages.
