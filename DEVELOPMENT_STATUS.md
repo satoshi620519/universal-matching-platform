@@ -1,3 +1,10 @@
+## Current checkpoint — Phase 14 analytics persistence-boundary enforcement
+- Continued the privacy audit through the concrete Prisma persistence path.
+- Found that the hardened AnalyticsEvent domain validator was not yet invoked before database persistence, leaving direct repository callers able to store unsafe payloads.
+- Wired isValidAnalyticsEventRecord into PrismaAnalyticsEventRepository.record so invalid or privacy-unsafe events are rejected before persistence.
+- Commit: d56f6c2a84d73164a31a9281129f904721f3c803.
+- Next exact task: audit event query/report surfaces for raw payload exposure, deployment-policy behavior, period aggregation boundaries, and capability authorization; add focused regression coverage only for demonstrated gaps before Phase 14 closure.
+
 ## Current checkpoint — Phase 14 analytics privacy-boundary hardening
 - Audited the existing analytics domain contracts instead of rebuilding reporting infrastructure.
 - Found a concrete gap: AnalyticsEventRecord validation checked event metadata but did not reject privacy-sensitive or nested payload structures.
