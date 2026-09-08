@@ -15,12 +15,12 @@ export class BusinessAnalyticsService {
     await this.capabilities.require(accountId, 'view-analytics', now);
     const since = this.periodStart(period, now);
     const events = await this.events.listSince(since);
-    const counts = events
-      .filter(event => event.occurredAt >= since && event.dataClassification === 'business')
-      .reduce<Record<string, number>>((result, event) => {
-        result[event.name] = (result[event.name] ?? 0) + 1;
-        return result;
-      }, {});
+    const relevantEvents = events.filter(event => event.occurredAt >= since && event.dataClassification === 'business');
+    const counts = relevantEvents.reduce<Record<string, number>>((result, event) => {
+      result[event.name] = (result[event.name] ?? 0) + 1;
+      return result;
+    }, {});
+    const activeAccountIds = new Set(relevantEvents.filter(event => event.name === 'activity').map(event => event.payload.accountId).filter((accountId): accountId is string => typeof accountId === 'string'));
     const productEventNames = new Set(analyticsMetricDefinitions.flatMap(definition => definition.sourceEvents));
     return Object.keys(counts).filter(name => productEventNames.has(name)).sort().map(name => ({
       metricName: analyticsMetricDefinitions.find(definition => definition.sourceEvents.includes(name))!.name,
@@ -28,7 +28,7 @@ export class BusinessAnalyticsService {
       period,
       scope: 'global',
       availability: 'available' as const,
-      value: counts[name],
+      value: name === 'activity' ? activeAccountIds.size : counts[name],
     }));
   }
 
