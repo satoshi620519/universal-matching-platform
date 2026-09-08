@@ -44,4 +44,4 @@ Delivery implementations must be replaceable, failure-isolated, and idempotency-
 - [x] Extension boundary rules documented.
 - [x] Outbound extension event contract implemented with tests.
 - [x] Developer documentation indexes supported extension points.
-- [ ] CI validates Phase 18 additions without reopening passed gates.
+- [x] CI validates Phase 18 additions without reopening passed gates (CI #3951 SUCCESS).
