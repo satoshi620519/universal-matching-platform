@@ -4513,3 +4513,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - All executable gates passed: packaged migrations, PostgreSQL integration, typecheck, lint, tests, matching concurrency, mobile acceptance, and build.
 - Phase 19 security hardening acceptance is complete; do not reopen it without a demonstrated regression or new security evidence.
 - Next exact task: reconcile the roadmap and select the next incomplete phase after Phase 19, beginning with repository evidence and avoiding speculative implementation.
+
+## Current checkpoint — Phase 20 performance and scale start
+- Roadmap reconciliation after Phase 19 selects Phase 20 as the next incomplete milestone.
+- Existing repository evidence already contains a domain-level critical user journey performance contract and explicit latency dimensions; Phase 20 will extend measurable baselines rather than invent a parallel performance model.
+- Created PERFORMANCE_AND_SCALE_SPEC.md as the specification-first acceptance contract.
+- Next exact task: inventory database/API hot paths and existing concurrency/realtime contracts, then define concrete baseline targets and implement only measurable instrumentation or safeguards that are currently missing.
