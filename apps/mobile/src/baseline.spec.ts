@@ -58,3 +58,6 @@ describe('mobile mutual match handoff',()=>{it('creates a conversation only afte
 
 
 describe('M16.6 acceptance boundary',()=>{it('covers routed auto-load, durable send/read/delete and lifecycle reconciliation without local authority',()=>{const screen=readFileSync(resolve(__dirname,'../app/conversations.tsx'),'utf8');expect(screen).toContain('useEffect(()=>{if(params.conversationId)open();}');expect(screen).toContain('service.delete');expect(screen).toContain('service.markRead');const realtime=readFileSync(resolve(__dirname,'realtime-service.ts'),'utf8');expect(realtime).toContain('stop()');expect(realtime).toContain('await this.reconcile()');});});
+
+
+describe('M16.7 mobile acceptance inventory',()=>{it('keeps all primary routes registered and purchaser verification scripts available',()=>{const layout=readFileSync(resolve(__dirname,'../app/_layout.tsx'),'utf8');for(const route of['index','discover','conversations','activity','profile','sign-in'])expect(layout).toContain('name="'+route+'"');const pkg=readFileSync(resolve(__dirname,'../package.json'),'utf8');for(const script of['"typecheck"','"test"','"build"'])expect(pkg).toContain(script);});});
