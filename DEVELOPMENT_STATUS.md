@@ -4483,3 +4483,9 @@ Before every new task, check this checkpoint and DEVELOPMENT_STATUS.md first. Do
 - Existing repository evidence already includes centralized authorization architecture, request rate-limit boundaries, deployment secret policy, and webhook/provider isolation; these must be audited and strengthened rather than duplicated.
 - Created SECURITY_HARDENING_SPEC.md as the specification-first acceptance contract.
 - Next exact task: audit authentication/session and authorization/resource-ownership execution paths against the Phase 19 contract, then implement only demonstrated gaps with regression tests.
+
+## Phase 19 audit checkpoint — authentication and authorization
+- Authentication audit verified opaque 256-bit session credentials, SHA-256 hash-only repository lookup, explicit expiry and revocation rejection, and HttpOnly/Secure/SameSite admin cookie handling.
+- Added focused regression coverage proving malformed/non-Bearer credentials do not reach repository lookup and raw issued credentials are not persisted as credentialHash.
+- Authorization audit found the server-side authentication/capability guard boundary and fail-closed architecture already established; no concrete resource-ownership bypass was demonstrated, so no speculative rewrite was added.
+- Next exact task: audit validation/error disclosure, rate-limit abuse, upload/media boundary, and secrets/webhook/privacy paths against SECURITY_HARDENING_SPEC.md.
