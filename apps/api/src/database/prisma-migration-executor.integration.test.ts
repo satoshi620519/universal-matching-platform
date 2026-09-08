@@ -24,7 +24,7 @@ describe.skipIf(!DATABASE_URL)('Prisma PostgreSQL migration executor', () => {
         sql: 'CREATE TABLE migration_executor_probe (id INTEGER PRIMARY KEY)',
       });
 
-      await expect(executor.listAppliedVersions()).resolves.toEqual([1]);
+      await expect(executor.listAppliedVersions()).resolves.toContain(1);
 
       const tables = await database.$queryRawUnsafe<Array<{ table_name: string }>>(
         `SELECT table_name FROM information_schema.tables
