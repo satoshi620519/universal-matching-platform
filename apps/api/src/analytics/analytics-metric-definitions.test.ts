@@ -4,7 +4,7 @@ import { analyticsMetricDefinitions } from './analytics-metric-definitions.js';
 
 describe('analyticsMetricDefinitions', () => {
   it('defines valid roadmap metric contracts', () => {
-    expect(analyticsMetricDefinitions).toHaveLength(7);
+    expect(analyticsMetricDefinitions).toHaveLength(8);
     expect(analyticsMetricDefinitions.every(isValidMetricDefinition)).toBe(true);
   });
 });
