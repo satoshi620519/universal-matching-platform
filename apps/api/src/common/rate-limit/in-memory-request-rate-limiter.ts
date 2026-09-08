@@ -1,43 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { describe, expect, it, vi } from 'vitest';
 
-import {
-  RequestRateLimiter,
-  type RateLimitDecision,
-  type RequestRateLimit,
-} from './request-rate-limiter.js';
+import { InMemoryRequestRateLimiter } from './in-memory-request-rate-limiter.js';
 
-interface Bucket {
-  readonly timestamps: number[];
-}
+describe('InMemoryRequestRateLimiter', () => {
+  it('rejects requests after the configured limit inside the window', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-08-31T00:00:00.000Z'));
+    const limiter = new InMemoryRequestRateLimiter();
+    const policy = { limit: 2, windowMs: 60_000 };
 
-@Injectable()
-export class InMemoryRequestRateLimiter extends RequestRateLimiter {
-  private readonly buckets = new Map<string, Bucket>();
+    expect(limiter.consume('key', policy)).toMatchObject({ allowed: true, remaining: 1 });
+    expect(limiter.consume('key', policy)).toMatchObject({ allowed: true, remaining: 0 });
+    expect(limiter.consume('key', policy)).toMatchObject({ allowed: false, remaining: 0 });
 
-  consume(key: string, limit: RequestRateLimit): RateLimitDecision {
-    const now = Date.now();
-    const cutoff = now - limit.windowMs;
-    const bucket = this.buckets.get(key) ?? { timestamps: [] };
-    const timestamps = bucket.timestamps.filter((timestamp) => timestamp > cutoff);
+    vi.useRealTimers();
+  });
 
-    if (timestamps.length >= limit.limit) {
-      const retryAfterMs = Math.max(0, timestamps[0] + limit.windowMs - now);
-      this.buckets.set(key, { timestamps });
+  it('allows requests again after the window expires', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-08-31T00:00:00.000Z'));
+    const limiter = new InMemoryRequestRateLimiter();
+    const policy = { limit: 1, windowMs: 1_000 };
 
-      return {
-        allowed: false,
-        retryAfterMs,
-        remaining: 0,
-      };
-    }
+    limiter.consume('key', policy);
+    vi.advanceTimersByTime(1_001);
 
-    timestamps.push(now);
-    this.buckets.set(key, { timestamps });
+    expect(limiter.consume('key', policy)).toMatchObject({ allowed: true });
+    vi.useRealTimers();
+  });
 
-    return {
-      allowed: true,
-      retryAfterMs: 0,
-      remaining: Math.max(0, limit.limit - timestamps.length),
-    };
-  }
-}
+  it('does not allow a zero or negative limit to create an invalid allowance', () => {
+    const limiter = new InMemoryRequestRateLimiter();
+    expect(limiter.consume('zero', { limit: 0, windowMs: 60_000 })).toMatchObject({ allowed: false, remaining: 0 });
+    expect(limiter.consume('negative', { limit: -1, windowMs: 60_000 })).toMatchObject({ allowed: false, remaining: 0 });
+  });
+
+  it('keeps independent keys isolated', () => {
+    const limiter = new InMemoryRequestRateLimiter();
+    const policy = { limit: 1, windowMs: 60_000 };
+
+    limiter.consume('a', policy);
+
+    expect(limiter.consume('b', policy)).toMatchObject({ allowed: true });
+  });
+});
