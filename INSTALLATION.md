@@ -64,7 +64,19 @@ pnpm --filter @universal/web dev
 pnpm --filter @universal/admin dev
 ```
 
-## 6. First buyer configuration
+## 6. Mobile application verification
+
+The mobile app is included as a source product and uses the same API deployment:
+
+```bash
+pnpm --filter @universal/mobile typecheck
+pnpm --filter @universal/mobile test
+pnpm --filter @universal/mobile build
+```
+
+For interactive evaluation, configure `EXPO_PUBLIC_API_BASE_URL` to the reachable API and run the platform-specific Expo command documented in `apps/mobile/package.json`. Follow `MOBILE_ACCEPTANCE_CHECKLIST.md` for the authoritative end-to-end flow.
+
+## 7. First buyer configuration
 
 Use Admin Quick Launch in this order:
 1. Branding
