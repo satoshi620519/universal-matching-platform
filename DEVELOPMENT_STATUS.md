@@ -1,3 +1,12 @@
+## Current checkpoint — Phase 16 M16.7 mobile release hygiene acceptance
+- Audited repository ignore rules, mobile app configuration and tracked packaging surface for secrets/generated artifacts.
+- Existing .gitignore already excluded root node_modules, build output, Expo state and private .env files while permitting .env.example.
+- Added explicit mobile/Expo generated directories and common signing-key/provisioning artifact exclusions to prevent accidental source-product leakage.
+- Added a mobile .env.example containing only EXPO_PUBLIC_API_BASE_URL and explicitly documenting that public Expo variables must never contain secrets.
+- No credentials, certificates, store keys or generated native projects were found/added. app.json contains identifiers only and no secret material.
+- M16.7 purchaser packaging acceptance is closed at source/repository level. CI execution evidence remains separately pending observable GitHub Actions telemetry and is not conflated with packaging acceptance.
+- Next exact task: advance to the next roadmap item by reading MASTER_DEVELOPMENT_ROADMAP.md and DEVELOPMENT_STATUS.md together, selecting the first incomplete milestone after Phase 16, and auditing before implementation to avoid duplicate work.
+
 ## Current checkpoint — Phase 16 M16.7 purchaser packaging/documentation audit
 - Audited existing buyer documentation instead of creating parallel mobile guides. Installation, Quick Start, Release Checklist, Release Verification Matrix and README existed and were reused.
 - Added only missing cross-links and explicit mobile verification gates: dedicated mobile typecheck/test/build commands, EXPO_PUBLIC_API_BASE_URL responsibility, the authoritative MOBILE_ACCEPTANCE_CHECKLIST flow, and purchaser ownership of iOS/Android signing/store submission.
