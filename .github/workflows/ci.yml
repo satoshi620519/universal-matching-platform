@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -16,6 +16,15 @@ jobs:
           - 5432:5432
         options: >-
           --health-cmd "pg_isready -U postgres -d universal_matching"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -33,6 +42,10 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - name: Verify packaged database migrations
         run: pnpm --filter @universal/database verify:migrations-build
+      - name: Verify CI infrastructure parity
+        run: |
+          pg_isready -h localhost -U postgres -d universal_matching
+          redis-cli -h localhost ping
       - name: PostgreSQL migration command integration
         run: DATABASE_URL="$DATABASE_URL" pnpm --filter @universal/database migrate
       - name: Typecheck
