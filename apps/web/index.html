@@ -1,15 +1,70 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mono — Universal Matching Platform</title>
-    <meta name="description" content="A premium universal matching platform foundation for meaningful connections across markets and use cases." />
-    <meta name="theme-color" content="#11100f" />
+    <title>NEXA — Universal Matching Platform</title>
+    <meta name="description" content="恋愛、友だち、仕事、趣味、コミュニティ。用途に合わせて設計できる高級感のある万能型マッチングプラットフォーム。" />
+    <meta name="theme-color" content="#0b0b0a" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Mono — Universal Matching Platform" />
-    <meta property="og:description" content="Where the right connections begin." />
+    <meta property="og:title" content="NEXA — Universal Matching Platform" />
+    <meta property="og:description" content="新しいつながりのサービスを作るためのプラットフォーム。" />
     <meta name="robots" content="index,follow" />
+    <style>
+      :root{--ink:#11110f;--paper:#f4f0e8;--gold:#b9a486;--line:rgba(255,255,255,.1);--ease:cubic-bezier(.2,.8,.2,1)}
+      html{scroll-behavior:smooth}
+      body{background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+      ::selection{background:#b9a486;color:#11110f}
+      button,a{cursor:pointer}
+      .salesLanding{overflow:hidden;background:var(--paper)}
+      .salesHero{position:relative;min-height:760px;background:radial-gradient(circle at 75% 35%,rgba(185,164,134,.13),transparent 25%),linear-gradient(180deg,#0b0b0a 0%,#11110f 100%)}
+      .salesHero:after{opacity:.8}
+      .salesHeroCopy h1{font-weight:500;text-shadow:0 1px 0 rgba(255,255,255,.04)}
+      .salesHeroCopy h1 em{font-style:normal;background:linear-gradient(120deg,#f5f0e8,#b9a486);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .salesHeroCopy>p{max-width:590px}
+      .salesProduct{border-radius:3px;background:linear-gradient(145deg,#1a1916,#0d0d0c);box-shadow:0 40px 100px rgba(0,0,0,.42),0 0 0 1px rgba(185,164,134,.05)}
+      .salesProductMain{background:radial-gradient(circle at 30% 45%,rgba(185,164,134,.12),transparent 32%),linear-gradient(135deg,#171714,#0e0e0d)}
+      .salesProductInfo button{border-radius:999px;transition:all .3s var(--ease)}
+      .salesProductInfo button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.25)}
+      .heroScroll{opacity:.72}
+      .salesIntro,.useCaseSection,.featureSection,.customSection,.safetySection,.globalSection{isolation:isolate}
+      .sectionHeading h2,.featureIntro h2,.customIntro h2,.safetyCopy h2,.globalCopy h2{letter-spacing:-.055em}
+      .useCaseGrid article,.featureList article,.customCard,.safetyPoints span{transition:transform .4s var(--ease),background .4s ease,border-color .4s ease,box-shadow .4s ease}
+      .useCaseGrid article:hover,.customCard:hover{transform:translateY(-7px)}
+      .featureList article:hover{transform:translateX(8px)}
+      .safetyPoints span:hover{transform:translateY(-4px)}
+      .matchingDemo{background:linear-gradient(180deg,#f4f0e8,#ebe5d9);padding-top:clamp(100px,12vw,170px);padding-bottom:clamp(100px,12vw,170px)}
+      .matchingDemoHeader h2{font-weight:500}
+      .matchingDemoHeader h2 em{background:linear-gradient(120deg,#a58a63,#c9b99e);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .matchingDemoShell{border-radius:8px;background:#0d0d0c;box-shadow:0 50px 120px rgba(17,16,14,.22),0 0 0 1px rgba(185,164,134,.12);transform:translateZ(0)}
+      .matchingDemoTop{background:linear-gradient(180deg,rgba(255,255,255,.035),transparent);height:58px;align-items:center}
+      .matchingDemoBody{background:#0f0f0e}
+      .matchingDemoSide{background:linear-gradient(180deg,#11110f,#0c0c0b)}
+      .demoSteps b{padding:8px 9px;border-radius:6px;transition:all .25s ease}
+      .demoSteps b.active{background:rgba(185,164,134,.09);box-shadow:inset 2px 0 #b9a486}
+      .demoProfile{border-radius:8px;background:linear-gradient(135deg,#20201c 0%,#11110f 70%);box-shadow:inset 0 1px rgba(255,255,255,.05),0 28px 70px rgba(0,0,0,.2)}
+      .demoProfile:hover{transform:translateY(-4px);border-color:rgba(185,164,134,.3)}
+      .demoAvatar{box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 25px 70px rgba(0,0,0,.3)}
+      .demoProfile.matched{box-shadow:0 20px 60px rgba(185,164,134,.09),inset 0 0 0 1px rgba(185,164,134,.1)}
+      .fullProductDemo{background:var(--paper)}
+      .fullProductShell{border-radius:10px;box-shadow:0 45px 110px rgba(17,16,14,.22),0 0 0 1px rgba(185,164,134,.08)}
+      .fp-topbar{background:linear-gradient(180deg,#171714,#10100f);height:62px}
+      .fp-nav button{transition:all .25s var(--ease)}
+      .fp-nav button:hover{transform:translateX(3px);color:#e7dac5}
+      .fp-nav button.active{box-shadow:inset 2px 0 #b9a486;background:rgba(185,164,134,.08)}
+      .fp-profile{border-radius:8px;background:linear-gradient(135deg,#1c1c19,#0f0f0e);box-shadow:0 25px 70px rgba(0,0,0,.22)}
+      .fp-profile:hover{transform:translateY(-4px)}
+      .fp-actions button,.fp-filter,.fp-settingsgrid button,.fp-safetygrid button,.fp-settingrows button{transition:all .25s var(--ease)}
+      .fp-actions button:hover,.fp-settingsgrid button:hover,.fp-safetygrid button:hover,.fp-settingrows button:hover{transform:translateY(-2px);border-color:rgba(185,164,134,.4)}
+      .fp-actions .primary{box-shadow:0 12px 35px rgba(185,164,134,.12)}
+      .launchSection{background:radial-gradient(circle at 50% 50%,rgba(185,164,134,.16),transparent 40%),#11110f}
+      .launchInner{position:relative}
+      .launchInner:before{content:"NEXA / UNIVERSAL MATCHING";position:absolute;top:-42px;left:50%;transform:translateX(-50%);font-size:7px;letter-spacing:.28em;color:rgba(255,255,255,.24);white-space:nowrap}
+      .landingFooter{background:#0b0b0a}
+      @media(max-width:900px){.salesHero{min-height:auto}.matchingDemoBody{grid-template-columns:1fr}.matchingDemoSide{display:none}.demoProfile{grid-template-columns:160px 1fr auto}}
+      @media(max-width:620px){.salesHero{padding-top:120px}.demoProfile{grid-template-columns:1fr;text-align:center}.demoAvatar{margin:auto}.demoProfile .fp-tags,.demoProfile .fp-actions{justify-content:center}.matchingDemoHeader{display:block}.matchingDemoHeader p{margin-top:24px}.launchInner:before{font-size:5px}}
+      @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.useCaseGrid article,.featureList article,.customCard,.safetyPoints span,.demoProfile{transition:none}}
+    </style>
   </head>
   <body>
     <div id="root"></div>
