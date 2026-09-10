@@ -57,13 +57,20 @@ Vite injection: `dd23ec0eac2d6bd30a281075a357327233f3974d`.
 
 ## Latest Render verification
 - Web deploy for commit `87667aa25df5c18a45a80cbd65dd4d46c5f49723` is `dep-dah577ht0dsc73dmngag` and is **live**.
-- API deploy for commit `59846989a113cd7e595c3dfa6093bd38067b0373` is `dep-dah6kmjeogqs739lqmcg` and is **live**.
+- API deploy for commit `dbc31f856ad41ae7ebf44ca1ee76ecdbce5b834c` is `dep-dah6pk3ncjis73f9lcng` and is **live**.
 - API build completed successfully: domain, database, and API builds all succeeded.
 - Database migration runner completed successfully with `Applied migrations: none`.
 - NestJS application started successfully.
 - Render confirmed `Your service is live` and exposed `https://universal-matching-platform-api.onrender.com`.
 - Runtime route registration confirmed authentication, profiles, discovery, matching, conversations, notifications, safety, administration, configuration, verification, analytics, and payment webhook routes.
 - The previous PaymentWebhookController runtime-token DI failure is resolved by commit `59846989a113cd7e595c3dfa6093bd38067b0373`.
+
+## Message notification integration completed
+- Existing `NotificationCreationService` is now connected to `MessagingController`.
+- Every newly created message now creates a durable `message` notification for each recipient through the authoritative notification creation boundary.
+- Existing realtime publication remains intact; no second notification persistence path was introduced.
+- The implementation is on `main` as commit `9c5fc19201ae7eb610922d8727ccaeaae5eaf859`.
+- The stale Phase 11 PR #51 was not merged because it was based on an older `main`; its required behavior was ported minimally onto the current `main` instead.
 
 ## Database wiring decision
 The repository `render.yaml` contains the correct declarative wiring:
@@ -92,13 +99,13 @@ The Render Postgres query tool cannot currently query this database because it c
 
 ## Exact stopping point
 - Latest Web deploy: `dep-dah577ht0dsc73dmngag` — **live**.
-- Latest API deploy: `dep-dah6kmjeogqs739lqmcg` — **live**.
-- Latest API commit: `59846989a113cd7e595c3dfa6093bd38067b0373`.
-- API startup, migration, Nest initialization, route registration, and Render live state are confirmed.
+- Latest confirmed API deploy before the notification integration: `dep-dah6pk3ncjis73f9lcng` — **live**.
+- Latest API code commit: `9c5fc19201ae7eb610922d8727ccaeaae5eaf859` — message notification integration, awaiting Render auto-deploy verification.
+- API startup, migration, Nest initialization, route registration, and Render live state are confirmed for the previous commit.
 - Latest progress-record commit is the commit containing this update.
 
 ## Next concrete task
-Run the live matching E2E path against the now-live API and existing Web integration: registration/sign-in -> profile bootstrap -> discovery -> persistent Like/Pass -> mutual Match -> conversation -> message -> notification/read state. Record every observed failure before changing code. Do not recreate existing matching logic or add unrelated features.
+Wait for the automatic Render deployment of `9c5fc19201ae7eb610922d8727ccaeaae5eaf859`, verify it reaches **live**, then run the live matching E2E path against the now-live API and existing Web integration: registration/sign-in -> profile bootstrap -> discovery -> persistent Like/Pass -> mutual Match -> conversation -> message -> notification/read state. Record every observed failure before changing code. Do not recreate existing matching logic or add unrelated features.
 
 ## Anti-duplication rule
 Before every future change, compare the latest commit and this file against the requested task. If a capability already exists, verify or connect it instead of recreating it.
