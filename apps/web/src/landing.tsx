@@ -5,6 +5,7 @@ import './landing-polish.css';
 import './landing-showcase.css';
 import './landing-sales.css';
 import './landing-finish.css';
+import './landing-final.css';
 
 const useCases = [
   ['01', 'Dating', 'Intent-led discovery for people looking for meaningful relationships.'],
