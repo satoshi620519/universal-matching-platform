@@ -1,0 +1,83 @@
+.landingNav .navButton,
+.primaryButton {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.landingNav .navButton:focus-visible,
+.primaryButton:focus-visible {
+  outline:2px solid rgba(232,224,210,.9);
+  outline-offset:4px;
+}
+
+.primaryButton.light:focus-visible {
+  outline-color:rgba(23,21,19,.8);
+}
+
+.heroLanding,
+.introLanding,
+.highlightLanding,
+.statementLanding,
+.ctaLanding,
+.landingFooter {
+  isolation:isolate;
+}
+
+@media (min-width:901px) {
+  .heroCopy {
+    padding-bottom:34px;
+  }
+
+  .heroVisual {
+    transform:translateY(12px);
+  }
+
+  .statementText {
+    max-width:520px;
+  }
+}
+
+@media (max-width:560px) {
+  .landingNav {
+    padding-left:18px;
+    padding-right:18px;
+  }
+
+  .heroCopy h1 {
+    max-width:340px;
+  }
+
+  .heroNote {
+    max-width:220px;
+  }
+
+  .heroBottom {
+    left:22px;
+    bottom:24px;
+  }
+
+  .scrollLine {
+    width:54px;
+  }
+
+  .highlightCard {
+    padding:25px;
+  }
+
+  .statementMark {
+    margin-bottom:45px;
+  }
+
+  .landingFooter {
+    gap:14px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .landingNav nav span,
+  .navButton,
+  .primaryButton,
+  .highlightCard,
+  .cardArrow {
+    transition:none;
+  }
+}
