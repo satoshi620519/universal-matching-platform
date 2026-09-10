@@ -10,7 +10,6 @@ import {
 import { DatabaseService } from '../database/database.service.js';
 import { NotificationRealtimePublicationService } from '../messaging/notification-realtime-publication.service.js';
 import { EffectiveSafetyRestrictionService } from '../safety/effective-safety-restriction.service.js';
-import { UserBlockRepository } from '../safety/user-block.repository.js';
 import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
 
 @Injectable()
@@ -19,7 +18,6 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
     private readonly database: DatabaseService,
     private readonly notificationRealtime: NotificationRealtimePublicationService,
     @Optional() private readonly safety?: EffectiveSafetyRestrictionService,
-    @Optional() private readonly blocks?: UserBlockRepository,
     @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
 
@@ -61,12 +59,15 @@ export class PrismaMatchTransitionRepository implements MatchTransitionRepositor
   }
 
   private async assertPairNotBlocked(firstAccountId: string, secondAccountId: string): Promise<void> {
-    if (!this.blocks) return;
-    const [forward, reverse] = await Promise.all([
-      this.blocks.exists(firstAccountId, secondAccountId),
-      this.blocks.exists(secondAccountId, firstAccountId),
-    ]);
-    if (forward || reverse) throw new ForbiddenException('interaction is blocked between these accounts');
+    const rows = await this.database.$queryRaw<Array<{ exists: boolean }>>`
+      SELECT EXISTS(
+        SELECT 1
+        FROM "user_blocks"
+        WHERE ("blocker_account_id" = ${firstAccountId}::uuid AND "blocked_account_id" = ${secondAccountId}::uuid)
+           OR ("blocker_account_id" = ${secondAccountId}::uuid AND "blocked_account_id" = ${firstAccountId}::uuid)
+      ) AS "exists"
+    `;
+    if (rows[0]?.exists === true) throw new ForbiddenException('interaction is blocked between these accounts');
   }
 
   private async lockPair(tx: { $executeRaw: (strings: TemplateStringsArray, ...values: unknown[]) => Promise<unknown> }, firstAccountId: string, secondAccountId: string): Promise<void> {
