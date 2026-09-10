@@ -35,8 +35,8 @@ function LandingPage() {
             </div>
           </div>
           <div className="heroVisual" aria-hidden="true">
-            <div className="portrait portraitBack"><span>Y</span></div>
-            <div className="portrait portraitMain"><span>A</span></div>
+            <div className="portrait portraitBack"><div className="portraitFigure" /><span className="portraitInitial">Y</span></div>
+            <div className="portrait portraitMain"><div className="portraitFigure" /><span className="portraitInitial">A</span></div>
             <div className="matchBadge"><span className="matchDot" /><div><strong>Perfect match</strong><small>Connection found</small></div></div>
             <div className="locationBadge"><span>◎</span> Anywhere in the world</div>
           </div>
