@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './landing.css';
 import './landing-polish.css';
@@ -40,6 +40,57 @@ function MiniProduct() {
   </div>;
 }
 
+const demoProfiles = [
+  { name: 'Mika', role: 'クリエイター', place: '東京', tags: ['写真', '旅行', 'デザイン'], score: 96, initial: 'M' },
+  { name: 'Alex', role: 'プロダクトマネージャー', place: '大阪', tags: ['起業', '音楽', 'カフェ'], score: 91, initial: 'A' },
+  { name: 'Lina', role: 'フリーランサー', place: '京都', tags: ['アート', '旅', 'コミュニティ'], score: 98, initial: 'L' },
+];
+
+function MatchingExperienceDemo() {
+  const [index, setIndex] = useState(0);
+  const [matched, setMatched] = useState(false);
+  const profile = demoProfiles[index];
+
+  useEffect(() => {
+    if (matched) return;
+    const timer = window.setTimeout(() => setIndex((value) => (value + 1) % demoProfiles.length), 4200);
+    return () => window.clearTimeout(timer);
+  }, [index, matched]);
+
+  const nextProfile = () => {
+    setMatched(false);
+    setIndex((value) => (value + 1) % demoProfiles.length);
+  };
+
+  return <section className="matchingDemo" aria-label="マッチング体験デモ">
+    <div className="matchingDemoHeader">
+      <div><span className="salesEyebrow">LIVE PRODUCT EXPERIENCE</span><h2>実際のマッチングを、<em>ここで体験。</em></h2></div>
+      <p>購入前に、ユーザーが「探す → 選ぶ → マッチする → つながる」体験をイメージできる、製品内蔵型のデモです。</p>
+    </div>
+    <div className="matchingDemoShell">
+      <div className="matchingDemoTop"><span><i/> DEMO / MATCHING</span><span>安全なプロフィール体験</span></div>
+      <div className="matchingDemoBody">
+        <aside className="matchingDemoSide"><span className="demoStepLabel">MATCHING FLOW</span><div className="demoSteps"><b className="active">01 <span>探す</span></b><b className={matched ? 'active' : ''}>02 <span>選ぶ</span></b><b className={matched ? 'active' : ''}>03 <span>マッチ</span></b><b className={matched ? 'active' : ''}>04 <span>つながる</span></b></div><div className="demoFilter"><span>目的</span><strong>共通点の多い人</strong><span>地域</span><strong>日本 · 近くの地域</strong></div></aside>
+        <div className="demoProfileStage">
+          <div className="demoStageMeta"><span>おすすめ</span><span>{index + 1} / {demoProfiles.length}</span></div>
+          <article className={matched ? 'demoProfile matched' : 'demoProfile'}>
+            <div className="demoAvatar"><div className="demoAvatarGlow"/><span>{profile.initial}</span></div>
+            <div className="demoProfileCopy"><span className="demoOnline">● オンライン</span><h3>{profile.name}</h3><p>{profile.role} · {profile.place}</p><div className="demoTags">{profile.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></div>
+            <div className="demoScore"><strong>{profile.score}%</strong><span>相性</span></div>
+          </article>
+          <div className="demoActions">
+            <button type="button" className="demoPass" onClick={nextProfile} aria-label="次のプロフィール">×</button>
+            <button type="button" className="demoLike" onClick={() => setMatched(true)}>{matched ? 'MATCHED' : '♡ いいね'}</button>
+            <button type="button" className="demoPass" onClick={nextProfile} aria-label="次のプロフィール">→</button>
+          </div>
+          {matched && <div className="demoMatchNotice"><span>✓</span><div><strong>MATCHED</strong><p>お互いの興味が一致しました。メッセージを始められます。</p></div><button type="button" onClick={() => setMatched(false)}>もう一度見る</button></div>}
+        </div>
+      </div>
+      <div className="matchingDemoBottom"><span>リアルタイム・デモ</span><span>相性スコア</span><span>プロフィール</span><span>マッチ成立</span></div>
+    </div>
+  </section>;
+}
+
 function LandingPage() {
   return <div className="landing salesLanding">
     <header className="landingNav salesNav">
@@ -51,10 +102,12 @@ function LandingPage() {
     <main>
       <section className="salesHero" id="top">
         <div className="heroAmbient"/><div className="heroRings"/>
-        <div className="salesHeroCopy"><span className="salesEyebrow"><i/> UNIVERSAL MATCHING PLATFORM</span><h1>ひとつの基盤から。<br/><em>あなたの</em>マッチングサービスへ。</h1><p>そのまま使える洗練されたマッチング基盤。ロゴ、世界観、ルール、対象ユーザー、体験まで変えて、あなただけのサービスへ。</p><div className="salesHeroActions"><button className="salesPrimary" type="button" onClick={() => scrollTo('usecases')}>どんなサービスを作れる？ <span>↗</span></button><button className="salesTextButton" type="button" onClick={() => scrollTo('customize')}>そのまま使う。自由に変える。 <span>↓</span></button></div><div className="heroTrust"><span>WEB</span><span>iOS</span><span>ANDROID</span><span>GLOBAL</span></div></div>
+        <div className="salesHeroCopy"><span className="salesEyebrow"><i/> UNIVERSAL MATCHING PLATFORM</span><h1>ひとつの基盤から。<br/><em>あなたの</em>マッチングサービスへ。</h1><p>そのまま使える洗練されたマッチング基盤。ロゴ、世界観、ルール、対象ユーザー、体験まで変えて、あなただけのサービスへ。</p><div className="salesHeroActions"><button className="salesPrimary" type="button" onClick={() => scrollTo('demo')}>マッチングを体験する <span>↘</span></button><button className="salesTextButton" type="button" onClick={() => scrollTo('customize')}>そのまま使う。自由に変える。 <span>↓</span></button></div><div className="heroTrust"><span>WEB</span><span>iOS</span><span>ANDROID</span><span>GLOBAL</span></div></div>
         <div className="salesHeroVisual"><MiniProduct/><div className="floatingStat"><strong>6+</strong><span>マッチング用途</span></div><div className="floatingStat second"><strong>100%</strong><span>ブランド対応</span></div></div>
         <button className="heroScroll" type="button" onClick={() => scrollTo('intro')}>スクロールして見る <i/></button>
       </section>
+
+      <MatchingExperienceDemo />
 
       <section className="salesIntro" id="intro"><div className="salesSectionTop"><span>01 / コンセプト</span><span>ひとつの用途だけのアプリではない</span></div><div className="introHeadline"><h2>ゼロから<br/><em>始めない。</em></h2><div><p>人と人を目的に合わせてつなぐサービスをつくるための、プレミアムな基盤です。デザイン、プロダクト構造、運用まで考えた土台があるから、購入者はゼロから作り直すのではなく、自分の市場づくりに集中できます。</p><button type="button" onClick={() => scrollTo('features')}>含まれるものを見る <span>↘</span></button></div></div><div className="introManifest"><span>01</span><b>目的を決める</b><span>→</span><b>体験をつくる</b><span>→</span><b>自分のサービスにする</b></div></section>
 
