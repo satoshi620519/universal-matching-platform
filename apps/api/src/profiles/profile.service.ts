@@ -22,8 +22,8 @@ import { PrismaCategoryRepository } from './prisma-category.repository.js';
 @Injectable()
 export class ProfileService {
   constructor(
-    @Inject('PROFILE_REPOSITORY') private readonly profiles: PrismaProfileRepository,
-    @Inject('CATEGORY_REPOSITORY') private readonly categories: PrismaCategoryRepository,
+    @Inject(PrismaProfileRepository) private readonly profiles: PrismaProfileRepository,
+    @Inject(PrismaCategoryRepository) private readonly categories: PrismaCategoryRepository,
     @Optional() private readonly categoryFieldSchemas?: CategoryFieldSchemaService,
     @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
