@@ -172,6 +172,39 @@ The top page is considered design-complete only when:
 
 ## Progress log
 
+### Checkpoint 2026-09-10 — First product-led redesign implemented
+
+Status: **IN PROGRESS — TOP PAGE DESIGN ONLY**
+
+Exact commit: `0839bea2ddac6dc07e49406e64e127a86028c1f2`
+
+Changes made:
+- preserved the existing MONO premium identity rather than restarting the design
+- added a dedicated product-led showcase visual system in `apps/web/src/landing-showcase.css`
+- changed the top-page narrative from mostly abstract marketing copy to staged product storytelling
+- added visual-only matching reasoning UI with compatibility, goals, interests, and location context
+- added visual-only discovery UI showing different use-case signals
+- added visual-only trust/safety product surface
+- added visual-only admin/operations surface with metrics and activity visualization
+- added visual-only Quick Launch / brand customization surface
+- kept all showcase surfaces front-end visual concepts only; no real feature behavior, API, database, authentication, or child pages were implemented
+- added responsive layouts for the new showcase sections
+
+Verification:
+- GitHub source updated successfully.
+- Render automatically started a new deployment for commit `0839bea2ddac6dc07e49406e64e127a86028c1f2` because the linked service auto-deploys from `main`.
+- Latest Render inspection at this checkpoint reports deploy `dep-dah1je21qmas73c61fsg` as `build_in_progress`; therefore the new version is **not yet verified live**.
+- No visual browser verification is claimed.
+
+Known remaining work:
+- verify the new Render deployment reaches `live`
+- audit the resulting composition for concrete design defects
+- continue refining only where differentiation, product comprehension, buyer desire, trust, or international appeal improves
+- complete the final top-page design freeze only after those checks
+
+Single next action:
+**Recheck deploy `dep-dah1je21qmas73c61fsg`; if live, audit the new composition and record the next concrete design improvement instead of repeating completed work.**
+
 ### Checkpoint 2026-09-10 — Direction reset for commercial visual objective
 
 Status: **IN PROGRESS — TOP PAGE DESIGN ONLY**
