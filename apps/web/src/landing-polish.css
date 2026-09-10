@@ -182,3 +182,90 @@
     transition:none;
   }
 }
+
+/* Final editorial pass: quiet hierarchy, premium spacing, and tactile cards. */
+.highlightLanding {
+  position:relative;
+}
+
+.highlightLanding::before {
+  content:'02';
+  position:absolute;
+  left:clamp(24px,4vw,64px);
+  bottom:28px;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(80px,11vw,160px);
+  line-height:1;
+  color:rgba(23,21,19,.045);
+  pointer-events:none;
+}
+
+.highlightCard {
+  background:rgba(255,255,255,.12);
+  box-shadow:0 18px 40px rgba(49,42,34,.035);
+}
+
+.highlightCard:nth-child(1)::after,
+.highlightCard:nth-child(2)::after,
+.highlightCard:nth-child(3)::after {
+  position:absolute;
+  right:29px;
+  top:29px;
+  font-size:7px;
+  letter-spacing:.22em;
+  color:#a09280;
+}
+
+.highlightCard:nth-child(1)::after { content:'FOUNDATION'; }
+.highlightCard:nth-child(2)::after { content:'TRUST'; }
+.highlightCard:nth-child(3)::after { content:'FLEXIBLE'; }
+
+.introGrid,
+.highlightLanding {
+  position:relative;
+  z-index:1;
+}
+
+.introGrid > p {
+  position:relative;
+  padding-left:25px;
+  border-left:1px solid #d1c8bb;
+}
+
+.ctaLanding .primaryButton.light {
+  padding-left:25px;
+  padding-right:25px;
+  box-shadow:0 18px 42px rgba(23,21,19,.16);
+}
+
+.landingFooter {
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+@media (max-width:900px) {
+  .introGrid > p {
+    padding-left:18px;
+  }
+
+  .highlightLanding::before {
+    left:auto;
+    right:24px;
+  }
+}
+
+@media (max-width:560px) {
+  .highlightCard:nth-child(1)::after,
+  .highlightCard:nth-child(2)::after,
+  .highlightCard:nth-child(3)::after {
+    right:25px;
+    top:25px;
+  }
+
+  .introGrid > p {
+    padding-left:15px;
+  }
+
+  .highlightLanding::before {
+    display:none;
+  }
+}
