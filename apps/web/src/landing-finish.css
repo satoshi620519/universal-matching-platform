@@ -1,0 +1,73 @@
+/* Final visual refinement layer: distinctive editorial product-showcase treatment. */
+.salesLanding{overflow-x:hidden}
+.salesLanding::selection{background:#b89b70;color:#111}
+.salesHero{isolation:isolate;background:radial-gradient(circle at 76% 46%,rgba(184,155,111,.08),transparent 24%),linear-gradient(115deg,#0b0b0a 0%,#11100e 52%,#0b0b0a 100%)}
+.salesHero::before{content:"";position:absolute;inset:0;opacity:.22;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(90deg,transparent,black 22%,black 78%,transparent)}
+.salesHeroCopy{animation:landingRise .8s ease-out both}
+.salesHeroVisual{animation:landingVisual .95s .12s cubic-bezier(.2,.7,.2,1) both}
+.salesHeroCopy h1{font-weight:450;text-wrap:balance}
+.salesHeroCopy h1 em{color:#d1b58c;font-style:italic}
+.salesHeroCopy>p{font-size:14px;max-width:510px}
+.salesHeroActions .salesPrimary{position:relative;overflow:hidden}
+.salesHeroActions .salesPrimary::after{content:"";position:absolute;inset:0;transform:translateX(-110%);background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transition:transform .65s ease}
+.salesHeroActions .salesPrimary:hover::after{transform:translateX(110%)}
+.salesProduct{position:relative;backdrop-filter:blur(8px);border-radius:2px;box-shadow:0 55px 120px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.025),inset 0 1px 0 rgba(255,255,255,.08);transition:transform .5s ease}
+.salesProduct:hover{transform:rotate(0deg) translateY(-6px)}
+.salesProduct::before{content:"";position:absolute;z-index:4;left:18px;top:48px;width:5px;height:5px;border-radius:50%;background:#c7ad83;box-shadow:11px 0 0 #4c4841,22px 0 0 #4c4841}
+.salesProfileVisual{background:radial-gradient(circle at 35% 35%,#c5a985 0,#765f4e 34%,#211e1a 76%);}
+.salesProfileVisual::before{content:"MATCH / 01";position:absolute;z-index:3;right:18px;top:17px;color:rgba(255,255,255,.55);font-size:7px;letter-spacing:.2em}
+.person{filter:saturate(.72);transition:transform .45s ease,filter .45s ease}
+.salesProduct:hover .person{filter:saturate(1)}
+.salesProduct:hover .personOne{transform:translate(-4px,-5px)}
+.salesProduct:hover .personTwo{transform:translate(5px,-3px)}
+.salesProduct:hover .personThree{transform:translate(2px,4px)}
+.floatingStat{border-radius:1px}
+.floatingStat strong{color:#e1d2bc}
+.salesIntro{position:relative}
+.salesIntro::before{content:"MATCH / DISCOVER / TRUST / CONNECT";position:absolute;right:clamp(24px,9vw,140px);top:38px;color:rgba(21,19,17,.18);font-size:7px;letter-spacing:.22em}
+.introHeadline h2,.sectionHeading h2,.featureIntro h2,.customHeader h2,.safetyCopy h2,.globalSection h2,.launchInner h2{font-weight:450}
+.introHeadline h2 em,.sectionHeading h2 em,.featureIntro h2 em,.customHeader h2 em,.customCard h3 em,.safetyCopy h2 em,.globalSection h2 em,.launchInner h2 em{color:#9c805d;font-style:italic}
+.introManifest{background:linear-gradient(90deg,transparent,rgba(21,19,17,.025),transparent)}
+.useCaseSection{position:relative}
+.useCaseGrid{box-shadow:0 25px 70px rgba(40,33,24,.07)}
+.useCaseGrid article{min-height:250px;background:rgba(255,255,255,.13);transition:background .3s ease,transform .3s ease,box-shadow .3s ease}
+.useCaseGrid article:hover{background:#f7f2e9;transform:translateY(-3px);z-index:2;box-shadow:0 18px 40px rgba(50,40,30,.08)}
+.useCaseGrid h3{letter-spacing:-.025em}
+.useCaseGrid article>b{transition:transform .3s ease}
+.useCaseGrid article:hover>b{transform:translate(4px,-4px)}
+.featureSection{position:relative;overflow:hidden;background:radial-gradient(circle at 82% 18%,rgba(184,155,111,.08),transparent 22%),#10100f}
+.featureSection::after{content:"PLATFORM / 08";position:absolute;right:clamp(24px,9vw,140px);top:48px;color:rgba(255,255,255,.16);font-size:7px;letter-spacing:.24em}
+.featureList article{transition:padding-left .3s ease,background .3s ease}
+.featureList article:hover{padding-left:12px;background:linear-gradient(90deg,rgba(255,255,255,.035),transparent)}
+.featurePlus{transition:transform .3s ease;color:#b9a486}
+.featureList article:hover .featurePlus{transform:rotate(45deg)}
+.customSection{position:relative;background:linear-gradient(135deg,#d9cebd,#e8e0d4 48%,#d5c9b8)}
+.customCard{transition:transform .35s ease,box-shadow .35s ease}
+.customCard:hover{transform:translateY(-5px);box-shadow:0 25px 55px rgba(30,25,20,.12)}
+.customCard.ready{background:linear-gradient(145deg,#f6f0e6,#ece3d5)}
+.customCard.developer{background:linear-gradient(145deg,#1b1a18,#11100f)}
+.cardNumber{font-size:92px;line-height:1}
+.customBottom strong{letter-spacing:-.025em}
+.safetySection{position:relative;overflow:hidden;background:radial-gradient(circle at 25% 50%,rgba(184,155,111,.075),transparent 24%),#111110}
+.shieldCore{position:relative;z-index:2;box-shadow:0 35px 100px rgba(0,0,0,.62),0 0 55px rgba(184,155,111,.08)}
+.safetyBadge{backdrop-filter:blur(10px)}
+.safetyPoints span{border:1px solid rgba(255,255,255,.1);padding:9px 12px;transition:background .25s ease,border-color .25s ease}
+.safetyPoints span:hover{background:rgba(255,255,255,.045);border-color:rgba(196,169,130,.35)}
+.globalSection{position:relative;overflow:hidden;background:#e9e1d5}
+.globalSection::before{content:"JPN  •  EUR  •  USA  •  SEA";position:absolute;right:clamp(24px,9vw,140px);top:44px;color:rgba(21,19,17,.18);font-size:7px;letter-spacing:.18em}
+.globalMap{box-shadow:inset 0 0 0 1px rgba(21,19,17,.08),0 30px 80px rgba(40,32,24,.07)}
+.mapPin{transition:transform .3s ease,box-shadow .3s ease}
+.mapPin:hover{transform:scale(1.14);box-shadow:0 0 0 8px rgba(184,155,111,.1)}
+.launchSection{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 0%,rgba(194,165,120,.13),transparent 38%),#ded4c5}
+.launchSection::before,.launchSection::after{content:"";position:absolute;border:1px solid rgba(21,19,17,.09);border-radius:50%;pointer-events:none}
+.launchSection::before{width:620px;height:620px;left:50%;top:-430px;transform:translateX(-50%)}
+.launchSection::after{width:820px;height:820px;left:50%;top:-530px;transform:translateX(-50%)}
+.launchInner{text-align:center;position:relative;z-index:2}
+.launchInner>p{max-width:570px;margin:28px auto 0;color:#6f675e;line-height:1.85;font-size:14px}
+.launchActions{justify-content:center}
+.salesFooter{background:#0b0b0a}
+@keyframes landingRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes landingVisual{from{opacity:0;transform:translateY(28px) rotate(4deg) scale(.97)}to{opacity:1;transform:translateY(0) rotate(1.5deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){.salesHeroCopy,.salesHeroVisual{animation:none}.salesProduct,.person,.useCaseGrid article,.customCard,.featureList article,.mapPin{transition:none}}
+@media (max-width:900px){.salesHero{min-height:auto;padding-top:135px}.salesIntro::before,.featureSection::after,.globalSection::before{display:none}.salesHeroCopy h1{font-size:clamp(54px,10vw,84px)}.salesHeroVisual{min-height:520px;margin-top:25px}.customCard{min-height:520px}.launchInner h2{font-size:clamp(52px,10vw,76px)}}
+@media (max-width:560px){.salesHero{padding:120px 20px 75px}.salesHeroCopy h1{font-size:52px}.salesHeroActions{align-items:flex-start;flex-direction:column;gap:10px}.heroTrust{gap:11px;margin-top:35px;flex-wrap:wrap}.heroTrust span+span{padding-left:11px}.salesHeroVisual{min-height:420px}.salesProductMain{grid-template-columns:1fr;gap:0}.salesProfileVisual{height:235px}.salesProductInfo{padding:25px 5px 10px}.salesProductInfo h3{font-size:45px}.floatingStat{display:none}.salesIntro,.useCaseSection,.featureSection,.customSection,.safetySection{padding-left:20px;padding-right:20px}.introHeadline,.sectionHeading,.featureSection,.safetySection{grid-template-columns:1fr;gap:45px}.introHeadline{padding:70px 0}.introManifest{grid-template-columns:auto 1fr;gap:10px}.introManifest span:nth-of-type(n+2){display:none}.introManifest b{padding:6px 0}.useCaseGrid{grid-template-columns:1fr}.useCaseGrid article{min-height:190px}.customSplit{grid-template-columns:1fr}.customCard{min-height:500px;padding:25px}.customItems{left:25px;right:25px;bottom:25px}.customCard h3{margin-top:100px}.safetyVisual{height:350px}.safetyOrbit.o2{width:330px;height:330px}.safetyOrbit.o1{width:250px;height:250px}.shieldCore{width:115px;height:140px}.globalSection{grid-template-columns:1fr!important}.launchActions{align-items:center}}
