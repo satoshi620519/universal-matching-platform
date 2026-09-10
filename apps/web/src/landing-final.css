@@ -54,3 +54,12 @@
 @keyframes scrollCue{0%,25%{transform:translateX(0);opacity:0}35%{opacity:1}70%{transform:translateX(500%);opacity:1}85%,100%{transform:translateX(500%);opacity:0}}
 @media (max-width:560px){.heroScroll{font-size:6px}.heroScroll i{width:46px}.heroScroll:hover i{width:58px}}
 @media (prefers-reduced-motion:reduce){.salesNav button,.salesNav a{transition:none}.salesHeroVisual::after{display:none}.heroScroll,.heroScroll i{transition:none}.heroScroll i::after{animation:none}}
+/* Final hero framing: subtle editorial marks make the product mockup feel like a deliberate product presentation. */
+.salesHero::before{content:"01";position:absolute;left:clamp(24px,7vw,110px);top:112px;color:rgba(255,255,255,.16);font-family:'Playfair Display',serif;font-size:12px;font-style:italic;letter-spacing:.08em}
+.salesHero::after{content:"FOUNDATION / PURPOSE / CONNECTION";position:absolute;right:clamp(24px,7vw,110px);bottom:30px;color:rgba(255,255,255,.18);font-size:6px;letter-spacing:.24em;pointer-events:none}
+.salesProduct{position:relative;isolation:isolate}
+.salesProduct::before,.salesProduct::after{content:"";position:absolute;width:18px;height:18px;pointer-events:none;opacity:.5}
+.salesProduct::before{left:-9px;top:-9px;border-left:1px solid #b9a486;border-top:1px solid #b9a486}
+.salesProduct::after{right:-9px;bottom:-9px;border-right:1px solid #b9a486;border-bottom:1px solid #b9a486}
+@media (max-width:700px){.salesHero::before{top:96px;font-size:10px}.salesHero::after{right:20px;bottom:24px;font-size:5px}.salesProduct::before,.salesProduct::after{display:none}}
+@media (prefers-reduced-motion:reduce){.salesProduct::before,.salesProduct::after{transition:none}}
