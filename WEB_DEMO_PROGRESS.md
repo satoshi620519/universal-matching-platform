@@ -14,11 +14,11 @@ Complete the **Web version demo site first**. iOS and Android are explicitly def
 ## Current baseline
 - Repository: `satoshi620519/universal-matching-platform`
 - Branch: `main`
-- Current commit: `5aa2874c8c565cd791c395ea0c9345fd0f047611`
-- Latest change: `style(web): finish premium landing visual layer`
+- Current commit: `a3192184b3d6b8772bbf4c8698da03713309cf86`
+- Latest change: `style(web): refine demo interaction states`
 - Web deployment: Render static site `universal-matching-platform-demo`
-- Latest Render deployment: `dep-dah32mgu01pc73cehm3g`
-- Latest known deployment state: `live`
+- Latest previously verified Render deployment: `dep-dah32mgu01pc73cehm3g`
+- Latest previously verified deployment state: `live`
 - Demo URL: `https://universal-matching-platform-demo.onrender.com`
 
 ## Work already completed
@@ -28,7 +28,8 @@ Complete the **Web version demo site first**. iOS and Android are explicitly def
 4. Premium visual layers were added and consolidated without creating another CSS layer.
 5. JSX nesting was corrected after the earlier build failure.
 6. The latest visual-only pass was applied through `apps/web/index.html` inline styling to avoid unnecessary stylesheet proliferation.
-7. The latest deployment reached `live`.
+7. Render deployment reached `live` for the prior visual baseline.
+8. **2026-09-10 checkpoint:** refined existing in-product interaction states in `apps/web/index.html` without rebuilding the landing page or adding another stylesheet. Added stronger filter-state feedback, list hover/focus treatment, chat input focus treatment, profile/safety/global/settings visual feedback, and responsive polish.
 
 ## Known demo limitations to address during Web completion
 These are existing, known limitations—not tasks already completed:
@@ -51,5 +52,7 @@ Before every future Web change, compare the latest commit and this file against 
 
 ## Session checkpoint
 - Date: 2026-09-10
-- State: Web visual baseline is live; Web demo completion work is next.
-- Next task: improve the existing FullProductDemo interactions in-place, starting with discovery filtering and replacing the most visible alert placeholders with in-product UI.
+- State: Web demo visual layer has been refined in-place; no iOS/Android work started.
+- Latest code commit: `a3192184b3d6b8772bbf4c8698da03713309cf86`.
+- Verification: GitHub write succeeded; no shell/build execution was available in this environment, so no new build/deploy PASS is claimed here. The previously verified Render deployment remains the baseline.
+- Exact next task: improve the existing FullProductDemo behavior in-place, starting with making the discovery category selection actually change the displayed candidate set, then replace the highest-visibility alert placeholder with an in-product panel/flow.
