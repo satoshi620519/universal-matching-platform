@@ -1,0 +1,19 @@
+/* Final interaction polish: premium navigation, focus states, and section rhythm. */
+.salesNav{position:fixed;top:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,rgba(8,8,7,.92),rgba(8,8,7,.68) 65%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .3s ease,backdrop-filter .3s ease}
+.salesNav::after{content:"";position:absolute;left:clamp(24px,7vw,110px);right:clamp(24px,7vw,110px);bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent)}
+.salesNav button,.salesNav a{transition:color .22s ease,opacity .22s ease,transform .22s ease}
+.salesNav nav button:hover{color:#e4d6c2;transform:translateY(-1px)}
+.salesNav button:focus-visible,.salesHero button:focus-visible,.salesProductInfo button:focus-visible{outline:1px solid #c7ad83;outline-offset:5px}
+.salesLanding section[id]{scroll-margin-top:86px}
+.salesHero{padding-top:170px}
+.salesHeroCopy,.salesHeroVisual{will-change:transform}
+.salesHeroVisual::after{content:"";position:absolute;inset:8% -4% 7% 4%;border:1px solid rgba(197,169,129,.08);pointer-events:none;z-index:-1}
+.salesProductBar span:last-child{color:#b9a486}
+.salesProductInfo button:hover{background:rgba(255,255,255,.065);border-color:rgba(197,169,129,.3);color:#e1d5c6}
+.featureList article,.useCaseGrid article,.customCard,.safetyPoints span,.mapPin{will-change:transform}
+.launchInner h2{text-wrap:balance}
+.landingFooter{position:relative}
+.landingFooter::before{content:"";position:absolute;left:clamp(24px,7vw,110px);right:clamp(24px,7vw,110px);top:0;height:1px;background:rgba(255,255,255,.08)}
+@media (max-width:900px){.salesHero{padding-top:150px}.salesNav{background:rgba(8,8,7,.88)}}
+@media (max-width:560px){.salesNav{padding-left:20px;padding-right:20px}.salesNav::after{left:20px;right:20px}.salesHero{padding-top:125px}.salesLanding section[id]{scroll-margin-top:70px}.salesHeroVisual::after{inset:4% -2% 3% -2%}}
+@media (prefers-reduced-motion:reduce){.salesNav button,.salesNav a{transition:none}.salesHeroVisual::after{display:none}}
