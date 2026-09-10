@@ -76,6 +76,38 @@
   transform:translateX(120%);
 }
 
+.introLanding,
+.statementLanding,
+.ctaLanding {
+  overflow:hidden;
+}
+
+.introLanding::before {
+  content:'01';
+  position:absolute;
+  right:clamp(24px,8vw,120px);
+  top:50%;
+  transform:translateY(-50%);
+  font-family:'Playfair Display',serif;
+  font-size:clamp(150px,20vw,300px);
+  line-height:1;
+  color:rgba(23,21,19,.035);
+  pointer-events:none;
+}
+
+.statementLanding::after {
+  content:'CONNECTION / TRUST / PURPOSE';
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  color:rgba(245,241,233,.16);
+  font-size:8px;
+  letter-spacing:.34em;
+  pointer-events:none;
+}
+
 @media (min-width:901px) {
   .heroCopy {
     padding-bottom:34px;
@@ -124,6 +156,12 @@
 
   .statementMark {
     margin-bottom:45px;
+  }
+
+  .statementLanding::after {
+    bottom:22px;
+    font-size:7px;
+    letter-spacing:.2em;
   }
 
   .landingFooter {
