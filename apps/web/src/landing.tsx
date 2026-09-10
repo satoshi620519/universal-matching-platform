@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 import './landing.css';
 
 const highlights = [
-  { number: '01', title: 'Any purpose', text: 'Dating, friendship, professional networking, communities, services — one adaptable foundation.' },
-  { number: '02', title: 'Made for trust', text: 'A refined experience where privacy, safety, and meaningful interaction come first.' },
-  { number: '03', title: 'Ready to become yours', text: 'A premium starting point that can be shaped around your brand, market, and audience.' },
+  { number: '01', title: 'One foundation', text: 'Dating, friendship, professional networking, communities, services — one adaptable foundation.' },
+  { number: '02', title: 'Trust by design', text: 'A refined experience where privacy, safety, and meaningful interaction come first.' },
+  { number: '03', title: 'Make it yours', text: 'A premium starting point that can be shaped around your brand, market, and audience.' },
 ];
 
 function LandingPage() {
