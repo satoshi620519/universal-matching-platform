@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './landing.css';
+import './landing-polish.css';
 
 const highlights = [
   { number: '01', title: 'One foundation', text: 'Dating, friendship, professional networking, communities, services — one adaptable foundation.' },
