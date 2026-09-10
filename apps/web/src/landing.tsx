@@ -8,35 +8,35 @@ import './landing-finish.css';
 import './landing-final.css';
 
 const useCases = [
-  ['01', 'Dating', 'Intent-led discovery for people looking for meaningful relationships.'],
-  ['02', 'Friendship', 'A calmer way to meet people around shared interests and life stages.'],
-  ['03', 'Business', 'Professional networking, partnerships, recruiting, and introductions.'],
-  ['04', 'Mentorship', 'Connect people by goals, expertise, experience, and availability.'],
-  ['05', 'Community', 'Build focused communities around places, interests, events, or causes.'],
-  ['06', 'Services', 'Match customers with specialists, creators, freelancers, or local providers.'],
+  ['01', '恋愛・パートナー', '価値観や目的をもとに、真剣な出会いを求める人をつなぐ。'],
+  ['02', '友だち・仲間', '共通の趣味や関心、ライフスタイルから自然なつながりをつくる。'],
+  ['03', 'ビジネス', '人脈づくり、業務提携、採用、ビジネスパートナーとの出会いに。'],
+  ['04', 'メンター・相談相手', '目標、専門知識、経験、活動時間などをもとに最適な相手をつなぐ。'],
+  ['05', 'コミュニティ', '地域、趣味、イベント、テーマなど、目的に合ったコミュニティをつくる。'],
+  ['06', 'サービス・仕事', '専門家、クリエイター、フリーランサー、地域の事業者と利用者をつなぐ。'],
 ];
 
 const featureGroups = [
-  ['01', 'Match & discover', 'Matching engine, configurable scoring, recommendations, search, filters, sorting, cards, lists, grids, likes, interests and mutual matches.'],
-  ['02', 'Profiles & identity', 'Avatars, galleries, bios, structured fields, custom fields, verification states, profile completion and privacy visibility.'],
-  ['03', 'Messages & notifications', 'Conversations, real-time messaging architecture, read states, typing, media, in-app notifications, email and push-ready flows.'],
-  ['04', 'Trust & safety', 'Block, report, evidence capture, moderation queues, warnings, suspension, bans, audit trails, rate limits and spam controls.'],
-  ['05', 'Admin & analytics', 'Users, profiles, reports, moderation, configuration, feature flags, localization, system health and product analytics.'],
-  ['06', 'Global & localization', 'Countries, regions, cities, languages, locales, time zones, distance matching and privacy-aware location precision.'],
-  ['07', 'Payments & extensibility', 'Optional paid features, payment integrations, API conventions, versioning, webhooks and extension-ready architecture.'],
-  ['08', 'Web / iOS / Android', 'Responsive web plus native-quality mobile product structure, sharing the same product philosophy and configurable foundation.'],
+  ['01', 'マッチング・検索', 'マッチングエンジン、スコアリング、レコメンド、検索、絞り込み、並び替え、カード、リスト、いいね、興味、相互マッチ。'],
+  ['02', 'プロフィール・本人確認', 'プロフィール、画像、自己紹介、項目設定、カスタム項目、確認ステータス、プロフィール完成度、公開範囲を柔軟に設定。'],
+  ['03', 'メッセージ・通知', '会話、リアルタイムメッセージ、既読、入力中表示、メディア、アプリ内通知、メール・プッシュ通知に対応できる設計。'],
+  ['04', '安心・安全', 'ブロック、通報、証拠情報、モデレーション、警告、利用停止、アカウント停止、監査ログ、レート制限、不正対策。'],
+  ['05', '管理・分析', 'ユーザー、プロフィール、通報、モデレーション、各種設定、機能管理、多言語、システム状態、サービス分析を管理。'],
+  ['06', 'グローバル対応', '国、地域、都市、言語、ロケール、タイムゾーン、距離検索、位置情報の公開範囲まで地域に合わせて設定。'],
+  ['07', '決済・拡張', '有料機能、決済連携、API、バージョニング、Webhookなど、将来のサービス拡張を見据えた設計。'],
+  ['08', 'Web / iOS / Android', 'Webのレスポンシブ対応に加え、iOS・Androidにも展開できる共通のプロダクト基盤。'],
 ];
 
 function scrollTo(id: string) { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 
 function MiniProduct() {
   return <div className="salesProduct">
-    <div className="salesProductBar"><span>NEXA / MATCHING</span><span>LIVE PREVIEW</span></div>
+    <div className="salesProductBar"><span>NEXA / マッチング</span><span>ライブプレビュー</span></div>
     <div className="salesProductMain">
-      <div className="salesProfileVisual"><div className="orbit orbitA"/><div className="orbit orbitB"/><div className="person personOne">A</div><div className="person personTwo">M</div><div className="person personThree">L</div><span className="visualLabel">PEOPLE / PURPOSE / PLACE</span></div>
-      <div className="salesProductInfo"><span className="micro">YOUR NEXT CONNECTION</span><h3>98%<em> compatible</em></h3><p>Shared interests<br/>Goals · Context · Intent</p><div className="signal"><i/><i/><i/><i/><i/></div><button type="button" onClick={() => scrollTo('features')}>Explore the system <b>↗</b></button></div>
+      <div className="salesProfileVisual"><div className="orbit orbitA"/><div className="orbit orbitB"/><div className="person personOne">A</div><div className="person personTwo">M</div><div className="person personThree">L</div><span className="visualLabel">人 / 目的 / 場所</span></div>
+      <div className="salesProductInfo"><span className="micro">あなたの次のつながり</span><h3>98%<em> マッチ</em></h3><p>共通の興味<br/>目的 · 背景 · 意思</p><div className="signal"><i/><i/><i/><i/><i/></div><button type="button" onClick={() => scrollTo('features')}>システムを見る <b>↗</b></button></div>
     </div>
-    <div className="salesProductFoot"><span>Private by design</span><span>Configurable rules</span><span>Built for your market</span></div>
+    <div className="salesProductFoot"><span>プライバシー設計</span><span>ルールを設定可能</span><span>市場に合わせて構築</span></div>
   </div>;
 }
 
@@ -44,33 +44,33 @@ function LandingPage() {
   return <div className="landing salesLanding">
     <header className="landingNav salesNav">
       <button className="landingBrand landingBrandButton" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><span className="brandSymbol">N</span><span>NEXA</span></button>
-      <nav aria-label="Landing navigation"><button type="button" onClick={() => scrollTo('usecases')}>Use cases</button><button type="button" onClick={() => scrollTo('features')}>Features</button><button type="button" onClick={() => scrollTo('customize')}>Customize</button><button type="button" onClick={() => scrollTo('safety')}>Safety</button></nav>
-      <button className="navButton" type="button" onClick={() => scrollTo('launch')}>See the platform</button>
+      <nav aria-label="ページナビゲーション"><button type="button" onClick={() => scrollTo('usecases')}>活用例</button><button type="button" onClick={() => scrollTo('features')}>機能</button><button type="button" onClick={() => scrollTo('customize')}>カスタマイズ</button><button type="button" onClick={() => scrollTo('safety')}>安心・安全</button></nav>
+      <button className="navButton" type="button" onClick={() => scrollTo('launch')}>プラットフォームを見る</button>
     </header>
 
     <main>
       <section className="salesHero" id="top">
         <div className="heroAmbient"/><div className="heroRings"/>
-        <div className="salesHeroCopy"><span className="salesEyebrow"><i/> UNIVERSAL MATCHING PLATFORM</span><h1>One foundation.<br/><em>Your</em> matching service.</h1><p>Launch a polished matching product as-is, or reshape the brand, rules, audience and experience until it becomes unmistakably yours.</p><div className="salesHeroActions"><button className="salesPrimary" type="button" onClick={() => scrollTo('usecases')}>See what you can build <span>↗</span></button><button className="salesTextButton" type="button" onClick={() => scrollTo('customize')}>As-is or fully customized <span>↓</span></button></div><div className="heroTrust"><span>WEB</span><span>iOS</span><span>ANDROID</span><span>GLOBAL</span></div></div>
-        <div className="salesHeroVisual"><MiniProduct/><div className="floatingStat"><strong>6+</strong><span>matching models</span></div><div className="floatingStat second"><strong>100%</strong><span>brand-ready</span></div></div>
-        <button className="heroScroll" type="button" onClick={() => scrollTo('intro')}>SCROLL TO DISCOVER <i/></button>
+        <div className="salesHeroCopy"><span className="salesEyebrow"><i/> UNIVERSAL MATCHING PLATFORM</span><h1>ひとつの基盤から。<br/><em>あなたの</em>マッチングサービスへ。</h1><p>そのまま使える洗練されたマッチング基盤。ロゴ、世界観、ルール、対象ユーザー、体験まで変えて、あなただけのサービスへ。</p><div className="salesHeroActions"><button className="salesPrimary" type="button" onClick={() => scrollTo('usecases')}>どんなサービスを作れる？ <span>↗</span></button><button className="salesTextButton" type="button" onClick={() => scrollTo('customize')}>そのまま使う。自由に変える。 <span>↓</span></button></div><div className="heroTrust"><span>WEB</span><span>iOS</span><span>ANDROID</span><span>GLOBAL</span></div></div>
+        <div className="salesHeroVisual"><MiniProduct/><div className="floatingStat"><strong>6+</strong><span>マッチング用途</span></div><div className="floatingStat second"><strong>100%</strong><span>ブランド対応</span></div></div>
+        <button className="heroScroll" type="button" onClick={() => scrollTo('intro')}>スクロールして見る <i/></button>
       </section>
 
-      <section className="salesIntro" id="intro"><div className="salesSectionTop"><span>01 / THE IDEA</span><span>NOT A SINGLE-PURPOSE APP</span></div><div className="introHeadline"><h2>Don't start from<br/><em>zero.</em></h2><div><p>This is a premium foundation for building services that connect people for a purpose. The product already has the visual language, product structure and operational thinking — so a buyer can focus on their market instead of rebuilding the basics.</p><button type="button" onClick={() => scrollTo('features')}>What is included <span>↘</span></button></div></div><div className="introManifest"><span>01</span><b>CHOOSE THE PURPOSE</b><span>→</span><b>SHAPE THE EXPERIENCE</b><span>→</span><b>MAKE IT YOURS</b></div></section>
+      <section className="salesIntro" id="intro"><div className="salesSectionTop"><span>01 / コンセプト</span><span>ひとつの用途だけのアプリではない</span></div><div className="introHeadline"><h2>ゼロから<br/><em>始めない。</em></h2><div><p>人と人を目的に合わせてつなぐサービスをつくるための、プレミアムな基盤です。デザイン、プロダクト構造、運用まで考えた土台があるから、購入者はゼロから作り直すのではなく、自分の市場づくりに集中できます。</p><button type="button" onClick={() => scrollTo('features')}>含まれるものを見る <span>↘</span></button></div></div><div className="introManifest"><span>01</span><b>目的を決める</b><span>→</span><b>体験をつくる</b><span>→</span><b>自分のサービスにする</b></div></section>
 
-      <section className="useCaseSection" id="usecases"><div className="sectionHeading"><div><span className="salesEyebrow">02 / ONE CORE · MANY MARKETS</span><h2>What will you<br/><em>connect?</em></h2></div><p>The same foundation can become a dating service, a professional network, a local community, a mentorship product, or a completely new niche. The buyer decides the purpose.</p></div><div className="useCaseGrid">{useCases.map(([n,t,d]) => <article key={n}><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div><b>↗</b></article>)}</div></section>
+      <section className="useCaseSection" id="usecases"><div className="sectionHeading"><div><span className="salesEyebrow">02 / ひとつの基盤 · 多くの市場</span><h2>誰と誰を<br/><em>つなぐ？</em></h2></div><p>同じ基盤から、恋愛、友だち、ビジネス、メンター、地域コミュニティ、専門サービスなど、さまざまなマッチングサービスへ展開できます。用途は購入者が決められます。</p></div><div className="useCaseGrid">{useCases.map(([n,t,d]) => <article key={n}><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div><b>↗</b></article>)}</div></section>
 
-      <section className="featureSection" id="features"><div className="featureIntro"><span className="salesEyebrow">03 / THE PLATFORM</span><h2>Everything buyers<br/><em>need to see.</em></h2><p>Not a vague promise. The sales experience makes the scope visible: product, safety, operations, global readiness and the foundations needed to customize it.</p></div><div className="featureList">{featureGroups.map(([n,t,d]) => <article key={n}><span className="featureNo">{n}</span><div><h3>{t}</h3><p>{d}</p></div><span className="featurePlus">+</span></article>)}</div></section>
+      <section className="featureSection" id="features"><div className="featureIntro"><span className="salesEyebrow">03 / プラットフォーム</span><h2>サービスに必要なものを<br/><em>ひとつの基盤に。</em></h2><p>曖昧な「マッチングアプリ」ではありません。プロダクト、安心・安全、運用、グローバル対応、カスタマイズまで、サービスとして成立させるための土台を見える形にしています。</p></div><div className="featureList">{featureGroups.map(([n,t,d]) => <article key={n}><span className="featureNo">{n}</span><div><h3>{t}</h3><p>{d}</p></div><span className="featurePlus">+</span></article>)}</div></section>
 
-      <section className="customSection" id="customize"><div className="customHeader"><span className="salesEyebrow">04 / MAKE IT YOURS</span><h2>Use it now.<br/><em>Own the direction.</em></h2></div><div className="customSplit"><article className="customCard ready"><span className="cardKicker">QUICK LAUNCH</span><div className="cardNumber">01</div><h3>Keep the design.<br/>Change the <em>identity.</em></h3><p>For buyers who want to launch quickly. Replace the logo, colors, imagery, language, terminology and legal/support links — then publish.</p><div className="customItems"><span>Logo & colors</span><span>Images & typography</span><span>Languages & regions</span><span>Profile questions</span></div></article><article className="customCard developer"><span className="cardKicker">ADVANCED CUSTOMIZATION</span><div className="cardNumber">02</div><h3>Change the rules.<br/>Make it <em>different.</em></h3><p>For buyers with a product team. Source code stays open to customization: matching logic, profile fields, onboarding, integrations, APIs and new features.</p><div className="customItems"><span>Matching algorithms</span><span>Feature visibility</span><span>API & webhooks</span><span>New product logic</span></div></article></div><div className="customBottom"><span>THE RESULT</span><strong>It can look like the product you bought — or like a product you built yourself.</strong></div></section>
+      <section className="customSection" id="customize"><div className="customHeader"><span className="salesEyebrow">04 / 自分のサービスへ</span><h2>すぐ使える。<br/><em>方向性は、自分で決める。</em></h2></div><div className="customSplit"><article className="customCard ready"><span className="cardKicker">クイックローンチ</span><div className="cardNumber">01</div><h3>デザインは活かす。<br/><em>ブランドを変える。</em></h3><p>すぐにサービスを始めたい購入者向け。ロゴ、カラー、画像、言語、用語、利用規約・サポート情報などを変更して公開できます。</p><div className="customItems"><span>ロゴ・カラー</span><span>画像・文字デザイン</span><span>言語・地域</span><span>プロフィール項目</span></div></article><article className="customCard developer"><span className="cardKicker">高度なカスタマイズ</span><div className="cardNumber">02</div><h3>ルールを変える。<br/><em>違うサービスにする。</em></h3><p>開発チームを持つ購入者向け。ソースコードをカスタマイズし、マッチングロジック、プロフィール、導線、API、新機能まで自由に拡張できます。</p><div className="customItems"><span>マッチングアルゴリズム</span><span>機能の表示設定</span><span>API・Webhook</span><span>独自のサービスロジック</span></div></article></div><div className="customBottom"><span>完成するもの</span><strong>購入したサービスの雰囲気を残すことも、自分で作ったようなサービスに変えることもできます。</strong></div></section>
 
-      <section className="safetySection" id="safety"><div className="safetyVisual"><div className="shieldCore">N</div><div className="safetyOrbit o1"/><div className="safetyOrbit o2"/><div className="safetyBadge">TRUST / BUILT IN</div></div><div className="safetyCopy"><span className="salesEyebrow">05 / TRUST & SAFETY</span><h2>Premium means<br/><em>responsible.</em></h2><p>Privacy and safety are part of the product story, not an afterthought. Buyers can present a service that feels considered from the first interaction to moderation and administration.</p><div className="safetyPoints"><span>Privacy controls</span><span>Report & block</span><span>Moderation queue</span><span>Audit logs</span><span>Abuse prevention</span><span>Location privacy</span></div></div></section>
+      <section className="safetySection" id="safety"><div className="safetyVisual"><div className="shieldCore">N</div><div className="safetyOrbit o1"/><div className="safetyOrbit o2"/><div className="safetyBadge">安心 / はじめから設計</div></div><div className="safetyCopy"><span className="salesEyebrow">05 / 安心・安全</span><h2>プレミアムとは、<br/><em>責任まで考えること。</em></h2><p>プライバシーと安全性を後付けにしない。最初の利用体験から、通報、モデレーション、管理まで、安心して運営できるサービス設計を目指します。</p><div className="safetyPoints"><span>プライバシー設定</span><span>通報・ブロック</span><span>モデレーション</span><span>監査ログ</span><span>不正・迷惑行為対策</span><span>位置情報の保護</span></div></div></section>
 
-      <section className="globalSection"><div><span className="salesEyebrow">06 / GLOBAL BY DESIGN</span><h2>Local enough<br/>for <em>any market.</em></h2></div><div className="globalMap"><div className="mapLines"/><span className="mapPin p1">JP</span><span className="mapPin p2">EU</span><span className="mapPin p3">US</span><span className="mapPin p4">SEA</span><div className="mapCaption"><b>REGION AWARE</b><span>Country · Region · City · Language · Timezone</span></div></div></section>
+      <section className="globalSection"><div><span className="salesEyebrow">06 / グローバル設計</span><h2>どの市場にも<br/><em>合わせられる。</em></h2></div><div className="globalMap"><div className="mapLines"/><span className="mapPin p1">日本</span><span className="mapPin p2">EU</span><span className="mapPin p3">米国</span><span className="mapPin p4">東南アジア</span><div className="mapCaption"><b>地域に合わせて設定</b><span>国 · 地域 · 都市 · 言語 · タイムゾーン</span></div></div></section>
 
-      <section className="launchSection" id="launch"><div className="launchInner"><span className="salesEyebrow">07 / YOUR NEXT PRODUCT</span><h2>Buy the foundation.<br/><em>Build the connection.</em></h2><p>A polished starting point for a serious matching business — ready to use, ready to customize, ready to become yours.</p><div className="launchActions"><button className="salesPrimary dark" type="button" onClick={() => scrollTo('features')}>Explore all features <span>↗</span></button><button className="salesTextButton darkText" type="button" onClick={() => scrollTo('top')}>Back to top ↑</button></div></div></section>
+      <section className="launchSection" id="launch"><div className="launchInner"><span className="salesEyebrow">07 / 次のサービスへ</span><h2>基盤を手に入れる。<br/><em>つながりをつくる。</em></h2><p>本気のマッチングサービスを始めるための、洗練された出発点。そのまま使えて、自由に変えられて、自分のサービスにできます。</p><div className="launchActions"><button className="salesPrimary dark" type="button" onClick={() => scrollTo('features')}>すべての機能を見る <span>↗</span></button><button className="salesTextButton darkText" type="button" onClick={() => scrollTo('top')}>トップへ戻る ↑</button></div></div></section>
     </main>
-    <footer className="landingFooter salesFooter"><button className="landingBrand landingBrandButton" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><span className="brandSymbol">N</span><span>NEXA</span></button><span>Universal matching platform · Web · iOS · Android</span><span>© 2026</span></footer>
+    <footer className="landingFooter salesFooter"><button className="landingBrand landingBrandButton" type="button" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}><span className="brandSymbol">N</span><span>NEXA</span></button><span>ユニバーサル・マッチングプラットフォーム · Web · iOS · Android</span><span>© 2026</span></footer>
   </div>;
 }
 
