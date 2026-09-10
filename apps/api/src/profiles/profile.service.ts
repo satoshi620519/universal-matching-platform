@@ -1,12 +1,10 @@
-import { Injectable, Optional } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import {
   createProfile,
-  type CategoryRepository,
   type GeographicScope,
   type Profile,
   type ProfileFieldValue,
-  type ProfileRepository,
   type ProfileFieldSchema,
   validateProfileFields,
   calculateProfileCompletion,
@@ -18,12 +16,14 @@ import {
 } from '@universal/domain';
 import { CategoryFieldSchemaService } from './category-field-schema.service.js';
 import { AnalyticsEventRecordingService } from '../analytics/analytics-event-recording.service.js';
+import { PrismaProfileRepository } from './prisma-profile.repository.js';
+import { PrismaCategoryRepository } from './prisma-category.repository.js';
 
 @Injectable()
 export class ProfileService {
   constructor(
-    private readonly profiles: ProfileRepository,
-    private readonly categories: CategoryRepository,
+    @Inject('PROFILE_REPOSITORY') private readonly profiles: PrismaProfileRepository,
+    @Inject('CATEGORY_REPOSITORY') private readonly categories: PrismaCategoryRepository,
     @Optional() private readonly categoryFieldSchemas?: CategoryFieldSchemaService,
     @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
