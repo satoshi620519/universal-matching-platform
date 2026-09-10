@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Headers, Post, Req, type RawBodyRequest } from '@nestjs/common';
 import type { FastifyRequest } from 'fastify';
-import type { PaymentWebhookProcessor } from './payment-webhook-processor.js';
-import type { VerifiedPaymentWebhookTransport } from './payment-webhook-transport.js';
+import { PaymentWebhookProcessor } from './payment-webhook-processor.js';
+import { VerifiedPaymentWebhookTransport } from './payment-webhook-transport.js';
 
 /** HTTP boundary: only cryptographically verified webhook data reaches the processor. */
 @Controller('payments/webhook')
