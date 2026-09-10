@@ -1,4 +1,4 @@
-export const API_BASE_URL = (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_API_BASE_URL ?? 'http://localhost:3000';
+export const API_BASE_URL = (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_API_BASE_URL ?? 'https://universal-matching-platform-api.onrender.com';
 
 export type Message = { id:string; conversationId:string; senderAccountId:string; body:string; createdAt:string };
 export type Conversation = { id:string; createdAt:string; participants:Array<{accountId:string; joinedAt:string}> };
