@@ -57,11 +57,7 @@ export class ProfileDiscoveryController {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'profile-metadata-update' });
     const existing = await this.profileRepository.findByAccountId(principal.accountId);
     if (!existing) throw new NotFoundException('profile not found');
-    return this.profiles.update(existing.id, {
-      avatar: body.avatar,
-      gallery: body.gallery,
-      biography: body.biography,
-    });
+    return this.profiles.update(existing.id, { avatar: body.avatar, gallery: body.gallery, biography: body.biography });
   }
 
   @Post('moderation/profiles/:accountId/verification')
@@ -99,16 +95,8 @@ export class ProfileDiscoveryController {
     const profile = await this.profileRepository.findByAccountId(accountId);
     if (!profile) throw new NotFoundException('profile not found');
     const fieldSchema = await this.schemaFor(profile.categoryId);
-    const projectionPolicy: ProfileProjectionPolicy = Object.fromEntries(
-      Object.entries(fieldSchema).map(([key, rule]) => [key, rule.visibility ?? 'public']),
-    );
-    return projectProfile(
-      profile,
-      { accountId: principal.accountId, privileged: await this.admin.can(principal.accountId, 'manage-moderation') },
-      projectionPolicy,
-      PUBLIC_CORE_PROJECTION,
-      await this.locationPrecision.resolve(),
-    );
+    const projectionPolicy: ProfileProjectionPolicy = Object.fromEntries(Object.entries(fieldSchema).map(([key, rule]) => [key, rule.visibility ?? 'public']));
+    return projectProfile(profile, { accountId: principal.accountId, privileged: await this.admin.can(principal.accountId, 'manage-moderation') }, projectionPolicy, PUBLIC_CORE_PROJECTION, await this.locationPrecision.resolve());
   }
 
   @Patch('profiles/me')
@@ -133,23 +121,8 @@ export class ProfileDiscoveryController {
     const subjectProfile = await this.profileRepository.findByAccountId(principal.accountId);
     const matchingRules = await this.matchingRules.resolve();
     const distanceConstraint = maxDistanceMeters === undefined ? undefined : { maxDistanceMeters: Number(maxDistanceMeters) };
-    if (distanceConstraint && !await this.distanceMatching.isEnabled()) {
-      throw new BadRequestException('distance matching is disabled by deployment configuration');
-    }
-    return this.discovery.discover({
-      subjectAccountId: principal.accountId,
-      categoryId,
-      geographicScope,
-      limit: Number(limit),
-      cursor,
-      distanceConstraint,
-      sort: createDiscoverySort(sort === undefined && direction === undefined ? undefined : { key: sort ?? 'id', direction: direction ?? 'asc' }),
-      ...(search === undefined && searchFields === undefined ? {} : { search: { term: search ?? '', fields: (searchFields ?? '').split(',') } }),
-      projectionPolicy: Object.fromEntries(Object.entries(projectionPolicy).map(([key, rule]) => [key, rule.visibility ?? 'public'])),
-      locationPolicy: await this.locationPrecision.resolve(),
-      ...(subjectProfile ? { subjectProfile } : {}),
-      ...(matchingRules ? { matchingRules } : {}),
-    });
+    if (distanceConstraint && !await this.distanceMatching.isEnabled()) throw new BadRequestException('distance matching is disabled by deployment configuration');
+    return this.discovery.discover({ subjectAccountId: principal.accountId, categoryId, geographicScope, limit: Number(limit), cursor, distanceConstraint, sort: createDiscoverySort(sort === undefined && direction === undefined ? undefined : { key: sort ?? 'id', direction: direction ?? 'asc' }), ...(search === undefined && searchFields === undefined ? {} : { search: { term: search ?? '', fields: (searchFields ?? '').split(',') } }), projectionPolicy: Object.fromEntries(Object.entries(projectionPolicy).map(([key, rule]) => [key, rule.visibility ?? 'public'])), locationPolicy: await this.locationPrecision.resolve(), ...(subjectProfile ? { subjectProfile } : {}), ...(matchingRules ? { matchingRules } : {}) });
   }
 
   @Post('matches/decision')
@@ -161,48 +134,30 @@ export class ProfileDiscoveryController {
   @Get('matches')
   async listMutualMatches(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-list' });
-    const rows = await this.database.matchInteraction.findMany({
-      where: { OR: [{ actorAccountId: principal.accountId }, { targetAccountId: principal.accountId }], decision: 'like' },
-      orderBy: { createdAt: 'desc' },
-    });
+    const rows = await this.database.matchInteraction.findMany({ where: { OR: [{ actorAccountId: principal.accountId }, { targetAccountId: principal.accountId }], decision: 'like' }, orderBy: { createdAt: 'desc' } });
     const otherIds = [...new Set(rows.map(row => row.actorAccountId === principal.accountId ? row.targetAccountId : row.actorAccountId))].filter(id => id !== principal.accountId);
     const mutualIds: string[] = [];
-    for (const otherId of otherIds) {
-      if (await this.matches.isMutualMatch(principal.accountId, otherId)) mutualIds.push(otherId);
-    }
+    for (const otherId of otherIds) if (await this.matches.isMutualMatch(principal.accountId, otherId)) mutualIds.push(otherId);
     const profiles = await Promise.all(mutualIds.map(accountId => this.profileRepository.findByAccountId(accountId)));
-    return { matches: profiles.filter(Boolean).map(profile => projectProfile(profile!, { accountId: principal.accountId, privileged: false }, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION, 'city' as const)) };
+    const locationPolicy = await this.locationPrecision.resolve();
+    return { matches: profiles.filter(Boolean).map(profile => projectProfile(profile!, { accountId: principal.accountId, privileged: false }, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION, locationPolicy)) };
   }
 
   @Get('matches/history')
   async listMatchHistory(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-history' });
-    const rows = await this.database.matchInteraction.findMany({
-      where: { actorAccountId: principal.accountId },
-      orderBy: { createdAt: 'desc' },
-      select: { id: true, targetAccountId: true, decision: true, idempotencyKey: true, createdAt: true },
-    });
+    const rows = await this.database.matchInteraction.findMany({ where: { actorAccountId: principal.accountId }, orderBy: { createdAt: 'desc' }, select: { id: true, targetAccountId: true, decision: true, idempotencyKey: true, createdAt: true } });
     return { history: rows };
   }
 
   private async requireSupportedGeography(scope: ReturnType<typeof createGeographicScope>): Promise<void> {
     if (scope.kind === 'global') return;
     const configuration = await this.localization.resolve();
-    if (!configuration.supportedCountries.includes(scope.countryCode)) {
-      throw new BadRequestException('countryCode is not supported by deployment localization configuration');
-    }
+    if (!configuration.supportedCountries.includes(scope.countryCode)) throw new BadRequestException('countryCode is not supported by deployment localization configuration');
   }
 
   private completionSchema(fieldSchema: ProfileFieldSchema) {
-    return {
-      fields: Object.entries(fieldSchema).map(([key, rule]) => ({
-        key,
-        label: key,
-        type: rule.kind === 'number' ? 'number' as const : rule.kind === 'boolean' ? 'boolean' as const : 'text' as const,
-        required: rule.required === true,
-        visibility: 'owner' as const,
-      })),
-    };
+    return { fields: Object.entries(fieldSchema).map(([key, rule]) => ({ key, label: key, type: rule.kind === 'number' ? 'number' as const : rule.kind === 'boolean' ? 'boolean' as const : 'text' as const, required: rule.required === true, visibility: 'owner' as const })) };
   }
 
   private async schemaFor(categoryId?: string): Promise<ProfileFieldSchema> {
