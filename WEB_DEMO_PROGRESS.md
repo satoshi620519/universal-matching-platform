@@ -38,12 +38,16 @@ Existing important endpoints include profile creation/update, discovery, `POST /
 10. Configured the existing Web demo Render service with `VITE_API_BASE_URL=https://universal-matching-platform-api.onrender.com` so future Web API calls target the deployed API instead of the localhost fallback.
 11. Added `apps/web/src/live-matching.ts`, a real API-backed Web demo integration. It supports authenticated live discovery, persistent like/pass decisions, mutual-match detection, persistent match listing, mutual-match conversation creation, server-backed messages, server-backed notifications, notification read state, and account/profile bootstrap.
 12. Updated `apps/web/vite.config.ts` to inject the live matching module into the existing NEXA demo without redesigning or replacing the current visual landing implementation.
+13. Audited the live integration before continuing and fixed a functional shell-integration defect: live mode now renders into a dedicated `nexaLiveRoot` section inside the existing NEXA content instead of clearing/replacing the whole `.fullProductShell`.
+14. Added scoped live-mode styles in the live module so the functional layer remains usable without adding another CSS dependency.
+15. Registration no longer immediately assumes that a credential is available; it submits the existing registration API and informs the user that email verification may be required before login.
 
 ## Current infrastructure blocker
 - The API service exists and its build succeeds.
 - API startup is blocked during `prisma migrate deploy` because its current `DATABASE_URL` is not securely connected to the managed PostgreSQL instance and previously resolved to `placeholder:5432`.
 - The Render environment-variable tool available here accepts literal values and does not expose the managed PostgreSQL connection string as a safe `fromDatabase` reference.
 - The repository `render.yaml` already contains the intended secure `fromDatabase` wiring.
+- Render documentation confirms that `fromDatabase` resolves the internal PostgreSQL `connectionString` at Blueprint sync time; the correct fix is therefore the supported Blueprint/dashboard synchronization path, not a pasted secret. citeturn0search0turn0search1
 - Do not invent or expose a database password/connection string.
 
 ## Real matching status
@@ -81,6 +85,7 @@ Existing important endpoints include profile creation/update, discovery, `POST /
 - Persistent notification loading and read state
 - Persistent match history loading
 - Existing premium NEXA visual implementation remains intact; the live mode is injected as an additional functional layer
+- Live mode is now isolated in its own section and no longer replaces the parent demo shell
 
 ## Still required before real product completion
 1. Securely wire the Render API service to the managed PostgreSQL connection string.
@@ -95,14 +100,17 @@ Existing important endpoints include profile creation/update, discovery, `POST /
 10. Update this record after each concrete checkpoint.
 
 ## Exact stopping point
-- Live matching implementation commit: `0716cab2536568d8983b4da24d31d5959bae35d0` (`feat(web): add live matching demo integration`)
+- Latest live-module fix commit: `f387621e568b5ac19c4c74a56d4f0502830e3e5d` (`fix(web): keep live matching inside demo shell`)
+- Previous live matching implementation commit: `0716cab2536568d8983b4da24d31d5959bae35d0` (`feat(web): add live matching demo integration`)
 - Vite injection commit: `dd23ec0eac2d6bd30a281075a357327233f3974d` (`feat(web): inject live matching integration into demo`)
-- This progress-record commit follows those implementation commits.
-- The Render Web service has autoDeploy enabled, so these GitHub pushes should trigger deployment automatically; do not manually trigger a deploy.
+- This progress-record update follows the live-module fix.
+- The Render Web service has autoDeploy enabled, so the new GitHub push should trigger deployment automatically; do not manually trigger a deploy.
 - The API deployment remains blocked by the unresolved secure PostgreSQL connection described above; do not repeat the known invalid placeholder/`${...}` environment-variable approach.
 
 ## Next concrete task
-Check the automatic Web deployment for `dd23ec0eac2d6bd30a281075a357327233f3974d`. If the build succeeds, verify the generated Web bundle includes the live module. Then resolve the existing API PostgreSQL wiring blocker using the supported Render Blueprint/dashboard path, without inventing a connection string. After the API is healthy, execute the full live matching flow against persisted data.
+1. Check the automatic Web deployment for `f387621e568b5ac19c4c74a56d4f0502830e3e5d` and confirm build status.
+2. If Web is live, proceed to the supported Render Blueprint/dashboard synchronization path for the API database wiring.
+3. Once API is healthy, run Prisma migrations and execute the full persisted flow: authentication → profile → discovery → like/pass → mutual match → conversation → message → notification → safety.
 
 ## Anti-duplication rule
 Before every future change, compare the latest commit and this file against the requested task. If the capability is already implemented, verify or connect it instead of recreating it.
