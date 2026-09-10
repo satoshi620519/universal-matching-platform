@@ -63,3 +63,23 @@
 .salesProduct::after{right:-9px;bottom:-9px;border-right:1px solid #b9a486;border-bottom:1px solid #b9a486}
 @media (max-width:700px){.salesHero::before{top:96px;font-size:10px}.salesHero::after{right:20px;bottom:24px;font-size:5px}.salesProduct::before,.salesProduct::after{display:none}}
 @media (prefers-reduced-motion:reduce){.salesProduct::before,.salesProduct::after{transition:none}}
+/* Completion pass: give every major section a clear editorial cadence and finish the mobile hierarchy. */
+.salesIntro,.useCaseSection,.featureSection,.customSection,.safetySection,.globalSection,.launchSection{position:relative}
+.salesIntro::after,.useCaseSection::after,.featureSection::after,.customSection::after,.safetySection::after,.globalSection::after{content:"";position:absolute;left:clamp(24px,7vw,110px);right:clamp(24px,7vw,110px);bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(21,19,17,.11),transparent);pointer-events:none}
+.salesIntro{background-image:radial-gradient(circle at 82% 22%,rgba(184,155,112,.07),transparent 28%)}
+.useCaseSection{background-image:radial-gradient(circle at 15% 78%,rgba(184,155,112,.055),transparent 25%)}
+.featureSection{background-image:radial-gradient(circle at 86% 18%,rgba(184,155,112,.055),transparent 24%)}
+.customCard{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.customCard:hover{transform:translateY(-5px);box-shadow:0 22px 55px rgba(12,11,10,.11);border-color:rgba(184,155,112,.22)}
+.useCaseGrid article{transition:background .25s ease,transform .25s ease,border-color .25s ease}
+.useCaseGrid article:hover{background:rgba(255,255,255,.42);transform:translateY(-3px);border-color:rgba(184,155,112,.18)}
+.featureList article{transition:background .25s ease,padding-left .25s ease}
+.featureList article:hover{background:rgba(255,255,255,.035);padding-left:8px}
+.safetyVisual{filter:drop-shadow(0 24px 45px rgba(0,0,0,.16))}
+.mapPin{transition:transform .25s ease,box-shadow .25s ease}
+.mapPin:hover{transform:translate(-50%,-50%) scale(1.12);box-shadow:0 0 0 8px rgba(184,155,112,.08)}
+.launchSection{background-image:radial-gradient(circle at 50% 35%,rgba(184,155,112,.11),transparent 34%)}
+.launchActions{margin-top:38px}
+.salesFooter{letter-spacing:.08em}
+@media (max-width:700px){.salesIntro::after,.useCaseSection::after,.featureSection::after,.customSection::after,.safetySection::after,.globalSection::after{left:20px;right:20px}.customCard:hover{transform:none;box-shadow:none}.useCaseGrid article:hover{transform:none}.featureList article:hover{padding-left:0}.salesFooter{letter-spacing:.04em}}
+@media (prefers-reduced-motion:reduce){.customCard,.useCaseGrid article,.featureList article,.mapPin{transition:none}}
