@@ -242,30 +242,92 @@
   border-top:1px solid rgba(255,255,255,.06);
 }
 
+/* Closing visual pass: stronger opening rhythm and a cleaner final frame. */
+.landingNav {
+  background:linear-gradient(180deg,rgba(12,11,10,.48),rgba(12,11,10,.08));
+}
+
+.heroLanding {
+  min-height:940px;
+}
+
+.heroCopy {
+  max-width:780px;
+}
+
+.heroCopy h1 {
+  max-width:760px;
+}
+
+.heroLead {
+  max-width:470px;
+}
+
+.heroActions {
+  margin-top:4px;
+}
+
+.heroVisual {
+  opacity:.98;
+}
+
+.introLanding::after {
+  left:clamp(24px,10vw,150px);
+  right:clamp(24px,10vw,150px);
+  background:linear-gradient(90deg,#d8d0c5,rgba(216,208,197,.25),#d8d0c5);
+}
+
+.highlightLanding {
+  padding-top:42px;
+}
+
+.highlightCard {
+  min-height:325px;
+}
+
+.highlightCard h3 {
+  letter-spacing:-.02em;
+}
+
+.statementLanding {
+  background:radial-gradient(circle at 50% 45%,rgba(177,148,105,.045),transparent 42%),#151412;
+}
+
+.ctaLanding {
+  background:linear-gradient(135deg,#c8b69a 0%,#c0ad90 58%,#cdbda5 100%);
+}
+
 @media (max-width:900px) {
-  .introGrid > p {
-    padding-left:18px;
+  .heroLanding {
+    min-height:1000px;
   }
 
-  .highlightLanding::before {
-    left:auto;
-    right:24px;
+  .highlightCard {
+    min-height:255px;
   }
 }
 
 @media (max-width:560px) {
-  .highlightCard:nth-child(1)::after,
-  .highlightCard:nth-child(2)::after,
-  .highlightCard:nth-child(3)::after {
-    right:25px;
-    top:25px;
+  .heroLanding {
+    min-height:930px;
   }
 
-  .introGrid > p {
-    padding-left:15px;
+  .heroCopy {
+    max-width:none;
   }
 
-  .highlightLanding::before {
-    display:none;
+  .highlightLanding {
+    padding-top:34px;
+  }
+
+  .highlightCard {
+    min-height:240px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .heroLanding,
+  .highlightCard {
+    scroll-behavior:auto;
   }
 }
