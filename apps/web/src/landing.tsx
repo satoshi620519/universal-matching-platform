@@ -28,7 +28,7 @@ function LandingPage() {
           <div className="heroCopy">
             <p className="overline">THE UNIVERSAL MATCHING PLATFORM</p>
             <h1>Where the right<br /><em>connections</em> begin.</h1>
-            <p className="heroLead">A sophisticated matching experience designed to adapt to any kind of connection — and any market.</p>
+            <p className="heroLead">A sophisticated matching experience built to adapt across people, purposes, and markets — without losing its sense of trust.</p>
             <div className="heroActions">
               <button className="primaryButton" type="button">Discover the experience <span>↗</span></button>
               <span className="heroNote">A premium foundation for your next service</span>
@@ -37,7 +37,7 @@ function LandingPage() {
           <div className="heroVisual" aria-hidden="true">
             <div className="portrait portraitBack"><div className="portraitFigure" /><span className="portraitInitial">Y</span></div>
             <div className="portrait portraitMain"><div className="portraitFigure" /><span className="portraitInitial">A</span></div>
-            <div className="matchBadge"><span className="matchDot" /><div><strong>Perfect match</strong><small>Connection found</small></div></div>
+            <div className="matchBadge"><span className="matchDot" /><div><strong>98% match</strong><small>Connection found</small></div></div>
             <div className="locationBadge"><span>◎</span> Anywhere in the world</div>
           </div>
           <div className="heroBottom"><span>SCROLL TO EXPLORE</span><span className="scrollLine" /></div>
@@ -47,7 +47,7 @@ function LandingPage() {
           <p className="overline">ONE FOUNDATION / MANY POSSIBILITIES</p>
           <div className="introGrid">
             <h2>Not another<br /><em>single-purpose</em> app.</h2>
-            <p>Build a dating service, a friendship community, a professional network, a local marketplace, or a completely new idea. The experience begins with the same elegant foundation and becomes yours.</p>
+            <p>Build a dating service, a friendship community, a professional network, a local marketplace, or a completely new idea. The experience starts with one elegant foundation and becomes distinctly yours.</p>
           </div>
         </section>
 
