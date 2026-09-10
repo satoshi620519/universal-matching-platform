@@ -16,6 +16,9 @@ Move the project from the completed client-side Web showcase into the real match
 - Branch: `main`
 - Existing Web demo Render service: `universal-matching-platform-demo`
 - Existing Web demo URL: `https://universal-matching-platform-demo.onrender.com`
+- API Render service: `universal-matching-platform-api`
+- API Render URL: `https://universal-matching-platform-api.onrender.com`
+- PostgreSQL: `universal-matching-platform-db`
 
 ## Existing real backend
 The API already contains substantial foundations for authentication, profiles/categories, discovery, matching transition persistence, messaging, realtime publication, notifications, safety/moderation, verification, analytics, configuration, administration, and payments/entitlements.
@@ -28,13 +31,16 @@ Existing important endpoints include profile creation/update, discovery, `POST /
 3. Added persistent `GET /matches` for authenticated mutual matches with public profile projection.
 4. Added persistent `GET /matches/history` for authenticated match decision history.
 5. Added `DatabaseService` access to `ProfileDiscoveryController` for those queries.
-6. Created Render PostgreSQL `universal-matching-platform-db` in Singapore on the Free plan. Instance ID: `dpg-dah40vtbedkc7391cud0-a`. It is currently provisioning and has a temporary Free-plan expiry.
+6. Created Render PostgreSQL `universal-matching-platform-db` in Singapore. Instance ID: `dpg-dah40vtbedkc7391cud0-a`.
+7. Created Render API web service `universal-matching-platform-api` in Singapore. Service ID: `srv-dah4a71t0dsc73egt1ng`.
+8. API build completed successfully on Render for commit `aff3d71858679d90ad2d02490468d25f376465a5`.
 
-## Important infrastructure state
-- The existing Render Web demo is a static site and does not provide the persistent backend runtime.
-- No Render PostgreSQL instance existed before this continuation; the new database is now being provisioned.
-- The API is not yet attached to a Render web service/database connection in this checkpoint. Secure Render wiring must be used; no database secret will be invented or exposed.
-- Do not claim the entire product is production-complete yet.
+## Current infrastructure blocker
+- The API service exists and builds successfully.
+- API startup currently fails during `prisma migrate deploy` because `DATABASE_URL` on the newly created Render API service is currently a placeholder and resolves to `placeholder:5432`.
+- Render's service-creation tool available to this workflow accepts only literal environment-variable values and does not expose the PostgreSQL connection string as a safe `fromDatabase` reference.
+- The repository `render.yaml` already contains the correct intended secure wiring using `fromDatabase: universal-matching-platform-db / connectionString`.
+- Do not invent or expose a database password/connection string. The API must not be marked healthy until the Render service is securely connected to the managed PostgreSQL instance.
 
 ## Real matching status
 ### Already implemented
@@ -60,20 +66,22 @@ Existing important endpoints include profile creation/update, discovery, `POST /
 - `GET /matches/history`
 
 ### Still required before real product completion
-1. Deploy the API as a Render web service.
-2. Wire the API securely to PostgreSQL.
-3. Run Prisma migrations.
-4. Seed demo categories/accounts/profiles safely.
-5. Connect the Web UI to authenticated API flows instead of local-only showcase state.
-6. Verify registration → profile → discovery → like/pass → mutual match → conversation → message → notification end-to-end.
-7. Verify block/report/safety restrictions against the real API.
-8. Verify international configuration and distance behavior with persisted profiles.
-9. Add remaining matching lifecycle operations only where the existing domain model requires them.
-10. Update this record after each concrete checkpoint.
+1. Securely wire the Render API service to the managed PostgreSQL connection string.
+2. Run Prisma migrations successfully on Render.
+3. Seed demo categories/accounts/profiles safely.
+4. Connect the Web UI to authenticated API flows instead of local-only showcase state.
+5. Verify registration → profile → discovery → like/pass → mutual match → conversation → message → notification end-to-end.
+6. Verify block/report/safety restrictions against the real API.
+7. Verify international configuration and distance behavior with persisted profiles.
+8. Add remaining matching lifecycle operations only where the existing domain model requires them.
+9. Update this record after each concrete checkpoint.
 
 ## Exact stopping point
-Latest implementation commit: `416ec47cdc7be15b1f2be4b07221c98446c856e6`.
-Next concrete task: Render API + PostgreSQL wiring and migration, then connect the existing Web matching UI to the real API.
+Latest repository commit before this progress-record update: `aff3d71858679d90ad2d02490468d25f376465a5` (`chore(render): wire API and PostgreSQL`).
+This progress-record update creates the next documentation commit.
+Render API deploy `dep-dah4a7ht0dsc73egt2rg` reached `update_failed` because Prisma could not reach `placeholder:5432`.
+
+Next concrete task: securely connect the existing Render API service to `universal-matching-platform-db`, then rerun/verify migration and continue with real Web API integration.
 
 ## Anti-duplication rule
 Before every future change, compare the latest commit and this file against the requested task. If the capability is already implemented, verify or connect it instead of recreating it.
