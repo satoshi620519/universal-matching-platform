@@ -1,6 +1,6 @@
 /* Final interaction polish: premium navigation, focus states, and section rhythm. */
-.salesNav{position:fixed;top:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,rgba(8,8,7,.92),rgba(8,8,7,.68) 65%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .3s ease,backdrop-filter .3s ease}
-.salesNav::after{content:"";position:absolute;left:clamp(24px,7vw,110px);right:clamp(24px,7vw,110px);bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent)}
+.salesNav{position:fixed;top:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,rgba(8,8,7,.94),rgba(8,8,7,.72) 65%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:background .3s ease,backdrop-filter .3s ease}
+.salesNav::after{content:"";position:absolute;left:clamp(24px,7vw,110px);right:clamp(24px,7vw,110px);bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent)}
 .salesNav button,.salesNav a{transition:color .22s ease,opacity .22s ease,transform .22s ease}
 .salesNav nav button:hover{color:#e4d6c2;transform:translateY(-1px)}
 .salesNav button:focus-visible,.salesHero button:focus-visible,.salesProductInfo button:focus-visible{outline:1px solid #c7ad83;outline-offset:5px}
@@ -14,6 +14,35 @@
 .launchInner h2{text-wrap:balance}
 .landingFooter{position:relative}
 .landingFooter::before{content:"";position:absolute;left:clamp(24px,7vw,110px);right:clamp(24px,7vw,110px);top:0;height:1px;background:rgba(255,255,255,.08)}
-@media (max-width:900px){.salesHero{padding-top:150px}.salesNav{background:rgba(8,8,7,.88)}}
-@media (max-width:560px){.salesNav{padding-left:20px;padding-right:20px}.salesNav::after{left:20px;right:20px}.salesHero{padding-top:125px}.salesLanding section[id]{scroll-margin-top:70px}.salesHeroVisual::after{inset:4% -2% 3% -2%}}
+/* Closing visual pass: stronger hierarchy, quieter surfaces, and a more premium product frame. */
+.salesHeroCopy{max-width:650px}
+.salesHeroCopy h1{letter-spacing:-.055em;line-height:.94}
+.salesHeroCopy>p{font-size:15px;line-height:1.8;color:rgba(255,255,255,.64)}
+.salesHeroVisual{filter:drop-shadow(0 35px 70px rgba(0,0,0,.28))}
+.salesProduct{border:1px solid rgba(255,255,255,.08)}
+.salesProductBar{letter-spacing:.18em}
+.salesProductInfo h3{letter-spacing:-.045em}
+.salesProductInfo h3 em{font-size:.42em;letter-spacing:.02em;color:#b9a486}
+.salesProductFoot{border-top-color:rgba(255,255,255,.08)}
+.salesEyebrow{letter-spacing:.22em}
+.sectionHeading p,.featureIntro>p,.safetyCopy>p{max-width:560px;line-height:1.9}
+.useCaseGrid{border:1px solid rgba(21,19,17,.07)}
+.useCaseGrid article{border-color:rgba(21,19,17,.07)}
+.featureList{border-top:1px solid rgba(255,255,255,.1)}
+.featureList article{min-height:128px;border-bottom:1px solid rgba(255,255,255,.09)}
+.customSplit{gap:1px}
+.customCard{border:1px solid rgba(21,19,17,.07)}
+.safetyPoints{gap:8px}
+.globalMap{border:1px solid rgba(21,19,17,.08)}
+.launchInner h2{letter-spacing:-.05em;line-height:.96}
+/* Final responsive guard: keep the premium navigation readable and the hero composition intentional on compact screens. */
+.salesNav nav{min-width:0}
+.salesNav nav button{white-space:nowrap}
+.salesNav .navButton{white-space:nowrap}
+.salesHeroVisual{min-width:0}
+.salesProduct{max-width:100%}
+@media (max-width:1100px){.salesNav nav{gap:16px}.salesNav nav button{font-size:11px}.salesNav .navButton{font-size:11px;padding-inline:16px}}
+@media (max-width:900px){.salesHero{padding-top:150px}.salesNav{background:rgba(8,8,7,.9)}.salesHeroCopy{max-width:none}.salesNav nav{gap:12px}.salesNav nav button{font-size:10px}.salesNav .navButton{padding-inline:13px}}
+@media (max-width:700px){.salesNav{padding-left:18px;padding-right:18px}.salesNav nav{display:none}.salesNav .navButton{margin-left:auto}.salesNav::after{left:18px;right:18px}.salesHero{padding-top:118px}}
+@media (max-width:560px){.salesNav{padding-left:20px;padding-right:20px}.salesNav::after{left:20px;right:20px}.salesHero{padding-top:125px}.salesLanding section[id]{scroll-margin-top:70px}.salesHeroVisual::after{inset:4% -2% 3% -2%}.salesHeroCopy h1{letter-spacing:-.06em}.salesHeroCopy>p{font-size:14px}.featureList article{min-height:110px}}
 @media (prefers-reduced-motion:reduce){.salesNav button,.salesNav a{transition:none}.salesHeroVisual::after{display:none}}
