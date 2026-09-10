@@ -45,6 +45,12 @@
 @media (max-width:900px){.salesHero{padding-top:150px}.salesNav{background:rgba(8,8,7,.9)}.salesHeroCopy{max-width:none}.salesNav nav{gap:12px}.salesNav nav button{font-size:10px}.salesNav .navButton{padding-inline:13px}}
 @media (max-width:700px){.salesNav{padding-left:18px;padding-right:18px}.salesNav nav{display:none}.salesNav .navButton{margin-left:auto}.salesNav::after{left:18px;right:18px}.salesHero{padding-top:118px}}
 @media (max-width:560px){.salesNav{padding-left:20px;padding-right:20px}.salesNav::after{left:20px;right:20px}.salesHero{padding-top:125px}.salesLanding section[id]{scroll-margin-top:70px}.salesHeroVisual::after{inset:4% -2% 3% -2%}.salesHeroCopy h1{letter-spacing:-.06em}.salesHeroCopy>p{font-size:14px}.featureList article{min-height:110px}}
-/* Micro-balance pass: prevent dense lower sections from feeling cramped on small screens. */
-@media (max-width:560px){.sectionHeading{margin-bottom:40px}.featureSection{padding-top:105px;padding-bottom:105px}.customHeader{margin-bottom:42px;align-items:flex-start}.customBottom{grid-template-columns:1fr;gap:12px;margin-top:28px}.customBottom strong{font-size:20px;line-height:1.35}.safetySection{padding-top:105px;padding-bottom:105px}.safetyCopy h2{margin-bottom:24px}.safetyPoints{margin-top:24px}.globalSection{padding-top:100px;padding-bottom:100px}.launchSection{padding-top:105px;padding-bottom:120px}.launchInner>p{font-size:13px;line-height:1.8}.salesFooter{min-height:82px;gap:12px}.salesFooter>span:nth-child(2){font-size:8px;line-height:1.5}}
-@media (prefers-reduced-motion:reduce){.salesNav button,.salesNav a{transition:none}.salesHeroVisual::after{display:none}}
+/* Micro-interaction finish: make the hero discovery cue feel intentional without adding visual noise. */
+.heroScroll{transition:color .25s ease,transform .25s ease}
+.heroScroll i{position:relative;overflow:hidden;transition:width .3s ease,background .25s ease}
+.heroScroll i::after{content:"";position:absolute;left:-25%;top:0;width:25%;height:100%;background:#b9a486;animation:scrollCue 2.8s ease-in-out infinite}
+.heroScroll:hover{color:#b9a486;transform:translateY(1px)}
+.heroScroll:hover i{width:88px;background:#6b6257}
+@keyframes scrollCue{0%,25%{transform:translateX(0);opacity:0}35%{opacity:1}70%{transform:translateX(500%);opacity:1}85%,100%{transform:translateX(500%);opacity:0}}
+@media (max-width:560px){.heroScroll{font-size:6px}.heroScroll i{width:46px}.heroScroll:hover i{width:58px}}
+@media (prefers-reduced-motion:reduce){.salesNav button,.salesNav a{transition:none}.salesHeroVisual::after{display:none}.heroScroll,.heroScroll i{transition:none}.heroScroll i::after{animation:none}}
