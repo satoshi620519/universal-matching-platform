@@ -56,8 +56,11 @@ Latest live-module fix: `f387621e568b5ac19c4c74a56d4f0502830e3e5d` (`fix(web): k
 Vite injection: `dd23ec0eac2d6bd30a281075a357327233f3974d`.
 
 ## Latest Render verification
-API deploy: `dep-dah55h9al16s73cno7rg`.
-At the latest verification, Render successfully completed the API build and reached the start command, but `prisma migrate deploy` failed before application startup.
+Web deploy for commit `87667aa25df5c18a45a80cbd65dd4d46c5f49723` is `dep-dah577ht0dsc73dmngag` and is **live**. The Web deployment pipeline is therefore healthy.
+
+API deploy for the same commit is `dep-dah577ht0dsc73dmnge0` and is **update_failed**.
+
+The API build itself completed successfully and Render reached the start command. The failure occurs at `prisma migrate deploy` before application startup.
 
 Exact failure:
 `Prisma schema validation - (get-config wasm)` / `P1012` / `The URL must start with the protocol postgresql:// or postgres://`.
@@ -93,10 +96,10 @@ The Render Postgres query tool cannot currently query this database because it c
 8. Complete remaining matching lifecycle operations only where the existing domain requires them.
 
 ## Exact stopping point
-- Latest API deploy checked: `dep-dah55h9al16s73cno7rg` — `update_in_progress` at the last poll because Render was processing the failed-start/redeploy cycle.
-- Latest confirmed failure cause: invalid/non-PostgreSQL `DATABASE_URL` at Prisma startup.
-- Latest relevant GitHub fix commit: `f387621e568b5ac19c4c74a56d4f0502830e3e5d`.
-- Latest progress-record commit before this update: `475f2879e82547c2d33c3e26a5b8ecc6fdf6bc9c`.
+- Latest Web deploy: `dep-dah577ht0dsc73dmngag` — **live**.
+- Latest API deploy: `dep-dah577ht0dsc73dmnge0` — **update_failed**.
+- Latest confirmed API failure cause: invalid/non-PostgreSQL `DATABASE_URL` at Prisma startup.
+- Latest progress-record commit before this update: `87667aa25df5c18a45a80cbd65dd4d46c5f49723`.
 
 ## Next concrete task
 Use the supported Render Blueprint/dashboard synchronization path to bind the existing API service to the existing PostgreSQL instance. After the binding is active, let autoDeploy run and immediately verify Prisma migration/startup. Do not recreate the API service, recreate the database, or add duplicate matching logic.
