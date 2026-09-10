@@ -12,6 +12,7 @@ import { LocalizationConfigurationService } from '../configuration/localization-
 import { LocationPrecisionConfigurationService } from '../configuration/location-precision-configuration.service.js';
 import { DistanceMatchingConfigurationService } from '../configuration/distance-matching-configuration.service.js';
 import { MatchingRulesConfigurationService } from '../configuration/matching-rules-configuration.service.js';
+import { DatabaseService } from '../database/database.service.js';
 import { createDiscoverySort, createGeographicScope, projectProfile, type ProfileFieldSchema, type ProfileProjectionPolicy, type ProfileCoreProjectionPolicy, type ProfileVerificationStatus } from '@universal/domain';
 
 const DEFAULT_FIELD_SCHEMA: ProfileFieldSchema = {
@@ -32,6 +33,7 @@ export class ProfileDiscoveryController {
     private readonly profileRepository: PrismaProfileRepository,
     private readonly discovery: DiscoveryService,
     private readonly matches: PrismaMatchTransitionRepository,
+    private readonly database: DatabaseService,
     private readonly admin: AdministrativeCapabilityAccessService,
     private readonly localization: LocalizationConfigurationService,
     private readonly locationPrecision: LocationPrecisionConfigurationService,
@@ -154,6 +156,33 @@ export class ProfileDiscoveryController {
   async decide(@Body() body: { targetAccountId?: string; decision?: 'like' | 'pass'; idempotencyKey?: string }, @Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
     const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-decision' });
     return this.matches.transition({ actorAccountId: principal.accountId, targetAccountId: body.targetAccountId ?? '', decision: body.decision ?? 'pass', idempotencyKey: body.idempotencyKey ?? randomUUID() });
+  }
+
+  @Get('matches')
+  async listMutualMatches(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-list' });
+    const rows = await this.database.matchInteraction.findMany({
+      where: { OR: [{ actorAccountId: principal.accountId }, { targetAccountId: principal.accountId }], decision: 'like' },
+      orderBy: { createdAt: 'desc' },
+    });
+    const otherIds = [...new Set(rows.map(row => row.actorAccountId === principal.accountId ? row.targetAccountId : row.actorAccountId))].filter(id => id !== principal.accountId);
+    const mutualIds: string[] = [];
+    for (const otherId of otherIds) {
+      if (await this.matches.isMutualMatch(principal.accountId, otherId)) mutualIds.push(otherId);
+    }
+    const profiles = await Promise.all(mutualIds.map(accountId => this.profileRepository.findByAccountId(accountId)));
+    return { matches: profiles.filter(Boolean).map(profile => projectProfile(profile!, { accountId: principal.accountId, privileged: false }, PUBLIC_PROJECTION, PUBLIC_CORE_PROJECTION, 'city' as const)) };
+  }
+
+  @Get('matches/history')
+  async listMatchHistory(@Headers('authorization') authorization?: string, @Headers('x-request-id') requestId?: string) {
+    const principal = await this.principalResolver.requireAuthenticated({ authorization, requestId: requestId ?? 'match-history' });
+    const rows = await this.database.matchInteraction.findMany({
+      where: { actorAccountId: principal.accountId },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, targetAccountId: true, decision: true, idempotencyKey: true, createdAt: true },
+    });
+    return { history: rows };
   }
 
   private async requireSupportedGeography(scope: ReturnType<typeof createGeographicScope>): Promise<void> {
