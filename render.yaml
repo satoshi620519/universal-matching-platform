@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: universal-matching-platform-demo
+    runtime: static
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @universal/web build
+    staticPublishPath: apps/web/dist
+    pullRequestPreviewsEnabled: true
