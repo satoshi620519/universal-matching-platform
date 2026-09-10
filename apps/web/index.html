@@ -84,5 +84,60 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/landing.tsx"></script>
+    <script>
+      (()=>{
+        const categoryTarget={恋愛:'M',友だち:'N',仕事:'A',趣味:'L'};
+        const find=(s)=>document.querySelector(s);
+        const syncCandidate=(initial,tries=0)=>{
+          const avatar=find('.fp-avatar span');
+          if(!avatar)return;
+          if(avatar.textContent===initial)return;
+          const next=find('.fp-actions button:nth-child(3)');
+          if(!next||tries>4)return;
+          next.click();
+          setTimeout(()=>syncCandidate(initial,tries+1),80);
+        };
+        const openModal=(title,body,actions=[])=>{
+          let modal=document.getElementById('nexaDemoModal');
+          if(!modal){
+            modal=document.createElement('div');
+            modal.id='nexaDemoModal';
+            modal.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(8,8,7,.72);backdrop-filter:blur(12px);opacity:0;transition:opacity .22s ease';
+            document.body.appendChild(modal);
+          }
+          modal.innerHTML=`<div style="width:min(520px,100%);border:1px solid rgba(185,164,134,.24);border-radius:14px;background:linear-gradient(145deg,#1a1916,#0d0d0c);color:#f5f1e8;box-shadow:0 35px 100px rgba(0,0,0,.5);padding:28px"><div style="display:flex;justify-content:space-between;gap:20px;align-items:flex-start"><div><span style="font-size:10px;letter-spacing:.22em;color:#b9a486">NEXA DEMO FLOW</span><h3 style="margin:8px 0 0;font-size:24px;font-weight:500">${title}</h3></div><button data-close-modal style="border:1px solid rgba(255,255,255,.12);background:transparent;color:#f5f1e8;border-radius:999px;width:34px;height:34px">×</button></div><div style="margin-top:22px;color:rgba(245,241,232,.72);line-height:1.8;font-size:14px">${body}</div><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">${actions.map((x,i)=>`<button data-modal-action="${i}" style="border:1px solid rgba(185,164,134,.28);background:${i===0?'#b9a486':'transparent'};color:${i===0?'#11110f':'#f5f1e8'};padding:11px 16px;border-radius:999px">${x}</button>`).join('')}</div></div>`;
+          modal.style.opacity='1';
+          modal.onclick=e=>{if(e.target===modal||e.target.closest('[data-close-modal]'))modal.remove();if(e.target.closest('[data-modal-action]'))modal.remove();};
+        };
+        const start=()=>{
+          document.addEventListener('click',e=>{
+            const filter=e.target.closest('.fp-filterbar button');
+            if(filter){
+              const label=filter.textContent.trim();
+              if(categoryTarget[label])setTimeout(()=>syncCandidate(categoryTarget[label]),40);
+              return;
+            }
+            const button=e.target.closest('.fp-settingsgrid button,.fp-safetygrid button,.fp-settingrows button');
+            if(!button)return;
+            const text=button.textContent.trim();
+            if(text.includes('安全モード'))return;
+            let title='設定';let body='この項目をデモ画面内で確認できます。実運用では購入者のブランド設定やサービスルールに合わせて内容を変更できます。';let actions=['閉じる'];
+            if(text.includes('プロフィールを編集')){title='プロフィールを編集';body='表示名、役割、地域、自己紹介、興味タグなどをこの画面から編集する想定です。';actions=['編集を開始','閉じる'];}
+            else if(text.includes('公開範囲')){title='公開範囲';body='プロフィールの公開範囲を「公開」「マッチした相手のみ」「非公開」などから設定できます。';actions=['公開','マッチした相手のみ','閉じる'];}
+            else if(text.includes('本人確認')){title='本人確認';body='本人確認ステータスと確認方法を表示するフローです。購入者側で必要な認証方式へ差し替えられる設計です。';actions=['確認内容を見る','閉じる'];}
+            else if(text.includes('写真・ギャラリー')){title='写真・ギャラリー';body='プロフィール画像やギャラリーを管理する画面です。掲載順、公開範囲、削除などを追加できます。';actions=['ギャラリーを開く','閉じる'];}
+            else if(text.includes('ブロック')){title='ブロック';body='この相手を候補、マッチ、メッセージ一覧から非表示にする確認フローです。';actions=['ブロックする','キャンセル'];}
+            else if(text.includes('通報')){title='通報';body='通報理由を選択し、必要に応じて補足情報を添えて送信する安全フローです。';actions=['不適切な内容','迷惑行為','なりすまし','キャンセル'];}
+            else if(text.includes('プライバシー')){title='プライバシー';body='位置情報、プロフィール公開範囲、通知などのプライバシー設定をまとめて管理できます。';actions=['設定を確認','閉じる'];}
+            else if(text.includes('通知設定')){title='通知設定';body='マッチ、メッセージ、安全通知など、通知カテゴリごとに受信方法を設定できます。';actions=['通知を確認','閉じる'];}
+            else if(text.includes('表示・アクセシビリティ')){title='表示・アクセシビリティ';body='文字サイズ、コントラスト、モーションなど、利用者に合わせた表示設定を想定しています。';actions=['表示設定を確認','閉じる'];}
+            else if(text.includes('アカウント')){title='アカウント';body='アカウント情報、セッション、削除などの管理画面へ進む想定です。';actions=['アカウントを管理','閉じる'];}
+            else return;
+            e.preventDefault();e.stopPropagation();openModal(title,body,actions);
+          },true);
+        };
+        if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+      })();
+    </script>
   </body>
 </html>
