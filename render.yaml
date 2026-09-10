@@ -18,7 +18,7 @@ services:
     plan: free
     branch: main
     buildCommand: pnpm install --no-frozen-lockfile && pnpm --filter @universal/api prisma:generate && pnpm --filter @universal/api build
-    startCommand: pnpm --filter @universal/api exec prisma migrate deploy && pnpm --filter @universal/api start
+    startCommand: pnpm --filter @universal/database migrate && pnpm --filter @universal/api start
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
