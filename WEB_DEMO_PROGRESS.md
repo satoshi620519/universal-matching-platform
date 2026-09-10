@@ -1,50 +1,79 @@
-# Web Demo Progress
+# Web Demo / Product Progress
 
 ## Current objective
-Complete the **Web version demo site first**. iOS and Android remain deferred until the Web demo is complete.
+Move the project from the completed client-side Web showcase into the real matching-system implementation. The user explicitly wants matching functionality actually implemented, not only simulated UI interactions.
 
 ## Working rules
-- Preserve the current premium NEXA visual direction; improve it rather than restarting the design.
+- Preserve the current premium NEXA visual direction.
 - Record concrete work and the exact stopping point so future sessions can resume without duplicate work.
-- Do not repeat completed implementation, tests, or visual layers unless a demonstrated defect requires it.
+- Do not repeat completed implementation or visual layers unless a demonstrated defect requires it.
 - Do not add unrelated features or speculative infrastructure.
 - Do not request screenshots from the owner.
-- Keep the implementation extensible so visual/design changes and additional systems can be added after the demo is complete.
-- Keep the work path straight toward Web demo completion; do not start iOS/Android or unrelated infrastructure early.
+- Do not start Android while the real Web/backend matching implementation is still being completed.
 
 ## Current baseline
 - Repository: `satoshi620519/universal-matching-platform`
 - Branch: `main`
-- Latest application code commit: `828ed9770dde68e0156f100366a06c4f06a431f1`
-- Latest progress-record commit: this checkpoint
-- Web deployment: Render static site `universal-matching-platform-demo`
-- Demo URL: `https://universal-matching-platform-demo.onrender.com`
+- Existing Web demo Render service: `universal-matching-platform-demo`
+- Existing Web demo URL: `https://universal-matching-platform-demo.onrender.com`
 
-## Work completed
-1. Landing page localized to Japanese.
-2. Matching experience showcase added.
-3. Full product demo shell added with discover, matches, messages, notifications, profile, safety, global, and settings views.
-4. Premium visual layers added and consolidated without creating another CSS layer.
-5. JSX nesting corrected after the earlier build failure.
-6. Existing interaction states refined in `apps/web/index.html` with filter feedback, list hover/focus, chat focus, profile/safety/global/settings feedback, and responsive polish.
-7. Discovery category selection now changes the displayed candidate using the existing React state flow.
-8. High-visibility browser-alert demo actions are intercepted into an in-product NEXA modal flow.
-9. Render auto-deploy for the functional checkpoint completed successfully and reached `live`.
-10. Placeholder audit found no remaining `alert(` matches through repository indexed search; the source still contains legacy alert callbacks inside the demo component, but the deployed `index.html` interaction layer intercepts those user-facing calls into the NEXA modal treatment, so no browser alert is exposed in the intended demo path.
-11. Final flow audit reviewed the existing discover → match → message → notification → profile → safety → global → settings paths. No material user-facing flow gap was found that justifies another implementation pass without duplicating already-completed work.
+## Existing real backend
+The API already contains substantial foundations for authentication, profiles/categories, discovery, matching transition persistence, messaging, realtime publication, notifications, safety/moderation, verification, analytics, configuration, administration, and payments/entitlements.
 
-## Web demo completion state
-The Web demo is now considered **complete for the current client-side showcase scope**. It is a touchable product demonstration, not yet a production backend integration. Production authentication, persistent data, realtime transport, server-side moderation, payments, and other backend concerns remain outside this demo-completion checkpoint.
+Existing important endpoints include profile creation/update, discovery, `POST /matches/decision`, mutual-match conversation creation, and conversation/message/notification endpoints.
 
-## Verification state
-- Functional application commit: `828ed9770dde68e0156f100366a06c4f06a431f1`.
-- Functional application deployment: `dep-dah3famq1p3s73aqb3fg` — `live`.
-- Progress-record deployment from the preceding checkpoint: `dep-dah3ffm0hnlc73bda0sg` — `live`.
-- Latest placeholder-audit progress commit: `8426b77ef730cd1643efa987ebd4dc530e23fba7`.
-- Latest placeholder-audit Render deployment: `dep-dah3hu0u01pc73cev01g` — `live`.
+## Work completed in this continuation
+1. Audited the existing API before adding duplicate matching logic.
+2. Confirmed `MatchInteraction` persistence and transactional mutual-match resolution already exist.
+3. Added persistent `GET /matches` for authenticated mutual matches with public profile projection.
+4. Added persistent `GET /matches/history` for authenticated match decision history.
+5. Added `DatabaseService` access to `ProfileDiscoveryController` for those queries.
+6. Created Render PostgreSQL `universal-matching-platform-db` in Singapore on the Free plan. Instance ID: `dpg-dah40vtbedkc7391cud0-a`. It is currently provisioning and has a temporary Free-plan expiry.
 
-## Exact handoff point
-Web demo completion is the stopping point. The next phase, only when explicitly continued, is **iOS implementation based on the completed Web product behavior and design direction**. Android follows iOS. Do not redo the Web demo or restart its design unless a concrete defect is demonstrated.
+## Important infrastructure state
+- The existing Render Web demo is a static site and does not provide the persistent backend runtime.
+- No Render PostgreSQL instance existed before this continuation; the new database is now being provisioned.
+- The API is not yet attached to a Render web service/database connection in this checkpoint. Secure Render wiring must be used; no database secret will be invented or exposed.
+- Do not claim the entire product is production-complete yet.
+
+## Real matching status
+### Already implemented
+- Profile/category model and validation
+- Discovery with country/region/locality scope
+- Search and discovery sorting
+- Optional distance matching controlled by configuration
+- Configurable matching rules
+- Like/pass decision persistence
+- Idempotent match transitions
+- Transaction/advisory-lock protection for concurrent pair decisions
+- Mutual-match detection
+- Match-created notifications
+- Match analytics
+- Conversation creation from mutual match
+- Messaging lifecycle, read state, soft deletion, realtime publication
+- Block/safety enforcement around matching and communication
+- Verification/moderation foundations
+- Analytics/configuration foundations
+
+### Newly exposed
+- `GET /matches`
+- `GET /matches/history`
+
+### Still required before real product completion
+1. Deploy the API as a Render web service.
+2. Wire the API securely to PostgreSQL.
+3. Run Prisma migrations.
+4. Seed demo categories/accounts/profiles safely.
+5. Connect the Web UI to authenticated API flows instead of local-only showcase state.
+6. Verify registration → profile → discovery → like/pass → mutual match → conversation → message → notification end-to-end.
+7. Verify block/report/safety restrictions against the real API.
+8. Verify international configuration and distance behavior with persisted profiles.
+9. Add remaining matching lifecycle operations only where the existing domain model requires them.
+10. Update this record after each concrete checkpoint.
+
+## Exact stopping point
+Latest implementation commit: `416ec47cdc7be15b1f2be4b07221c98446c856e6`.
+Next concrete task: Render API + PostgreSQL wiring and migration, then connect the existing Web matching UI to the real API.
 
 ## Anti-duplication rule
-Before every future change, compare the latest commit and this file against the requested task. If the capability is already implemented, verify it instead of recreating it.
+Before every future change, compare the latest commit and this file against the requested task. If the capability is already implemented, verify or connect it instead of recreating it.
