@@ -83,3 +83,18 @@
 .salesFooter{letter-spacing:.08em}
 @media (max-width:700px){.salesIntro::after,.useCaseSection::after,.featureSection::after,.customSection::after,.safetySection::after,.globalSection::after{left:20px;right:20px}.customCard:hover{transform:none;box-shadow:none}.useCaseGrid article:hover{transform:none}.featureList article:hover{padding-left:0}.salesFooter{letter-spacing:.04em}}
 @media (prefers-reduced-motion:reduce){.customCard,.useCaseGrid article,.featureList article,.mapPin{transition:none}}
+/* Matching experience demo: turn the hero product frame into a self-running, buyer-facing preview. */
+.salesProduct{overflow:hidden}
+.salesProductMain{position:relative}
+.salesProductMain::after{content:"";position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:7px 12px;border:1px solid rgba(197,169,129,.22);border-radius:999px;background:rgba(9,9,8,.72);color:rgba(255,255,255,.68);font-size:7px;letter-spacing:.18em;white-space:nowrap;animation:matchingStep 8s ease-in-out infinite}
+.salesProfileVisual .person{animation:matchPerson 8s ease-in-out infinite}
+.salesProfileVisual .personTwo{animation-delay:-2.6s}
+.salesProfileVisual .personThree{animation-delay:-5.2s}
+.salesProductInfo h3{animation:matchScore 8s ease-in-out infinite}
+.salesProductInfo .signal{animation:matchSignal 8s ease-in-out infinite}
+@keyframes matchingStep{0%,14%{content:"① 条件を確認";opacity:.55}18%,34%{content:"② 相性を分析";opacity:1}38%,62%{content:"③ マッチ候補を表示";opacity:1}66%,86%{content:"④ MATCH成立";opacity:1}90%,100%{content:"① 条件を確認";opacity:.55}}
+@keyframes matchPerson{0%,18%{transform:translate3d(0,0,0) scale(.94);opacity:.55}34%,62%{transform:translate3d(0,0,0) scale(1);opacity:1}66%,82%{transform:translate3d(0,0,0) scale(1.08);opacity:1}90%,100%{transform:translate3d(0,0,0) scale(.94);opacity:.55}}
+@keyframes matchScore{0%,18%{opacity:.72;transform:scale(.98)}34%,62%{opacity:1;transform:scale(1)}66%,82%{opacity:1;transform:scale(1.04)}90%,100%{opacity:.72;transform:scale(.98)}}
+@keyframes matchSignal{0%,18%{opacity:.45}34%,62%{opacity:1}66%,82%{opacity:1}90%,100%{opacity:.45}}
+@media (max-width:560px){.salesProductMain::after{bottom:10px;font-size:6px;letter-spacing:.12em;padding:6px 9px}}
+@media (prefers-reduced-motion:reduce){.salesProductMain::after,.salesProfileVisual .person,.salesProductInfo h3,.salesProductInfo .signal{animation:none}}
