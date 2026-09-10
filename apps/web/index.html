@@ -61,6 +61,21 @@
       .launchInner{position:relative}
       .launchInner:before{content:"NEXA / UNIVERSAL MATCHING";position:absolute;top:-42px;left:50%;transform:translateX(-50%);font-size:7px;letter-spacing:.28em;color:rgba(255,255,255,.24);white-space:nowrap}
       .landingFooter{background:#0b0b0a}
+      .fp-filterbar{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 40px rgba(0,0,0,.14);backdrop-filter:blur(10px)}
+      .fp-filterbar button{transition:all .22s var(--ease);border:1px solid transparent}
+      .fp-filterbar button:hover{border-color:rgba(185,164,134,.32);transform:translateY(-1px)}
+      .fp-filterbar button.selected{box-shadow:0 8px 24px rgba(185,164,134,.1)}
+      .fp-list article{transition:transform .25s var(--ease),border-color .25s ease,background .25s ease}
+      .fp-list article:hover{transform:translateX(4px);border-color:rgba(185,164,134,.25);background:rgba(255,255,255,.025)}
+      .fp-chat{box-shadow:inset 0 1px rgba(255,255,255,.035)}
+      .fp-compose input:focus{outline:none;border-color:rgba(185,164,134,.5);box-shadow:0 0 0 3px rgba(185,164,134,.08)}
+      .fp-compose button{transition:all .22s var(--ease)}
+      .fp-compose button:hover{transform:translateY(-1px);box-shadow:0 10px 25px rgba(185,164,134,.12)}
+      .fp-own{background:linear-gradient(135deg,rgba(185,164,134,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:10px}
+      .fp-safe{box-shadow:0 0 0 1px rgba(185,164,134,.18),0 8px 24px rgba(185,164,134,.08)}
+      .fp-regioncards span{transition:transform .25s var(--ease),border-color .25s ease}
+      .fp-regioncards span:hover{transform:translateY(-2px);border-color:rgba(185,164,134,.3)}
+      .fp-settingrows button b,.fp-settingsgrid button b{color:#d9c6a6}
       @media(max-width:900px){.salesHero{min-height:auto}.matchingDemoBody{grid-template-columns:1fr}.matchingDemoSide{display:none}.demoProfile{grid-template-columns:160px 1fr auto}}
       @media(max-width:620px){.salesHero{padding-top:120px}.demoProfile{grid-template-columns:1fr;text-align:center}.demoAvatar{margin:auto}.demoProfile .fp-tags,.demoProfile .fp-actions{justify-content:center}.matchingDemoHeader{display:block}.matchingDemoHeader p{margin-top:24px}.launchInner:before{font-size:5px}}
       @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.useCaseGrid article,.featureList article,.customCard,.safetyPoints span,.demoProfile{transition:none}}
