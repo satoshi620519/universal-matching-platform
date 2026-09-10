@@ -10,15 +10,14 @@ Complete the **Web version demo site first**. iOS and Android are explicitly def
 - Do not add unrelated features or speculative infrastructure.
 - Do not request screenshots from the owner.
 - Keep the implementation extensible so visual/design changes and additional systems can be added after the demo is complete.
+- Keep the work path straight toward Web demo completion; do not start iOS/Android or unrelated infrastructure early.
 
 ## Current baseline
 - Repository: `satoshi620519/universal-matching-platform`
 - Branch: `main`
-- Current commit: `a3192184b3d6b8772bbf4c8698da03713309cf86`
-- Latest change: `style(web): refine demo interaction states`
+- Latest code commit: `828ed9770dde68e0156f100366a06c4f06a431f1`
+- Latest code change: `feat(web): complete demo interaction flows in place`
 - Web deployment: Render static site `universal-matching-platform-demo`
-- Latest previously verified Render deployment: `dep-dah32mgu01pc73cehm3g`
-- Latest previously verified deployment state: `live`
 - Demo URL: `https://universal-matching-platform-demo.onrender.com`
 
 ## Work already completed
@@ -29,30 +28,25 @@ Complete the **Web version demo site first**. iOS and Android are explicitly def
 5. JSX nesting was corrected after the earlier build failure.
 6. The latest visual-only pass was applied through `apps/web/index.html` inline styling to avoid unnecessary stylesheet proliferation.
 7. Render deployment reached `live` for the prior visual baseline.
-8. **2026-09-10 checkpoint:** refined existing in-product interaction states in `apps/web/index.html` without rebuilding the landing page or adding another stylesheet. Added stronger filter-state feedback, list hover/focus treatment, chat input focus treatment, profile/safety/global/settings visual feedback, and responsive polish.
+8. **2026-09-10 visual checkpoint:** refined existing in-product interaction states in `apps/web/index.html` with stronger filter-state feedback, list hover/focus treatment, chat input focus treatment, profile/safety/global/settings visual feedback, and responsive polish.
+9. **2026-09-10 functional checkpoint:** extended the existing demo in-place through `apps/web/index.html` only. Discovery category selection now drives the displayed candidate to a category-specific candidate using the existing React navigation state, and the former high-visibility alert placeholders for profile, safety, notification, display/accessibility, and account actions are intercepted into an in-product NEXA modal flow. No iOS/Android work was started and no new stylesheet or unrelated infrastructure was added.
 
-## Known demo limitations to address during Web completion
-These are existing, known limitations—not tasks already completed:
-- The demo category selector changes UI state but does not yet filter the candidate dataset.
-- Several profile/safety/settings actions currently use alert-based demo placeholders rather than in-product panels or flows.
-- The current demo is primarily client-side showcase behavior; production backend integration is not the current visual-demo baseline.
+## Remaining Web demo work
+- Finish any remaining alert/placeholder interactions that materially affect the user-facing demo.
+- Improve the existing in-product flows where they are still only visual/client-side, without introducing speculative backend infrastructure.
+- Verify the latest Render deployment after the current auto-deploy finishes.
+- Perform the final Web demo completion check against the existing feature/demo scope.
+- Only after Web demo completion, begin iOS; Android follows iOS.
 
-## Next exact work queue
-1. Inspect the current Web demo implementation and repository state before changing anything.
-2. Upgrade the existing demo interactions in-place, prioritizing real in-product flows over alert placeholders.
-3. Make discovery filters materially affect displayed candidates and matching state.
-4. Make profile, safety, global, notification, and settings interactions visibly respond inside the product UI.
-5. Keep the existing premium design system and avoid rebuilding the landing page.
-6. Validate build/deployment using the existing project pipeline where execution is available.
-7. Update this file after each meaningful implementation checkpoint with commit SHA, what changed, verification result, and the exact next task.
-8. Only after the Web demo is complete, begin iOS work; Android follows iOS.
+## Verification state
+- GitHub write for the functional checkpoint succeeded at commit `828ed9770dde68e0156f100366a06c4f06a431f1`.
+- Render auto-deploy was detected for that commit as deployment `dep-dah3famq1p3s73aqb3fg`.
+- At the last check, that deployment was `build_in_progress`; therefore no new Render `live` verification is claimed yet.
 
 ## Anti-duplication rule
 Before every future Web change, compare the latest commit and this file against the requested task. If the capability is already implemented, verify it instead of recreating it.
 
-## Session checkpoint
-- Date: 2026-09-10
-- State: Web demo visual layer has been refined in-place; no iOS/Android work started.
-- Latest code commit: `a3192184b3d6b8772bbf4c8698da03713309cf86`.
-- Verification: GitHub write succeeded; no shell/build execution was available in this environment, so no new build/deploy PASS is claimed here. The previously verified Render deployment remains the baseline.
-- Exact next task: improve the existing FullProductDemo behavior in-place, starting with making the discovery category selection actually change the displayed candidate set, then replace the highest-visibility alert placeholder with an in-product panel/flow.
+## Exact next task
+1. Poll `dep-dah3famq1p3s73aqb3fg` until the auto-deploy reaches a terminal state.
+2. If live, continue only with the remaining Web demo placeholder/flow gaps; if failed, inspect the failure before changing code.
+3. Update this file with the terminal verification result and the exact next Web-only task.
