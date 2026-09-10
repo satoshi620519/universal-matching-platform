@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { createCategory, type Category, type CategoryRepository } from '@universal/domain';
+import { createCategory, type Category } from '@universal/domain';
+import { PrismaCategoryRepository } from './prisma-category.repository.js';
 
 @Injectable()
 export class CategoryService {
-  constructor(private readonly categories: CategoryRepository) {}
+  constructor(private readonly categories: PrismaCategoryRepository) {}
 
   async create(input: { key: string; displayName: string }): Promise<Category> {
     const normalizedKey = input.key.trim();
