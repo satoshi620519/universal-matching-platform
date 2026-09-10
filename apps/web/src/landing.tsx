@@ -70,8 +70,8 @@ function LandingPage() {
 
         <section className="ctaLanding">
           <p className="overline">A NEW STARTING POINT</p>
-          <h2>Your idea.<br /><em>Your community.</em></h2>
-          <button className="primaryButton light" type="button">Enter the experience <span>↗</span></button>
+          <h2>Start with a<br /><em>better foundation.</em></h2>
+          <button className="primaryButton light" type="button">Discover what’s possible <span>↗</span></button>
         </section>
       </main>
 
