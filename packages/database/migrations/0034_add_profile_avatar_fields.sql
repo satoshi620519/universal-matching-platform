@@ -1,0 +1,4 @@
+ALTER TABLE profiles
+  ADD COLUMN IF NOT EXISTS avatar_id TEXT,
+  ADD COLUMN IF NOT EXISTS avatar_storage_key TEXT,
+  ADD COLUMN IF NOT EXISTS avatar_status TEXT;
