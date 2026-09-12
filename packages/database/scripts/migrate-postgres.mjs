@@ -7,7 +7,7 @@ const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) throw new Error('DATABASE_URL is required to run database migrations');
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const migrationsDirectory = join(packageRoot, 'dist', 'migrations');
+const migrationsDirectory = join(packageRoot, 'migrations');
 const client = new Client({ connectionString: databaseUrl });
 await client.connect();
 try {
