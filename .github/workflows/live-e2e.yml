@@ -17,5 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Wait for Render API deployment
+        run: sleep 180
       - name: Run live matching journey
         run: node scripts/live-e2e.mjs
