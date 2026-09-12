@@ -1,6 +1,8 @@
 const API_BASE_URL = process.env.LIVE_E2E_API_BASE_URL ?? 'https://universal-matching-platform-api.onrender.com';
 const REQUEST_TIMEOUT_MS = 30_000;
 const RATE_LIMIT_RETRY_MS = 65_000;
+const DISCOVERY_PAGE_SIZE = 20;
+const DISCOVERY_MAX_PAGES = 25;
 
 const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const password = `E2E-${unique}-Aa1!`;
@@ -65,6 +67,22 @@ async function registerAndSignIn(label) {
   return { email, token: result.credential, account };
 }
 
+async function discoverProfile({ token, categoryId, profileId }) {
+  let cursor;
+  for (let page = 1; page <= DISCOVERY_MAX_PAGES; page += 1) {
+    const params = new URLSearchParams({ categoryId, scope: 'global', countryCode: 'JP', limit: String(DISCOVERY_PAGE_SIZE) });
+    if (cursor) params.set('cursor', cursor);
+    const discovery = await request(`/discovery?${params.toString()}`, { token });
+    const items = discovery.items ?? [];
+    const candidate = items.find((item) => item.id === profileId);
+    if (candidate) return candidate;
+    console.log(`discovery page ${page}: ${items.length} candidates; target not on this page`);
+    if (!discovery.nextCursor) break;
+    cursor = discovery.nextCursor;
+  }
+  throw new Error(`could not discover target profile ${profileId} within ${DISCOVERY_MAX_PAGES} pages`);
+}
+
 async function main() {
   console.log(`LIVE E2E target: ${API_BASE_URL}`);
   const categories = await request('/profile-categories');
@@ -80,18 +98,14 @@ async function main() {
   const profileB = await request('/profiles/me', { token: b.token, method: 'POST', body: { categoryId: category.id, fields: fieldsFromSchema(category), geographicScope: { kind: 'global', countryCode: 'JP' } } });
 
   console.log('6: discovery A -> B');
-  const discoveryA = await request(`/discovery?categoryId=${encodeURIComponent(category.id)}&scope=global&countryCode=JP&limit=20`, { token: a.token });
-  const candidateB = discoveryA.items?.find((item) => item.id === profileB.id);
-  if (!candidateB) throw new Error(`A could not discover B (returned ${discoveryA.items?.length ?? 0} candidates)`);
+  await discoverProfile({ token: a.token, categoryId: category.id, profileId: profileB.id });
 
   console.log('7: A likes B');
   const firstDecision = await request('/matches/decision', { token: a.token, method: 'POST', body: { targetAccountId: b.account.id, decision: 'like', idempotencyKey: `e2e-a-${unique}` } });
   if (firstDecision.mutual) throw new Error('Unexpected mutual match before B likes A');
 
   console.log('8: discovery B -> A');
-  const discoveryB = await request(`/discovery?categoryId=${encodeURIComponent(category.id)}&scope=global&countryCode=JP&limit=20`, { token: b.token });
-  const candidateA = discoveryB.items?.find((item) => item.id === profileA.id);
-  if (!candidateA) throw new Error(`B could not discover A (returned ${discoveryB.items?.length ?? 0} candidates)`);
+  await discoverProfile({ token: b.token, categoryId: category.id, profileId: profileA.id });
 
   console.log('9: B likes A -> mutual match');
   const secondDecision = await request('/matches/decision', { token: b.token, method: 'POST', body: { targetAccountId: a.account.id, decision: 'like', idempotencyKey: `e2e-b-${unique}` } });
