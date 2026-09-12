@@ -58,14 +58,21 @@ export class MessagingController {
     const created = await this.messages.createForParticipant({ conversationId, senderAccountId: principal.accountId, body: body.body ?? '' });
     if (!created) return { statusCode: HttpStatus.NOT_FOUND };
     await this.messageRealtime.publishRecipients({ messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId, recipientAccountIds: created.recipientAccountIds });
+
+    const notificationIds: string[] = [];
     if (this.notificationCreation) {
-      await Promise.all(created.recipientAccountIds.map((accountId) => this.notificationCreation!.create({
-        accountId,
-        kind: 'message',
-        payload: { messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId },
-      })));
+      for (const accountId of created.recipientAccountIds) {
+        const notification = await this.notificationCreation.create({
+          accountId,
+          kind: 'message',
+          payload: { messageId: created.message.id, conversationId: created.message.conversationId, senderAccountId: created.message.senderAccountId },
+        });
+        notificationIds.push(notification.id);
+      }
     }
-    if (created.notificationIds.length) void this.notificationRealtime.publishCreatedBestEffort({ notificationIds: created.notificationIds, recipientAccountIds: created.recipientAccountIds });
+    if (notificationIds.length) {
+      void this.notificationRealtime.publishCreatedBestEffort({ notificationIds, recipientAccountIds: created.recipientAccountIds });
+    }
     return created.message;
   }
 
