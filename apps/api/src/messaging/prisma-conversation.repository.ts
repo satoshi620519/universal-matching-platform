@@ -14,43 +14,50 @@ export class PrismaConversationRepository {
 
   async findDirect(accountA: string, accountB: string): Promise<ConversationRecord | null> {
     const [low, high] = [accountA.trim(), accountB.trim()].sort();
-    const existing = await (this.database as any).directConversationPair.findUnique({
-      where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
-      include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
-    });
-    return existing?.conversation ?? null;
+    if (!low || !high || low === high) return null;
+    return this.findDirectByParticipants(this.database, low, high);
   }
 
   async createOrFindDirect(accountA: string, accountB: string): Promise<ConversationRecord> {
     const [low, high] = [accountA.trim(), accountB.trim()].sort();
     if (!low || !high || low === high) throw new Error('A direct conversation requires two distinct participants');
-    const existing = await (this.database as any).directConversationPair.findUnique({
-      where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
-      include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
+
+    const existing = await this.findDirectByParticipants(this.database, low, high);
+    if (existing) return existing;
+
+    return this.database.$transaction(async (tx) => {
+      // Serialize creation for this participant pair. The Prisma schema intentionally
+      // has no separate direct-pair model, so the database lock supplies the uniqueness
+      // boundary that the previous missing model was incorrectly assuming.
+      await (tx as any).$executeRawUnsafe(
+        'SELECT pg_advisory_xact_lock(hashtextextended($1, 0))',
+        `direct-conversation:${low}:${high}`,
+      );
+
+      const raced = await this.findDirectByParticipants(tx, low, high);
+      if (raced) return raced;
+
+      const conversation = await tx.conversation.create({
+        data: { participants: { create: [{ accountId: low }, { accountId: high }] } },
+        include: { participants: { orderBy: { joinedAt: 'asc' } } },
+      });
+      void this.analytics?.recordBusinessEvent('conversation_started');
+      return conversation;
     });
-    if (existing) return existing.conversation;
-    try {
-      return await this.database.$transaction(async (tx) => {
-        const raced = await (tx as any).directConversationPair.findUnique({ where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } }, include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } } });
-        if (raced) return raced.conversation;
-        const conversation = await tx.conversation.create({ data: { participants: { create: [{ accountId: low }, { accountId: high }] } }, include: { participants: { orderBy: { joinedAt: 'asc' } } } });
-        await (tx as any).directConversationPair.create({ data: { accountLowId: low, accountHighId: high, conversationId: conversation.id } });
-        void this.analytics?.recordBusinessEvent('conversation_started');
-        return conversation;
-      });
-    } catch (error) {
-      if (!this.isUniqueConflict(error)) throw error;
-      const winner = await (this.database as any).directConversationPair.findUnique({
-        where: { accountLowId_accountHighId: { accountLowId: low, accountHighId: high } },
-        include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
-      });
-      if (winner) return winner.conversation;
-      throw error;
-    }
   }
 
-  private isUniqueConflict(error: unknown): boolean {
-    return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: unknown }).code === 'P2002';
+  private async findDirectByParticipants(client: any, low: string, high: string): Promise<ConversationRecord | null> {
+    const candidates = await client.conversationParticipant.findMany({
+      where: { accountId: low },
+      include: { conversation: { include: { participants: { orderBy: { joinedAt: 'asc' } } } } },
+    });
+    const match = candidates.find((candidate: any) => {
+      const participantIds = candidate.conversation.participants
+        .map((participant: { accountId: string }) => participant.accountId)
+        .sort();
+      return participantIds.length === 2 && participantIds[0] === low && participantIds[1] === high;
+    });
+    return match?.conversation ?? null;
   }
 
   async create(participantAccountIds: string[]): Promise<ConversationRecord> {
