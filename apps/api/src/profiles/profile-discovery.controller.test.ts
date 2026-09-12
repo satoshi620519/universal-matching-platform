@@ -197,7 +197,7 @@ describe('ProfileDiscoveryController transport boundary', () => {
 
   it('uses authenticated account as discovery subject and keeps projection server-owned', async () => {
     const c=controller(); const discover=vi.spyOn((c as any).discovery,'discover');
-    await c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,undefined,undefined,undefined,'Bearer test');
+    await c.discover('cat-1','global',undefined,undefined,undefined,'10',undefined,undefined,undefined,undefined,undefined,undefined,'Bearer test');
     expect(discover.mock.calls[0][0] as any).toMatchObject({ subjectAccountId:'viewer-1', categoryId:'cat-1', limit:10 });
     expect((discover.mock.calls[0][0] as any).subjectProfile).toMatchObject({ accountId:'viewer-1' });
     expect((discover.mock.calls[0][0] as any).matchingRules).toBeUndefined();
