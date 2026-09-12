@@ -32,7 +32,7 @@ export class DiscoveryService {
 
     const exclusionPolicies: readonly DiscoveryExclusionPolicy[] = Array.isArray(this.exclusions)
       ? this.exclusions
-      : [this.exclusions.block, this.exclusions.safety];
+      : [this.exclusions as DiscoveryExclusionPolicies].flatMap(({ block, safety }) => [block, safety]);
 
     const eligible = await Promise.all(page.items.map(async (candidate) => {
       if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate, input.geographicScope).eligible) return null;
