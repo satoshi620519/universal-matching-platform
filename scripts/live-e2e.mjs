@@ -1,4 +1,5 @@
 const API_BASE_URL = process.env.LIVE_E2E_API_BASE_URL ?? 'https://universal-matching-platform-api.onrender.com';
+const REQUEST_TIMEOUT_MS = 30_000;
 
 const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const password = `E2E-${unique}-Aa1!`;
@@ -7,19 +8,29 @@ async function request(path, { token, method = 'GET', body } = {}) {
   const headers = {};
   if (body !== undefined) headers['content-type'] = 'application/json';
   if (token) headers.authorization = `Bearer ${token}`;
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method,
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  const text = await response.text();
-  let payload = null;
-  try { payload = text ? JSON.parse(text) : null; } catch { payload = text; }
-  if (!response.ok) {
-    const detail = typeof payload === 'string' ? payload : JSON.stringify(payload);
-    throw new Error(`${method} ${path} -> ${response.status}: ${detail}`);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal: controller.signal,
+    });
+    const text = await response.text();
+    let payload = null;
+    try { payload = text ? JSON.parse(text) : null; } catch { payload = text; }
+    if (!response.ok) {
+      const detail = typeof payload === 'string' ? payload : JSON.stringify(payload);
+      throw new Error(`${method} ${path} -> ${response.status}: ${detail}`);
+    }
+    return payload;
+  } catch (error) {
+    if (error?.name === 'AbortError') throw new Error(`${method} ${path} -> timeout after ${REQUEST_TIMEOUT_MS}ms`);
+    throw error;
+  } finally {
+    clearTimeout(timeout);
   }
-  return payload;
 }
 
 function fieldsFromSchema(category) {
