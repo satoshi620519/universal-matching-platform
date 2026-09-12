@@ -4,7 +4,6 @@ import { DatabaseService } from '../database/database.service.js';
 export type CreatedMessage = {
   message: MessageRecord;
   recipientAccountIds: string[];
-  notificationIds: string[];
 };
 
 export type MessageRecord = {
@@ -56,25 +55,9 @@ export class PrismaMessageRepository {
         select: { accountId: true },
       });
 
-      const notifications = recipients.length > 0
-        ? await Promise.all(recipients.map(({ accountId }) => tx.notification.create({
-            data: {
-              accountId,
-              kind: 'message.created',
-              payload: {
-                conversationId: message.conversationId,
-                messageId: message.id,
-                senderAccountId: message.senderAccountId,
-              },
-            },
-            select: { id: true },
-          })))
-        : [];
-
       return {
         message,
         recipientAccountIds: recipients.map(({ accountId }) => accountId),
-        notificationIds: notifications.map(({ id }) => id),
       };
     });
   }
