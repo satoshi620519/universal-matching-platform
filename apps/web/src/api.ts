@@ -55,7 +55,7 @@ export type ProfileFieldRule = { kind:'string'|'number'|'boolean'; required?:boo
 export type ProfileCategory = { id:string; displayName?:string; key?:string; fieldSchema?:Record<string,ProfileFieldRule> };
 export type DiscoveryProfile = { accountId:string; fields:Record<string, unknown>; categoryId:string };
 export function listProfileCategories(){return apiRequest<{categories:ProfileCategory[]}>('/profile-categories');}
-export function createMyProfile(input:{categoryId:string;fields:Record<string,string|number|boolean|null>;geographicScope?:{kind:string;countryCode?:string;regionCode?:string}}){return apiRequest('/profiles/me',{method:'POST',body:JSON.stringify(input)});}
+export function createMyProfile(input:{categoryId:string;fields:Record<string,string|number|boolean|null>;geographicScope?:{kind:string;countryCode?:string;regionCode?:string}}){return apiRequest<MyProfile>('/profiles/me',{method:'POST',body:JSON.stringify(input)});}
 export function discoverProfiles(params:{categoryId:string;scope?:string;countryCode?:string;limit?:number;cursor?:string}){const q=new URLSearchParams({categoryId:params.categoryId,scope:params.scope??'global',limit:String(params.limit??20)});if(params.countryCode)q.set('countryCode',params.countryCode);if(params.cursor)q.set('cursor',params.cursor);return apiRequest<{items:DiscoveryProfile[];nextCursor?:string}>('/discovery?'+q);}
 
 export type MatchProfile = DiscoveryProfile & { id?: string };
