@@ -8,7 +8,7 @@ export interface RuntimeConfig {
 export function loadRuntimeConfig(
   environment: Record<string, string | undefined> = process.env,
 ): RuntimeConfig {
-  const rawPort = environment.PORT ?? '3001';
+  const rawPort = environment.PORT ?? '10000';
   const port = Number(rawPort);
 
   if (!Number.isInteger(port) || port <= 0 || port > 65535) {
