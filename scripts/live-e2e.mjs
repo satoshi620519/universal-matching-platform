@@ -77,7 +77,7 @@ async function main() {
     method: 'POST',
     body: {
       categoryId: category.id,
-      fields: { ...fieldsFromSchema(category), name: 'E2E Member A' },
+      fields: fieldsFromSchema(category),
       geographicScope: { kind: 'global', countryCode: 'JP' },
     },
   });
@@ -87,7 +87,7 @@ async function main() {
     method: 'POST',
     body: {
       categoryId: category.id,
-      fields: { ...fieldsFromSchema(category), name: 'E2E Member B' },
+      fields: fieldsFromSchema(category),
       geographicScope: { kind: 'global', countryCode: 'JP' },
     },
   });
