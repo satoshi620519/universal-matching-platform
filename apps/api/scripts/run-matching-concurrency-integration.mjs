@@ -8,6 +8,8 @@ if (!process.env.MATCHING_TEST_DATABASE_URL) {
 
 const databaseUrl = process.env.MATCHING_TEST_DATABASE_URL;
 
+// Build workspace packages consumed through their package exports before Vitest starts.
+execSync('pnpm --filter @universal/domain build', { stdio: 'inherit' });
 execSync('pnpm --filter @universal/database build', { stdio: 'inherit' });
 execSync('pnpm prisma generate', { stdio: 'inherit' });
 
