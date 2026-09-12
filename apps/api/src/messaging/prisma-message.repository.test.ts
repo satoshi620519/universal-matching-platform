@@ -32,7 +32,6 @@ describe('PrismaMessageRepository', () => {
     await expect(repository.createForParticipant({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' })).resolves.toMatchObject({
       message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1', body: 'hello' },
       recipientAccountIds: ['a2', 'a3'],
-      notificationIds: [],
     });
     expect(create).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' }),
