@@ -1,5 +1,6 @@
 const API_BASE_URL = process.env.LIVE_E2E_API_BASE_URL ?? 'https://universal-matching-platform-api.onrender.com';
 const REQUEST_TIMEOUT_MS = 30_000;
+const RATE_LIMIT_RETRY_MS = 65_000;
 
 const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const password = `E2E-${unique}-Aa1!`;
@@ -8,29 +9,45 @@ async function request(path, { token, method = 'GET', body } = {}) {
   const headers = {};
   if (body !== undefined) headers['content-type'] = 'application/json';
   if (token) headers.authorization = `Bearer ${token}`;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-  try {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      method,
-      headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
-      signal: controller.signal,
-    });
-    const text = await response.text();
-    let payload = null;
-    try { payload = text ? JSON.parse(text) : null; } catch { payload = text; }
-    if (!response.ok) {
-      const detail = typeof payload === 'string' ? payload : JSON.stringify(payload);
-      throw new Error(`${method} ${path} -> ${response.status}: ${detail}`);
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      const response = await fetch(`${API_BASE_URL}${path}`, {
+        method,
+        headers,
+        body: body === undefined ? undefined : JSON.stringify(body),
+        signal: controller.signal,
+      });
+      const text = await response.text();
+      let payload = null;
+      try { payload = text ? JSON.parse(text) : null; } catch { payload = text; }
+
+      if (response.status === 429 && attempt === 0) {
+        const retryAfter = Number(response.headers.get('retry-after'));
+        const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
+          ? Math.max(retryAfter * 1000 + 1000, RATE_LIMIT_RETRY_MS)
+          : RATE_LIMIT_RETRY_MS;
+        console.log(`429 on ${method} ${path}; waiting ${Math.ceil(delayMs / 1000)}s before retry`);
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        continue;
+      }
+
+      if (!response.ok) {
+        const detail = typeof payload === 'string' ? payload : JSON.stringify(payload);
+        throw new Error(`${method} ${path} -> ${response.status}: ${detail}`);
+      }
+      return payload;
+    } catch (error) {
+      if (error?.name === 'AbortError') throw new Error(`${method} ${path} -> timeout after ${REQUEST_TIMEOUT_MS}ms`);
+      throw error;
+    } finally {
+      clearTimeout(timeout);
     }
-    return payload;
-  } catch (error) {
-    if (error?.name === 'AbortError') throw new Error(`${method} ${path} -> timeout after ${REQUEST_TIMEOUT_MS}ms`);
-    throw error;
-  } finally {
-    clearTimeout(timeout);
   }
+
+  throw new Error(`${method} ${path} -> rate-limit retry exhausted`);
 }
 
 function fieldsFromSchema(category) {
