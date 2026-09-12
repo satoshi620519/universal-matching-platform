@@ -12,12 +12,13 @@ import {
 } from '@universal/domain';
 
 export type DiscoveryExclusionPolicies = Readonly<{ block: DiscoveryExclusionPolicy; safety: DiscoveryExclusionPolicy }>;
+export type DiscoveryExclusionProvider = DiscoveryExclusionPolicies | readonly DiscoveryExclusionPolicy[];
 
 @Injectable()
 export class DiscoveryService {
   constructor(
     @Inject('DISCOVERY_PROFILE_REPOSITORY') private readonly profiles: DiscoveryProfileRepository,
-    @Inject('DISCOVERY_EXCLUSION_POLICIES') private readonly exclusions: DiscoveryExclusionPolicies,
+    @Inject('DISCOVERY_EXCLUSION_POLICIES') private readonly exclusions: DiscoveryExclusionProvider,
     @Optional() private readonly effectiveSafety?: EffectiveSafetyRestrictionService,
     @Optional() private readonly analytics?: AnalyticsEventRecordingService,
   ) {}
@@ -29,12 +30,17 @@ export class DiscoveryService {
     const subjectRestriction: SafetyRestriction = this.effectiveSafety ? await this.effectiveSafety.resolveForAccount(input.subjectAccountId, 'general') : 'none';
     if (blocksCapability(subjectRestriction, 'general')) return { items: [] };
 
+    const exclusionPolicies: readonly DiscoveryExclusionPolicy[] = Array.isArray(this.exclusions)
+      ? this.exclusions
+      : [this.exclusions.block, this.exclusions.safety];
+
     const eligible = await Promise.all(page.items.map(async (candidate) => {
       if (!evaluateDiscoveryEligibility(input.subjectAccountId, input.categoryId, subjectCountryCode, candidate, input.geographicScope).eligible) return null;
       if (!matchesDiscoveryPreferences(candidate, query.preferences ?? { filters: [] })) return null;
       if (!matchesDiscoverySearch(candidate, query.search)) return null;
-      if (await this.exclusions.block.excludes(input.subjectAccountId, candidate.accountId)) return null;
-      if (await this.exclusions.safety.excludes(input.subjectAccountId, candidate.accountId)) return null;
+      for (const policy of exclusionPolicies) {
+        if (await policy.excludes(input.subjectAccountId, candidate.accountId)) return null;
+      }
       if (this.effectiveSafety) {
         const candidateRestriction = await this.effectiveSafety.resolveForAccount(candidate.accountId, 'general');
         if (blocksCapability(candidateRestriction, 'general')) return null;
