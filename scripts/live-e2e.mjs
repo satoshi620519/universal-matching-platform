@@ -9,31 +9,21 @@ async function request(path, { token, method = 'GET', body } = {}) {
   const headers = {};
   if (body !== undefined) headers['content-type'] = 'application/json';
   if (token) headers.authorization = `Bearer ${token}`;
-
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
-      const response = await fetch(`${API_BASE_URL}${path}`, {
-        method,
-        headers,
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: controller.signal,
-      });
+      const response = await fetch(`${API_BASE_URL}${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), signal: controller.signal });
       const text = await response.text();
       let payload = null;
       try { payload = text ? JSON.parse(text) : null; } catch { payload = text; }
-
       if (response.status === 429 && attempt === 0) {
         const retryAfter = Number(response.headers.get('retry-after'));
-        const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
-          ? Math.max(retryAfter * 1000 + 1000, RATE_LIMIT_RETRY_MS)
-          : RATE_LIMIT_RETRY_MS;
+        const delayMs = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.max(retryAfter * 1000 + 1000, RATE_LIMIT_RETRY_MS) : RATE_LIMIT_RETRY_MS;
         console.log(`429 on ${method} ${path}; waiting ${Math.ceil(delayMs / 1000)}s before retry`);
         await new Promise((resolve) => setTimeout(resolve, delayMs));
         continue;
       }
-
       if (!response.ok) {
         const detail = typeof payload === 'string' ? payload : JSON.stringify(payload);
         throw new Error(`${method} ${path} -> ${response.status}: ${detail}`);
@@ -42,11 +32,8 @@ async function request(path, { token, method = 'GET', body } = {}) {
     } catch (error) {
       if (error?.name === 'AbortError') throw new Error(`${method} ${path} -> timeout after ${REQUEST_TIMEOUT_MS}ms`);
       throw error;
-    } finally {
-      clearTimeout(timeout);
-    }
+    } finally { clearTimeout(timeout); }
   }
-
   throw new Error(`${method} ${path} -> rate-limit retry exhausted`);
 }
 
@@ -84,75 +71,42 @@ async function main() {
   if (!categories?.categories?.length) throw new Error('No profile categories available');
   const category = categories.categories[0];
   console.log(`category: ${category.id}`);
-
   const a = await registerAndSignIn('a');
   const b = await registerAndSignIn('b');
 
   console.log('4: profile bootstrap A');
-  await request('/profiles/me', {
-    token: a.token,
-    method: 'POST',
-    body: {
-      categoryId: category.id,
-      fields: fieldsFromSchema(category),
-      geographicScope: { kind: 'global', countryCode: 'JP' },
-    },
-  });
+  const profileA = await request('/profiles/me', { token: a.token, method: 'POST', body: { categoryId: category.id, fields: fieldsFromSchema(category), geographicScope: { kind: 'global', countryCode: 'JP' } } });
   console.log('5: profile bootstrap B');
-  await request('/profiles/me', {
-    token: b.token,
-    method: 'POST',
-    body: {
-      categoryId: category.id,
-      fields: fieldsFromSchema(category),
-      geographicScope: { kind: 'global', countryCode: 'JP' },
-    },
-  });
+  const profileB = await request('/profiles/me', { token: b.token, method: 'POST', body: { categoryId: category.id, fields: fieldsFromSchema(category), geographicScope: { kind: 'global', countryCode: 'JP' } } });
 
   console.log('6: discovery A -> B');
   const discoveryA = await request(`/discovery?categoryId=${encodeURIComponent(category.id)}&scope=global&countryCode=JP&limit=20`, { token: a.token });
-  const candidateB = discoveryA.items?.find((item) => item.accountId === b.account.id);
-  if (!candidateB) throw new Error('A could not discover B');
+  const candidateB = discoveryA.items?.find((item) => item.id === profileB.id);
+  if (!candidateB) throw new Error(`A could not discover B (returned ${discoveryA.items?.length ?? 0} candidates)`);
 
   console.log('7: A likes B');
-  const firstDecision = await request('/matches/decision', {
-    token: a.token,
-    method: 'POST',
-    body: { targetAccountId: b.account.id, decision: 'like', idempotencyKey: `e2e-a-${unique}` },
-  });
+  const firstDecision = await request('/matches/decision', { token: a.token, method: 'POST', body: { targetAccountId: b.account.id, decision: 'like', idempotencyKey: `e2e-a-${unique}` } });
   if (firstDecision.mutual) throw new Error('Unexpected mutual match before B likes A');
 
   console.log('8: discovery B -> A');
   const discoveryB = await request(`/discovery?categoryId=${encodeURIComponent(category.id)}&scope=global&countryCode=JP&limit=20`, { token: b.token });
-  const candidateA = discoveryB.items?.find((item) => item.accountId === a.account.id);
-  if (!candidateA) throw new Error('B could not discover A');
+  const candidateA = discoveryB.items?.find((item) => item.id === profileA.id);
+  if (!candidateA) throw new Error(`B could not discover A (returned ${discoveryB.items?.length ?? 0} candidates)`);
 
   console.log('9: B likes A -> mutual match');
-  const secondDecision = await request('/matches/decision', {
-    token: b.token,
-    method: 'POST',
-    body: { targetAccountId: a.account.id, decision: 'like', idempotencyKey: `e2e-b-${unique}` },
-  });
+  const secondDecision = await request('/matches/decision', { token: b.token, method: 'POST', body: { targetAccountId: a.account.id, decision: 'like', idempotencyKey: `e2e-b-${unique}` } });
   if (!secondDecision.mutual) throw new Error('Mutual match was not created');
 
   console.log('10: A match list');
   const matches = await request('/matches', { token: a.token });
-  if (!matches.items?.some((item) => item.accountId === b.account.id)) throw new Error('A match list missing B');
+  if (!matches.matches?.some((item) => item.id === profileB.id)) throw new Error('A match list missing B');
 
   console.log('11: A creates mutual-match conversation');
-  const conversation = await request('/conversations/from-mutual-match', {
-    token: a.token,
-    method: 'POST',
-    body: { targetAccountId: b.account.id },
-  });
+  const conversation = await request('/conversations/from-mutual-match', { token: a.token, method: 'POST', body: { targetAccountId: b.account.id } });
   if (!conversation?.id) throw new Error('Conversation was not created');
 
   console.log('12: A sends message');
-  const message = await request(`/conversations/${conversation.id}/messages`, {
-    token: a.token,
-    method: 'POST',
-    body: { body: 'E2E live message' },
-  });
+  const message = await request(`/conversations/${conversation.id}/messages`, { token: a.token, method: 'POST', body: { body: 'E2E live message' } });
   if (!message?.id) throw new Error('Message was not created');
 
   console.log('13: B receives message');
@@ -165,14 +119,10 @@ async function main() {
   if (!notification) throw new Error('B has no message notification');
 
   console.log('15: B marks notification read');
-  await request(`/conversations/notifications/${encodeURIComponent(notification.id)}/read`, {
-    token: b.token,
-    method: 'POST',
-  });
+  await request(`/conversations/notifications/${encodeURIComponent(notification.id)}/read`, { token: b.token, method: 'POST' });
   const notificationsAfter = await request('/conversations/notifications', { token: b.token });
   const updated = notificationsAfter.notifications?.find((item) => item.id === notification.id);
   if (!updated?.readAt) throw new Error('Notification did not become read');
-
   console.log('LIVE_E2E_RESULT=passed');
 }
 
