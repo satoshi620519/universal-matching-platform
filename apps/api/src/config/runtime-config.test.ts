@@ -4,7 +4,7 @@ import { loadRuntimeConfig } from './runtime-config.js';
 describe('runtime configuration', () => {
   it('provides safe defaults', () => {
     expect(loadRuntimeConfig({})).toEqual({
-      port: 3001,
+      port: 10000,
       host: '0.0.0.0',
       environment: 'development',
       databaseUrl: undefined,
