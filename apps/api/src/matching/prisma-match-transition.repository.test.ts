@@ -16,11 +16,13 @@ function databaseFor(sequence: {
     return sequence.create ?? { decision: 'like', actorAccountId: 'a1', targetAccountId: 'a2' };
   });
   const $executeRaw = vi.fn().mockResolvedValue(undefined);
+  const $queryRaw = vi.fn().mockResolvedValue([{ exists: false }]);
   const notificationCreateMany = vi.fn().mockResolvedValue({ count: 0 });
   const notificationCreate = vi.fn().mockResolvedValueOnce({ id: 'n1', accountId: 'a1' }).mockResolvedValueOnce({ id: 'n2', accountId: 'a2' });
   const tx = { matchInteraction: { findUnique, create }, notification: { create: notificationCreate, createMany: notificationCreateMany }, $executeRaw };
   return {
     $transaction: vi.fn(async (fn: (value: typeof tx) => unknown) => fn(tx)),
+    $queryRaw,
     tx,
     notificationRealtime: {
       publishCreatedBestEffort: vi.fn().mockResolvedValue(undefined),
