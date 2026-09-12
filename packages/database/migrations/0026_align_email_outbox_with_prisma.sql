@@ -1,6 +1,3 @@
--- Align the legacy email outbox table with the current Prisma model.
--- The legacy table keeps its original primary key; renaming that column makes
--- it the Prisma `id` without introducing a second primary key.
 ALTER TABLE email_outbox_messages
   RENAME COLUMN email_outbox_message_id TO id;
 
@@ -22,7 +19,6 @@ SET
   delivered_at = COALESCE(delivered_at, sent_at),
   updated_at = COALESCE(updated_at, created_at, now());
 
--- Remove legacy NOT NULL fields that current Prisma writes no longer provide.
 ALTER TABLE email_outbox_messages
   DROP COLUMN IF EXISTS recipient_email,
   DROP COLUMN IF EXISTS template_key,
