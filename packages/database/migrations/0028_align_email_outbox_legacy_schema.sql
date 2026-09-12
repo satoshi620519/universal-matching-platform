@@ -8,4 +8,4 @@ ALTER TABLE email_outbox_messages
 
 ALTER TABLE email_outbox_messages
   ADD CONSTRAINT email_outbox_messages_status_check
-  CHECK (status IN ('pending', 'delivered', 'failed));
+  CHECK (status IN ('pending', 'delivered', 'failed'));
