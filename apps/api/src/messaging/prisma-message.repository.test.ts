@@ -17,6 +17,28 @@ describe('PrismaMessageRepository', () => {
     const repository = new PrismaMessageRepository({} as never);
     await expect(repository.createForParticipant({ conversationId: 'c1', senderAccountId: 'a1', body: '   ' })).rejects.toThrow('must not be empty');
   });
+
+  it('creates the message and returns recipient account ids', async () => {
+    const findUnique = vi.fn().mockResolvedValue({ accountId: 'a1' });
+    const create = vi.fn().mockResolvedValue({ id: 'm1', conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
+    const findMany = vi.fn().mockResolvedValue([{ accountId: 'a2' }, { accountId: 'a3' }]);
+    const repository = new PrismaMessageRepository({
+      $transaction: (operation: (tx: unknown) => unknown) => operation({
+        conversationParticipant: { findUnique, findMany },
+        message: { create },
+      }),
+    } as never);
+
+    await expect(repository.createForParticipant({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' })).resolves.toMatchObject({
+      message: { id: 'm1', conversationId: 'c1', senderAccountId: 'a1', body: 'hello' },
+      recipientAccountIds: ['a2', 'a3'],
+      notificationIds: [],
+    });
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' }),
+    }));
+  });
+
   it('does not expose messages when reader is not a participant', async () => {
     const findUnique = vi.fn().mockResolvedValue(null);
     const findMany = vi.fn();
@@ -33,31 +55,6 @@ describe('PrismaMessageRepository', () => {
     expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ take: 100, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }] }));
   });
 
-  it('creates recipient notifications in the same message transaction', async () => {
-    const findUnique = vi.fn().mockResolvedValue({ accountId: 'a1' });
-    const create = vi.fn().mockResolvedValue({ id: 'm1', conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
-    const findMany = vi.fn().mockResolvedValue([{ accountId: 'a2' }, { accountId: 'a3' }]);
-    const notificationCreate = vi.fn()
-      .mockResolvedValueOnce({ id: 'n2', accountId: 'a2' })
-      .mockResolvedValueOnce({ id: 'n3', accountId: 'a3' });
-    const repository = new PrismaMessageRepository({
-      $transaction: (operation: (tx: unknown) => unknown) => operation({
-        conversationParticipant: { findUnique, findMany },
-        message: { create },
-        notification: { create: notificationCreate },
-      }),
-    } as never);
-
-    await repository.createForParticipant({ conversationId: 'c1', senderAccountId: 'a1', body: 'hello' });
-
-    expect(notificationCreate).toHaveBeenCalledTimes(2);
-    expect(notificationCreate).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ accountId: 'a2', kind: 'message.created' }),
-    }));
-    expect(notificationCreate).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ accountId: 'a3', kind: 'message.created' }),
-    }));
-  });
   it('marks read state only for an authorized participant row', async () => {
     const updateMany = vi.fn().mockResolvedValue({ count: 1 });
     const repository = new PrismaMessageRepository({ conversationParticipant: { updateMany } } as never);
