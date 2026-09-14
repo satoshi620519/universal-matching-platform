@@ -33,12 +33,23 @@ describe('NEXA demo-v2 interaction contract', () => {
     const messageBody = messageStart >= 0 && messageEnd > messageStart ? source.slice(messageStart, messageEnd) : '';
     expect(messageBody).toContain('if(!state.matches.size)');
     expect(messageBody).toContain('相互マッチ成立後に利用できます');
+    expect(messageBody).toContain('const p=matchedProfile()');
+    expect(messageBody).toContain('${esc(p.name)}');
+    expect(messageBody).not.toContain('<b>Mika</b>');
 
     const sendStart = source.indexOf('function send()');
     const sendEnd = source.indexOf('function discover()', sendStart);
     const sendBody = sendStart >= 0 && sendEnd > sendStart ? source.slice(sendStart, sendEnd) : '';
-    expect(sendBody).toContain('if(!state.matches.size)');
+    expect(sendBody).toContain('const p=matchedProfile()');
+    expect(sendBody).toContain('if(!p)');
     expect(sendBody).toContain('マッチ成立後にメッセージを開始できます');
+    expect(sendBody).toContain('profileId:p.id');
+  });
+
+  it('routes message navigation to the selected match', () => {
+    expect(source).toContain('function go(v,id){state.view=v;if(id)state.activeMatch=id;render()}');
+    expect(source).toContain("onclick=\"go('messages','${p.id}')\"");
+    expect(source).toContain('state.activeMatch=id');
   });
 
   it('keeps blocked candidates excluded from discovery', () => {
