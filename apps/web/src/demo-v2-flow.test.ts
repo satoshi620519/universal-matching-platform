@@ -74,4 +74,17 @@ describe('NEXA demo-v2 interaction contract', () => {
     expect(source).toContain('state.config.published=true');
     expect(source).toContain('公開内容を見る');
   });
+
+  it('makes every Quick Launch step editable and persisted in demo state', () => {
+    const configureStart = source.indexOf('function configure(key)');
+    const configureEnd = source.indexOf('function publish()', configureStart);
+    const configureBody = configureStart >= 0 && configureEnd > configureStart ? source.slice(configureStart, configureEnd) : '';
+    for (const key of ['brand','color','region','language','category','profile','rules','safety','notify','legal']) {
+      expect(configureBody).toContain(`key==='${key}'`);
+    }
+    expect(configureBody).toContain('state.config.steps.add(key)');
+    expect(configureBody).toContain('state.config[key]=v||\'設定済み\'');
+    expect(source).toContain("${state.config.steps.has(k)?'編集':'設定'}");
+    expect(source).toContain('設定済み · ${esc(state.config[k]||\'現在のデモに反映\')}');
+  });
 });
