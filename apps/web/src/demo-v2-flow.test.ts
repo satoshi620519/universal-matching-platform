@@ -31,9 +31,9 @@ describe('NEXA demo-v2 interaction contract', () => {
     const messageStart = source.indexOf('function messages()');
     const messageEnd = source.indexOf('function notifications()', messageStart);
     const messageBody = messageStart >= 0 && messageEnd > messageStart ? source.slice(messageStart, messageEnd) : '';
-    expect(messageBody).toContain('if(!state.matches.size)');
-    expect(messageBody).toContain('相互マッチ成立後に利用できます');
     expect(messageBody).toContain('const p=matchedProfile()');
+    expect(messageBody).toContain('if(!p)');
+    expect(messageBody).toContain('相互マッチ成立後に利用できます');
     expect(messageBody).toContain('${esc(p.name)}');
     expect(messageBody).not.toContain('<b>Mika</b>');
 
