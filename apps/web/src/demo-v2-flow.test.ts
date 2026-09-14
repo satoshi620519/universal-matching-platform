@@ -7,11 +7,13 @@ const source = readFileSync(demoPath, 'utf8');
 
 describe('NEXA demo-v2 interaction contract', () => {
   it('keeps like and mutual match as separate states', () => {
-    expect(source).toContain("state.liked.add(p.id)");
-    expect(source).toContain("state.matches.add(id)");
-    expect(source).toContain("if(!state.liked.has(id))");
+    expect(source).toContain('state.liked.add(p.id)');
+    expect(source).toContain('state.matches.add(id)');
+    expect(source).toContain('if(!state.liked.has(id))');
 
-    const likeBody = source.match(/function like\(\)\{([\s\S]*?)\n\}/)?.[1] ?? '';
+    const likeStart = source.indexOf('function like()');
+    const likeEnd = source.indexOf('function mutual(', likeStart);
+    const likeBody = likeStart >= 0 && likeEnd > likeStart ? source.slice(likeStart, likeEnd) : '';
     expect(likeBody).toContain('state.liked.add(p.id)');
     expect(likeBody).not.toContain('state.matches.add');
   });
@@ -26,7 +28,8 @@ describe('NEXA demo-v2 interaction contract', () => {
 
   it('keeps Quick Launch as a ten-step publish gate', () => {
     expect(source).toContain("const launchItems=['ブランド名・ロゴ','カラー・画像','対象地域','言語・用語','カテゴリ','プロフィール項目','マッチングルール','安全・通報方針','通知設定','利用規約・サポート']");
-    expect(source).toContain('launchItems.length');
+    expect(source).toContain("const labels=[['brand','ブランド名・ロゴ']");
+    expect(source).toContain('state.config.steps.size<10');
     expect(source).toContain('state.config.published=true');
     expect(source).toContain('公開内容を見る');
   });
