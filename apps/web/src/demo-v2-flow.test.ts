@@ -18,6 +18,20 @@ describe('NEXA demo-v2 interaction contract', () => {
     expect(likeBody).not.toContain('state.matches.add');
   });
 
+  it('requires an established mutual match before messaging', () => {
+    const messageStart = source.indexOf('function messages()');
+    const messageEnd = source.indexOf('function notifications()', messageStart);
+    const messageBody = messageStart >= 0 && messageEnd > messageStart ? source.slice(messageStart, messageEnd) : '';
+    expect(messageBody).toContain('if(!state.matches.size)');
+    expect(messageBody).toContain('相互マッチ成立後に利用できます');
+
+    const sendStart = source.indexOf('function send()');
+    const sendEnd = source.indexOf('function discover()', sendStart);
+    const sendBody = sendStart >= 0 && sendEnd > sendStart ? source.slice(sendStart, sendEnd) : '';
+    expect(sendBody).toContain('if(!state.matches.size)');
+    expect(sendBody).toContain('マッチ成立後にメッセージを開始できます');
+  });
+
   it('keeps safety actions connected to candidate state and moderation feedback', () => {
     expect(source).toContain('state.blocked.add(p.id)');
     expect(source).toContain('state.liked.delete(p.id)');
