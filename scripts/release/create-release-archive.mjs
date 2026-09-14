@@ -38,9 +38,6 @@ const violations = trackedFiles.filter((file) => forbidden.some((pattern) => pat
 if (violations.length) fail(`forbidden tracked files detected:\n- ${violations.join("\n- ")}`);
 
 mkdirSync(outputDir, { recursive: true });
-runGit(["archive", "--format=tar.gz", `--prefix=${archiveBase}/`, resolvedRef]);
-
-// git archive writes to stdout, so rerun it with an explicit output file.
 const archiveBytes = execFileSync("git", ["archive", "--format=tar.gz", `--prefix=${archiveBase}/`, resolvedRef]);
 writeFileSync(archivePath, archiveBytes);
 
