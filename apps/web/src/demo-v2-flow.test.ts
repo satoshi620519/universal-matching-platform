@@ -32,6 +32,13 @@ describe('NEXA demo-v2 interaction contract', () => {
     expect(sendBody).toContain('マッチ成立後にメッセージを開始できます');
   });
 
+  it('keeps blocked candidates excluded from discovery', () => {
+    const currentStart = source.indexOf('function current()');
+    const currentEnd = source.indexOf('function like()', currentStart);
+    const currentBody = currentStart >= 0 && currentEnd > currentStart ? source.slice(currentStart, currentEnd) : '';
+    expect(currentBody).toContain('profiles.filter(p=>!state.blocked.has(p.id))');
+  });
+
   it('keeps safety actions connected to candidate state and moderation feedback', () => {
     expect(source).toContain('state.blocked.add(p.id)');
     expect(source).toContain('state.liked.delete(p.id)');
