@@ -19,7 +19,7 @@ function navRender(){$('#nav').innerHTML=nav.map(([id,ic,label])=>`<button class
 function go(v){state.view=v;render()}
 function current(){const a=profiles.filter(p=>!state.blocked.has(p.id));if(!a.length)return null;if(state.index>=a.length)state.index=0;return a[state.index]}
 function like(){const p=current();if(!p)return;if(state.liked.has(p.id)){toast('すでに「いいね」済みです');return}state.liked.add(p.id);toast(`${p.name}さんに「いいね」を送りました`);render()}
-function mutual(id){if(!state.liked.has(id)){toast('先に「いいね」を送ってください');return}state.matches.add(id);toast('相互いいね。マッチが成立しました');render()}
+function mutual(id){if(!state.liked.has(id)){toast('先に「いいね」を送ってください');return}if(!state.incoming.has(id)){toast('相手からの「いいね」が確認できないためマッチできません');return}state.matches.add(id);toast('相互いいね。マッチが成立しました');render()}
 function next(){if(current()){state.index++;render()}}
 function block(){const p=current();if(!p)return;state.blocked.add(p.id);state.liked.delete(p.id);state.matches.delete(p.id);toast(`${p.name}さんをブロックしました`);render()}
 function report(){const p=current();if(!p)return;state.notifications++;toast('通報を管理キューへ送信しました');render()}
