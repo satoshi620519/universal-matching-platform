@@ -18,6 +18,15 @@ describe('NEXA demo-v2 interaction contract', () => {
     expect(likeBody).not.toContain('state.matches.add');
   });
 
+  it('requires both an outgoing and incoming like before mutual match', () => {
+    const mutualStart = source.indexOf('function mutual(');
+    const mutualEnd = source.indexOf('function next()', mutualStart);
+    const mutualBody = mutualStart >= 0 && mutualEnd > mutualStart ? source.slice(mutualStart, mutualEnd) : '';
+    expect(mutualBody).toContain('if(!state.liked.has(id))');
+    expect(mutualBody).toContain('if(!state.incoming.has(id))');
+    expect(mutualBody).toContain('state.matches.add(id)');
+  });
+
   it('requires an established mutual match before messaging', () => {
     const messageStart = source.indexOf('function messages()');
     const messageEnd = source.indexOf('function notifications()', messageStart);
