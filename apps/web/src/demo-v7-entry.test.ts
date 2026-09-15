@@ -33,6 +33,8 @@ describe('NEXA buyer-facing demo entry', () => {
     expect(source).toContain('w().block(x.id)');
     expect(source).toContain('w().S.reported.has(p.id)');
     expect(source).toContain('w().S.blocked.has(p.id)');
+    expect(source).toContain('安全画面で処理結果を確認できます');
+    expect(source).toContain('候補・MATCH対象から除外されます');
   });
 
   it('provides a demo-only reset without changing the underlying product flow', () => {
