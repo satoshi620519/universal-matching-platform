@@ -24,6 +24,12 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(source).toContain('if(id)S.active=id');
   });
 
+  it('keeps search typing stable and applies name search on submit', () => {
+    expect(source).toContain('onkeydown="if(event.key===\'Enter\'){S.q=this.value.trim();render()}"');
+    expect(source).toContain('onclick="S.q=document.getElementById(\'search\').value.trim();render()"');
+    expect(source).not.toContain('oninput="S.q=this.value;render()"');
+  });
+
   it('keeps the matching lifecycle explicit: profile -> like -> mutual match -> match list -> message', () => {
     expect(source).toContain("go('detail','${p.id}')");
     expect(source).toContain('function like(id)');
