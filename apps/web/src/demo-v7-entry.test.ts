@@ -26,6 +26,19 @@ describe('NEXA buyer-facing demo entry', () => {
     expect(source).toContain("go('launch')");
   });
 
+  it('exposes a guided tour across the buyer-facing feature screens', () => {
+    expect(source).toContain('全機能を順番に確認');
+    expect(source).toContain("['discover','候補・検索']");
+    expect(source).toContain("['matches','MATCH一覧']");
+    expect(source).toContain("['messages','メッセージ']");
+    expect(source).toContain("['notifications','通知']");
+    expect(source).toContain("['safety','安心・安全']");
+    expect(source).toContain("['global','地域・言語']");
+    expect(source).toContain("['admin','管理・分析']");
+    expect(source).toContain("['launch','Quick Launch']");
+    expect(source).toContain('全機能ツアーが完了しました');
+  });
+
   it('exposes one-click mutual matching against fictional demo state', () => {
     expect(source).toContain('相互MATCHを体験');
     expect(source).toContain('w().S.incoming.add(x.id)');
