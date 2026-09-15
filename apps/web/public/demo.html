@@ -64,7 +64,7 @@
       const activity=d.createElement('div');
       activity.id='demo-activity';
       activity.style.cssText='position:fixed;right:18px;top:18px;z-index:31;width:min(360px,calc(100vw - 36px));border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui;overflow:hidden;backdrop-filter:blur(12px)';
-      activity.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">ライブアクティビティ</div><div id="demo-activity-body" style="padding:12px 14px"><div id="demo-activity-status" style="color:#9da5b2;line-height:1.55">MATCH・メッセージ・安全操作の状態をここに反映します。</div><div id="demo-activity-log" style="margin-top:9px;display:grid;gap:5px"></div><div id="demo-activity-actions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px"></div></div>';
+      activity.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">ライブアクティビティ</div><div id="demo-activity-body" style="padding:12px 14px"><div id="demo-activity-status" style="color:#9da5b2;line-height:1.55">MATCH・メッセージ・安全操作の状態をここに反映します。</div><div id="demo-activity-log" style="margin-top:9px;display:grid;gap:5px"></div><div id="demo-activity-actions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px"></div><div style="margin-top:10px;border-top:1px solid #29303b;padding-top:9px"><button id="demo-feature-toggle" aria-expanded="false" style="width:100%;padding:7px 9px;border:1px solid #29303b;background:#171c25;color:#cbd1da;border-radius:8px;cursor:pointer;text-align:left">全機能ショートカット ＋</button><div id="demo-feature-links" style="display:none;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px"></div></div></div>';
       d.body.appendChild(activity);
       const activityStatus=d.getElementById('demo-activity-status'),activityActions=d.getElementById('demo-activity-actions'),activityLog=d.getElementById('demo-activity-log');
       let previous={matches:0,messages:0,reported:0,blocked:0,notes:w.S.notes};
@@ -89,6 +89,13 @@
       }
       updateActivity();
       setInterval(()=>{updateProgress();updateActivity()},350);
+
+      const featureLinks=d.getElementById('demo-feature-links');
+      [['探す','discover'],['マッチ','matches'],['メッセージ','messages'],['通知','notifications'],['プロフィール','profile'],['安心・安全','safety'],['地域・言語','global'],['設定','settings'],['管理・分析','admin'],['Quick Launch','launch']].forEach(([label,target])=>{
+        const b=d.createElement('button');b.textContent=label;b.style.cssText='padding:7px 6px;border:1px solid #29303b;background:#171c25;color:#fff;border-radius:8px;cursor:pointer';b.onclick=()=>w.go(target);featureLinks.appendChild(b);
+      });
+      const featureToggle=d.getElementById('demo-feature-toggle');
+      featureToggle.onclick=()=>{const open=featureLinks.style.display==='grid';featureLinks.style.display=open?'none':'grid';featureToggle.setAttribute('aria-expanded',String(!open));featureToggle.textContent=open?'全機能ショートカット ＋':'全機能ショートカット −'};
 
       const panel=d.createElement('div');
       panel.id='mutual-like-control';
