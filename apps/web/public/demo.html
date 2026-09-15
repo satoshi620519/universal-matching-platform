@@ -42,9 +42,15 @@
           w.send();
         },60);
       }
+      function demoSafetyAction(){
+        const p=w.P.find(x=>!w.S.blocked.has(x.id)&&!w.S.reported.has(x.id));
+        if(!p){w.go('safety');return}
+        w.report(p.id);
+        w.go('safety');
+      }
       function updateProgress(){
         const liked=w.S.liked.size>0,matched=w.S.matches.size>0,mess=Object.values(w.S.msg||{}).some(a=>Array.isArray(a)&&a.length>0);
-        const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess,safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
+        const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess,safety:w.S.blocked.size>0||w.S.reported.size>0};
         const first=steps.findIndex(([key])=>!done[key]);
         const current=d.getElementById('demo-progress-current');
         if(current)current.textContent=first<0?'COMPLETE':'STEP '+(first+1)+'/8';
@@ -64,7 +70,7 @@
           if(target==='liked'){const p=w.P.find(x=>!w.S.blocked.has(x.id));if(p)w.like(p.id);return}
           if(target==='matches'){const p=w.P.find(x=>w.S.liked.has(x.id)&&w.S.incoming.has(x.id));if(p)w.mutual(p.id);return}
           if(target==='messages'){sendDemoMessage();return}
-          if(target==='safety'){w.go('safety');}
+          if(target==='safety'){demoSafetyAction();}
         };
         resetBtn.onclick=()=>w.reset();
       }
@@ -96,6 +102,7 @@
         if(reported||blocked)addAction('安心・安全を見る','safety');
         if(notes>3)addAction('通知を見る（更新あり）','notifications');
         if(matches&&!messages){const b=d.createElement('button');b.textContent='サンプルメッセージを送信';b.style.cssText='padding:7px 9px;border:1px solid #d9bd7d;background:#d9bd7d;color:#17140e;border-radius:8px;font-weight:800;cursor:pointer';b.onclick=sendDemoMessage;activityActions.appendChild(b)}
+        if(!reported&&!blocked){const b=d.createElement('button');b.textContent='安全操作を体験（通報）';b.style.cssText='padding:7px 9px;border:1px solid #d9bd7d;background:#d9bd7d;color:#17140e;border-radius:8px;font-weight:800;cursor:pointer';b.onclick=demoSafetyAction;activityActions.appendChild(b)}
       }
       updateActivity();
       setInterval(()=>{updateProgress();updateActivity()},350);
