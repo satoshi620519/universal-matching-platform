@@ -33,6 +33,15 @@
       const steps=[
         ['user','ユーザー設定'],['profile','プロフィール'],['discover','条件検索'],['detail','プロフィール確認'],['liked','LIKE'],['matches','相互MATCH'],['messages','メッセージ'],['safety','安心・安全']
       ];
+      function sendDemoMessage(){
+        w.go('messages');
+        setTimeout(()=>{
+          const input=d.getElementById('message');
+          if(!input||!w.S.matches.size){w.toast('MATCH成立後にメッセージを送信できます');return}
+          input.value='こんにちは！デモでマッチングできました。';
+          w.send();
+        },60);
+      }
       function updateProgress(){
         const liked=w.S.liked.size>0,matched=w.S.matches.size>0,mess=Object.values(w.S.msg||{}).some(a=>Array.isArray(a)&&a.length>0);
         const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess,safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
@@ -54,7 +63,7 @@
           if(target==='detail'){const p=w.P.find(x=>!w.S.blocked.has(x.id));if(p)w.go('detail',p.id);return}
           if(target==='liked'){const p=w.P.find(x=>!w.S.blocked.has(x.id));if(p)w.like(p.id);return}
           if(target==='matches'){const p=w.P.find(x=>w.S.liked.has(x.id)&&w.S.incoming.has(x.id));if(p)w.mutual(p.id);return}
-          if(target==='messages'){w.go('messages');return}
+          if(target==='messages'){sendDemoMessage();return}
           if(target==='safety'){w.go('safety');}
         };
         resetBtn.onclick=()=>w.reset();
@@ -86,6 +95,7 @@
         if(messages)addAction('メッセージを見る','messages');
         if(reported||blocked)addAction('安心・安全を見る','safety');
         if(notes>3)addAction('通知を見る（更新あり）','notifications');
+        if(matches&&!messages){const b=d.createElement('button');b.textContent='サンプルメッセージを送信';b.style.cssText='padding:7px 9px;border:1px solid #d9bd7d;background:#d9bd7d;color:#17140e;border-radius:8px;font-weight:800;cursor:pointer';b.onclick=sendDemoMessage;activityActions.appendChild(b)}
       }
       updateActivity();
       setInterval(()=>{updateProgress();updateActivity()},350);
