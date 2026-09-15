@@ -72,6 +72,14 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(wrapper).toContain('c.reported>0||c.blocked>0');
   });
 
+  it('shows a clear completion handoff and exposes shortcuts after the core journey', () => {
+    expect(wrapper).toContain('8/8 完了');
+    expect(wrapper).toContain('主要なMATCH体験を完了しました');
+    expect(wrapper).toContain("d.getElementById('fl').style.display='flex'");
+    expect(wrapper).toContain('全機能ショートカットを開く ＋');
+    expect(wrapper).toContain('全機能ショートカットを閉じる −');
+  });
+
   it('exposes every major demo surface through persistent shortcuts', () => {
     expect(wrapper).toContain('全機能ショートカット ＋');
     expect(wrapper).toContain("['探す','discover']");
