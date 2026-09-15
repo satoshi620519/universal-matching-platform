@@ -26,6 +26,15 @@ describe('NEXA buyer-facing demo entry', () => {
     expect(source).toContain("go('launch')");
   });
 
+  it('exposes one-click mutual matching against fictional demo state', () => {
+    expect(source).toContain('相互MATCHを体験');
+    expect(source).toContain('w().S.incoming.add(x.id)');
+    expect(source).toContain('w().like(x.id)');
+    expect(source).toContain('w().mutual(x.id)');
+    expect(source).toContain("w().go('matches')");
+    expect(source).toContain('MATCHが成立しました');
+  });
+
   it('exposes real report and block actions against fictional demo state', () => {
     expect(source).toContain('通報を体験');
     expect(source).toContain('ブロックを体験');
