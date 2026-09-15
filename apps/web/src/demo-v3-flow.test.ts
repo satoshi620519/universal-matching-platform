@@ -40,10 +40,11 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
   });
 
   it('keeps the v6 wrapper persistent controls and reload lifecycle', () => {
-    expect(wrapper).toContain('id="progress"');
-    expect(wrapper).toContain('id="activity"');
-    expect(wrapper).toContain('id="mutual"');
     expect(wrapper).toContain('const frame=document.getElementById(\'frame\')');
+    expect(wrapper).toContain("p.id='progress'");
+    expect(wrapper).toContain("a.id='activity'");
+    expect(wrapper).toContain("m.id='mutual'");
+    expect(wrapper).toContain("d.querySelectorAll('#progress,#activity,#mutual')");
     expect(wrapper).toContain('clearInterval(timer)');
     expect(wrapper).toContain('frame.addEventListener(\'load\',bootDemo)');
     expect(wrapper).toContain('w.location.reload()');
