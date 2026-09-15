@@ -16,19 +16,31 @@
   <script>
     const frame=document.getElementById('demo');
     const loading=document.getElementById('loading');
+    let controlsReady=false;
     frame.addEventListener('load',()=>{
-      loading.remove();
+      loading?.remove();
       const w=frame.contentWindow,d=w.document;
-      if(!w.S||!w.P)return;
+      if(!w.S||!w.P||controlsReady)return;
+      controlsReady=true;
       const panel=d.createElement('div');
       panel.id='mutual-like-control';
-      panel.style.cssText='position:fixed;right:18px;bottom:18px;z-index:30;max-width:360px;padding:14px;border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui';
-      panel.innerHTML='<b style="display:block;margin-bottom:7px">デモ用・相手からのLIKE</b><span style="display:block;color:#9da5b2;line-height:1.5;margin-bottom:9px">任意の候補に相手側のLIKEを付与できます。これで全プロフィールの相互MATCHを実際に体験できます。</span><div id="mutual-like-buttons" style="display:flex;flex-wrap:wrap;gap:6px"></div><button id="mutual-like-all" style="margin-top:8px;width:100%;padding:8px;border-radius:8px;border:1px solid #d9bd7d;background:#d9bd7d;color:#17140e;font-weight:800;cursor:pointer">全員からLIKEを受け取る</button>';
+      panel.style.cssText='position:fixed;right:18px;bottom:18px;z-index:30;width:min(360px,calc(100vw - 36px));border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui;overflow:hidden;backdrop-filter:blur(12px)';
+      panel.innerHTML='<button id="mutual-like-toggle" aria-expanded="true" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 14px;border:0;background:transparent;color:#f5f4ef;font:700 12px system-ui;cursor:pointer;text-align:left"><span>デモ用・相互MATCH操作</span><span id="mutual-like-chevron">−</span></button><div id="mutual-like-body" style="padding:0 14px 14px"><span style="display:block;color:#9da5b2;line-height:1.5;margin-bottom:9px">候補ごとに相手側のLIKEを再現できます。LIKE後に相互MATCHを成立させるためのデモ専用操作です。</span><div id="mutual-like-buttons" style="display:flex;flex-wrap:wrap;gap:6px"></div><button id="mutual-like-all" style="margin-top:8px;width:100%;padding:8px;border-radius:8px;border:1px solid #d9bd7d;background:#d9bd7d;color:#17140e;font-weight:800;cursor:pointer">全員からLIKEを受け取る</button></div>';
       d.body.appendChild(panel);
+      const body=d.getElementById('mutual-like-body');
+      const toggle=d.getElementById('mutual-like-toggle');
+      const chevron=d.getElementById('mutual-like-chevron');
+      toggle.onclick=()=>{
+        const open=body.style.display!=='none';
+        body.style.display=open?'none':'block';
+        toggle.setAttribute('aria-expanded',String(!open));
+        chevron.textContent=open?'+':'−';
+      };
       const buttons=d.getElementById('mutual-like-buttons');
       w.P.forEach(p=>{
         const b=d.createElement('button');
         b.textContent=p.name;
+        b.setAttribute('aria-label',p.name+'からLIKEを受け取る');
         b.style.cssText='padding:7px 9px;border:1px solid #29303b;background:#171c25;color:#fff;border-radius:8px;cursor:pointer';
         b.onclick=()=>{w.S.incoming.add(p.id);w.S.notes++;w.render();w.toast(p.name+'からのLIKEを受け取りました');};
         buttons.appendChild(b);
