@@ -7,19 +7,19 @@ const entry = readFileSync(resolve(process.cwd(), 'public/demo.html'), 'utf8');
 
 describe('NEXA guided demo end-to-end walkthrough', () => {
   it('starts at landing and guides user -> profile -> discovery -> profile detail', () => {
-    expect(entry).toContain('/demo-v5.html');
+    expect(entry).toContain('src="/demo-v5.html"');
     expect(source).toContain('デモを開始する');
     expect(source).toContain("view:'home'");
     expect(source).toContain('function user()');
-    expect(source).toContain('S.view=\'user\'');
+    expect(source).toContain("S.view='user'");
     expect(source).toContain('ユーザー設定を保存してプロフィールへ');
     expect(source).toContain('function profile()');
     expect(source).toContain('条件検索へ進む');
     expect(source).toContain('名前で検索');
     expect(source).toContain('条件をリセット');
     expect(source).toContain('function detail(id)');
-    expect(source).toContain("function go(v,id=null)");
-    expect(source).toContain("if(id)S.active=id");
+    expect(source).toContain('function go(v,id=null)');
+    expect(source).toContain('if(id)S.active=id');
   });
 
   it('keeps the matching lifecycle explicit: profile -> like -> mutual match -> match list -> message', () => {
@@ -32,6 +32,13 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(source).toContain('function send()');
     expect(source).toContain('S.msg[p.id]');
     expect(source).toContain('会話を開く');
+  });
+
+  it('exposes an explicit demo control to simulate incoming likes for every profile', () => {
+    expect(entry).toContain('id="mutual-like-control"');
+    expect(entry).toContain('相手からのLIKE');
+    expect(entry).toContain('全員からLIKEを受け取る');
+    expect(entry).toContain('w.P.forEach(p=>w.S.incoming.add(p.id))');
   });
 
   it('includes notification, safety, regional/language, admin and buyer launch surfaces', () => {
