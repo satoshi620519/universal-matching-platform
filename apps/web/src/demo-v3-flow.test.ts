@@ -26,12 +26,15 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(source).toContain("go('detail','${p.id}')");
     expect(source).toContain('function like(id)');
     expect(source).toContain('function mutual(id)');
+    expect(source).toContain("if(!S.liked.has(id)){toast('先に「いいね」を送ってください');return}");
+    expect(source).toContain("if(!S.incoming.has(id)){toast('相手からのいいね待ちです');return}");
     expect(source).toContain('S.matches.add(id)');
     expect(source).toContain('function matches()');
     expect(source).toContain('function messages()');
     expect(source).toContain('function send()');
     expect(source).toContain('S.msg[p.id]');
     expect(source).toContain('会話を開く');
+    expect(source).toContain("toast('MATCH成立。会話が解放されました')");
   });
 
   it('exposes compact incoming-like controls for every profile without replacing the demo UI', () => {
@@ -44,9 +47,26 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(entry).toContain('w.P.forEach(p=>{');
   });
 
-  it('includes notification, safety, regional/language, admin and buyer launch surfaces', () => {
+  it('keeps safety actions stateful and removes blocked profiles from discovery', () => {
     expect(source).toContain('function report(id)');
+    expect(source).toContain('S.reported.add(id)');
+    expect(source).toContain('通報を管理キューへ送信しました');
     expect(source).toContain('function block(id)');
+    expect(source).toContain('S.blocked.add(id)');
+    expect(source).toContain('S.liked.delete(id)');
+    expect(source).toContain('S.matches.delete(id)');
+    expect(source).toContain('S.active===id');
+    expect(source).toContain('!S.blocked.has(p.id)');
+    expect(source).toContain('go(\'discover\')');
+  });
+
+  it('keeps notification, regional/language, admin and buyer launch surfaces', () => {
+    expect(source).toContain('function notifications()');
+    expect(source).toContain('function safety()');
+    expect(source).toContain('function global()');
+    expect(source).toContain('function settings()');
+    expect(source).toContain('function admin()');
+    expect(source).toContain('function launch()');
     expect(source).toContain('安心・安全');
     expect(source).toContain('地域・言語');
     expect(source).toContain('管理・分析');
