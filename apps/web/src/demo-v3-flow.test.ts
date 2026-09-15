@@ -57,6 +57,22 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(entry).toContain('setInterval(updateProgress,350)');
   });
 
+  it('exposes every major demo surface through persistent shortcuts', () => {
+    expect(entry).toContain('id="demo-feature-toggle"');
+    expect(entry).toContain('全機能ショートカット ＋');
+    expect(entry).toContain("['探す','discover']");
+    expect(entry).toContain("['マッチ','matches']");
+    expect(entry).toContain("['メッセージ','messages']");
+    expect(entry).toContain("['通知','notifications']");
+    expect(entry).toContain("['プロフィール','profile']");
+    expect(entry).toContain("['安心・安全','safety']");
+    expect(entry).toContain("['地域・言語','global']");
+    expect(entry).toContain("['設定','settings']");
+    expect(entry).toContain("['管理・分析','admin']");
+    expect(entry).toContain("['Quick Launch','launch']");
+    expect(entry).toContain("b.onclick=()=>w.go(target)");
+  });
+
   it('keeps safety actions stateful and removes blocked profiles from discovery', () => {
     expect(source).toContain('function report(id)');
     expect(source).toContain('S.reported.add(id)');
