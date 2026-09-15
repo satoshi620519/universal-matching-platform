@@ -8,7 +8,8 @@ const wrapper = readFileSync(resolve(process.cwd(), 'public/demo-v6.html'), 'utf
 
 describe('NEXA guided demo end-to-end walkthrough', () => {
   it('starts at landing and guides user -> profile -> discovery -> profile detail', () => {
-    expect(entry).toContain('src="/demo-v6.html"');
+    expect(entry).toContain('src="/demo-v7.html"');
+    expect(readFileSync(resolve(process.cwd(), 'public/demo-v7.html'), 'utf8')).toContain('src="/demo-v6.html"');
     expect(wrapper).toContain('src="/demo-v5.html"');
     expect(source).toContain('デモを開始する');
     expect(source).toContain("view:'home'");
