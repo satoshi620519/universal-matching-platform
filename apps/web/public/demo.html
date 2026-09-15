@@ -3,10 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="refresh" content="0;url=/demo-v5.html">
   <title>NEXA — Universal Matching Platform Demo</title>
+  <style>
+    html,body{margin:0;height:100%;background:#080a0e}
+    iframe{display:block;width:100%;height:100%;border:0}
+    .loading{position:fixed;inset:0;display:grid;place-items:center;color:#d9bd7d;background:#080a0e;font:14px system-ui;z-index:10}
+  </style>
 </head>
 <body>
-  <p>デモを読み込んでいます… <a href="/demo-v5.html">デモを開く</a></p>
+  <div class="loading" id="loading">NEXA DEMO を読み込んでいます…</div>
+  <iframe id="demo" src="/demo-v5.html" title="NEXA Universal Matching Platform Demo"></iframe>
+  <script>
+    const frame=document.getElementById('demo');
+    const loading=document.getElementById('loading');
+    frame.addEventListener('load',()=>{
+      loading.remove();
+      const w=frame.contentWindow,d=w.document;
+      if(!w.S||!w.P)return;
+      const panel=d.createElement('div');
+      panel.id='mutual-like-control';
+      panel.style.cssText='position:fixed;right:18px;bottom:18px;z-index:30;max-width:360px;padding:14px;border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui';
+      panel.innerHTML='<b style="display:block;margin-bottom:7px">デモ用・相手からのLIKE</b><span style="display:block;color:#9da5b2;line-height:1.5;margin-bottom:9px">任意の候補に相手側のLIKEを付与できます。これで全プロフィールの相互MATCHを実際に体験できます。</span><div id="mutual-like-buttons" style="display:flex;flex-wrap:wrap;gap:6px"></div><button id="mutual-like-all" style="margin-top:8px;width:100%;padding:8px;border-radius:8px;border:1px solid #d9bd7d;background:#d9bd7d;color:#17140e;font-weight:800;cursor:pointer">全員からLIKEを受け取る</button>';
+      d.body.appendChild(panel);
+      const buttons=d.getElementById('mutual-like-buttons');
+      w.P.forEach(p=>{
+        const b=d.createElement('button');
+        b.textContent=p.name;
+        b.style.cssText='padding:7px 9px;border:1px solid #29303b;background:#171c25;color:#fff;border-radius:8px;cursor:pointer';
+        b.onclick=()=>{w.S.incoming.add(p.id);w.S.notes++;w.render();w.toast(p.name+'からのLIKEを受け取りました');};
+        buttons.appendChild(b);
+      });
+      d.getElementById('mutual-like-all').onclick=()=>{w.P.forEach(p=>w.S.incoming.add(p.id));w.S.notes+=w.P.length;w.render();w.toast('全プロフィールからLIKEを受け取りました');};
+    });
+  </script>
 </body>
 </html>
