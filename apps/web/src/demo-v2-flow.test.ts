@@ -33,12 +33,12 @@ describe('NEXA demo-v2 interaction contract', () => {
     const messageBody = messageStart >= 0 && messageEnd > messageStart ? source.slice(messageStart, messageEnd) : '';
     expect(messageBody).toContain('const p=matchedProfile()');
     expect(messageBody).toContain('if(!p)');
-    expect(messageBody).toContain('相互マッチ成立後に利用できます');
+    expect(messageBody).toContain('メッセージはMATCH成立後に解放されます');
     expect(messageBody).toContain('${esc(p.name)}');
     expect(messageBody).not.toContain('<b>Mika</b>');
 
     const sendStart = source.indexOf('function send()');
-    const sendEnd = source.indexOf('function discover()', sendStart);
+    const sendEnd = source.indexOf('function resetDemo()', sendStart);
     const sendBody = sendStart >= 0 && sendEnd > sendStart ? source.slice(sendStart, sendEnd) : '';
     expect(sendBody).toContain('const p=matchedProfile()');
     expect(sendBody).toContain('if(!p)');
@@ -53,10 +53,11 @@ describe('NEXA demo-v2 interaction contract', () => {
   });
 
   it('keeps blocked candidates excluded from discovery', () => {
-    const currentStart = source.indexOf('function current()');
-    const currentEnd = source.indexOf('function like()', currentStart);
-    const currentBody = currentStart >= 0 && currentEnd > currentStart ? source.slice(currentStart, currentEnd) : '';
-    expect(currentBody).toContain('profiles.filter(p=>!state.blocked.has(p.id))');
+    const candidatesStart = source.indexOf('function candidates()');
+    const candidatesEnd = source.indexOf('function current()', candidatesStart);
+    const candidatesBody = candidatesStart >= 0 && candidatesEnd > candidatesStart ? source.slice(candidatesStart, candidatesEnd) : '';
+    expect(candidatesBody).toContain('profiles.filter(p=>!state.blocked.has(p.id)');
+    expect(candidatesBody).toContain("state.category==='すべて'");
   });
 
   it('keeps safety actions connected to candidate state and moderation feedback', () => {
@@ -68,8 +69,8 @@ describe('NEXA demo-v2 interaction contract', () => {
   });
 
   it('keeps Quick Launch as a ten-step publish gate', () => {
-    expect(source).toContain("const launchItems=['ブランド名・ロゴ','カラー・画像','対象地域','言語・用語','カテゴリ','プロフィール項目','マッチングルール','安全・通報方針','通知設定','利用規約・サポート']");
-    expect(source).toContain("const labels=[['brand','ブランド名・ロゴ']");
+    expect(source).toContain("const launchItems=[['brand','ブランド名・ロゴ'],['color','カラー・画像'],['region','対象地域'],['language','言語・用語'],['category','カテゴリ'],['profile','プロフィール項目'],['rules','マッチングルール'],['safety','安全・通報方針'],['notify','通知設定'],['legal','利用規約・サポート']]");
+    expect(source).toContain('Object.fromEntries(launchItems)');
     expect(source).toContain('state.config.steps.size<10');
     expect(source).toContain('state.config.published=true');
     expect(source).toContain('公開内容を見る');
@@ -79,12 +80,14 @@ describe('NEXA demo-v2 interaction contract', () => {
     const configureStart = source.indexOf('function configure(key)');
     const configureEnd = source.indexOf('function publish()', configureStart);
     const configureBody = configureStart >= 0 && configureEnd > configureStart ? source.slice(configureStart, configureEnd) : '';
+    expect(configureBody).toContain('const labels=Object.fromEntries(launchItems)');
+    expect(configureBody).toContain('const defaults=');
     for (const key of ['brand','color','region','language','category','profile','rules','safety','notify','legal']) {
       expect(configureBody).toContain(`key==='${key}'`);
     }
     expect(configureBody).toContain('state.config.steps.add(key)');
-    expect(configureBody).toContain('state.config[key]=v||\'設定済み\'');
+    expect(configureBody).toContain("state.config[key]=v||'設定済み'");
     expect(source).toContain("${state.config.steps.has(k)?'編集':'設定'}");
-    expect(source).toContain('設定済み · ${esc(state.config[k]||\'現在のデモに反映\')}');
+    expect(source).toContain("設定済み · ${esc(state.config[k]||'反映済み')}");
   });
 });
