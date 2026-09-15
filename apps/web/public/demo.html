@@ -27,7 +27,7 @@
       const progress=d.createElement('div');
       progress.id='demo-progress';
       progress.style.cssText='position:fixed;left:18px;bottom:18px;z-index:30;width:min(300px,calc(100vw - 36px));border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui;overflow:hidden;backdrop-filter:blur(12px)';
-      progress.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">デモ体験ステータス <span id="demo-progress-current" style="float:right;color:#d9bd7d;font-weight:600"></span></div><div id="demo-progress-body" style="padding:10px 14px"></div><button id="demo-progress-next" style="display:none;margin:0 14px 12px;width:calc(100% - 28px);padding:8px;border:1px solid #d9bd7d;border-radius:8px;background:#d9bd7d;color:#17140e;font-weight:800;cursor:pointer">次のステップへ →</button>';
+      progress.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">デモ体験ステータス <span id="demo-progress-current" style="float:right;color:#d9bd7d;font-weight:600"></span></div><div id="demo-progress-body" style="padding:10px 14px"></div><button id="demo-progress-next" style="display:none;margin:0 14px 12px;width:calc(100% - 28px);padding:8px;border:1px solid #d9bd7d;border-radius:8px;background:#d9bd7d;color:#17140e;font-weight:800;cursor:pointer">次のステップへ →</button><button id="demo-progress-reset" style="display:none;margin:0 14px 12px;width:calc(100% - 28px);padding:8px;border:1px solid #29303b;border-radius:8px;background:#171c25;color:#f5f4ef;font-weight:700;cursor:pointer">デモを最初からやり直す</button>';
       d.body.appendChild(progress);
 
       const steps=[
@@ -38,15 +38,14 @@
         const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess,safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
         const first=steps.findIndex(([key])=>!done[key]);
         const current=d.getElementById('demo-progress-current');
-        if(current)current.textContent=first<0?'COMPLETE':`STEP ${first+1}/8`;
+        if(current)current.textContent=first<0?'COMPLETE':'STEP '+(first+1)+'/8';
         const body=d.getElementById('demo-progress-body');
         if(!body)return;
         body.innerHTML=steps.map(([key,label],i)=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;color:${done[key]?'#f5f4ef':'#69717d'}"><span style="width:19px;height:19px;border-radius:50%;display:grid;place-items:center;border:1px solid ${done[key]?'#73d5aa':'#29303b'};color:${done[key]?'#73d5aa':'#69717d'};font-size:10px">${done[key]?'✓':i+1}</span><span>${label}</span></div>`).join('');
-        const next=d.getElementById('demo-progress-next');
-        if(!next)return;
-        if(first<0){next.style.display='none';return}
-        next.style.display='block';
-        next.textContent=`${steps[first][1]}へ進む →`;
+        const next=d.getElementById('demo-progress-next'),resetBtn=d.getElementById('demo-progress-reset');
+        if(!next||!resetBtn)return;
+        if(first<0){next.style.display='none';resetBtn.style.display='block';return}
+        resetBtn.style.display='none';next.style.display='block';next.textContent=steps[first][1]+'へ進む →';
         next.onclick=()=>{
           const target=steps[first][0];
           if(target==='user'&&!w.S.started){w.start();return}
@@ -58,31 +57,35 @@
           if(target==='messages'){w.go('messages');return}
           if(target==='safety'){w.go('safety');}
         };
+        resetBtn.onclick=()=>w.reset();
       }
       updateProgress();
 
       const activity=d.createElement('div');
       activity.id='demo-activity';
       activity.style.cssText='position:fixed;right:18px;top:18px;z-index:31;width:min(360px,calc(100vw - 36px));border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui;overflow:hidden;backdrop-filter:blur(12px)';
-      activity.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">ライブアクティビティ</div><div id="demo-activity-body" style="padding:12px 14px"><div id="demo-activity-status" style="color:#9da5b2;line-height:1.55">MATCH・メッセージ・安全操作の状態をここに反映します。</div><div id="demo-activity-actions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px"></div></div>';
+      activity.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">ライブアクティビティ</div><div id="demo-activity-body" style="padding:12px 14px"><div id="demo-activity-status" style="color:#9da5b2;line-height:1.55">MATCH・メッセージ・安全操作の状態をここに反映します。</div><div id="demo-activity-log" style="margin-top:9px;display:grid;gap:5px"></div><div id="demo-activity-actions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px"></div></div>';
       d.body.appendChild(activity);
-      const activityStatus=d.getElementById('demo-activity-status'),activityActions=d.getElementById('demo-activity-actions');
-      let previous={matches:0,messages:0,reported:0,blocked:0};
+      const activityStatus=d.getElementById('demo-activity-status'),activityActions=d.getElementById('demo-activity-actions'),activityLog=d.getElementById('demo-activity-log');
+      let previous={matches:0,messages:0,reported:0,blocked:0,notes:w.S.notes};
+      const events=[];
+      function addEvent(text){events.unshift(text);if(events.length>3)events.pop();activityLog.innerHTML=events.map(e=>`<div style="padding:6px 8px;border-radius:7px;background:#171c25;color:#cbd1da">${e}</div>`).join('')}
       function addAction(label,target){const b=d.createElement('button');b.textContent=label;b.style.cssText='padding:7px 9px;border:1px solid #29303b;background:#171c25;color:#fff;border-radius:8px;cursor:pointer';b.onclick=()=>w.go(target);activityActions.appendChild(b)}
       function updateActivity(){
-        const matches=w.S.matches.size,messages=Object.values(w.S.msg||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0),reported=w.S.reported.size,blocked=w.S.blocked.size;
-        if(matches>previous.matches)activityStatus.textContent='MATCH成立。会話が解放されました。';
-        else if(messages>previous.messages)activityStatus.textContent='メッセージ送信を検知。会話履歴に反映されています。';
-        else if(reported>previous.reported)activityStatus.textContent='通報を管理キューへ送信しました。';
-        else if(blocked>previous.blocked)activityStatus.textContent='ブロックを反映。候補一覧から除外しました。';
+        const matches=w.S.matches.size,messages=Object.values(w.S.msg||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0),reported=w.S.reported.size,blocked=w.S.blocked.size,notes=w.S.notes;
+        if(matches>previous.matches){activityStatus.textContent='MATCH成立。会話が解放されました。';addEvent('MATCH成立 → 会話を利用できます。')}
+        else if(messages>previous.messages){activityStatus.textContent='メッセージ送信を検知。会話履歴に反映されています。';addEvent('メッセージ送信 → 会話履歴へ反映。')}
+        else if(reported>previous.reported){activityStatus.textContent='通報を管理キューへ送信しました。';addEvent('通報 → 安全管理キューへ送信。')}
+        else if(blocked>previous.blocked){activityStatus.textContent='ブロックを反映。候補一覧から除外しました。';addEvent('ブロック → 候補一覧から除外。')}
+        else if(notes>previous.notes){activityStatus.textContent='新しい通知を検知しました。';addEvent('通知更新 → 通知センターを確認できます。')}
         else if(matches)activityStatus.textContent=`MATCH ${matches}件・メッセージ ${messages}件`;
         else activityStatus.textContent='MATCH・メッセージ・安全操作の状態をここに反映します。';
-        previous={matches,messages,reported,blocked};
+        previous={matches,messages,reported,blocked,notes};
         activityActions.innerHTML='';
         if(matches)addAction('マッチ一覧を見る','matches');
         if(messages)addAction('メッセージを見る','messages');
         if(reported||blocked)addAction('安心・安全を見る','safety');
-        if(w.S.notes>0)addAction(`通知を見る（${w.S.notes}）`,'notifications');
+        if(notes>3)addAction('通知を見る（更新あり）','notifications');
       }
       updateActivity();
       setInterval(()=>{updateProgress();updateActivity()},350);
@@ -95,12 +98,7 @@
       const body=d.getElementById('mutual-like-body');
       const toggle=d.getElementById('mutual-like-toggle');
       const chevron=d.getElementById('mutual-like-chevron');
-      toggle.onclick=()=>{
-        const open=body.style.display!=='none';
-        body.style.display=open?'none':'block';
-        toggle.setAttribute('aria-expanded',String(!open));
-        chevron.textContent=open?'+':'−';
-      };
+      toggle.onclick=()=>{const open=body.style.display!=='none';body.style.display=open?'none':'block';toggle.setAttribute('aria-expanded',String(!open));chevron.textContent=open?'+':'−'};
       const buttons=d.getElementById('mutual-like-buttons');
       w.P.forEach(p=>{
         const b=d.createElement('button');
