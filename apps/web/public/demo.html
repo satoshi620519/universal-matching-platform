@@ -8,6 +8,7 @@
     html,body{margin:0;height:100%;background:#080a0e}
     iframe{display:block;width:100%;height:100%;border:0}
     .loading{position:fixed;inset:0;display:grid;place-items:center;color:#d9bd7d;background:#080a0e;font:14px system-ui;z-index:10}
+    @media(max-width:700px){#demo-progress{left:10px!important;bottom:10px!important;width:min(270px,calc(100vw - 20px))!important}#mutual-like-control{right:10px!important;top:78px!important;bottom:auto!important;width:min(320px,calc(100vw - 20px))!important}}
   </style>
 </head>
 <body>
@@ -26,7 +27,7 @@
       const progress=d.createElement('div');
       progress.id='demo-progress';
       progress.style.cssText='position:fixed;left:18px;bottom:18px;z-index:30;width:min(300px,calc(100vw - 36px));border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui;overflow:hidden;backdrop-filter:blur(12px)';
-      progress.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">デモ体験ステータス</div><div id="demo-progress-body" style="padding:10px 14px"></div>';
+      progress.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">デモ体験ステータス <span id="demo-progress-current" style="float:right;color:#d9bd7d;font-weight:600"></span></div><div id="demo-progress-body" style="padding:10px 14px"></div><button id="demo-progress-next" style="display:none;margin:0 14px 12px;width:calc(100% - 28px);padding:8px;border:1px solid #d9bd7d;border-radius:8px;background:#d9bd7d;color:#17140e;font-weight:800;cursor:pointer">次のステップへ →</button>';
       d.body.appendChild(progress);
 
       const steps=[
@@ -34,10 +35,29 @@
       ];
       function updateProgress(){
         const liked=w.S.liked.size>0,matched=w.S.matches.size>0,mess=Object.values(w.S.msg||{}).some(a=>Array.isArray(a)&&a.length>0);
-        const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked, matches:matched,messages:mess||w.S.view==='messages',safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
+        const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess||w.S.view==='messages',safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
+        const first=steps.findIndex(([key])=>!done[key]);
+        const current=d.getElementById('demo-progress-current');
+        if(current)current.textContent=first<0?'COMPLETE':`STEP ${first+1}/8`;
         const body=d.getElementById('demo-progress-body');
         if(!body)return;
         body.innerHTML=steps.map(([key,label],i)=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;color:${done[key]?'#f5f4ef':'#69717d'}"><span style="width:19px;height:19px;border-radius:50%;display:grid;place-items:center;border:1px solid ${done[key]?'#73d5aa':'#29303b'};color:${done[key]?'#73d5aa':'#69717d'};font-size:10px">${done[key]?'✓':i+1}</span><span>${label}</span></div>`).join('');
+        const next=d.getElementById('demo-progress-next');
+        if(!next)return;
+        if(first<0){next.style.display='none';return}
+        next.style.display='block';
+        next.textContent=`${steps[first][1]}へ進む →`;
+        next.onclick=()=>{
+          const target=steps[first][0];
+          if(target==='user'&&!w.S.started){w.start();return}
+          if(target==='profile'){w.go('profile');return}
+          if(target==='discover'){w.go('discover');return}
+          if(target==='detail'){const p=w.P.find(x=>!w.S.blocked.has(x.id));if(p)w.go('detail',p.id);return}
+          if(target==='liked'){const p=w.P.find(x=>!w.S.blocked.has(x.id));if(p)w.like(p.id);return}
+          if(target==='matches'){const p=w.P.find(x=>w.S.liked.has(x.id)&&w.S.incoming.has(x.id));if(p)w.mutual(p.id);return}
+          if(target==='messages'){w.go('messages');return}
+          if(target==='safety'){w.go('safety');}
+        };
       }
       updateProgress();
       setInterval(updateProgress,350);
