@@ -82,11 +82,11 @@ describe('NEXA demo-v2 interaction contract', () => {
     const configureBody = configureStart >= 0 && configureEnd > configureStart ? source.slice(configureStart, configureEnd) : '';
     expect(configureBody).toContain('const labels=Object.fromEntries(launchItems)');
     expect(configureBody).toContain('const defaults=');
-    for (const key of ['brand','color','region','language','category']) {
-      expect(configureBody).toContain(`key==='${key}'`);
-    }
     expect(configureBody).toContain("else state.config[key]=v||'設定済み'");
     expect(configureBody).toContain('state.config.steps.add(key)');
+    for (const key of ['brand','color','region','language','category','profile','rules','safety','notify','legal']) {
+      expect(source).toContain(`['${key}',`);
+    }
     expect(source).toContain("${state.config.steps.has(k)?'編集':'設定'}");
     expect(source).toContain("設定済み · ${esc(state.config[k]||'反映済み')}");
   });
