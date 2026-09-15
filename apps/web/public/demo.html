@@ -8,7 +8,7 @@
     html,body{margin:0;height:100%;background:#080a0e}
     iframe{display:block;width:100%;height:100%;border:0}
     .loading{position:fixed;inset:0;display:grid;place-items:center;color:#d9bd7d;background:#080a0e;font:14px system-ui;z-index:10}
-    @media(max-width:700px){#demo-progress{left:10px!important;bottom:10px!important;width:min(270px,calc(100vw - 20px))!important}#mutual-like-control{right:10px!important;top:78px!important;bottom:auto!important;width:min(320px,calc(100vw - 20px))!important}}
+    @media(max-width:700px){#demo-progress{left:10px!important;bottom:10px!important;width:min(270px,calc(100vw - 20px))!important}#mutual-like-control{right:10px!important;top:78px!important;bottom:auto!important;width:min(320px,calc(100vw - 20px))!important}#demo-activity{right:10px!important;top:10px!important;width:min(300px,calc(100vw - 20px))!important}}
   </style>
 </head>
 <body>
@@ -35,7 +35,7 @@
       ];
       function updateProgress(){
         const liked=w.S.liked.size>0,matched=w.S.matches.size>0,mess=Object.values(w.S.msg||{}).some(a=>Array.isArray(a)&&a.length>0);
-        const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess||w.S.view==='messages',safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
+        const done={user:w.S.started,profile:w.S.started&&!!w.S.user.name,discover:['discover','detail','matches','messages','safety'].includes(w.S.view)||liked||matched,detail:w.S.view==='detail'||liked||matched,liked,matches:matched,messages:mess,safety:w.S.view==='safety'||w.S.blocked.size>0||w.S.reported.size>0};
         const first=steps.findIndex(([key])=>!done[key]);
         const current=d.getElementById('demo-progress-current');
         if(current)current.textContent=first<0?'COMPLETE':`STEP ${first+1}/8`;
@@ -60,7 +60,32 @@
         };
       }
       updateProgress();
-      setInterval(updateProgress,350);
+
+      const activity=d.createElement('div');
+      activity.id='demo-activity';
+      activity.style.cssText='position:fixed;right:18px;top:18px;z-index:31;width:min(360px,calc(100vw - 36px));border:1px solid #29303b;border-radius:14px;background:#11151cf5;box-shadow:0 14px 40px #0008;color:#f5f4ef;font:12px system-ui;overflow:hidden;backdrop-filter:blur(12px)';
+      activity.innerHTML='<div style="padding:11px 14px;border-bottom:1px solid #29303b;font-weight:800;letter-spacing:.04em">ライブアクティビティ</div><div id="demo-activity-body" style="padding:12px 14px"><div id="demo-activity-status" style="color:#9da5b2;line-height:1.55">MATCH・メッセージ・安全操作の状態をここに反映します。</div><div id="demo-activity-actions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px"></div></div>';
+      d.body.appendChild(activity);
+      const activityStatus=d.getElementById('demo-activity-status'),activityActions=d.getElementById('demo-activity-actions');
+      let previous={matches:0,messages:0,reported:0,blocked:0};
+      function addAction(label,target){const b=d.createElement('button');b.textContent=label;b.style.cssText='padding:7px 9px;border:1px solid #29303b;background:#171c25;color:#fff;border-radius:8px;cursor:pointer';b.onclick=()=>w.go(target);activityActions.appendChild(b)}
+      function updateActivity(){
+        const matches=w.S.matches.size,messages=Object.values(w.S.msg||{}).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0),reported=w.S.reported.size,blocked=w.S.blocked.size;
+        if(matches>previous.matches)activityStatus.textContent='MATCH成立。会話が解放されました。';
+        else if(messages>previous.messages)activityStatus.textContent='メッセージ送信を検知。会話履歴に反映されています。';
+        else if(reported>previous.reported)activityStatus.textContent='通報を管理キューへ送信しました。';
+        else if(blocked>previous.blocked)activityStatus.textContent='ブロックを反映。候補一覧から除外しました。';
+        else if(matches)activityStatus.textContent=`MATCH ${matches}件・メッセージ ${messages}件`;
+        else activityStatus.textContent='MATCH・メッセージ・安全操作の状態をここに反映します。';
+        previous={matches,messages,reported,blocked};
+        activityActions.innerHTML='';
+        if(matches)addAction('マッチ一覧を見る','matches');
+        if(messages)addAction('メッセージを見る','messages');
+        if(reported||blocked)addAction('安心・安全を見る','safety');
+        if(w.S.notes>0)addAction(`通知を見る（${w.S.notes}）`,'notifications');
+      }
+      updateActivity();
+      setInterval(()=>{updateProgress();updateActivity()},350);
 
       const panel=d.createElement('div');
       panel.id='mutual-like-control';
