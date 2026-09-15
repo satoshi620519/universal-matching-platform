@@ -4,10 +4,12 @@ import { resolve } from 'node:path';
 
 const source = readFileSync(resolve(process.cwd(), 'public/demo-v5.html'), 'utf8');
 const entry = readFileSync(resolve(process.cwd(), 'public/demo.html'), 'utf8');
+const wrapper = readFileSync(resolve(process.cwd(), 'public/demo-v6.html'), 'utf8');
 
 describe('NEXA guided demo end-to-end walkthrough', () => {
   it('starts at landing and guides user -> profile -> discovery -> profile detail', () => {
-    expect(entry).toContain('src="/demo-v5.html"');
+    expect(entry).toContain('src="/demo-v6.html"');
+    expect(wrapper).toContain('src="/demo-v5.html"');
     expect(source).toContain('デモを開始する');
     expect(source).toContain("view:'home'");
     expect(source).toContain('function user()');
@@ -37,40 +39,38 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(source).toContain("toast('MATCH成立。会話が解放されました')");
   });
 
-  it('exposes compact incoming-like controls for every profile without replacing the demo UI', () => {
-    expect(entry).toContain('id="mutual-like-control"');
-    expect(entry).toContain('id="mutual-like-toggle"');
-    expect(entry).toContain('aria-expanded="true"');
-    expect(entry).toContain('全員からLIKEを受け取る');
-    expect(entry).toContain('w.P.forEach(p=>w.S.incoming.add(p.id))');
-    expect(entry).toContain('w.S.incoming.add(p.id);w.S.notes++;w.render()');
-    expect(entry).toContain('w.P.forEach(p=>{');
+  it('keeps the v6 wrapper persistent controls and reload lifecycle', () => {
+    expect(wrapper).toContain('id="progress"');
+    expect(wrapper).toContain('id="activity"');
+    expect(wrapper).toContain('id="mutual"');
+    expect(wrapper).toContain('const frame=document.getElementById(\'frame\')');
+    expect(wrapper).toContain('clearInterval(timer)');
+    expect(wrapper).toContain('frame.addEventListener(\'load\',bootDemo)');
+    expect(wrapper).toContain('w.location.reload()');
   });
 
   it('shows a live journey status overlay for the actual demo state', () => {
-    expect(entry).toContain('id="demo-progress"');
-    expect(entry).toContain('デモ体験ステータス');
-    expect(entry).toContain("const steps=[['user','ユーザー設定'],['profile','プロフィール'],['discover','条件検索'],['detail','プロフィール確認'],['liked','LIKE'],['matches','相互MATCH'],['messages','メッセージ'],['safety','安心・安全']]");
-    expect(entry).toContain('w.S.liked.size>0');
-    expect(entry).toContain('w.S.matches.size>0');
-    expect(entry).toContain('Object.values(w.S.msg||{}).some');
-    expect(entry).toContain('setInterval(updateProgress,350)');
+    expect(wrapper).toContain('デモ体験ステータス');
+    expect(wrapper).toContain("const steps=[['user','ユーザー設定'],['profile','プロフィール'],['discover','条件検索'],['detail','プロフィール確認'],['liked','LIKE'],['matches','相互MATCH'],['messages','メッセージ'],['safety','安心・安全']]");
+    expect(wrapper).toContain('c.liked>0');
+    expect(wrapper).toContain('c.matched>0');
+    expect(wrapper).toContain('c.messages>0');
+    expect(wrapper).toContain('c.reported>0||c.blocked>0');
   });
 
   it('exposes every major demo surface through persistent shortcuts', () => {
-    expect(entry).toContain('id="demo-feature-toggle"');
-    expect(entry).toContain('全機能ショートカット ＋');
-    expect(entry).toContain("['探す','discover']");
-    expect(entry).toContain("['マッチ','matches']");
-    expect(entry).toContain("['メッセージ','messages']");
-    expect(entry).toContain("['通知','notifications']");
-    expect(entry).toContain("['プロフィール','profile']");
-    expect(entry).toContain("['安心・安全','safety']");
-    expect(entry).toContain("['地域・言語','global']");
-    expect(entry).toContain("['設定','settings']");
-    expect(entry).toContain("['管理・分析','admin']");
-    expect(entry).toContain("['Quick Launch','launch']");
-    expect(entry).toContain("b.onclick=()=>w.go(target)");
+    expect(wrapper).toContain('全機能ショートカット ＋');
+    expect(wrapper).toContain("['探す','discover']");
+    expect(wrapper).toContain("['マッチ','matches']");
+    expect(wrapper).toContain("['メッセージ','messages']");
+    expect(wrapper).toContain("['通知','notifications']");
+    expect(wrapper).toContain("['プロフィール','profile']");
+    expect(wrapper).toContain("['安心・安全','safety']");
+    expect(wrapper).toContain("['地域・言語','global']");
+    expect(wrapper).toContain("['設定','settings']");
+    expect(wrapper).toContain("['管理・分析','admin']");
+    expect(wrapper).toContain("['Quick Launch','launch']");
+    expect(wrapper).toContain('b.onclick=()=>w.go(t)');
   });
 
   it('keeps safety actions stateful and removes blocked profiles from discovery', () => {
@@ -84,6 +84,10 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(source).toContain('S.active===id');
     expect(source).toContain('!S.blocked.has(p.id)');
     expect(source).toContain('go(\'discover\')');
+    expect(wrapper).toContain('function safety()');
+    expect(wrapper).toContain("w.report(x.id)");
+    expect(wrapper).toContain("w.go('safety')");
+    expect(wrapper).toContain('c.reported>0||c.blocked>0');
   });
 
   it('keeps notification, regional/language, admin and buyer launch surfaces', () => {
