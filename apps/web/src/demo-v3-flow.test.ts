@@ -47,6 +47,16 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(entry).toContain('w.P.forEach(p=>{');
   });
 
+  it('shows a live journey status overlay for the actual demo state', () => {
+    expect(entry).toContain('id="demo-progress"');
+    expect(entry).toContain('デモ体験ステータス');
+    expect(entry).toContain("const steps=[['user','ユーザー設定'],['profile','プロフィール'],['discover','条件検索'],['detail','プロフィール確認'],['liked','LIKE'],['matches','相互MATCH'],['messages','メッセージ'],['safety','安心・安全']]");
+    expect(entry).toContain('w.S.liked.size>0');
+    expect(entry).toContain('w.S.matches.size>0');
+    expect(entry).toContain('Object.values(w.S.msg||{}).some');
+    expect(entry).toContain('setInterval(updateProgress,350)');
+  });
+
   it('keeps safety actions stateful and removes blocked profiles from discovery', () => {
     expect(source).toContain('function report(id)');
     expect(source).toContain('S.reported.add(id)');
