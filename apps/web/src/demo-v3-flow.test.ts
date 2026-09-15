@@ -7,7 +7,7 @@ describe('NEXA demo-v3 end-to-end walkthrough', () => {
     expect(source).toContain('デモを開始する');
     expect(source).toContain("S={view:'home'");
     expect(source).toContain('function start()');
-    expect(source).toContain("S.started=true");
+    expect(source).toContain('S.started=true');
     expect(source).toContain('名前で検索');
     expect(source).toContain('条件をリセット');
     expect(source).toContain('プロフィール');
@@ -16,7 +16,7 @@ describe('NEXA demo-v3 end-to-end walkthrough', () => {
     expect(source).toContain('function like(');
     expect(source).toContain('function mutual(');
     expect(source).toContain('S.matches.add(id)');
-    expect(source).toContain("S.view='messages'");
+    expect(source).toContain("go('messages'");
     expect(source).toContain('function send()');
     expect(source).toContain('S.messages[p.id]');
     expect(source).toContain('会話を開く');
