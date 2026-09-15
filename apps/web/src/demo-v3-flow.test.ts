@@ -34,11 +34,14 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(source).toContain('会話を開く');
   });
 
-  it('exposes an explicit demo control to simulate incoming likes for every profile', () => {
+  it('exposes compact incoming-like controls for every profile without replacing the demo UI', () => {
     expect(entry).toContain('id="mutual-like-control"');
-    expect(entry).toContain('相手からのLIKE');
+    expect(entry).toContain('id="mutual-like-toggle"');
+    expect(entry).toContain('aria-expanded="true"');
     expect(entry).toContain('全員からLIKEを受け取る');
     expect(entry).toContain('w.P.forEach(p=>w.S.incoming.add(p.id))');
+    expect(entry).toContain('w.S.incoming.add(p.id);w.S.notes++;w.render()');
+    expect(entry).toContain('w.P.forEach(p=>{');
   });
 
   it('includes notification, safety, regional/language, admin and buyer launch surfaces', () => {
