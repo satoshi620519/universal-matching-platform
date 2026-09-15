@@ -50,6 +50,13 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
     expect(wrapper).toContain('w.location.reload()');
   });
 
+  it('requires a real search/filter interaction before the guided discovery step completes', () => {
+    expect(wrapper).toContain("searchUsed=w.S.q.trim().length>0||w.S.cat!=='すべて'||w.S.region!=='日本'");
+    expect(wrapper).toContain('discover:searchUsed');
+    expect(source).toContain('onchange="S.cat=this.value;render()"');
+    expect(source).toContain('onchange="S.region=this.value;render()"');
+  });
+
   it('shows a live journey status overlay for the actual demo state', () => {
     expect(wrapper).toContain('デモ体験ステータス');
     expect(wrapper).toContain("const steps=[['user','ユーザー設定'],['profile','プロフィール'],['discover','条件検索'],['detail','プロフィール確認'],['liked','LIKE'],['matches','相互MATCH'],['messages','メッセージ'],['safety','安心・安全']]");
