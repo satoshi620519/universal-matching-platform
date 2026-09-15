@@ -35,6 +35,16 @@ describe('NEXA buyer-facing demo entry', () => {
     expect(source).toContain('MATCHが成立しました');
   });
 
+  it('exposes one-click message sending after a demo match', () => {
+    expect(source).toContain('メッセージ送信を体験');
+    expect(source).toContain('w().S.active=x.id');
+    expect(source).toContain("w().go('messages')");
+    expect(source).toContain("querySelector('iframe#frame')");
+    expect(source).toContain("getElementById('message')");
+    expect(source).toContain('inner.send()');
+    expect(source).toContain('メッセージを送信しました');
+  });
+
   it('exposes real report and block actions against fictional demo state', () => {
     expect(source).toContain('通報を体験');
     expect(source).toContain('ブロックを体験');
