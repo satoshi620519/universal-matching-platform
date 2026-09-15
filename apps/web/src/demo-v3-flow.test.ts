@@ -1,26 +1,35 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-const source = readFileSync(resolve(process.cwd(), 'public/demo-v3.html'), 'utf8');
-describe('NEXA demo-v3 end-to-end walkthrough', () => {
-  it('starts from a real product landing screen and exposes the complete member journey', () => {
+
+const source = readFileSync(resolve(process.cwd(), 'public/demo-v4.html'), 'utf8');
+const entry = readFileSync(resolve(process.cwd(), 'public/demo.html'), 'utf8');
+
+describe('NEXA guided demo end-to-end walkthrough', () => {
+  it('starts at the landing screen and explicitly guides user -> profile -> discovery', () => {
+    expect(entry).toContain('/demo-v4.html');
     expect(source).toContain('デモを開始する');
-    expect(source).toContain("S={view:'home'");
-    expect(source).toContain('function start()');
-    expect(source).toContain('S.started=true');
+    expect(source).toContain("view:'home'");
+    expect(source).toContain('function user()');
+    expect(source).toContain("S.view='user'");
+    expect(source).toContain('ユーザー設定を保存してプロフィールへ');
+    expect(source).toContain('function profile()');
+    expect(source).toContain('条件検索へ進む');
     expect(source).toContain('名前で検索');
     expect(source).toContain('条件をリセット');
-    expect(source).toContain('プロフィール');
   });
+
   it('keeps the matching lifecycle explicit: like -> mutual match -> match list -> message', () => {
     expect(source).toContain('function like(');
     expect(source).toContain('function mutual(');
     expect(source).toContain('S.matches.add(id)');
-    expect(source).toContain("go('messages'");
+    expect(source).toContain('function matches()');
+    expect(source).toContain('function messages()');
     expect(source).toContain('function send()');
-    expect(source).toContain('S.messages[p.id]');
+    expect(source).toContain('S.msg[p.id]');
     expect(source).toContain('会話を開く');
   });
+
   it('includes notification, safety, regional/language, admin and buyer launch surfaces', () => {
     expect(source).toContain('function report(');
     expect(source).toContain('function block(');
@@ -29,6 +38,7 @@ describe('NEXA demo-v3 end-to-end walkthrough', () => {
     expect(source).toContain('管理・分析');
     expect(source).toContain('Quick Launch');
   });
+
   it('keeps the demo self-contained and fictional', () => {
     expect(source).toContain('架空データのみ使用');
     expect(source).toContain('fictional data');
