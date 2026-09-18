@@ -1,23 +1,22 @@
-/* Production mobile-home presentation for the logged-out demo entry. Visual-only; auth and post-login flows remain untouched. */
-.fp-authRequired{position:relative;isolation:isolate;overflow:hidden;margin:clamp(18px,3vw,42px) 0;border:1px solid #e5e7eb;border-radius:30px;background:#f7f8fa;color:#111827;box-shadow:0 24px 70px rgba(15,23,42,.12)}
-.fp-authRequired:before{content:'NEXA';display:block;padding:22px 26px 0;font-size:15px;font-weight:800;letter-spacing:-.04em;color:#111827}
-.fp-authRequired:after{content:'●  3 new connections';position:absolute;right:26px;top:24px;font-size:10px;font-weight:700;color:#64748b}
-.fp-authRequired .fp-toolbar{position:relative;display:block;padding:34px 26px 20px;margin:0}
-.fp-authRequired .fp-kicker{display:block;margin-bottom:12px;font-size:10px;font-weight:800;letter-spacing:.12em;color:#64748b}
-.fp-authRequired .fp-toolbar h3{max-width:500px;margin:0;font-size:clamp(32px,5vw,58px);font-weight:800;line-height:1.02;letter-spacing:-.065em;color:#111827}
-.fp-authRequired .fp-toolbar h3:after{content:'Find people who fit your world.';display:block;max-width:420px;margin-top:14px;font-size:14px;font-weight:500;line-height:1.7;letter-spacing:-.02em;color:#64748b}
-.fp-authRequired .fp-toolbar>span{display:none}
-.fp-authRequired .fp-empty{position:relative;margin:0 18px 18px;padding:24px;border:1px solid #e5e7eb;border-radius:24px;background:#fff;box-shadow:0 12px 30px rgba(15,23,42,.06);text-align:left;color:#111827}
-.fp-authRequired .fp-empty:before{content:'DISCOVER  ·  RECOMMENDED FOR YOU';display:block;margin-bottom:18px;font-size:9px;font-weight:800;letter-spacing:.12em;color:#94a3b8}
-.fp-authRequired .fp-empty:after{content:'96%';position:absolute;right:24px;top:54px;display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#ecfdf5;color:#047857;font-size:13px;font-weight:800}
-.fp-authRequired .fp-empty b{display:block;max-width:calc(100% - 70px);font-size:24px;font-weight:800;line-height:1.15;letter-spacing:-.045em;color:#111827}
-.fp-authRequired .fp-empty b:after{content:'Mika  ·  Creator  ·  Tokyo';display:block;margin-top:8px;font-size:11px;font-weight:600;letter-spacing:0;color:#64748b}
-.fp-authRequired .fp-empty p{max-width:520px;margin:22px 0 24px;font-size:13px;line-height:1.8;color:#64748b}
-.fp-authRequired .fp-empty p:before{content:'Photography   Travel   Design';display:block;margin-bottom:12px;padding:11px 12px;border-radius:12px;background:#f1f5f9;color:#475569;font-size:11px;font-weight:700;letter-spacing:.01em}
-.fp-authRequired .fp-empty button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:56px;padding:0 20px;border:0;border-radius:16px;background:#111827;color:#fff;font-size:13px;font-weight:800;letter-spacing:-.01em;box-shadow:0 10px 24px rgba(15,23,42,.18);transition:transform .2s ease,box-shadow .2s ease}
-.fp-authRequired .fp-empty button:after{content:'→';font-size:20px;font-weight:400}
-.fp-authRequired .fp-empty button:hover{transform:translateY(-2px);box-shadow:0 15px 30px rgba(15,23,42,.24)}
-.fp-authRequired .fp-empty button:focus-visible{outline:3px solid #93c5fd;outline-offset:4px}
-.fp-authRequired .fp-empty button:active{transform:translateY(0)}
-@media(min-width:760px){.fp-authRequired{display:grid;grid-template-columns:1fr 1fr;gap:0;padding-bottom:18px}.fp-authRequired:before{grid-column:1/-1}.fp-authRequired .fp-toolbar{padding:74px 26px 32px 42px;align-self:center}.fp-authRequired .fp-empty{margin:34px 34px 18px 10px;align-self:center}.fp-authRequired .fp-empty b{font-size:28px}}
-@media(max-width:620px){.fp-authRequired{border-radius:24px}.fp-authRequired:before{padding:20px 20px 0}.fp-authRequired:after{right:20px;top:22px;font-size:9px}.fp-authRequired .fp-toolbar{padding:34px 20px 20px}.fp-authRequired .fp-toolbar h3{font-size:38px}.fp-authRequired .fp-empty{margin:0 12px 12px;padding:22px;border-radius:20px}.fp-authRequired .fp-empty:after{right:20px;top:50px;width:48px;height:48px}.fp-authRequired .fp-empty b{font-size:22px}.fp-authRequired .fp-empty p{font-size:12px}}
+/* Scoped visual redesign for the logged-out app home only. */
+.fp-authRequired{position:relative;overflow:hidden;margin:32px 0;border:1px solid #e7e8ec;border-radius:28px;background:#f5f6f8;color:#15171c;box-shadow:0 24px 80px rgba(20,25,38,.10)}
+.fp-authRequired:before{content:'NEXA';display:block;padding:28px 32px 0;font-size:17px;font-weight:800;letter-spacing:-.07em;color:#16181e}
+.fp-authRequired:after{content:'●  3 new connections';position:absolute;right:32px;top:31px;color:#747b89;font-size:10px;font-weight:700;letter-spacing:.02em}
+.fp-authRequired .fp-toolbar{display:block;margin:0;padding:64px 40px 26px}
+.fp-authRequired .fp-kicker{display:block;margin-bottom:16px;color:#8b92a0;font-size:10px;font-weight:800;letter-spacing:.16em}
+.fp-authRequired .fp-toolbar h3{margin:0;max-width:560px;color:#15171c;font-size:clamp(34px,5vw,64px);font-weight:750;line-height:.98;letter-spacing:-.075em}
+.fp-authRequired .fp-toolbar h3:after{content:'A calmer way to discover meaningful connections.';display:block;max-width:390px;margin-top:18px;color:#747b89;font-size:14px;font-weight:450;line-height:1.7;letter-spacing:-.02em}
+.fp-authRequired .fp-toolbar>span{display:inline-flex;margin-top:24px;padding:8px 11px;border:1px solid #dfe2e8;border-radius:999px;background:#fff;color:#747b89;font-size:10px;font-weight:700}
+.fp-authRequired .fp-empty{position:relative;margin:0 24px 24px;padding:28px;border:1px solid #e3e6eb;border-radius:24px;background:#fff;box-shadow:0 14px 36px rgba(25,32,48,.07);color:#15171c;text-align:left}
+.fp-authRequired .fp-empty:before{content:'DISCOVER / FOR YOU';display:block;margin-bottom:28px;color:#9aa1ad;font-size:9px;font-weight:800;letter-spacing:.18em}
+.fp-authRequired .fp-empty:after{content:'96%';position:absolute;right:28px;top:56px;display:grid;place-items:center;width:58px;height:58px;border:1px solid #d8eee4;border-radius:50%;background:#f0faf5;color:#23805a;font-size:13px;font-weight:800}
+.fp-authRequired .fp-empty b{display:block;max-width:calc(100% - 80px);font-size:25px;font-weight:750;line-height:1.12;letter-spacing:-.05em}
+.fp-authRequired .fp-empty b:after{content:'Mika  ·  Creator  ·  Tokyo';display:block;margin-top:10px;color:#7e8694;font-size:11px;font-weight:600;letter-spacing:0}
+.fp-authRequired .fp-empty p{margin:28px 0 24px;color:#7e8694;font-size:13px;line-height:1.8}
+.fp-authRequired .fp-empty p:before{content:'Photography   Travel   Design';display:block;margin-bottom:16px;padding:12px 14px;border:1px solid #edf0f4;border-radius:12px;background:#f8f9fb;color:#525b6a;font-size:11px;font-weight:700;letter-spacing:.01em}
+.fp-authRequired .fp-empty button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:58px;padding:0 20px;border:0;border-radius:14px;background:#17191f;color:#fff;font-size:13px;font-weight:750;box-shadow:0 12px 25px rgba(23,25,31,.18);transition:transform .2s ease,background .2s ease}
+.fp-authRequired .fp-empty button:after{content:'↗';font-size:19px;font-weight:400}
+.fp-authRequired .fp-empty button:hover{background:#30343d;transform:translateY(-2px)}
+.fp-authRequired .fp-empty button:focus-visible{outline:3px solid #a8c8ff;outline-offset:4px}
+@media(min-width:760px){.fp-authRequired{display:grid;grid-template-columns:1fr 1fr;gap:0}.fp-authRequired:before{grid-column:1/-1}.fp-authRequired .fp-toolbar{padding:74px 36px 54px 48px}.fp-authRequired .fp-empty{margin:42px 40px 28px 0;align-self:center;padding:32px}.fp-authRequired .fp-empty b{font-size:29px}}
+@media(max-width:620px){.fp-authRequired{margin:18px 0;border-radius:22px}.fp-authRequired:before{padding:22px 20px 0}.fp-authRequired:after{right:20px;top:26px;font-size:9px}.fp-authRequired .fp-toolbar{padding:48px 20px 24px}.fp-authRequired .fp-toolbar h3{font-size:40px}.fp-authRequired .fp-empty{margin:0 12px 12px;padding:22px;border-radius:19px}.fp-authRequired .fp-empty:after{right:20px;top:52px;width:48px;height:48px}.fp-authRequired .fp-empty b{font-size:23px}.fp-authRequired .fp-empty p{font-size:12px}}
