@@ -27,4 +27,18 @@ describe("demo-v7 authentication integration", () => {
     const v5 = readFileSync(new URL("../public/demo-v5.html", import.meta.url), "utf8");
     expect(v5).toContain("S.discoveryVisited=true");
   });
+  it("keeps the guided buyer-flow actions wired to the actual demo controls", () => {
+    const v6 = readFileSync(new URL("../public/demo-v6.html", import.meta.url), "utf8");
+    for (const step of ["ユーザー設定", "プロフィール", "条件検索", "プロフィール確認", "LIKE", "相互MATCH", "メッセージ", "安心・安全"]) {
+      expect(v6).toContain(step);
+    }
+    expect(v6).toContain("w.start()");
+    expect(v6).toContain("w.go('profile')");
+    expect(v6).toContain("w.go('discover')");
+    expect(v6).toContain("w.like(x.id)");
+    expect(v6).toContain("w.mutual(x.id)");
+    expect(v6).toContain("w.go('messages')");
+    expect(v6).toContain("w.go('safety')");
+  });
+
 });
