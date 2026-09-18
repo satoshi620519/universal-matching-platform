@@ -18,7 +18,7 @@ services:
     plan: free
     branch: main
     buildCommand: pnpm install --no-frozen-lockfile && pnpm --filter @universal/api prisma:generate && pnpm turbo run build --filter=@universal/api...
-    startCommand: pnpm --filter @universal/database migrate && pnpm --filter @universal/api start
+    startCommand: pnpm --filter @universal/api start & api_pid=$!; pnpm --filter @universal/database migrate; migration_status=$?; if [ $migration_status -ne 0 ]; then kill $api_pid; exit $migration_status; fi; wait $api_pid
     autoDeploy: true
     envVars:
       - key: DATABASE_URL
