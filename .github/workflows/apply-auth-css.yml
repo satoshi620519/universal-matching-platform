@@ -23,11 +23,14 @@ jobs:
           text = path.read_text(encoding='utf-8')
           marker = "import './landing-final.css';"
           addition = "import './auth-sales.css';"
-          text = text.replace(marker + r"\n" + addition, marker + "\n" + addition)
-          if addition not in text:
+          malformed = marker + chr(92) + 'n' + addition
+          normalized = marker + chr(10) + addition
+          if malformed in text:
+              text = text.replace(malformed, normalized, 1)
+          elif addition not in text:
               if marker not in text:
                   raise SystemExit('Import marker not found')
-              text = text.replace(marker, marker + "\n" + addition, 1)
+              text = text.replace(marker, normalized, 1)
           path.write_text(text, encoding='utf-8')
           PY
 
@@ -36,5 +39,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add apps/web/src/landing.tsx
-          git diff --cached --quiet || git commit -m "Normalize auth sales stylesheet import"
+          git diff --cached --quiet || git commit -m "Normalize auth sales stylesheet import safely"
           git push
