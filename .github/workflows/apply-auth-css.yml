@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add auth sales stylesheet import
+      - name: Normalize auth sales stylesheet import
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -23,11 +23,12 @@ jobs:
           text = path.read_text(encoding='utf-8')
           marker = "import './landing-final.css';"
           addition = "import './auth-sales.css';"
+          text = text.replace(marker + r"\n" + addition, marker + "\n" + addition)
           if addition not in text:
               if marker not in text:
                   raise SystemExit('Import marker not found')
-              text = text.replace(marker, marker + '\\n' + addition, 1)
-              path.write_text(text, encoding='utf-8')
+              text = text.replace(marker, marker + "\n" + addition, 1)
+          path.write_text(text, encoding='utf-8')
           PY
 
       - name: Commit and push
@@ -35,5 +36,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add apps/web/src/landing.tsx
-          git diff --cached --quiet || git commit -m "Connect auth sales stylesheet"
+          git diff --cached --quiet || git commit -m "Normalize auth sales stylesheet import"
           git push
