@@ -139,44 +139,5 @@
         if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
       })();
     </script>
-    <style>
-      #nexaAuthDock{position:fixed;top:18px;right:18px;z-index:10000;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 13px;border:1px solid rgba(185,164,134,.28);border-radius:999px;background:rgba(17,17,15,.94);color:#f5f1e8;box-shadow:0 14px 45px rgba(0,0,0,.25);backdrop-filter:blur(12px);font:12px system-ui}
-      #nexaAuthDock .nexaAuthStatus{color:#c9c0b2;letter-spacing:.04em}
-      #nexaAuthDock button{border:1px solid rgba(185,164,134,.45);background:#b9a486;color:#11110f;border-radius:999px;padding:7px 13px;font:700 11px system-ui;cursor:pointer}
-      #nexaAuthDock button.nexaLogout{background:transparent;color:#eee;border-color:rgba(255,255,255,.16)}
-      #nexaLoginOverlay{position:fixed;inset:0;z-index:10001;display:none;place-items:center;padding:20px;background:rgba(7,7,6,.78);backdrop-filter:blur(14px);font-family:system-ui}
-      #nexaLoginOverlay .nexaLoginCard{width:min(390px,100%);box-sizing:border-box;padding:28px;border:1px solid rgba(185,164,134,.35);border-radius:16px;background:linear-gradient(145deg,#1b1a17,#0d0d0c);color:#f5f1e8;box-shadow:0 35px 100px rgba(0,0,0,.5)}
-      #nexaLoginOverlay h2{margin:8px 0;font-weight:500;font-size:27px}
-      #nexaLoginOverlay p{color:#999;line-height:1.7;font-size:12px}
-      #nexaLoginOverlay input{display:block;width:100%;box-sizing:border-box;margin:10px 0;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:#0a0a09;color:#fff}
-      #nexaLoginOverlay .nexaLoginActions{display:flex;gap:8px;margin-top:14px}
-      #nexaLoginOverlay .nexaLoginActions button{flex:1;padding:11px;border-radius:9px;border:1px solid rgba(255,255,255,.12);background:transparent;color:#eee;cursor:pointer}
-      #nexaLoginOverlay .nexaLoginActions button[type=submit]{background:#b9a486;border-color:#b9a486;color:#11110f;font-weight:700}
-      #nexaLoginError{min-height:20px;color:#ffb0b0;font-size:12px}
-      @media(max-width:620px){#nexaAuthDock{top:10px;right:10px}.salesHero{padding-top:130px}}
-    </style>
-    <div id="nexaAuthDock" aria-label="アカウント認証"><span class="nexaAuthStatus" id="nexaAuthStatus">未ログイン</span><button id="nexaAuthButton" type="button">ログイン</button></div>
-    <div id="nexaLoginOverlay" role="dialog" aria-modal="true" aria-labelledby="nexaLoginTitle">
-      <form class="nexaLoginCard" id="nexaLoginForm">
-        <span style="font-size:9px;letter-spacing:.2em;color:#b9a486">ACCOUNT ACCESS</span>
-        <h2 id="nexaLoginTitle">ログイン</h2>
-        <p>登録済みのアカウントでNEXAデモに接続します。</p>
-        <input id="nexaLoginEmail" type="email" autocomplete="email" placeholder="メールアドレス" required>
-        <input id="nexaLoginPassword" type="password" autocomplete="current-password" placeholder="パスワード" required>
-        <div id="nexaLoginError" aria-live="polite"></div>
-        <div class="nexaLoginActions"><button id="nexaLoginCancel" type="button">キャンセル</button><button type="submit">ログインする</button></div>
-      </form>
-    </div>
-    <script>
-      (()=>{const API='https://universal-matching-platform-api.onrender.com',KEY='nexa.session.credential',dock=document.getElementById('nexaAuthDock'),status=document.getElementById('nexaAuthStatus'),button=document.getElementById('nexaAuthButton'),overlay=document.getElementById('nexaLoginOverlay'),form=document.getElementById('nexaLoginForm'),error=document.getElementById('nexaLoginError'),email=document.getElementById('nexaLoginEmail'),password=document.getElementById('nexaLoginPassword');
-        const credential=()=>sessionStorage.getItem(KEY);
-        const render=()=>{const token=credential();status.textContent=token?'ログイン中':'未ログイン';button.textContent=token?'ログアウト':'ログイン';button.className=token?'nexaLogout':'';button.onclick=token?logout:open};
-        const open=()=>{error.textContent='';overlay.style.display='grid';email.focus()};
-        const close=()=>{overlay.style.display='none'};
-        async function logout(){const token=credential();try{await fetch(API+'/auth/sign-out',{method:'POST',headers:{Authorization:'Bearer '+token},credentials:'include'})}finally{sessionStorage.removeItem(KEY);render()}}
-        form.addEventListener('submit',async e=>{e.preventDefault();error.textContent='';const submit=form.querySelector('button[type=submit]');submit.disabled=true;try{const res=await fetch(API+'/auth/sign-in',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({email:email.value,password:password.value})});if(!res.ok)throw new Error('ログインに失敗しました。');const data=await res.json();if(!data.credential)throw new Error('メールアドレスまたはパスワードを確認してください。');sessionStorage.setItem(KEY,data.credential);close();form.reset();render()}catch(err){error.textContent=err instanceof Error?err.message:'ログインに失敗しました。'}finally{submit.disabled=false}});
-        document.getElementById('nexaLoginCancel').onclick=close;overlay.addEventListener('click',e=>{if(e.target===overlay)close()});render();
-      })();
-    </script>
   </body>
 </html>
