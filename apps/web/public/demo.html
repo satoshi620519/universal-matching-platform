@@ -16,7 +16,7 @@ html,body{margin:0;height:100%;background:#080a0e}iframe{display:block;width:100
 </style>
 </head>
 <body>
-<iframe src="/demo-v7.html" title="NEXA Universal Matching Platform Demo"></iframe>
+<iframe id="demoFrame" src="/demo-v7.html" title="NEXA Universal Matching Platform Demo"></iframe>
 <div id="auth"><button id="openLogin">ログイン</button></div>
 <div id="login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
  <form class="dialog" id="loginForm">
@@ -31,11 +31,14 @@ html,body{margin:0;height:100%;background:#080a0e}iframe{display:block;width:100
 (()=>{
  const API='https://universal-matching-platform-api.onrender.com';
  const KEY='nexa.session.credential';
- const auth=document.getElementById('auth');const login=document.getElementById('login');const form=document.getElementById('loginForm');const error=document.getElementById('error');
+ const CHANNEL='nexa-demo-auth';
+ const auth=document.getElementById('auth');const login=document.getElementById('login');const form=document.getElementById('loginForm');const error=document.getElementById('error');const demoFrame=document.getElementById('demoFrame');
  const credential=()=>sessionStorage.getItem(KEY);
- function render(){const token=credential();auth.innerHTML=token?'<div class="user"><span>ログイン中</span><button id="logout">ログアウト</button></div>':'<button id="openLogin">ログイン</button>';if(!token)document.getElementById('openLogin').onclick=()=>{error.textContent='';login.style.display='grid';document.getElementById('email').focus()};else document.getElementById('logout').onclick=logout}
- async function logout(){const token=credential();try{await fetch(API+'/auth/sign-out',{method:'POST',headers:{Authorization:'Bearer '+token},credentials:'include'})}finally{sessionStorage.removeItem(KEY);render()}}
- form.addEventListener('submit',async e=>{e.preventDefault();error.textContent='';const submit=form.querySelector('button[type="submit"]');submit.disabled=true;try{const res=await fetch(API+'/auth/sign-in',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({email:document.getElementById('email').value,password:document.getElementById('password').value})});if(!res.ok)throw new Error('ログインに失敗しました。');const data=await res.json();if(!data.credential)throw new Error('メールアドレスまたはパスワードを確認してください。');sessionStorage.setItem(KEY,data.credential);login.style.display='none';form.reset();render()}catch(err){error.textContent=err instanceof Error?err.message:'ログインに失敗しました。'}finally{submit.disabled=false}});
+ function broadcast(type){const message={channel:CHANNEL,type,authenticated:Boolean(credential())};if(demoFrame.contentWindow)demoFrame.contentWindow.postMessage(message,location.origin)}
+ function render(){const token=credential();auth.innerHTML=token?'<div class="user"><span>ログイン中</span><button id="logout">ログアウト</button></div>':'<button id="openLogin">ログイン</button>';if(!token)document.getElementById('openLogin').onclick=()=>{error.textContent='';login.style.display='grid';document.getElementById('email').focus()};else document.getElementById('logout').onclick=logout;broadcast(token?'auth:signed-in':'auth:state')}
+ async function logout(){const token=credential();try{await fetch(API+'/auth/sign-out',{method:'POST',headers:{Authorization:'Bearer '+token},credentials:'include'})}finally{sessionStorage.removeItem(KEY);render();broadcast('auth:signed-out')}}
+ form.addEventListener('submit',async e=>{e.preventDefault();error.textContent='';const submit=form.querySelector('button[type="submit"]');submit.disabled=true;try{const res=await fetch(API+'/auth/sign-in',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({email:document.getElementById('email').value,password:document.getElementById('password').value})});if(!res.ok)throw new Error('ログインに失敗しました。');const data=await res.json();if(!data.credential)throw new Error('メールアドレスまたはパスワードを確認してください。');sessionStorage.setItem(KEY,data.credential);login.style.display='none';form.reset();render();broadcast('auth:signed-in')}catch(err){error.textContent=err instanceof Error?err.message:'ログインに失敗しました。'}finally{submit.disabled=false}});
+ demoFrame.addEventListener('load',()=>broadcast(credential()?'auth:signed-in':'auth:state'));
  document.getElementById('cancel').onclick=()=>{login.style.display='none'};login.addEventListener('click',e=>{if(e.target===login)login.style.display='none'});render();
 })();
 </script>
