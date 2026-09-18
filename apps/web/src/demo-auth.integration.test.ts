@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const root = resolve(process.cwd(), 'apps/web/public');
+const root = resolve(process.cwd(), 'public');
 const read = (name: string) => readFileSync(resolve(root, name), 'utf8');
 
 describe('demo authentication integration', () => {
@@ -22,7 +22,7 @@ describe('demo authentication integration', () => {
   it('keeps auth requests connected through all nested demo frames', () => {
     expect(read('demo-v6.html')).toContain("window.parent.postMessage(m,location.origin)");
     expect(read('demo-v7.html')).toContain("window.parent.postMessage(m,location.origin)");
-    expect(read('demo-auth-relay.html')).toContain("message.type==='auth:open'||message.type==='auth:logout'");
     expect(read('demo.html')).toContain("if(m.type==='auth:open')openLogin()");
+    expect(read('demo.html')).toContain('src="/demo-v7.html"');
   });
 });
