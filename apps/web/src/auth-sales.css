@@ -1,22 +1,22 @@
-/* Scoped visual redesign for the logged-out app home only. */
-.fp-authRequired{position:relative;overflow:hidden;margin:32px 0;border:1px solid #e7e8ec;border-radius:28px;background:#f5f6f8;color:#15171c;box-shadow:0 24px 80px rgba(20,25,38,.10)}
-.fp-authRequired:before{content:'NEXA';display:block;padding:28px 32px 0;font-size:17px;font-weight:800;letter-spacing:-.07em;color:#16181e}
-.fp-authRequired:after{content:'●  3 new connections';position:absolute;right:32px;top:31px;color:#747b89;font-size:10px;font-weight:700;letter-spacing:.02em}
-.fp-authRequired .fp-toolbar{display:block;margin:0;padding:64px 40px 26px}
-.fp-authRequired .fp-kicker{display:block;margin-bottom:16px;color:#8b92a0;font-size:10px;font-weight:800;letter-spacing:.16em}
-.fp-authRequired .fp-toolbar h3{margin:0;max-width:560px;color:#15171c;font-size:clamp(34px,5vw,64px);font-weight:750;line-height:.98;letter-spacing:-.075em}
-.fp-authRequired .fp-toolbar h3:after{content:'A calmer way to discover meaningful connections.';display:block;max-width:390px;margin-top:18px;color:#747b89;font-size:14px;font-weight:450;line-height:1.7;letter-spacing:-.02em}
-.fp-authRequired .fp-toolbar>span{display:inline-flex;margin-top:24px;padding:8px 11px;border:1px solid #dfe2e8;border-radius:999px;background:#fff;color:#747b89;font-size:10px;font-weight:700}
-.fp-authRequired .fp-empty{position:relative;margin:0 24px 24px;padding:28px;border:1px solid #e3e6eb;border-radius:24px;background:#fff;box-shadow:0 14px 36px rgba(25,32,48,.07);color:#15171c;text-align:left}
-.fp-authRequired .fp-empty:before{content:'DISCOVER / FOR YOU';display:block;margin-bottom:28px;color:#9aa1ad;font-size:9px;font-weight:800;letter-spacing:.18em}
-.fp-authRequired .fp-empty:after{content:'96%';position:absolute;right:28px;top:56px;display:grid;place-items:center;width:58px;height:58px;border:1px solid #d8eee4;border-radius:50%;background:#f0faf5;color:#23805a;font-size:13px;font-weight:800}
-.fp-authRequired .fp-empty b{display:block;max-width:calc(100% - 80px);font-size:25px;font-weight:750;line-height:1.12;letter-spacing:-.05em}
-.fp-authRequired .fp-empty b:after{content:'Mika  ·  Creator  ·  Tokyo';display:block;margin-top:10px;color:#7e8694;font-size:11px;font-weight:600;letter-spacing:0}
-.fp-authRequired .fp-empty p{margin:28px 0 24px;color:#7e8694;font-size:13px;line-height:1.8}
-.fp-authRequired .fp-empty p:before{content:'Photography   Travel   Design';display:block;margin-bottom:16px;padding:12px 14px;border:1px solid #edf0f4;border-radius:12px;background:#f8f9fb;color:#525b6a;font-size:11px;font-weight:700;letter-spacing:.01em}
-.fp-authRequired .fp-empty button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:58px;padding:0 20px;border:0;border-radius:14px;background:#17191f;color:#fff;font-size:13px;font-weight:750;box-shadow:0 12px 25px rgba(23,25,31,.18);transition:transform .2s ease,background .2s ease}
-.fp-authRequired .fp-empty button:after{content:'↗';font-size:19px;font-weight:400}
-.fp-authRequired .fp-empty button:hover{background:#30343d;transform:translateY(-2px)}
-.fp-authRequired .fp-empty button:focus-visible{outline:3px solid #a8c8ff;outline-offset:4px}
-@media(min-width:760px){.fp-authRequired{display:grid;grid-template-columns:1fr 1fr;gap:0}.fp-authRequired:before{grid-column:1/-1}.fp-authRequired .fp-toolbar{padding:74px 36px 54px 48px}.fp-authRequired .fp-empty{margin:42px 40px 28px 0;align-self:center;padding:32px}.fp-authRequired .fp-empty b{font-size:29px}}
-@media(max-width:620px){.fp-authRequired{margin:18px 0;border-radius:22px}.fp-authRequired:before{padding:22px 20px 0}.fp-authRequired:after{right:20px;top:26px;font-size:9px}.fp-authRequired .fp-toolbar{padding:48px 20px 24px}.fp-authRequired .fp-toolbar h3{font-size:40px}.fp-authRequired .fp-empty{margin:0 12px 12px;padding:22px;border-radius:19px}.fp-authRequired .fp-empty:after{right:20px;top:52px;width:48px;height:48px}.fp-authRequired .fp-empty b{font-size:23px}.fp-authRequired .fp-empty p{font-size:12px}}
+/* Production-oriented universal matching home: preserve auth behavior, replace the locked empty state with a clear multi-purpose product preview. */
+.fp-authRequired{position:relative;overflow:hidden;margin:32px 0;border:1px solid #dfe4eb;border-radius:30px;background:linear-gradient(145deg,#f8fafc 0%,#eef2f7 100%);color:#141a24;box-shadow:0 28px 90px rgba(30,45,70,.14)}
+.fp-authRequired:before{content:'NEXA  /  UNIVERSAL MATCHING';display:block;padding:28px 34px 0;color:#6e7889;font-size:10px;font-weight:800;letter-spacing:.18em}
+.fp-authRequired:after{content:'WEB  ·  iOS  ·  ANDROID   /   GLOBAL READY';position:absolute;right:34px;top:29px;color:#7d8797;font-size:9px;font-weight:800;letter-spacing:.08em}
+.fp-authRequired .fp-toolbar{display:block;margin:0;padding:64px 46px 26px}
+.fp-authRequired .fp-kicker{display:block;margin-bottom:17px;color:#6d7890;font-size:10px;font-weight:850;letter-spacing:.18em}
+.fp-authRequired .fp-toolbar h3{margin:0;max-width:620px;color:#121925;font-size:clamp(36px,5vw,68px);font-weight:780;line-height:.98;letter-spacing:-.075em}
+.fp-authRequired .fp-toolbar h3:after{content:'恋愛、友だち、仕事、趣味、コミュニティ。目的に合わせて、人と人・企業と人をつなぐ。';display:block;max-width:520px;margin-top:22px;color:#687386;font-size:14px;font-weight:500;line-height:1.9;letter-spacing:-.02em}
+.fp-authRequired .fp-toolbar>span{display:inline-flex;margin-top:25px;padding:9px 13px;border:1px solid #d6dde7;border-radius:999px;background:rgba(255,255,255,.76);color:#657186;font-size:10px;font-weight:800}
+.fp-authRequired .fp-empty{position:relative;margin:0 30px 30px;padding:32px;border:1px solid #dfe5ed;border-radius:24px;background:rgba(255,255,255,.9);box-shadow:0 18px 45px rgba(35,48,70,.08);color:#17202e;text-align:left}
+.fp-authRequired .fp-empty:before{content:'DISCOVER  /  ONE PLATFORM, MANY PURPOSES';display:block;margin-bottom:25px;color:#8792a3;font-size:9px;font-weight:850;letter-spacing:.16em}
+.fp-authRequired .fp-empty:after{content:'96%';position:absolute;right:30px;top:48px;display:grid;place-items:center;width:62px;height:62px;border:1px solid #c8e7d9;border-radius:50%;background:#effaf4;color:#247957;font-size:13px;font-weight:850;box-shadow:0 8px 22px rgba(36,121,87,.08)}
+.fp-authRequired .fp-empty b{display:block;max-width:calc(100% - 90px);font-size:27px;font-weight:780;line-height:1.14;letter-spacing:-.055em}
+.fp-authRequired .fp-empty b:after{content:'Mika  ·  Creator  ·  Tokyo';display:block;margin-top:10px;color:#758196;font-size:11px;font-weight:650;letter-spacing:0}
+.fp-authRequired .fp-empty p{margin:26px 0 22px;color:#778398;font-size:13px;line-height:1.8}
+.fp-authRequired .fp-empty p:before{content:'恋愛  /  友だち  /  仕事  /  趣味  /  コミュニティ  /  サービス';display:block;margin-bottom:15px;padding:14px 15px;border:1px solid #e4eaf1;border-radius:13px;background:#f7f9fc;color:#4d5a6e;font-size:10px;font-weight:800;line-height:1.8;letter-spacing:.02em}
+.fp-authRequired .fp-empty button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:60px;padding:0 21px;border:0;border-radius:15px;background:#182231;color:#fff;font-size:13px;font-weight:800;box-shadow:0 14px 28px rgba(24,34,49,.2);transition:transform .2s ease,background .2s ease}
+.fp-authRequired .fp-empty button:after{content:'↗';font-size:20px;font-weight:400}
+.fp-authRequired .fp-empty button:hover{background:#2b3a4f;transform:translateY(-2px)}
+.fp-authRequired .fp-empty button:focus-visible{outline:3px solid #9ebfff;outline-offset:4px}
+@media(min-width:760px){.fp-authRequired{display:grid;grid-template-columns:1fr 1fr;gap:0}.fp-authRequired:before{grid-column:1/-1}.fp-authRequired .fp-toolbar{padding:74px 36px 54px 48px}.fp-authRequired .fp-empty{margin:42px 40px 30px 0;align-self:center;padding:34px}.fp-authRequired .fp-empty b{font-size:30px}}
+@media(max-width:620px){.fp-authRequired{margin:18px 0;border-radius:23px}.fp-authRequired:before{padding:22px 20px 0;font-size:9px}.fp-authRequired:after{right:20px;top:26px;font-size:7px}.fp-authRequired .fp-toolbar{padding:48px 20px 24px}.fp-authRequired .fp-toolbar h3{font-size:40px}.fp-authRequired .fp-empty{margin:0 12px 12px;padding:22px;border-radius:19px}.fp-authRequired .fp-empty:after{right:20px;top:49px;width:48px;height:48px}.fp-authRequired .fp-empty b{font-size:23px}.fp-authRequired .fp-empty p{font-size:12px}}
