@@ -9,3 +9,19 @@
 @media (max-width:900px){.matchingDemoHeader{grid-template-columns:1fr;gap:22px}.matchingDemoBody{grid-template-columns:1fr}.matchingDemoSide{border-right:0;border-bottom:1px solid rgba(255,255,255,.08);padding:20px 24px;display:block}.demoSteps{grid-template-columns:repeat(4,1fr);gap:8px}.demoSteps b{display:block}.demoSteps b span{display:block;margin-top:5px}.demoFilter{display:none}.demoProfile{grid-template-columns:180px 1fr auto}}
 @media (max-width:600px){.matchingDemo{padding:72px 18px}.matchingDemoHeader{margin-bottom:34px}.matchingDemoHeader h2{font-size:40px}.matchingDemoTop,.matchingDemoBottom{padding:13px 14px;font-size:7px}.matchingDemoTop span:last-child{display:none}.matchingDemoSide{padding:16px}.demoProfileStage{padding:24px 16px 28px}.demoProfile{grid-template-columns:1fr;gap:18px;min-height:0;padding:24px}.demoAvatar{width:130px;margin:auto}.demoProfileCopy{text-align:center}.demoTags{justify-content:center}.demoScore{text-align:center}.demoScore strong{font-size:32px}.demoActions{gap:10px}.demoLike{min-width:130px}.demoMatchNotice{align-items:flex-start}.demoMatchNotice button{display:none}}
 @media (max-width:700px){.salesIntro::after,.useCaseSection::after,.featureSection::after,.customSection::after,.safetySection::after,.globalSection::after{left:20px;right:20px}.customCard:hover{transform:none;box-shadow:none}.useCaseGrid article:hover{transform:none}.featureList article:hover{padding-left:0}.salesFooter{letter-spacing:.04em}}@media (prefers-reduced-motion:reduce){.salesNav button,.salesNav a,.salesProduct::before,.salesProduct::after{transition:none}.salesHeroVisual::after{display:none}.heroScroll,.heroScroll i{transition:none}.heroScroll i::after{animation:none}.customCard,.useCaseGrid article,.featureList article,.mapPin{transition:none}.demoAvatarGlow,.demoMatchNotice{animation:none}.demoProfile,.demoPass,.demoLike{transition:none}}
+
+/* Buyer-facing hero upgrade */
+.salesHero{isolation:isolate;overflow:hidden}
+.salesHero::after{opacity:.7}
+.salesHeroCopy{position:relative;z-index:2}
+.salesHeroCopy h1{font-size:clamp(58px,7vw,104px);text-shadow:0 12px 45px rgba(0,0,0,.18)}
+.salesHeroCopy>p{max-width:610px;font-size:16px}
+.salesHeroActions{margin-top:34px}
+.salesHeroVisual{position:relative;padding:18px 0 42px}
+.heroBuyerBadge{position:absolute;right:-18px;top:-28px;z-index:4;display:grid;gap:7px;padding:12px 15px;border:1px solid rgba(197,169,129,.28);background:rgba(12,11,10,.82);backdrop-filter:blur(12px);box-shadow:0 20px 50px rgba(0,0,0,.22);transform:rotate(2deg)}
+.heroBuyerBadge span{font-size:6px;letter-spacing:.22em;color:#b9a486}.heroBuyerBadge b{font-size:9px;font-weight:400;color:#eee6db}
+.heroValueRail{position:absolute;left:-34px;bottom:0;z-index:4;display:grid;grid-template-columns:repeat(3,auto);gap:1px;border:1px solid rgba(255,255,255,.1);background:rgba(10,10,9,.72);backdrop-filter:blur(10px)}
+.heroValueRail div{display:grid;gap:4px;padding:10px 13px;min-width:82px;border-right:1px solid rgba(255,255,255,.07)}.heroValueRail div:last-child{border-right:0}.heroValueRail strong{font:italic 16px 'Playfair Display',serif;color:#cdb796}.heroValueRail span{font-size:6px;letter-spacing:.1em;color:#777;white-space:nowrap}
+.floatingStat{box-shadow:0 18px 50px rgba(0,0,0,.18);border-color:rgba(197,169,129,.2)}
+@media(max-width:900px){.salesHeroCopy h1{font-size:clamp(50px,9vw,82px)}.heroBuyerBadge{right:0;top:-12px}.heroValueRail{left:0}}
+@media(max-width:560px){.salesHeroCopy h1{font-size:48px}.salesHeroCopy>p{font-size:14px}.heroBuyerBadge{position:relative;right:auto;top:auto;width:max-content;max-width:100%;margin:0 0 12px auto;transform:none}.salesHeroVisual{padding-top:0}.heroValueRail{position:relative;left:auto;bottom:auto;width:100%;margin-top:10px;grid-template-columns:repeat(3,1fr)}.heroValueRail div{min-width:0;padding:9px 7px}.heroValueRail span{font-size:5px}.floatingStat{display:none}}
