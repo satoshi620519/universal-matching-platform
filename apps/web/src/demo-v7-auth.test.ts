@@ -27,6 +27,13 @@ describe("demo-v7 authentication integration", () => {
     const v5 = readFileSync(new URL("../public/demo-v5.html", import.meta.url), "utf8");
     expect(v5).toContain("S.discoveryVisited=true");
   });
+  it("keeps notifications interactive with a read-state action", () => {
+    const v5 = readFileSync(new URL("../public/demo-v5.html", import.meta.url), "utf8");
+    expect(v5).toContain("function notifications()");
+    expect(v5).toContain("通知を確認済みにする");
+    expect(v5).toContain("S.notes=0;render()");
+  });
+
   it("keeps the guided buyer-flow actions wired to the actual demo controls", () => {
     const v6 = readFileSync(new URL("../public/demo-v6.html", import.meta.url), "utf8");
     for (const step of ["ユーザー設定", "プロフィール", "条件検索", "プロフィール確認", "LIKE", "相互MATCH", "メッセージ", "安心・安全"]) {
