@@ -1,0 +1,43 @@
+name: Apply authenticated demo gate
+
+on:
+  push:
+    branches:
+      - feature/landing-authenticated-flow
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply auth gate exactly once
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('apps/web/src/landing.tsx')
+          text = path.read_text(encoding='utf-8')
+          marker = " const panel=()=>{\n"
+          gate = " const panel=()=>{\n  if(!credential)return <div className=\"fp-page fp-authRequired\"><div className=\"fp-toolbar\"><div><span className=\"fp-kicker\">ACCOUNT ACCESS</span><h3>ログインして機能を体験</h3></div><span>ロック中</span></div><div className=\"fp-empty\"><b>内部機能はログイン後に利用できます</b><p>アカウント登録なしのデモログインでも、すべての機能を体験できます。</p><button onClick={()=>{setAuthError('');setAuthOpen(true)}}>ログイン / デモを開始</button></div></div>;\n"
+          if 'fp-authRequired' in text:
+              print('Auth gate already present; no change needed.')
+          elif text.count(marker) != 1:
+              raise SystemExit(f'Expected exactly one panel marker, found {text.count(marker)}')
+          else:
+              path.write_text(text.replace(marker, gate, 1), encoding='utf-8')
+              print('Auth gate inserted.')
+          PY
+      - name: Commit change when needed
+        run: |
+          if git diff --quiet; then
+            echo 'No changes to commit.'
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add apps/web/src/landing.tsx
+            git commit -m 'feat(demo): gate internal panels behind login'
+            git push
+          fi
