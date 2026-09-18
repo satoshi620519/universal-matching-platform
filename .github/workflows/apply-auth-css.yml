@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Normalize auth sales stylesheet import
+      - name: Update landing stylesheet import and auth home structure
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -31,6 +31,11 @@ jobs:
               if marker not in text:
                   raise SystemExit('Import marker not found')
               text = text.replace(marker, normalized, 1)
+          old = '''if(!credential)return <div className="fp-page fp-authRequired"><div className="fp-toolbar"><div><span className="fp-kicker">ACCOUNT ACCESS</span><h3>ログインして機能を体験</h3></div><span>ロック中</span></div><div className="fp-empty"><b>内部機能はログイン後に利用できます</b><p>アカウント登録なしのデモログインでも、すべての機能を体験できます。</p><button onClick={()=>{setAuthError('');setAuthOpen(true)}}>ログイン / デモを開始</button></div></div>;'''
+          new = '''if(!credential)return <div className="fp-page fp-authRequired"><div className="fp-homeHeader"><div><span className="fp-kicker">UNIVERSAL MATCHING PLATFORM</span><h3>目的に合わせて、人と可能性をつなぐ。</h3><p>恋愛・友だち・仕事・趣味・コミュニティ・サービス。ひとつの基盤で、さまざまなマッチングサービスを展開できます。</p></div><span className="fp-liveBadge">● DEMO PREVIEW</span></div><div className="fp-homeFilters"><button className="selected">すべて</button><button>恋愛</button><button>友だち</button><button>仕事</button><button>趣味</button><button>サービス</button></div><div className="fp-homeGrid"><article className="fp-homeFeature"><span className="fp-kicker">DISCOVER</span><h4>あなたに合う出会いを、もっと自然に。</h4><p>目的・興味・地域・言語を組み合わせて、最適な相手やサービスを見つける。</p><div className="fp-homeMetrics"><span><b>96%</b><small>相性の例</small></span><span><b>GLOBAL</b><small>地域・言語対応</small></span><span><b>SAFE</b><small>安心・安全設計</small></span></div></article><div className="fp-homeProfiles"><article><div className="fp-homeAvatar">M</div><div><b>Mika</b><span>クリエイター · 東京</span><small>写真 / 旅行 / デザイン</small></div><strong>96%</strong></article><article><div className="fp-homeAvatar">A</div><div><b>Alex</b><span>プロダクト · 大阪</span><small>起業 / 音楽 / カフェ</small></div><strong>91%</strong></article><article><div className="fp-homeAvatar">L</div><div><b>Lina</b><span>フリーランサー · 京都</span><small>アート / 旅 / コミュニティ</small></div><strong>98%</strong></article></div></div><div className="fp-homeBottom"><span>検索</span><span>マッチング</span><span>メッセージ</span><span>通知</span><span>プロフィール</span><span>安心・安全</span><span>地域・言語</span><span>設定</span></div><div className="fp-homeCta"><div><b>この体験を、あなたのサービスに。</b><span>ロゴ・カラー・画像を変えて、独自のマッチング事業へ。</span></div><button onClick={()=>{setAuthError('');setAuthOpen(true)}}>ログイン / デモを開始 →</button></div></div>;'''
+          if old not in text:
+              raise SystemExit('Auth home block not found; refusing unsafe edit')
+          text = text.replace(old, new, 1)
           path.write_text(text, encoding='utf-8')
           PY
 
@@ -39,5 +44,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add apps/web/src/landing.tsx
-          git diff --cached --quiet || git commit -m "Normalize auth sales stylesheet import safely"
+          git diff --cached --quiet || git commit -m "Build structural universal matching home preview"
           git push
