@@ -58,7 +58,7 @@ describe('NEXA guided demo end-to-end walkthrough', () => {
   });
 
   it('requires a real search/filter interaction before the guided discovery step completes', () => {
-    expect(wrapper).toContain("searchUsed=w.S.q.trim().length>0||w.S.cat!=='すべて'||w.S.region!=='日本'");
+    expect(wrapper).toContain("searchUsed=w.S.discoveryVisited||w.S.q.trim().length>0||w.S.cat!=='すべて'||w.S.region!=='日本");
     expect(wrapper).toContain('discover:searchUsed');
     expect(source).toContain('onchange="S.cat=this.value;render()"');
     expect(source).toContain('onchange="S.region=this.value;render()"');
