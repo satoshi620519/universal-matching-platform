@@ -1,0 +1,39 @@
+name: Apply auth sales styling
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-auth-css:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add auth sales stylesheet import
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('apps/web/src/landing.tsx')
+          text = path.read_text(encoding='utf-8')
+          marker = "import './landing-final.css';"
+          addition = "import './auth-sales.css';"
+          if addition not in text:
+              if marker not in text:
+                  raise SystemExit('Import marker not found')
+              text = text.replace(marker, marker + '\\n' + addition, 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add apps/web/src/landing.tsx
+          git diff --cached --quiet || git commit -m "Connect auth sales stylesheet"
+          git push
