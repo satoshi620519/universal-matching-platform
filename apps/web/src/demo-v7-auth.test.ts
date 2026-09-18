@@ -24,7 +24,7 @@ describe("demo-v7 authentication integration", () => {
     expect(source).toContain("sessionStorage.removeItem(KEY);renderAuth()");
   });
   it("keeps the buyer-flow discovery step complete after leaving the search screen", () => {
-    const v5 = readFileSync(new URL("../public/demo-v7.html", import.meta.url), "utf8");
+    const v5 = readFileSync(new URL("../public/demo-v5.html", import.meta.url), "utf8");
     expect(v5).toContain("S.discoveryVisited=true");
   });
 });
