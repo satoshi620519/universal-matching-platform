@@ -28,3 +28,16 @@
 
 ## Anti-duplication rule
 Do not redo the already-completed profile locality/avatar/identity/database fixes (migrations 31–35), rate-limit retry work, port fix, user-block migration, or migration-test updates through 33. The current open backend defect was the missing `profile_gallery_media` table and migration 36 now addresses it.
+
+
+## 2026-09-18 — Demo authentication integration checkpoint
+
+- Issue: #54 — Demo v6: integrate authentication into actual matching UI
+- Branch: `feature/demo-auth-integration-direct`
+- Latest commit: `840d6aec92b31f3bc81176dde54411dc503c15f5`
+- Implemented: login entry/status/logout controls inside the actual `demo-v5.html` matching UI.
+- Implemented: authentication request/state relay across `demo-v6.html` → `demo-v7.html` → `demo-auth-relay.html` → `demo.html`.
+- Added: `apps/web/src/demo-auth.integration.test.ts` covering unauthenticated UI, authenticated/logout UI, and nested auth-request routing.
+- Existing matching walkthrough, shortcuts, and feature screens were left intact.
+- Verification recorded at code level; runtime/browser E2E still needs to be run in the Codex/CI environment before declaring the issue fully closed.
+- Next step: run the focused Vitest test and browser/live E2E against the deployed demo, then record the exact results and close/merge only if those checks pass.
