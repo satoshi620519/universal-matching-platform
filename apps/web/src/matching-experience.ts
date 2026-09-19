@@ -51,7 +51,11 @@ export function rankCandidates(
       score: calculateMatchScore(request, candidate),
       reasons: buildMatchReasons(request, candidate),
     }))
-    .sort((left, right) => right.score - left.score);
+    .sort((left, right) => {
+      const scoreDifference = right.score - left.score;
+      if (scoreDifference !== 0) return scoreDifference;
+      return left.candidate.id.localeCompare(right.candidate.id);
+    });
 }
 
 export const DEMO_INTENT_REQUESTS: readonly IntentRequest[] = [
