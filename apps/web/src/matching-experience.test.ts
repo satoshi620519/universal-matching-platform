@@ -45,4 +45,12 @@ describe('matching experience helpers', () => {
       'プロフィール情報あり',
     ]);
   });
+
+  it('uses a stable candidate-id tie breaker', () => {
+    const tied: CandidateProfile[] = [
+      { ...candidates[0], id: 'zulu' },
+      { ...candidates[0], id: 'alpha' },
+    ];
+    expect(rankCandidates({ ...request, intentId: 'learn', summary: '' }, tied).map((item) => item.candidate.id)).toEqual(['alpha', 'zulu']);
+  });
 });
