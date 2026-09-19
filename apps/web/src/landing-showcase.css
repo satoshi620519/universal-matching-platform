@@ -49,3 +49,34 @@
 .matchingDemo .swipeDemoCta{border-radius:18px!important;background:linear-gradient(135deg,rgba(214,181,132,.14),rgba(255,255,255,.035))!important;border:1px solid rgba(214,181,132,.2)!important}
 .matchingDemo .swipeDemoCta strong{color:#f1e6d4!important}
 @media(max-width:700px){.matchingDemoHeader{padding:0 18px}.matchingDemoShell{padding:16px!important}.matchingDemoTop{padding:18px!important}.matchingDemo .demoProfileStage{border-radius:18px!important}.matchingDemo .swipeActions button{width:48px!important;height:48px!important}}
+
+/* New Demo 3 direction: practical matching-service marketplace, not a decorative showcase. */
+.matchingDemo{color:#1d2633;background:linear-gradient(145deg,#f7f9fc 0%,#eef3f8 58%,#e7edf5 100%);border:1px solid #d5deea;border-radius:30px;box-shadow:0 32px 90px rgba(32,55,82,.16),inset 0 1px 0 #fff}
+.matchingDemo::before{content:'UNIVERSAL MATCHING / DEMO 03';top:16px;right:22px;color:#8190a4;font-size:8px;letter-spacing:.2em}
+.matchingDemoHeader{background:rgba(255,255,255,.88);border-bottom:1px solid #dbe3ed;backdrop-filter:blur(18px);color:#27364a}
+.matchingDemoHeader strong{color:#1c3048!important;letter-spacing:.12em}
+.matchingDemoHeader small{color:#74869b!important}
+.matchingDemoShell{padding:28px!important;gap:20px!important}
+.matchingDemoTop{position:relative;display:grid;gap:12px;padding:26px!important;border:1px solid #d7e2ef!important;border-radius:22px!important;background:radial-gradient(circle at 100% 0,#dcecff 0,transparent 42%),linear-gradient(135deg,#fff 0%,#f3f7fc 100%)!important;box-shadow:0 14px 35px rgba(57,87,121,.08)!important}
+.matchingDemoTop:after{content:'恋愛  •  友だち  •  仕事  •  スキル  •  地域  •  趣味';display:block;color:#6b7f95;font-size:10px;letter-spacing:.04em}
+.matchingDemoTop h3{color:#172b43!important;font-size:clamp(27px,3.3vw,48px)!important;line-height:1.05!important;letter-spacing:-.055em!important}
+.matchingDemoTop p{color:#64758b!important;max-width:560px;line-height:1.8!important}
+.matchingDemoTop button,.matchingDemo button{border-radius:12px!important;font-weight:700!important;box-shadow:0 7px 16px rgba(40,87,145,.1);transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important}
+.matchingDemoTop button:hover,.matchingDemo button:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(40,87,145,.16)}
+.matchingDemo .swipeDemoPanel{border:1px solid #d4e0ed!important;border-radius:24px!important;background:linear-gradient(145deg,#ffffff,#edf4fb)!important;box-shadow:0 18px 42px rgba(47,75,111,.09)!important;color:#24364b}
+.matchingDemo .demoProfileStage{border:1px solid #d3dfec!important;border-radius:24px!important;background:#fff!important;box-shadow:0 20px 45px rgba(49,75,108,.13)!important}
+.matchingDemo .demoProfile{border-radius:20px!important;background:linear-gradient(180deg,#fff,#f4f8fc)!important;box-shadow:inset 0 1px 0 #fff!important;color:#26384d}
+.matchingDemo .demoProfile strong,.matchingDemo .demoProfile h3{color:#1d3046!important}
+.matchingDemo .demoProfile small,.matchingDemo .demoProfile p{color:#71839a!important}
+.matchingDemo .demoAvatar{border:3px solid #fff!important;box-shadow:0 0 0 5px #dceaff,0 16px 35px rgba(38,70,108,.2)!important}
+.matchingDemo .swipeActions{gap:10px!important}
+.matchingDemo .swipeActions button{width:52px!important;height:52px!important;border:1px solid #d2deeb!important;background:#fff!important;color:#48617e!important;box-shadow:0 7px 16px rgba(42,72,108,.1)!important}
+.matchingDemo .swipeActions button:last-child{background:linear-gradient(135deg,#276be8,#174db9)!important;color:#fff!important;border-color:#276be8!important}
+.matchingDemo .swipePurpose{border:1px solid #d5e1ef!important;background:#fff!important;border-radius:14px!important;color:#506984!important}
+.matchingDemo .swipeDemoCta{border:1px solid #cfe0f5!important;border-radius:18px!important;background:linear-gradient(135deg,#eaf3ff,#fff)!important;color:#294562!important;box-shadow:0 12px 30px rgba(45,98,168,.08)!important}
+.matchingDemo .swipeDemoCta strong{color:#1e4e98!important}
+.matchingDemo input,.matchingDemo select{border:1px solid #d2dfed!important;background:#fff!important;color:#263b54!important;border-radius:10px!important}
+.matchingDemo [role='tab'],.matchingDemo .filterPill{border:1px solid #d4e0ed!important;background:#fff!important;color:#60758e!important;border-radius:999px!important}
+.matchingDemo .filterPill{padding:8px 12px!important}
+@media(max-width:700px){.matchingDemo::before{display:block;position:static;padding:12px 18px 0;text-align:right}.matchingDemoShell{padding:16px!important}.matchingDemoTop{padding:20px!important}.matchingDemoTop:after{font-size:9px;line-height:1.7}.matchingDemo .demoProfileStage{border-radius:18px!important}.matchingDemo .swipeActions button{width:46px!important;height:46px!important}}
+@media(prefers-reduced-motion:reduce){.matchingDemoTop button,.matchingDemo button{transition:none!important}}
