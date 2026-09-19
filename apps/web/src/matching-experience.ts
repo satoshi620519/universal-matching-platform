@@ -70,3 +70,34 @@ export const DEMO_INTENT_REQUESTS: readonly IntentRequest[] = [
     language: 'Japanese',
   },
 ];
+
+export const DEMO_CANDIDATES: readonly CandidateProfile[] = [
+  {
+    id: 'mika',
+    name: 'Mika',
+    intentIds: ['work', 'create'],
+    region: 'Japan',
+    languages: ['Japanese', 'English'],
+    summary: 'プロダクトデザインと写真を通じた協業に関心があります。',
+  },
+  {
+    id: 'alex',
+    name: 'Alex',
+    intentIds: ['work', 'join'],
+    region: 'Japan',
+    languages: ['Japanese', 'English'],
+    summary: '地域の起業家やプロダクトチームとの接点を探しています。',
+  },
+  {
+    id: 'lina',
+    name: 'Lina',
+    intentIds: ['create', 'join'],
+    region: 'Japan',
+    languages: ['English'],
+    summary: 'アートや地域コミュニティの企画に参加しています。',
+  },
+];
+
+export function getDemoMatches(request: IntentRequest): RankedMatch[] {
+  return rankCandidates(request, [...DEMO_CANDIDATES]);
+}
