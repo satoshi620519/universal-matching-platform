@@ -80,7 +80,61 @@ function Discovery({ onMessageTarget }: { onMessageTarget: (id:string)=>void }) 
  {ready&&<div className="discoveryResults"><Button className="primary" onClick={()=>void discover()} loading={discovering} loadingLabel="Loading…">Discover people →</Button><div className="presentationControls" role="group" aria-label="Discovery presentation"><Button className={presentation==='card'?'primary':'pass'} onClick={()=>setPresentation('card')}>Cards</Button><Button className={presentation==='list'?'primary':'pass'} onClick={()=>setPresentation('list')}>List</Button><Button className={presentation==='grid'?'primary':'pass'} onClick={()=>setPresentation('grid')}>Grid</Button></div><DiscoveryPresentation mode={presentation}>{profiles.map(p=>{const profileFields=p.fields as Record<string, unknown>;return <Card className="profileCard" key={p.accountId}><div className="avatar" aria-hidden="true">{String(profileFields.displayName??'?').slice(0,1)}</div><h3>{String(profileFields.displayName??'Member')}</h3><p className="headline">{String(profileFields.headline??'')}</p><p>{String(profileFields.bio??'')}</p><div className="decisionRow"><Button className="pass" onClick={()=>void decision(p.accountId,'pass')}>Pass</Button><Button className="primary" onClick={()=>void decision(p.accountId,'like')}>Connect →</Button></div></Card>})}</DiscoveryPresentation>{nextCursor&&<Button className="pass loadMore" loading={discovering} loadingLabel="Loading…" onClick={()=>void discover(true)}>Load more people</Button>}</div>}</section>;
 }
 
-function Home({ setScreen }: { setScreen: (screen: Screen) => void }) { return <main><nav aria-label="Main navigation"><div className="brand"><span className="brandMark">C</span>connect</div><div className="navLinks"><a href="#experience">Experience</a><a href="#safety">Safety</a><Button className="ghost" onClick={() => setScreen('signin')}>Sign in</Button></div></nav><section className="hero"><div className="eyebrow">HUMAN CONNECTION, REIMAGINED</div><h1>Meet beyond<br/><em>the ordinary.</em></h1><p>A modern space for discovering people, starting conversations, and building meaningful connections.</p><div className="actions"><Button className="primary" onClick={() => setScreen('register')}>Start exploring <span>→</span></Button><a className="textButton" href="#experience">How it works</a></div><div className="proof"><div><strong>Private</strong><span>Designed for control</span></div><div><strong>Global</strong><span>Built without borders</span></div><div><strong>Thoughtful</strong><span>Human at the center</span></div></div></section><section id="experience" className="featureSection"><div className="sectionIntro"><span>01 / THE EXPERIENCE</span><h2>Less noise.<br/>More <em>possibility.</em></h2></div><div className="featureGrid">{features.map(feature=><article key={feature.title}><div className="featureIcon">{feature.icon}</div><h3>{feature.title}</h3><p>{feature.text}</p><a href="#start">Discover more →</a></article>)}</div></section><section id="safety" className="statement"><span>BUILT FOR THE REAL WORLD</span><h2>Connection feels better<br/>when trust comes first.</h2><p>Clear controls, thoughtful interactions, and a platform architecture designed to grow responsibly.</p></section><footer id="start"><div className="brand"><span className="brandMark">C</span>connect</div><p>© 2026 Connect. A universal platform foundation.</p><Button className="primary" onClick={() => setScreen('register')}>Get started →</Button></footer></main>; }
+function Home({ setScreen }: { setScreen: (screen: Screen) => void }) {
+  return <main className="matchLanding">
+    <header className="matchTopbar">
+      <Button className="matchBrand" onClick={() => setScreen('home')}><span className="matchLogo">C</span><span>connect</span></Button>
+      <div className="matchTopActions">
+        <Button className="matchIconButton" aria-label="Language">◎</Button>
+        <Button className="matchTopLogin" onClick={() => setScreen('signin')}>Log in</Button>
+      </div>
+    </header>
+    <section className="matchHero" aria-label="Discover people">
+      <div className="matchHeroCopy">
+        <div className="matchEyebrow">DISCOVER • CONNECT • MATCH</div>
+        <h1>Swipe right<br/><span>for your next connection.</span></h1>
+        <p>Discover people who match what you are looking for, then connect when the interest is mutual.</p>
+        <Button className="matchPrimary" onClick={() => setScreen('register')}>Create account <span>→</span></Button>
+      </div>
+      <div className="matchStage" aria-label="Profile discovery preview">
+        <div className="matchStack matchBackOne" />
+        <div className="matchStack matchBackTwo" />
+        <article className="matchProfile">
+          <div className="matchPhoto">
+            <div className="matchPhotoGradient" />
+            <div className="matchPhotoPerson" aria-hidden="true">A</div>
+            <div className="matchPhotoTop"><span>● Online</span><button aria-label="More options">•••</button></div>
+            <div className="matchProfileInfo">
+              <div><h2>Alex, 28 <span>✓</span></h2><p>Creative • Tokyo</p><p className="matchBio">Coffee, travel and finding new places. Looking for someone who enjoys good conversations.</p></div>
+            </div>
+          </div>
+          <div className="matchActions" aria-label="Profile actions">
+            <button className="matchAction pass" aria-label="Pass">×</button>
+            <button className="matchAction rewind" aria-label="Rewind">↶</button>
+            <button className="matchAction like" aria-label="Like">♥</button>
+            <button className="matchAction boost" aria-label="Boost">⚡</button>
+            <button className="matchAction super" aria-label="Super like">★</button>
+          </div>
+        </article>
+        <div className="matchHint">← Pass &nbsp;&nbsp; Like →</div>
+      </div>
+    </section>
+    <section className="matchTrust">
+      <div><strong>18+</strong><span>Age-aware experiences</span></div>
+      <div><strong>Global</strong><span>Built for local communities</span></div>
+      <div><strong>Private</strong><span>Control your visibility</span></div>
+    </section>
+    <section className="matchHow">
+      <div><span className="matchEyebrow">HOW IT WORKS</span><h2>A simple path<br/><em>to a match.</em></h2></div>
+      <div className="matchSteps">
+        <article><b>01</b><h3>Discover</h3><p>See profiles based on your preferences and location.</p></article>
+        <article><b>02</b><h3>Choose</h3><p>Pass, like, or show interest with one simple action.</p></article>
+        <article><b>03</b><h3>Connect</h3><p>When interest is mutual, the conversation opens.</p></article>
+      </div>
+    </section>
+    <footer className="matchFooter"><span>connect</span><Button className="matchFooterCta" onClick={() => setScreen('register')}>Get started →</Button></footer>
+  </main>;
+}
 
 function App(){const [screen,setScreen]=useState<Screen>(()=>window.location.hash==='#verify'?'verify':sessionStorage.getItem('connect.credential')?'dashboard':'home');const [account,setAccount]=useState<Account|null>(null);const [loading,setLoading]=useState(false);const [error,setError]=useState('');
  useEffect(()=>{const sync=()=>setScreen(window.location.hash==='#verify'?'verify':'home');window.addEventListener('hashchange',sync);return()=>window.removeEventListener('hashchange',sync);},[]);
