@@ -24,7 +24,7 @@ export type CandidateProfile = {
   region: string;
   languages: string[];
   summary: string;
-  trustSignals: string[];
+  trustSignals?: string[];
 };
 
 export const MATCHING_INTENTS: readonly MatchingIntent[] = [
