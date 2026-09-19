@@ -12,3 +12,89 @@
 .ctaLanding{padding:170px 24px 180px;text-align:center;background:#c8b69a;color:var(--ink);position:relative}.ctaLanding:after{content:'M';position:absolute;right:6vw;bottom:-.25em;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(180px,28vw,420px);line-height:1;color:rgba(255,255,255,.08);pointer-events:none}.ctaLanding .overline{position:relative;z-index:1;color:#695e50}.ctaLanding h2{position:relative;z-index:1;font-size:clamp(60px,8vw,114px);line-height:.9;letter-spacing:-.057em;font-weight:500;margin:0 0 47px}.primaryButton.light{position:relative;z-index:1;background:#171513;color:#f0ebe3}.landingFooter{min-height:92px;padding:0 clamp(24px,5vw,76px);display:grid;grid-template-columns:1fr auto auto;gap:35px;align-items:center;background:#11100f;color:#68635c;font-size:9px;letter-spacing:.14em}.landingFooter .landingBrand{color:#f5f1e9}
 @media(max-width:900px){.landingNav nav{display:none}.heroLanding{grid-template-columns:1fr;min-height:1000px;padding-top:150px}.heroCopy{max-width:700px}.heroVisual{height:460px;margin-top:-10px}.heroVisual:before{width:360px;height:360px;right:4%;top:7%}.heroVisual:after{width:500px;height:500px;right:-15%;top:-8%}.portraitMain{right:17%;top:5%;width:250px;height:345px}.portraitBack{right:46%;top:23%;width:195px;height:275px}.matchBadge{right:3%;bottom:8%}.locationBadge{left:2%;bottom:18%}.introGrid{grid-template-columns:1fr;gap:45px}.highlightLanding{grid-template-columns:1fr}.highlightCard{min-height:230px}.landingFooter{grid-template-columns:1fr 1fr}.landingFooter>span:last-child{display:none}}
 @media(max-width:560px){html{scroll-padding-top:72px}.landingNav{height:72px}.landingBrand{font-size:12px}.navButton{padding:9px 14px}.heroLanding{padding:125px 22px 70px;min-height:930px}.heroCopy h1{font-size:55px}.heroLead{font-size:15px;margin:28px 0}.heroActions{align-items:flex-start;flex-direction:column;gap:17px}.heroVisual{height:390px}.heroVisual:before{width:270px;height:270px;right:0;top:10%}.heroVisual:after{width:390px;height:390px;right:-20%;top:-2%}.portraitMain{right:2%;width:205px;height:282px}.portraitBack{right:42%;width:158px;height:224px}.matchBadge{right:0;bottom:5%;min-width:175px}.locationBadge{left:0;bottom:18%;font-size:8px}.introLanding{padding:105px 24px 90px}.introGrid h2{font-size:52px}.highlightLanding{padding:20px 24px 105px}.statementLanding{padding:135px 24px}.statementText{font-size:13px}.ctaLanding{padding:125px 24px 145px}.ctaLanding h2{font-size:58px}.landingFooter{padding:20px 24px;min-height:78px}}
+
+/* PREMIUM DEMO SHOWCASE — scoped to the live product preview */
+.swipeDemoPanel{position:relative!important;overflow:hidden!important;background:
+ radial-gradient(circle at 76% 18%,rgba(196,169,122,.16),transparent 24%),
+ radial-gradient(circle at 18% 78%,rgba(92,111,105,.12),transparent 24%),
+ linear-gradient(135deg,#12110f 0%,#191714 48%,#0e0d0c 100%)!important;
+ border:1px solid rgba(255,255,255,.12)!important;
+ box-shadow:0 40px 120px rgba(0,0,0,.34)!important;
+}
+.swipeDemoPanel:before{content:'LIVE PRODUCT EXPERIENCE';position:absolute;right:28px;top:24px;font-size:7px;letter-spacing:.28em;color:rgba(255,255,255,.32);z-index:3}
+.swipeDemoPanel:after{content:'';position:absolute;width:520px;height:520px;border:1px solid rgba(196,169,122,.09);border-radius:50%;right:-170px;top:70px;box-shadow:0 0 0 70px rgba(196,169,122,.025),0 0 0 140px rgba(196,169,122,.018);pointer-events:none}
+.swipeDemoHeader{height:70px!important;padding:0 30px!important;border-bottom:1px solid rgba(255,255,255,.09)!important;background:rgba(8,8,7,.22)!important;backdrop-filter:blur(16px)!important}
+.swipeBrand{display:flex!important;align-items:center!important;gap:11px!important}
+.swipeBrand>span{width:30px!important;height:30px!important;border:1px solid rgba(220,198,164,.65)!important;border-radius:50%!important;display:grid!important;place-items:center!important;font:italic 17px 'Playfair Display',serif!important;color:#d6c4a8!important}
+.swipeBrand strong{font-size:13px!important;letter-spacing:.24em!important}
+.swipeBrand small{display:block!important;color:#777!important;font-size:6px!important;letter-spacing:.18em!important;margin-top:3px!important}
+.fp-liveBadge{border:1px solid rgba(196,169,122,.3)!important;background:rgba(196,169,122,.06)!important;color:#c8b18d!important;padding:7px 10px!important;letter-spacing:.18em!important;font-size:7px!important}
+.swipeDemoHero{position:relative!important;display:grid!important;grid-template-columns:minmax(360px,.86fr) minmax(440px,1.14fr)!important;gap:30px!important;min-height:590px!important;padding:54px 44px 38px!important}
+.swipeDemoCopy{position:relative!important;z-index:2!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:15px 0 20px!important}
+.swipeDemoCopy .fp-kicker{font-size:8px!important;letter-spacing:.25em!important;color:#c5ad88!important}
+.swipeDemoCopy h3{font:500 clamp(40px,4.1vw,66px)/.96 'DM Sans',sans-serif!important;letter-spacing:-.055em!important;margin:18px 0 22px!important;max-width:590px!important}
+.swipeDemoCopy h3 em{font:500 1em/.96 'Playfair Display',serif!important;color:#d4c09e!important}
+.swipeDemoCopy>p{max-width:510px!important;color:#8d8981!important;font-size:12px!important;line-height:1.9!important;margin:0 0 24px!important}
+.swipeFilters{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin:0 0 24px!important}
+.swipeFilters button{border:1px solid rgba(255,255,255,.1)!important;background:rgba(255,255,255,.025)!important;color:#777!important;border-radius:999px!important;padding:7px 11px!important;font-size:7px!important;letter-spacing:.06em!important}
+.swipeFilters button.selected{background:#d0bc9d!important;border-color:#d0bc9d!important;color:#171513!important}
+.swipeDemoCopy .fp-primaryCta{align-self:flex-start!important;border:0!important;background:#eee7dc!important;color:#171513!important;border-radius:999px!important;padding:13px 17px!important;font-size:9px!important;font-weight:600!important;box-shadow:0 14px 35px rgba(0,0,0,.25)!important}
+.swipeDemoCopy .fp-primaryCta b{margin-left:28px!important}
+.swipePlatforms{margin-top:13px!important;color:#5f5b54!important;font-size:7px!important;letter-spacing:.18em!important}
+.swipeDemoStage{position:relative!important;z-index:2!important;min-height:500px!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:22px!important;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012))!important;box-shadow:0 28px 80px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.07)!important;padding:22px!important;display:flex!important;flex-direction:column!important}
+.swipeDemoStage:before{content:'MATCH ENGINE';position:absolute;left:22px;bottom:20px;font-size:6px;letter-spacing:.22em;color:#555!important}
+.swipeStageTop{display:flex!important;justify-content:space-between!important;padding:0 2px 14px!important;color:#777!important;font-size:7px!important;letter-spacing:.18em!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
+.swipeStageTop span:first-child{color:#d1bd9b!important}
+.swipeStack{flex:1!important;height:405px!important;min-height:405px!important;position:relative!important;display:grid!important;place-items:center!important}
+.swipeCard{width:min(310px,68%)!important;height:350px!important;border-radius:20px!important;overflow:hidden!important;box-shadow:0 28px 55px rgba(0,0,0,.42)!important}
+.swipeCard.backTwo{transform:translate(48px,12px) rotate(6deg)!important;opacity:.25!important;background:linear-gradient(160deg,#6f665b,#24211e)!important}
+.swipeCard.backOne{transform:translate(24px,7px) rotate(3deg)!important;opacity:.52!important;background:linear-gradient(160deg,#9b8468,#292622)!important}
+.swipeCard.front{background:#1c1a17!important;border:1px solid rgba(255,255,255,.12)!important;transform:translateX(-8px) rotate(-1.5deg)!important;transition:transform .25s ease,box-shadow .25s ease!important}
+.swipeCard.front:hover{transform:translate(-8px,-7px) rotate(-1deg)!important;box-shadow:0 38px 70px rgba(0,0,0,.5)!important}
+.swipeCardImage{height:205px!important;background:
+ radial-gradient(circle at 50% 34%,rgba(228,208,181,.8) 0 11%,transparent 12%),
+ radial-gradient(ellipse at 50% 56%,rgba(90,73,61,.95) 0 29%,transparent 30%),
+ linear-gradient(145deg,#9a846e,#3a3129 58%,#171513)!important;position:relative!important}
+.swipeCardImage:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.1),transparent 35%,rgba(0,0,0,.3))!important}
+.swipeCardImage>span{position:absolute!important;z-index:2!important;left:18px!important;bottom:13px!important;font:italic 38px 'Playfair Display',serif!important;color:rgba(255,255,255,.78)!important}
+.swipeCardImage i{position:absolute!important;z-index:2!important;right:13px!important;top:13px!important;border:1px solid rgba(255,255,255,.25)!important;background:rgba(10,9,8,.38)!important;padding:6px 8px!important;border-radius:999px!important;color:#e5d4b7!important;font-style:normal!important;font-size:8px!important}
+.swipeCardImage b{position:absolute!important;z-index:2!important;left:16px!important;top:15px!important;color:#c3d9c8!important;font-size:6px!important;letter-spacing:.12em!important}
+.swipeCardBody{padding:18px 18px 16px!important}
+.swipeCardBody>span{font-size:7px!important;color:#8c877e!important}
+.swipeCardBody h4{font-size:28px!important;font-weight:400!important;margin:6px 0 6px!important;letter-spacing:-.04em!important}
+.swipeCardBody p{font-size:8px!important;color:#777!important;line-height:1.55!important;margin:0 0 10px!important}
+.swipeTags{display:flex!important;gap:5px!important;flex-wrap:wrap!important}
+.swipeTags b{font-size:6px!important;font-weight:400!important;color:#aaa!important;border:1px solid rgba(255,255,255,.1)!important;padding:5px 7px!important;border-radius:999px!important}
+.swipeActions{display:flex!important;justify-content:center!important;gap:10px!important;position:relative!important;z-index:5!important}
+.swipeActions button{width:43px!important;height:43px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,.13)!important;background:#171613!important;color:#aaa!important;font-size:18px!important;cursor:pointer!important;box-shadow:0 10px 25px rgba(0,0,0,.25)!important}
+.swipeActions button:hover{transform:translateY(-2px)!important;border-color:rgba(210,189,153,.55)!important;color:#e6d4b6!important}
+.swipeActions button.like{width:54px!important;height:54px!important;margin-top:-6px!important;background:#d1bd9c!important;border-color:#d1bd9c!important;color:#171513!important;font-size:21px!important}
+.swipeHint{display:flex!important;justify-content:space-between!important;margin-top:9px!important;color:#4f4c47!important;font-size:6px!important;letter-spacing:.15em!important}
+.swipeHint b{color:#8e806b!important;font-weight:400!important}
+.swipePurpose{position:relative!important;z-index:2!important;border-top:1px solid rgba(255,255,255,.08)!important;background:rgba(0,0,0,.16)!important;padding:26px 44px!important;display:grid!important;grid-template-columns:.75fr 1.25fr!important;gap:30px!important;align-items:center!important}
+.swipePurpose h4{font-size:25px!important;font-weight:400!important;letter-spacing:-.04em!important;margin:8px 0 0!important}
+.swipePurposeItems{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:7px!important}
+.swipePurposeItems span{padding:13px 12px!important;border:1px solid rgba(255,255,255,.08)!important;background:rgba(255,255,255,.025)!important;color:#888!important;font-size:7px!important;letter-spacing:.04em!important}
+.swipePurposeItems span:first-child,.swipePurposeItems span:hover{border-color:rgba(196,169,122,.32)!important;color:#cbb58f!important;background:rgba(196,169,122,.045)!important}
+.swipeDemoCta{position:relative!important;z-index:2!important;border-top:1px solid rgba(255,255,255,.08)!important;padding:22px 44px!important;background:rgba(255,255,255,.018)!important;display:flex!important;justify-content:space-between!important;align-items:center!important}
+.swipeDemoCta div{display:grid!important;gap:5px!important}
+.swipeDemoCta b{font-size:16px!important;font-weight:400!important}
+.swipeDemoCta span{font-size:7px!important;color:#666!important}
+.swipeDemoCta button{border:1px solid rgba(196,169,122,.42)!important;background:transparent!important;color:#cdb892!important;padding:11px 15px!important;border-radius:999px!important;font-size:8px!important;cursor:pointer!important}
+.swipeDemoCta button:hover{background:#cdb892!important;color:#171513!important}
+@media(max-width:900px){
+ .swipeDemoHero{grid-template-columns:1fr!important;padding:38px 24px 28px!important}
+ .swipeDemoCopy h3{font-size:42px!important}
+ .swipeDemoStage{min-height:500px!important}
+ .swipePurpose{grid-template-columns:1fr!important;padding:22px 24px!important}
+}
+@media(max-width:560px){
+ .swipeDemoHeader{padding:0 18px!important}
+ .swipeDemoPanel:before{display:none!important}
+ .swipeDemoHero{padding:30px 16px 20px!important}
+ .swipeDemoCopy h3{font-size:36px!important}
+ .swipeDemoStage{padding:15px!important;border-radius:17px!important}
+ .swipeCard{width:76%!important}
+ .swipePurposeItems{grid-template-columns:1fr 1fr!important}
+ .swipeDemoCta{padding:20px 18px!important}
+}
