@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import './full-product-demo.css';
 
 type View = 'discover' | 'matches' | 'messages' | 'notifications' | 'profile' | 'safety' | 'global';
 
