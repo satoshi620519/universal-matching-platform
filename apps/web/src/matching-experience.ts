@@ -16,6 +16,14 @@ export type RankedMatch = {
   reasons: MatchReason[];
 };
 
+export type MatchCardViewModel = {
+  id: string;
+  name: string;
+  score: number;
+  summary: string;
+  reasons: MatchReason[];
+};
+
 export function buildMatchReasons(
   request: IntentRequest,
   candidate: CandidateProfile,
@@ -56,6 +64,16 @@ export function rankCandidates(
       if (scoreDifference !== 0) return scoreDifference;
       return left.candidate.id.localeCompare(right.candidate.id);
     });
+}
+
+export function toMatchCardViewModel(match: RankedMatch): MatchCardViewModel {
+  return {
+    id: match.candidate.id,
+    name: match.candidate.name,
+    score: match.score,
+    summary: match.candidate.summary,
+    reasons: match.reasons,
+  };
 }
 
 export const DEMO_INTENT_REQUESTS: readonly IntentRequest[] = [
@@ -104,4 +122,8 @@ export const DEMO_CANDIDATES: readonly CandidateProfile[] = [
 
 export function getDemoMatches(request: IntentRequest): RankedMatch[] {
   return rankCandidates(request, [...DEMO_CANDIDATES]);
+}
+
+export function getDemoMatchCards(request: IntentRequest): MatchCardViewModel[] {
+  return getDemoMatches(request).map(toMatchCardViewModel);
 }
