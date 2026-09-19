@@ -1,0 +1,44 @@
+/* Demo 3 structural presentation layer. Scoped exclusively to the signed-out Demo 3 panel. */
+.swipeDemoPanel{background:#f7f4ee!important;color:#20231f!important;border:1px solid #e4ddd1!important;border-radius:28px!important;box-shadow:0 24px 80px rgba(35,31,24,.10)!important}
+.swipeDemoPanel .swipeDemoHeader{height:86px!important;padding:0 42px!important;border-bottom:1px solid #e7e0d5!important;background:#fffdf9!important}
+.swipeDemoPanel .swipeBrand strong{color:#20231f!important;font-size:15px!important;letter-spacing:.22em!important}
+.swipeDemoPanel .swipeBrand small{color:#8b877e!important;font-size:7px!important}
+.swipeDemoPanel .swipeBrand>span{border-color:#9c835e!important;color:#8b704b!important;background:#f5efe5!important}
+.swipeDemoPanel .fp-liveBadge{border:1px solid #d8cbb8!important;border-radius:999px!important;padding:8px 13px!important;color:#8b704b!important;background:#fbf7f0!important;font-size:8px!important;letter-spacing:.12em!important}
+.swipeDemoPanel .swipeDemoHero{grid-template-columns:minmax(0,1fr) minmax(360px,.92fr)!important;gap:64px!important;padding:70px 66px 62px!important;background:linear-gradient(125deg,#fffdf9 0%,#f3eee5 100%)!important}
+.swipeDemoPanel .swipeDemoCopy{max-width:560px!important}
+.swipeDemoPanel .swipeDemoCopy h3{font-size:clamp(34px,4.4vw,64px)!important;line-height:1.08!important;letter-spacing:-.065em!important;color:#242820!important;margin:18px 0 24px!important}
+.swipeDemoPanel .swipeDemoCopy h3 em{color:#9a7950!important}
+.swipeDemoPanel .swipeDemoCopy p{color:#77786f!important;font-size:12px!important;line-height:2.05!important;max-width:470px!important}
+.swipeDemoPanel .fp-kicker{color:#9a7950!important;font-size:8px!important;letter-spacing:.2em!important}
+.swipeDemoPanel .swipeFilters button{border-color:#ded5c7!important;background:#fffdf9!important;color:#7b776e!important;border-radius:999px!important;padding:10px 14px!important;font-size:9px!important}
+.swipeDemoPanel .swipeFilters .selected{background:#9a7950!important;color:#fff!important;border-color:#9a7950!important}
+.swipeDemoPanel .fp-primaryCta{background:#242820!important;color:#fff!important;border:0!important;border-radius:999px!important;padding:16px 22px!important;font-size:11px!important;box-shadow:0 12px 24px rgba(36,40,32,.16)!important}
+.swipeDemoPanel .swipePlatforms{color:#969187!important;font-size:9px!important}
+.swipeDemoPanel .swipeStageTop{color:#9a7950!important;font-size:8px!important}
+.swipeDemoPanel .swipeStack{height:470px!important}
+.swipeDemoPanel .swipeCard{border-color:#e6ddd0!important;border-radius:26px!important;box-shadow:0 25px 55px rgba(56,45,31,.13)!important}
+.swipeDemoPanel .swipeCard.backTwo{background:#e5d8c7!important;opacity:.6!important}
+.swipeDemoPanel .swipeCard.backOne{background:#eee6da!important;opacity:.85!important}
+.swipeDemoPanel .swipeCard.front{background:#fffdf9!important}
+.swipeDemoPanel .swipeCardImage{background:radial-gradient(circle at 50% 30%,#cbb493,#a38a6c 42%,#655541 80%)!important}
+.swipeDemoPanel .swipeCardImage span{color:#fff8ed!important}
+.swipeDemoPanel .swipeCardImage i{background:#fffdf9!important;color:#8c6d45!important;border-radius:999px!important}
+.swipeDemoPanel .swipeCardImage b{color:#fff8ed!important}
+.swipeDemoPanel .swipeCardBody>span{color:#9a958a!important}
+.swipeDemoPanel .swipeCardBody h4{color:#242820!important;font-size:34px!important}
+.swipeDemoPanel .swipeCardBody p{color:#817d74!important}
+.swipeDemoPanel .swipeTags b{border-color:#e2d9cc!important;color:#8a8378!important;background:#faf6ef!important;border-radius:999px!important}
+.swipeDemoPanel .swipeActions button{background:#fffdf9!important;border-color:#d9cebe!important;color:#706858!important;box-shadow:0 8px 20px rgba(56,45,31,.08)!important}
+.swipeDemoPanel .swipeActions .like{background:#9a7950!important;color:#fff!important;border-color:#9a7950!important}
+.swipeDemoPanel .swipeHint{color:#a19a8f!important}
+.swipeDemoPanel .swipeHint b{color:#9a7950!important}
+.swipeDemoPanel .swipePurpose{display:grid!important;grid-template-columns:minmax(220px,.8fr) 1.2fr!important;gap:50px!important;padding:34px 66px!important;background:#fffdf9!important;border-color:#e7e0d5!important}
+.swipeDemoPanel .swipePurpose h4{font-size:24px!important;color:#242820!important}
+.swipeDemoPanel .swipePurposeItems{gap:12px!important;color:#77786f!important;font-size:10px!important}
+.swipeDemoPanel .swipePurposeItems span{border:1px solid #e6ddd0!important;border-radius:999px!important;padding:10px 13px!important;background:#faf6ef!important}
+.swipeDemoPanel .swipeDemoCta{padding:30px 42px!important;background:#242820!important;border-radius:0 0 28px 28px!important}
+.swipeDemoPanel .swipeDemoCta b{color:#fff!important;font-size:15px!important}
+.swipeDemoPanel .swipeDemoCta span{color:#bdb9af!important;font-size:9px!important}
+.swipeDemoPanel .swipeDemoCta button{border:1px solid #cbb493!important;background:#cbb493!important;color:#242820!important;border-radius:999px!important;padding:13px 18px!important;font-size:9px!important}
+@media(max-width:800px){.swipeDemoPanel .swipeDemoHero{grid-template-columns:1fr!important;padding:42px 24px!important;gap:28px!important}.swipeDemoPanel .swipePurpose{grid-template-columns:1fr!important;padding:28px 24px!important;gap:20px!important}.swipeDemoPanel .swipeDemoHeader{padding:0 22px!important}.swipeDemoPanel .swipeDemoCta{padding:26px 24px!important}}
