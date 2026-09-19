@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildMatchReasons, rankCandidates } from './matching-experience';
+import { buildMatchReasons, getDemoMatches, rankCandidates } from './matching-experience';
 import type { CandidateProfile, IntentRequest } from './matching-intents';
 
 const request: IntentRequest = {
@@ -52,5 +52,12 @@ describe('matching experience helpers', () => {
       { ...candidates[0], id: 'alpha' },
     ];
     expect(rankCandidates({ ...request, intentId: 'learn', summary: '' }, tied).map((item) => item.candidate.id)).toEqual(['alpha', 'zulu']);
+  });
+
+  it('returns the reusable demo dataset in ranked order', () => {
+    const ranked = getDemoMatches(request);
+    expect(ranked[0].candidate.id).toBe('alex');
+    expect(ranked[0].score).toBeGreaterThan(ranked[1].score);
+    expect(ranked[0].reasons.map((reason) => reason.label)).toContain('目的が一致');
   });
 });
