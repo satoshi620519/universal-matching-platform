@@ -93,6 +93,28 @@ function LandingPage(){
     </div>
    </section>
 
+   <section id="reference-purchase" style={{padding:'96px 6vw',background:'#f7f8fa',color:'#171b24'}}>
+    <div style={{maxWidth:'1180px',margin:'0 auto'}}>
+     <div style={{textAlign:'center',marginBottom:'52px'}}>
+      <span style={{display:'inline-block',fontSize:'12px',fontWeight:700,letterSpacing:'.18em',color:'#5d72f2',marginBottom:'14px'}}>FOR BUYERS · UNIVERSAL MATCHING PLATFORM</span>
+      <h2 style={{fontSize:'clamp(32px,4vw,54px)',lineHeight:1.15,margin:'0 0 18px',letterSpacing:'-.04em'}}>買ったその日から使える。<br/><strong>自由に変えて、どんな分野のマッチングにも。</strong></h2>
+      <p style={{maxWidth:'800px',margin:'0 auto',fontSize:'16px',lineHeight:1.9,color:'#667085'}}>ゼロから開発するのではなく、完成したマッチング基盤をそのまま使うことも、自分のブランドや事業に合わせて自由にカスタマイズすることもできます。恋愛、仕事、趣味、スキル、地域、サービスなど、用途を限定しないユニバーサルな土台です。</p>
+     </div>
+     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))',gap:'16px'}}>
+      {[['01','そのまま使える完成品','マッチング、プロフィール、検索、LIKE、相互マッチ、メッセージ、通知、安心・安全など、主要機能を備えた基盤を購入後そのまま利用できます。'],['02','自由にカスタマイズできる','ロゴ、カラー、画像、文章、サービス名、プロフィール項目、地域、言語などを変更して、自分のブランドとして展開できます。'],['03','どの分野のマッチングにも','恋愛だけに限定せず、仕事、採用、ビジネス、スキル、趣味、コミュニティ、地域、サービスなど、目的に合わせて使えます。'],['04','ソースコードから自由に拡張','購入者や開発者がソースコードを編集し、独自のマッチング条件、機能、API、決済、管理機能などを追加・変更できます。'],['05','Web・iOS・Androidへ展開','Webを中心に、iOS・Androidにも展開できる共通のプロダクト基盤として、自分のサービスへ発展させられます。'],['06','購入後のスタートも分かりやすく','セットアップ、利用方法、管理、カスタマイズの入口まで整理し、購入した後に「何をすればいいか」が分かる形を目指します。']].map(([n,title,desc])=><article key={n} style={{background:'#fff',border:'1px solid #e7eaf0',borderRadius:'18px',padding:'28px',boxShadow:'0 10px 30px rgba(20,30,50,.05)'}}>
+       <span style={{display:'block',fontSize:'12px',fontWeight:700,letterSpacing:'.14em',color:'#5d72f2',marginBottom:'22px'}}>{n}</span>
+       <h3 style={{fontSize:'20px',margin:'0 0 12px',lineHeight:1.45}}>{title}</h3>
+       <p style={{fontSize:'14px',lineHeight:1.85,color:'#667085',margin:0}}>{desc}</p>
+      </article>)}
+     </div>
+     <div style={{marginTop:'34px',padding:'26px 28px',borderRadius:'16px',background:'#171b24',color:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'24px',flexWrap:'wrap'}}>
+      <div><strong style={{display:'block',fontSize:'18px',marginBottom:'6px'}}>完成品を買って、そのまま使う。必要なら、自由に作り変える。</strong><span style={{fontSize:'13px',color:'#b9c0ce'}}>「そのまま使える」と「自由にカスタムできる」を両立し、あなたのアイデアをどんな分野のマッチングサービスにも発展させるためのプラットフォームです。</span></div>
+      <button type="button" onClick={()=>go('demo')} style={{border:0,borderRadius:'999px',padding:'13px 20px',background:'#fff',color:'#171b24',fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'}}>実際のシステムを見る →</button>
+     </div>
+    </div>
+   </section>
+
+
    <section className="referenceFeatures" id="reference-features">
     <div className="referenceFeatureCopy">
      <span className="referenceBlueKicker">FEATURES</span>
@@ -118,27 +140,6 @@ function LandingPage(){
      </div>
     </div>
     <div className="referenceCouple" style={{backgroundImage:"url('"+coupleImage+"')"}}><div className="referenceCoupleOverlay"/><span>New encounters,<br/><i>new stories</i></span></div>
-   </section>
-
-   <section id="reference-purchase" style={{padding:'96px 6vw',background:'#f7f8fa',color:'#171b24'}}>
-    <div style={{maxWidth:'1180px',margin:'0 auto'}}>
-     <div style={{textAlign:'center',marginBottom:'52px'}}>
-      <span style={{display:'inline-block',fontSize:'12px',fontWeight:700,letterSpacing:'.18em',color:'#5d72f2',marginBottom:'14px'}}>FOR BUYERS · UNIVERSAL MATCHING PLATFORM</span>
-      <h2 style={{fontSize:'clamp(32px,4vw,54px)',lineHeight:1.15,margin:'0 0 18px',letterSpacing:'-.04em'}}>買ったその日から使える。<br/><strong>自由に変えて、どんな分野のマッチングにも。</strong></h2>
-      <p style={{maxWidth:'800px',margin:'0 auto',fontSize:'16px',lineHeight:1.9,color:'#667085'}}>ゼロから開発するのではなく、完成したマッチング基盤をそのまま使うことも、自分のブランドや事業に合わせて自由にカスタマイズすることもできます。恋愛、仕事、趣味、スキル、地域、サービスなど、用途を限定しないユニバーサルな土台です。</p>
-     </div>
-     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))',gap:'16px'}}>
-      {[['01','そのまま使える完成品','マッチング、プロフィール、検索、LIKE、相互マッチ、メッセージ、通知、安心・安全など、主要機能を備えた基盤を購入後そのまま利用できます。'],['02','自由にカスタマイズできる','ロゴ、カラー、画像、文章、サービス名、プロフィール項目、地域、言語などを変更して、自分のブランドとして展開できます。'],['03','どの分野のマッチングにも','恋愛だけに限定せず、仕事、採用、ビジネス、スキル、趣味、コミュニティ、地域、サービスなど、目的に合わせて使えます。'],['04','ソースコードから自由に拡張','購入者や開発者がソースコードを編集し、独自のマッチング条件、機能、API、決済、管理機能などを追加・変更できます。'],['05','Web・iOS・Androidへ展開','Webを中心に、iOS・Androidにも展開できる共通のプロダクト基盤として、自分のサービスへ発展させられます。'],['06','購入後のスタートも分かりやすく','セットアップ、利用方法、管理、カスタマイズの入口まで整理し、購入した後に「何をすればいいか」が分かる形を目指します。']].map(([n,title,desc])=><article key={n} style={{background:'#fff',border:'1px solid #e7eaf0',borderRadius:'18px',padding:'28px',boxShadow:'0 10px 30px rgba(20,30,50,.05)'}}>
-       <span style={{display:'block',fontSize:'12px',fontWeight:700,letterSpacing:'.14em',color:'#5d72f2',marginBottom:'22px'}}>{n}</span>
-       <h3 style={{fontSize:'20px',margin:'0 0 12px',lineHeight:1.45}}>{title}</h3>
-       <p style={{fontSize:'14px',lineHeight:1.85,color:'#667085',margin:0}}>{desc}</p>
-      </article>)}
-     </div>
-     <div style={{marginTop:'34px',padding:'26px 28px',borderRadius:'16px',background:'#171b24',color:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'24px',flexWrap:'wrap'}}>
-      <div><strong style={{display:'block',fontSize:'18px',marginBottom:'6px'}}>完成品を買って、そのまま使う。必要なら、自由に作り変える。</strong><span style={{fontSize:'13px',color:'#b9c0ce'}}>「そのまま使える」と「自由にカスタムできる」を両立し、あなたのアイデアをどんな分野のマッチングサービスにも発展させるためのプラットフォームです。</span></div>
-      <button type="button" onClick={()=>go('demo')} style={{border:0,borderRadius:'999px',padding:'13px 20px',background:'#fff',color:'#171b24',fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'}}>実際のシステムを見る →</button>
-     </div>
-    </div>
    </section>
 
    <section className="referenceStats" id="reference-plans" style={{backgroundImage:"url('"+cityImage+"')"}}>
