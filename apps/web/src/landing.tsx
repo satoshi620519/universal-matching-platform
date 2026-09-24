@@ -113,6 +113,21 @@ function LandingPage(){
     <div className="referenceStatsOverlay"><p>今、世界中で選ばれています</p><div><article><strong>100<span>万人+</span></strong><small>累計登録者数</small></article><article><strong>50<span>か国+</span></strong><small>対応国・地域</small></article><article><strong>98<span>%</span></strong><small>マッチング成功率</small></article></div><button onClick={()=>scroll('demo')}>今すぐ無料で始める <span>→</span></button><small>あなたの新しい出会いが、ここから始まります。</small></div>
    </section>
 
+   <section className="referenceUseCases">
+    <div className="referenceUseCaseIntro"><span className="referenceBlueKicker">MATCHING FOR EVERY PURPOSE</span><h2>出会い方は、<br/><strong>ひとつじゃない。</strong></h2><p>恋愛だけではありません。仕事、趣味、地域、スキル。<br/>ひとつの基盤を、さまざまなサービスへ。</p></div>
+    <div className="referenceUseCaseGrid">
+      <article><span>01</span><i>♡</i><h3>恋愛・パートナー</h3><p>価値観や趣味、ライフスタイルから相性のよい相手を探す。</p><button onClick={()=>scroll('demo')}>体験する →</button></article>
+      <article><span>02</span><i>◇</i><h3>友だち・コミュニティ</h3><p>共通の興味や地域から、新しい仲間とのつながりをつくる。</p><button onClick={()=>scroll('demo')}>体験する →</button></article>
+      <article><span>03</span><i>↗</i><h3>ビジネス・仕事</h3><p>採用、業務提携、人脈づくり、専門家との出会いに。</p><button onClick={()=>scroll('demo')}>体験する →</button></article>
+      <article><span>04</span><i>◎</i><h3>スキル・サービス</h3><p>教える人、相談したい人、依頼したい人を目的でつなぐ。</p><button onClick={()=>scroll('demo')}>体験する →</button></article>
+    </div>
+   </section>
+
+   <section className="referenceClosing">
+    <div><span className="referenceBlueKicker">START YOUR CONNECTION</span><h2>新しいつながりを、<br/><strong>ここから。</strong></h2><p>登録して、探して、つながる。<br/>あなたのサービスとしても、そのまま始められます。</p></div>
+    <button onClick={()=>scroll('demo')}>今すぐ無料で始める <span>→</span></button>
+   </section>
+
    <section className="referenceDemoBridge"><span>UNIVERSAL MATCHING PLATFORM</span><h2>実際のサービスを、<em>そのまま体験。</em></h2><p>この先では、ログインからマッチング、メッセージ、安心・安全、地域設定まで実際に操作できます。</p><button onClick={()=>scroll('demo')}>インタラクティブデモを見る →</button></section>
    <section id="ref-faq" className="referenceFaq"><div><span>FAQ</span><h2>よくある質問</h2></div><div><article><b>無料で始められますか？</b><p>はい。デモは無料で体験でき、実際の主要機能を確認できます。</p></article><article><b>どの地域で利用できますか？</b><p>国・地域・言語・タイムゾーンを切り替えられる設計です。</p></article><article><b>スマートフォンにも対応していますか？</b><p>Webに加えてiOS・Androidへ展開できる基盤として設計されています。</p></article></div></section>
    <FullProductDemo/>
