@@ -77,8 +77,7 @@ function LandingPage(){
   <header className="referenceNav">
    <button className="referenceBrand" type="button" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}><span className="referenceBrandMark"><i/><b/></span><strong>Universal Matching</strong></button>
    <nav><button onClick={()=>go('reference-features')}>ホーム</button><button onClick={()=>go('reference-features')}>機能紹介</button><button onClick={()=>go('reference-plans')}>料金プラン</button><button onClick={()=>go('reference-faq')}>よくある質問</button></nav>
-   <div className="referenceNavActions"><button className="referenceLogin" onClick={()=>go('demo')}>ログイン</button><button className="referenceStart" onClick={()=>go('demo')}>無料で始める <span>→</span></button></div>
-  </header>
+   <div className="referenceNavActions"><button className="referenceLogin" onClick={()=>go('demo')}>ログイン</button><button className="referenceStart" onClick={()=>go('demo')}>無料で始める <span>→</span></button></div>  </header>
 
   <main>
    <section className="referenceHero">
@@ -118,6 +117,27 @@ function LandingPage(){
      </div>
     </div>
     <div className="referenceCouple" style={{backgroundImage:"url('"+coupleImage+"')"}}><div className="referenceCoupleOverlay"/><span>New encounters,<br/><i>new stories</i></span></div>
+   </section>
+
+   <section id="reference-purchase" style={{padding:'96px 6vw',background:'#f7f8fa',color:'#171b24'}}>
+    <div style={{maxWidth:'1180px',margin:'0 auto'}}>
+     <div style={{textAlign:'center',marginBottom:'52px'}}>
+      <span style={{display:'inline-block',fontSize:'12px',fontWeight:700,letterSpacing:'.18em',color:'#5d72f2',marginBottom:'14px'}}>FOR BUYERS</span>
+      <h2 style={{fontSize:'clamp(32px,4vw,54px)',lineHeight:1.15,margin:'0 0 18px',letterSpacing:'-.04em'}}>このシステムを買うと、<br/><strong>自分のマッチングサービスとして使えます。</strong></h2>
+      <p style={{maxWidth:'760px',margin:'0 auto',fontSize:'16px',lineHeight:1.9,color:'#667085'}}>ゼロから開発するのではなく、完成したマッチング基盤を土台にして、あなたのブランド・市場・目的に合わせてサービス化できます。</p>
+     </div>
+     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))',gap:'16px'}}>
+      {[['01','買ったままでも使える','マッチング、プロフィール、検索、LIKE、相互マッチ、メッセージ、通知、安心・安全など、サービス運営に必要な主要機能をまとめた基盤です。'],['02','自分のブランドに変えられる','ロゴ、カラー、画像、文章、サービス名、プロフィール項目、地域や言語などを変更して、自分のサービスとして見せられます。'],['03','目的に合わせて作り替えられる','恋愛だけでなく、仕事、スキル、趣味、コミュニティ、サービスなど、販売先の用途に合わせて構成を変更できます。'],['04','コードから自由に拡張できる','購入者や開発者がソースコードを編集し、独自のマッチング条件、機能、API、決済、管理機能などを追加できます。'],['05','Web・iOS・Androidへ展開できる','Webを中心に、iOS・Androidへ展開できる共通基盤として、将来のサービス拡張を見据えて利用できます。'],['06','購入後のスタートが分かりやすい','セットアップ、利用方法、管理、カスタマイズの入口まで整理し、購入者が次に何をすればいいか分かる形を目指します。']].map(([n,title,desc])=><article key={n} style={{background:'#fff',border:'1px solid #e7eaf0',borderRadius:'18px',padding:'28px',boxShadow:'0 10px 30px rgba(20,30,50,.05)'}}>
+       <span style={{display:'block',fontSize:'12px',fontWeight:700,letterSpacing:'.14em',color:'#5d72f2',marginBottom:'22px'}}>{n}</span>
+       <h3 style={{fontSize:'20px',margin:'0 0 12px',lineHeight:1.45}}>{title}</h3>
+       <p style={{fontSize:'14px',lineHeight:1.85,color:'#667085',margin:0}}>{desc}</p>
+      </article>)}
+     </div>
+     <div style={{marginTop:'34px',padding:'24px 28px',borderRadius:'16px',background:'#171b24',color:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'24px',flexWrap:'wrap'}}>
+      <div><strong style={{display:'block',fontSize:'18px',marginBottom:'6px'}}>つまり、「完成品を買って、自分のサービスにする」という使い方です。</strong><span style={{fontSize:'13px',color:'#b9c0ce'}}>見た目だけを変える使い方から、ソースコードを編集して本格的に作り込む使い方まで対応します。</span></div>
+      <button type="button" onClick={()=>go('demo')} style={{border:0,borderRadius:'999px',padding:'13px 20px',background:'#fff',color:'#171b24',fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'}}>実際のシステムを見る →</button>
+     </div>
+    </div>
    </section>
 
    <section className="referenceStats" id="reference-plans" style={{backgroundImage:"url('"+cityImage+"')"}}>
