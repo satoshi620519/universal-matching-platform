@@ -90,6 +90,11 @@ function LandingPage(){
      <p>同じ価値観、同じ趣味、同じ未来を描ける人と出会える<br className="desktopOnly"/>次世代のマッチングプラットフォームです。</p>
      <div className="referenceHeroButtons"><button className="referencePrimary" onClick={()=>go('demo')}>今すぐ無料で始める <span>→</span></button><button className="referenceSecondary" onClick={()=>go('demo')}>アプリをダウンロード</button></div>
      <div className="referenceStores"><span className="referenceStore"><b>●</b><strong>App Store</strong><small>からダウンロード</small></span><span className="referenceStore"><b>▶</b><strong>Google Play</strong><small>で入手できます</small></span></div>
+     <div style={{marginTop:'28px',maxWidth:'720px',padding:'20px 22px',borderRadius:'16px',background:'rgba(255,255,255,.94)',color:'#171b24',boxShadow:'0 18px 45px rgba(0,0,0,.16)'}}>
+      <span style={{display:'block',fontSize:'11px',fontWeight:800,letterSpacing:'.16em',color:'#5d72f2',marginBottom:'8px'}}>FOR BUYERS · THIS IS WHAT YOU BUY</span>
+      <strong style={{display:'block',fontSize:'clamp(18px,2vw,25px)',lineHeight:1.35,marginBottom:'7px'}}>完成したマッチング基盤を買って、自分のサービスとして使えます。</strong>
+      <span style={{display:'block',fontSize:'13px',lineHeight:1.7,color:'#667085'}}>ロゴ・カラー・画像を変えてすぐに使うことも、ソースコードを編集して独自サービスへ拡張することもできます。</span>
+     </div>
     </div>
    </section>
 
