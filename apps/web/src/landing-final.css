@@ -214,3 +214,134 @@
 .premiumReasons{padding:112px clamp(28px,7vw,108px);background:#f8f9fc;position:relative}.premiumReasonsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1200px;margin:0 auto}.premiumReasonsGrid article{position:relative;min-height:255px;padding:29px;background:#fff;border:1px solid #e4e9f1;border-radius:18px;box-shadow:0 12px 35px rgba(30,45,70,.045);transition:.25s}.premiumReasonsGrid article:hover{transform:translateY(-5px);border-color:#cfd8ee;box-shadow:0 22px 50px rgba(30,45,70,.09)}.premiumReasonsGrid article>span{position:absolute;top:25px;right:26px;font-size:8px;color:#9aa5b7;letter-spacing:.12em}.premiumReasonIcon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#eef3ff,#f5f1ff);color:#5d70d2;font-size:18px;box-shadow:inset 0 0 0 1px rgba(93,112,210,.08)}.premiumReasonsGrid h3{font-size:18px;letter-spacing:-.035em;margin:22px 0 9px;color:#151e2d}.premiumReasonsGrid p{font-size:10px;line-height:1.9;color:#748095;margin:0;max-width:300px}
 @media(max-width:900px){.premiumProof{display:grid;grid-template-columns:1fr;gap:20px}.premiumProofTags{min-width:0!important;width:100%;max-width:500px}.premiumReasonsGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.premiumProof{min-height:auto;padding:34px 18px}.premiumProof strong{font-size:24px}.premiumProof p{font-size:10px}.premiumProofTags{grid-template-columns:repeat(2,1fr)!important}.premiumReasons{padding:78px 18px}.premiumReasonsGrid{grid-template-columns:1fr}.premiumReasonsGrid article{min-height:220px}}
+
+
+/* Matching foundation section — restore the previous visual language */
+.premiumProduct{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#f7f9fd 0%,#ffffff 48%,#f1f5fc 100%);
+  border-top:1px solid #e7ebf2;
+  border-bottom:1px solid #e7ebf2;
+}
+.premiumProduct::before{
+  content:"";
+  position:absolute;
+  width:520px;height:520px;
+  left:-180px;top:-170px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(88,115,232,.12),transparent 68%);
+  pointer-events:none;
+}
+.premiumProduct::after{
+  content:"02";
+  position:absolute;
+  right:clamp(28px,7vw,108px);
+  top:58px;
+  font-size:72px;
+  font-weight:800;
+  letter-spacing:-.08em;
+  color:rgba(73,91,126,.055);
+  pointer-events:none;
+}
+.premiumProductVisualRestored{
+  position:relative;
+  z-index:1;
+  min-height:560px;
+  border-radius:30px;
+  background:linear-gradient(145deg,#eaf0ff,#f8faff 58%,#edf7fb);
+  box-shadow:0 28px 70px rgba(37,55,91,.12);
+  overflow:hidden;
+}
+.premiumProductVisualRestored::before{
+  content:"MATCHING EXPERIENCE";
+  position:absolute;
+  left:24px;top:22px;
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.2em;
+  color:#7787a6;
+}
+.premiumProductVisualRestored::after{
+  content:"DISCOVER  →  CONNECT  →  TRUST  →  GLOBAL";
+  position:absolute;
+  left:24px;right:24px;bottom:20px;
+  padding-top:13px;
+  border-top:1px solid rgba(76,97,139,.12);
+  font-size:7px;
+  letter-spacing:.13em;
+  color:#77849b;
+}
+.premiumProductCopyRestored{
+  position:relative;
+  z-index:1;
+}
+.premiumProductCopyRestored h2{
+  max-width:650px;
+}
+.premiumProductCopyRestored>p{
+  max-width:590px;
+  font-size:13px;
+  line-height:2;
+}
+.premiumFeatureListRestored{
+  margin-top:30px;
+  border-top:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.premiumFeatureListRestored>div{
+  min-height:78px;
+  padding:15px 16px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  border:1px solid #e2e7ef;
+  border-radius:14px;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 9px 25px rgba(37,55,91,.045);
+  transition:.22s;
+}
+.premiumFeatureListRestored>div:hover{
+  transform:translateY(-3px);
+  border-color:#cbd5ef;
+  box-shadow:0 15px 32px rgba(37,55,91,.08);
+}
+.premiumFeatureListRestored>div>b{
+  width:30px;height:30px;
+  flex:0 0 30px;
+  display:grid;place-items:center;
+  border-radius:9px;
+  background:#111827;
+  color:#fff;
+  font-size:8px;
+  letter-spacing:.04em;
+}
+.premiumFeatureListRestored>div span{
+  display:grid;
+  gap:4px;
+}
+.premiumFeatureListRestored strong{
+  font-size:11px;
+  color:#172033;
+  letter-spacing:.01em;
+}
+.premiumFeatureListRestored small{
+  font-size:8px;
+  line-height:1.5;
+  color:#7a879a;
+}
+@media(max-width:900px){
+  .premiumFeatureListRestored{grid-template-columns:1fr}
+  .premiumProductVisualRestored{min-height:500px}
+}
+@media(max-width:600px){
+  .premiumProduct{padding-top:76px;padding-bottom:76px}
+  .premiumProduct::after{font-size:52px;top:34px}
+  .premiumProductVisualRestored{min-height:420px;border-radius:22px}
+  .premiumProductVisualRestored::after{font-size:5px;letter-spacing:.08em}
+  .premiumFeatureListRestored>div{min-height:70px;padding:13px}
+  .premiumFeatureListRestored strong{font-size:10px}
+  .premiumFeatureListRestored small{font-size:7px}
+}
