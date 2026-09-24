@@ -73,18 +73,86 @@ function LandingPage(){
  const coupleImage='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1400&q=85';
  const cityImage='https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1800&q=85';
  const go=(id:string)=>scrollTo(id);
- return <div className="referenceTop premiumTop" id="reference-top">
-  <header className="premiumNav"><button className="premiumBrand" type="button" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}><span className="premiumBrandMark">N</span><span><b>UNIVERSAL</b><small>MATCHING PLATFORM</small></span></button><nav><button onClick={()=>scrollTo('premium-usecases')}>用途</button><button onClick={()=>scrollTo('premium-product')}>プロダクト</button><button onClick={()=>scrollTo('premium-buy')}>購入者向け</button><button onClick={()=>scrollTo('premium-flow')}>仕組み</button></nav><div className="premiumNavActions"><button className="premiumTextBtn" onClick={()=>scrollTo('demo')}>デモを見る</button><button className="premiumNavCta" onClick={()=>scrollTo('demo')}>体験する <span>↗</span></button></div></header>
+ return <div className="referenceTop" id="reference-top">
+  <header className="referenceNav">
+   <button className="referenceBrand" type="button" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}><span className="referenceBrandMark"><i/><b/></span><strong>Universal Matching</strong></button>
+   <nav><button onClick={()=>go('reference-features')}>ホーム</button><button onClick={()=>go('reference-features')}>機能紹介</button><button onClick={()=>go('reference-plans')}>料金プラン</button><button onClick={()=>go('reference-faq')}>よくある質問</button></nav>
+   <div className="referenceNavActions"><button className="referenceLogin" onClick={()=>go('demo')}>ログイン</button><button className="referenceStart" onClick={()=>go('demo')}>無料で始める <span>→</span></button></div>
+  </header>
+
   <main>
-   <section className="premiumHero"><div className="premiumHeroGlow premiumHeroGlowA"/><div className="premiumHeroGlow premiumHeroGlowB"/><div className="premiumHeroCopy"><span className="premiumEyebrow"><i/> UNIVERSAL MATCHING · READY TO CUSTOMIZE</span><h1>人と目的を、<br/><strong>ひとつの体験で。</strong></h1><p>恋愛、仕事、スキル、趣味、地域、サービス。用途を限定しないマッチング基盤を、完成したプロダクトとして。</p><div className="premiumHeroActions"><button className="premiumPrimary" onClick={()=>scrollTo('demo')}>実際のデモを体験する <span>↗</span></button><button className="premiumGhost" onClick={()=>scrollTo('premium-buy')}>購入後の自由度を見る</button></div><div className="premiumMeta"><span>WEB</span><span>iOS / ANDROID</span><span>GLOBAL</span><span>SAFE BY DESIGN</span></div></div>
-    <div className="premiumHeroVisual"><div className="premiumWindow"><div className="premiumWindowBar"><span><i/><i/><i/></span><b>LIVE PRODUCT · MATCHING</b><em>● ONLINE</em></div><div className="premiumWindowBody"><aside><strong>N</strong><button className="active">⌂</button><button>♡</button><button>◫</button><button>◌</button><button>⚙</button></aside><div className="premiumApp"><div className="premiumAppHead"><div><small>RECOMMENDED FOR YOU</small><h3>次のつながり</h3></div><span>FILTER ☷</span></div><div className="premiumProfileCard"><div className="premiumProfileImage" style={{backgroundImage:"url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=85')"}}><span>96% MATCH</span><b>● ONLINE</b></div><div className="premiumProfileInfo"><small>クリエイター · 東京</small><h4>Mika</h4><p>目的、興味、地域、背景を組み合わせて相手を発見。</p><div><i>写真</i><i>旅行</i><i>デザイン</i></div></div><div className="premiumProfileActions"><button>×</button><button>♡</button><button>↗</button></div></div></div></div><div className="premiumWindowFoot"><span>条件を設定</span><b>→</b><span>相手を発見</span><b>→</b><span>マッチ</span><b>→</b><span>メッセージ</span></div></div><div className="premiumFloat premiumFloatOne"><small>ACTIVE</small><b>24</b><span>online now</span></div><div className="premiumFloat premiumFloatTwo"><span>SMART MATCH</span><b>98%</b><small>purpose · region · interests</small></div></div></section>
-   <section className="premiumProof"><div><small>READY TO USE · READY TO CUSTOMIZE</small><strong>そのまま使える。自由に作り変えられる。</strong><p>デザインも、機能も、ブランドも。あなたのサービスに合わせて自由にカスタマイズ。</p></div><div className="premiumProofTags"><span>DESIGN</span><span>FUNCTION</span><span>BRAND</span><span>INDUSTRY</span><span>REGION</span><span>LANGUAGE</span></div></section>
-   <section className="premiumSection premiumBuy" id="premium-buy"><div className="premiumSectionHead"><span className="premiumEyebrow">01 · FOR BUYERS</span><h2>完成品だから、<br/><em>ゼロから始めない。</em></h2><p>購入後はそのまま使うことも、ブランドや事業に合わせて作り変えることもできます。</p></div><div className="premiumBuyGrid"><article><span>01</span><b>QUICK LAUNCH</b><h3>すぐに自分のサービスへ</h3><p>ロゴ、カラー、画像、文章、地域、言語などを変更してブランドに合わせられます。</p><i>→</i></article><article><span>02</span><b>SOURCE CUSTOMIZE</b><h3>コードから自由に拡張</h3><p>独自の条件、導線、API、プロフィール項目、新機能などを追加・変更できます。</p><i>→</i></article><article><span>03</span><b>UNIVERSAL USE</b><h3>用途を限定しない</h3><p>恋愛だけではなく、仕事、採用、スキル、趣味、地域、サービスにも展開できます。</p><i>→</i></article></div></section>
-   <section className="premiumReasons" id="premium-reasons"><div className="premiumSectionHead centered"><span className="premiumEyebrow">WHY CHOOSE US</span><h2>選ばれる6つの理由</h2><p>私たちは、ただのマッチングではなく、<br/>あなたの人生を豊かにする出会いを提供します。</p></div><div className="premiumReasonsGrid"><article><span>01</span><div className="premiumReasonIcon">♡</div><h3>高精度マッチング</h3><p>AIがあなたの価値観や好みを分析し、最適な相手をご提案します。</p></article><article><span>02</span><div className="premiumReasonIcon">♢</div><h3>安心・安全</h3><p>24時間の監視体制と本人確認で、安心してご利用いただけます。</p></article><article><span>03</span><div className="premiumReasonIcon">◎</div><h3>多言語・多地域対応</h3><p>世界中のユーザーとつながるグローバルなマッチングプラットフォームです。</p></article><article><span>04</span><div className="premiumReasonIcon">♧</div><h3>豊富な検索機能</h3><p>年齢・地域・趣味・職業など細かな条件で理想の相手を見つけられます。</p></article><article><span>05</span><div className="premiumReasonIcon">☆</div><h3>使いやすいUI/UX</h3><p>シンプルで直感的な操作性で誰でも簡単に始められます。</p></article><article><span>06</span><div className="premiumReasonIcon">ϟ</div><h3>すぐに始められる</h3><p>面倒な手続きは不要。登録後すぐにマッチングを始められます。</p></article></div></section>
-   <section className="premiumSection premiumProduct" id="premium-product"><div className="premiumProductVisual premiumProductVisualRestored"><div className="premiumPhone premiumPhoneBack"><div className="premiumPhoneScreen"><div className="premiumMiniTop">MATCHES <span>12</span></div><div className="premiumMiniRows"><i/><i/><i/><i/></div></div></div><div className="premiumPhone premiumPhoneFront"><div className="premiumPhoneScreen"><div className="premiumMiniImage" style={{backgroundImage:"url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=85')"}}/><div className="premiumMiniCopy"><small>98% MATCH · KYOTO</small><h4>Lina</h4><p>アート · 旅 · コミュニティ</p><button>♡ LIKE</button></div></div></div></div><div className="premiumSectionHead premiumProductCopyRestored"><span className="premiumEyebrow">02 · PRODUCT FOUNDATION</span><h2>マッチングに必要な体験を、<br/><em>最初からひとつに。</em></h2><p>探す、条件を絞る、プロフィールを見る、LIKE、相互マッチ、メッセージ、通知、安心・安全。実際の運営を想定した導線をひとつの基盤にまとめています。</p><div className="premiumFeatureList premiumFeatureListRestored"><div><b>01</b><span><strong>Discovery</strong><small>検索・条件・レコメンド</small></span></div><div><b>02</b><span><strong>Connection</strong><small>LIKE・MATCH・メッセージ</small></span></div><div><b>03</b><span><strong>Trust</strong><small>本人確認・通報・公開範囲</small></span></div><div><b>04</b><span><strong>Global</strong><small>国・地域・言語・距離</small></span></div></div></div></section>
-   <section className="premiumUse" id="premium-usecases"><div className="premiumSectionHead centered"><span className="premiumEyebrow">03 · ONE ENGINE / MANY USE CASES</span><h2>同じ基盤から、<em>市場だけを変える。</em></h2><p>マッチングの仕組みは共通。サービスの目的とブランドは、購入者が自由に設計できます。</p></div><div className="premiumUseGrid"><article key="01"><span>01</span><h3>恋愛・パートナー</h3><p>価値観や目的をもとに、真剣な出会いを求める人をつなぐ。</p><b>EXPLORE ↗</b></article><article key="02"><span>02</span><h3>友だち・仲間</h3><p>共通の趣味や関心、ライフスタイルから自然なつながりをつくる。</p><b>EXPLORE ↗</b></article><article key="03"><span>03</span><h3>ビジネス</h3><p>人脈づくり、業務提携、採用、ビジネスパートナーとの出会いに。</p><b>EXPLORE ↗</b></article><article key="04"><span>04</span><h3>メンター・相談相手</h3><p>目標、専門知識、経験、活動時間などをもとに最適な相手をつなぐ。</p><b>EXPLORE ↗</b></article><article key="05"><span>05</span><h3>コミュニティ</h3><p>地域、趣味、イベント、テーマなど、目的に合ったコミュニティをつくる。</p><b>EXPLORE ↗</b></article><article key="06"><span>06</span><h3>サービス・仕事</h3><p>専門家、クリエイター、フリーランサー、地域の事業者と利用者をつなぐ。</p><b>EXPLORE ↗</b></article></div></section>
-   <section className="premiumFlow" id="premium-flow"><div className="premiumSectionHead centered"><span className="premiumEyebrow">04 · THE EXPERIENCE</span><h2>条件から、<em>つながるまで。</em></h2></div><div className="premiumFlowGrid"><article><span>01</span><b>DEFINE</b><h3>目的と条件</h3><p>目的、地域、距離、詳細条件を設定。</p></article><article><span>02</span><b>DISCOVER</b><h3>相手を発見</h3><p>検索とレコメンドから候補を表示。</p></article><article><span>03</span><b>CONNECT</b><h3>マッチする</h3><p>LIKEが一致したらつながりを開始。</p></article><article><span>04</span><b>CONVERSE</b><h3>会話を始める</h3><p>メッセージと通知で関係を育てる。</p></article></div></section>
-   <section className="premiumFinalCta"><div><span className="premiumEyebrow">05 · INTERACTIVE DEMO</span><h2>見て終わりではなく、<br/><em>実際に触って判断する。</em></h2><p>主要機能をまとめた実機型デモで、操作感と完成度を確認できます。</p></div><button className="premiumPrimary" onClick={()=>scrollTo('demo')}>デモを完全に体験する <span>↗</span></button></section>
+   <section className="referenceHero">
+    <div className="referenceHeroImage" style={{backgroundImage:"url('"+heroImage+"')"}}/>
+    <div className="referenceHeroOverlay"/>
+    <div className="referenceHeroCopy">
+     <span className="referenceKicker">あなたの「好き」が、きっと見つかる</span>
+     <h1>つながる、広がる、<br/><strong>新しい出会いのカタチ</strong></h1>
+     <p>同じ価値観、同じ趣味、同じ未来を描ける人と出会える<br className="desktopOnly"/>次世代のマッチングプラットフォームです。</p>
+     <div className="referenceHeroButtons"><button className="referencePrimary" onClick={()=>go('demo')}>今すぐ無料で始める <span>→</span></button><button className="referenceSecondary" onClick={()=>go('demo')}>アプリをダウンロード</button></div>
+     <div className="referenceStores"><span className="referenceStore"><b>●</b><strong>App Store</strong><small>からダウンロード</small></span><span className="referenceStore"><b>▶</b><strong>Google Play</strong><small>で入手できます</small></span></div>
+    </div>
+   </section>
+
+   <section id="reference-purchase" style={{padding:'96px 6vw',background:'#f7f8fa',color:'#171b24'}}>
+    <div style={{maxWidth:'1180px',margin:'0 auto'}}>
+     <div style={{textAlign:'center',marginBottom:'52px'}}>
+      <span style={{display:'inline-block',fontSize:'12px',fontWeight:700,letterSpacing:'.18em',color:'#5d72f2',marginBottom:'14px'}}>FOR BUYERS · UNIVERSAL MATCHING PLATFORM</span>
+      <h2 style={{fontSize:'clamp(32px,4vw,54px)',lineHeight:1.15,margin:'0 0 18px',letterSpacing:'-.04em'}}>買ったその日から使える。<br/><strong>自由に変えて、どんな分野のマッチングにも。</strong></h2>
+      <p style={{maxWidth:'800px',margin:'0 auto',fontSize:'16px',lineHeight:1.9,color:'#667085'}}>ゼロから開発するのではなく、完成したマッチング基盤をそのまま使うことも、自分のブランドや事業に合わせて自由にカスタマイズすることもできます。恋愛、仕事、趣味、スキル、地域、サービスなど、用途を限定しないユニバーサルな土台です。</p>
+     </div>
+     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(230px,1fr))',gap:'16px'}}>
+      {[['01','そのまま使える完成品','マッチング、プロフィール、検索、LIKE、相互マッチ、メッセージ、通知、安心・安全など、主要機能を備えた基盤を購入後そのまま利用できます。'],['02','自由にカスタマイズできる','ロゴ、カラー、画像、文章、サービス名、プロフィール項目、地域、言語などを変更して、自分のブランドとして展開できます。'],['03','どの分野のマッチングにも','恋愛だけに限定せず、仕事、採用、ビジネス、スキル、趣味、コミュニティ、地域、サービスなど、目的に合わせて使えます。'],['04','ソースコードから自由に拡張','購入者や開発者がソースコードを編集し、独自のマッチング条件、機能、API、決済、管理機能などを追加・変更できます。'],['05','Web・iOS・Androidへ展開','Webを中心に、iOS・Androidにも展開できる共通のプロダクト基盤として、自分のサービスへ発展させられます。'],['06','購入後のスタートも分かりやすく','セットアップ、利用方法、管理、カスタマイズの入口まで整理し、購入した後に「何をすればいいか」が分かる形を目指します。']].map(([n,title,desc])=><article key={n} style={{background:'#fff',border:'1px solid #e7eaf0',borderRadius:'18px',padding:'28px',boxShadow:'0 10px 30px rgba(20,30,50,.05)'}}>
+       <span style={{display:'block',fontSize:'12px',fontWeight:700,letterSpacing:'.14em',color:'#5d72f2',marginBottom:'22px'}}>{n}</span>
+       <h3 style={{fontSize:'20px',margin:'0 0 12px',lineHeight:1.45}}>{title}</h3>
+       <p style={{fontSize:'14px',lineHeight:1.85,color:'#667085',margin:0}}>{desc}</p>
+      </article>)}
+     </div>
+     <div style={{marginTop:'34px',padding:'26px 28px',borderRadius:'16px',background:'#171b24',color:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'24px',flexWrap:'wrap'}}>
+      <div><strong style={{display:'block',fontSize:'18px',marginBottom:'6px'}}>完成品を買って、そのまま使う。必要なら、自由に作り変える。</strong><span style={{fontSize:'13px',color:'#b9c0ce'}}>「そのまま使える」と「自由にカスタムできる」を両立し、あなたのアイデアをどんな分野のマッチングサービスにも発展させるためのプラットフォームです。</span></div>
+      <button type="button" onClick={()=>go('demo')} style={{border:0,borderRadius:'999px',padding:'13px 20px',background:'#fff',color:'#171b24',fontWeight:700,cursor:'pointer',whiteSpace:'nowrap'}}>実際のシステムを見る →</button>
+     </div>
+    </div>
+   </section>
+
+
+   <section className="referenceFeatures" id="reference-features">
+    <div className="referenceFeatureCopy">
+     <span className="referenceBlueKicker">FEATURES</span>
+     <h2>選ばれる6つの理由</h2>
+     <p>私たちは、ただのマッチングではなく、<br/>あなたの人生を豊かにする出会いを提供します。</p>
+     <div className="referenceFeatureGrid">
+      {[['♡','高精度マッチング','AIがあなたの価値観や好みを分析し、最適な相手をご提案します。'],['♢','安心・安全','24時間の監視体制と本人確認で、安心してご利用いただけます。'],['◎','多言語・多地域対応','世界中のユーザーとつながるグローバルなマッチングプラットフォームです。'],['♧','豊富な検索機能','年齢・地域・趣味・職業など細かな条件で理想の相手を見つけられます。'],['☆','使いやすいUI/UX','シンプルで直感的な操作性で誰でも簡単に始められます。'],['ϟ','すぐに始められる','面倒な手続きは不要。登録後すぐにマッチングを始められます。']].map(([icon,title,desc])=><article key={title}><span className="referenceFeatureIcon">{icon}</span><h3>{title}</h3><p>{desc}</p></article>)}
+     </div>
+    </div>
+    <div className="referencePhones">
+     <div className="referencePhone referencePhoneBack"><div className="referencePhoneNotch"/><div className="referencePhoneScreen referenceChat"><div className="referenceAppBar">‹ <b>あやか</b> <span>◌</span></div><div className="referenceChatPerson"><img src={secondImage}/><div><b>あやか</b><small>26歳 · 東京</small></div></div><div className="referenceBubble left">はじめまして！<br/>マッチングありがとうございます！</div><div className="referenceBubble right">こちらこそ！<br/>よろしくお願いします♡</div><div className="referenceBubble left">カフェ巡りが大好きです♪</div><div className="referenceInput">メッセージを入力… <span>➤</span></div></div></div>
+     <div className="referencePhone referencePhoneFront"><div className="referencePhoneNotch"/><div className="referencePhoneScreen"><div className="referenceAppBar">♡ <b>Universal Matching</b><span>◌</span></div><div className="referenceProfilePhoto" style={{backgroundImage:"url('"+secondImage+"')"}}/><div className="referenceProfileBody"><h3>あやか <small>26歳</small></h3><p>東京 / 会社員</p><span>カフェ巡りと旅行が好きです。<br/>一緒にいろんな場所を見に行きたいです！</span><div className="referenceTags"><i>カフェ</i><i>旅行</i><i>映画</i><i>グルメ</i></div></div><div className="referenceSwipe"><button>×</button><button>♥</button><button>★</button></div><div className="referenceBottomTabs"><span>⌂<small>ホーム</small></span><span>⌕<small>検索</small></span><span>♧<small>メッセージ</small></span><span>◎<small>マイページ</small></span></div></div></div>
+    </div>
+   </section>
+
+   <section className="referenceSteps">
+    <div className="referenceStepsCopy">
+     <span className="referenceBlueKicker">HOW IT WORKS</span>
+     <h2>かんたん3ステップで始められる</h2>
+     <p>登録からマッチングまで、たったの3ステップ。<br/>すぐに理想の出会いを見つけることができます。</p>
+     <div className="referenceStepGrid">
+      {[['1','♙','会員登録','メールアドレスやSNSで簡単に登録できます。'],['2','⌕','プロフィール作成','あなたのことをもっと知ってもらうために、プロフィールを作成しましょう。'],['3','♡','マッチング開始','理想の相手を見つけて、メッセージを送りましょう。']].map(([n,icon,title,desc],i)=><article key={n}><span className="referenceStepNo">{n}</span><div className="referenceStepIcon">{icon}</div><h3>{title}</h3><p>{desc}</p>{i<2&&<b className="referenceStepArrow">→</b>}</article>)}
+     </div>
+    </div>
+    <div className="referenceCouple" style={{backgroundImage:"url('"+coupleImage+"')"}}><div className="referenceCoupleOverlay"/><span>New encounters,<br/><i>new stories</i></span></div>
+   </section>
+
+   <section className="referenceStats" id="reference-plans" style={{backgroundImage:"url('"+cityImage+"')"}}>
+    <div className="referenceStatsOverlay"/>
+    <div className="referenceStatsInner">
+     <span className="referenceStatsLead">今、世界中で選ばれています</span>
+     <div className="referenceStatGrid"><div><strong>100</strong><b>万人+</b><small>累計登録者数</small></div><div><strong>50</strong><b>か国+</b><small>対応国・地域</small></div><div><strong>98</strong><b>%</b><small>マッチング成功率</small></div></div>
+     <button className="referenceStatsButton" onClick={()=>go('demo')}>今すぐ無料で始める <span>→</span></button>
+     <p>あなたの新しい出会いが、ここから始まります。</p>
+    </div>
+   </section>
+
+   <section className="referenceHiddenAnchor" id="reference-faq" aria-hidden="true"/>
   </main>
  </div>
 }
