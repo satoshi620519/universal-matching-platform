@@ -124,3 +124,51 @@
  .referenceStepGrid{grid-template-columns:1fr}.referenceStepArrow{display:none}.referenceStepGrid article{padding-left:34px;text-align:left;min-height:70px}.referenceStepIcon{margin:0 0 6px}.referenceStepNo{left:0}.referenceStepGrid p{margin:0}.referenceCouple{height:220px}.referenceCouple>span{font-size:23px}
  .referenceStatGrid strong{font-size:22px}.referenceStatGrid b{font-size:9px}.referenceStatsButton{font-size:9px;padding:8px 20px}
 }
+\n
+/* PREMIUM TOP VISUAL PASS — scoped to referenceTop only */
+.referenceTop{background:#f6f8fc;color:#111827}
+.referenceNav{height:72px;padding:0 clamp(22px,5vw,76px);background:rgba(255,255,255,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(20,32,55,.08);box-shadow:0 8px 30px rgba(22,36,64,.04)}
+.referenceBrand{gap:12px}.referenceBrand strong{font-size:15px;letter-spacing:-.035em}.referenceBrandMark{transform:scale(1.05)}
+.referenceNav nav{gap:34px}.referenceNav nav button{font-size:11px;color:#647084;transition:.2s}.referenceNav nav button:hover{color:#1b2740;transform:translateY(-1px)}
+.referenceLogin{border-color:#d7dce5;padding:9px 20px;color:#344054;background:rgba(255,255,255,.7)}
+.referenceStart{padding:11px 20px;background:linear-gradient(135deg,#4c8dff 0%,#6a4df5 100%);box-shadow:0 10px 24px rgba(86,101,235,.24);transition:.25s}
+.referenceStart:hover,.referencePrimary:hover,.referenceStatsButton:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(86,101,235,.3)}
+.referenceHero{height:590px;background:#eef3fb}
+.referenceHeroImage{inset:0 0 0 39%;background-position:center 25%;filter:saturate(.92) contrast(1.02)}
+.referenceHeroOverlay{background:linear-gradient(90deg,#f7f9fc 0%,#f7f9fc 30%,rgba(247,249,252,.94) 42%,rgba(247,249,252,.45) 59%,rgba(247,249,252,.03) 78%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(12,25,48,.08))}
+.referenceHeroCopy{width:min(650px,48vw);margin-left:clamp(42px,7vw,112px)}
+.referenceKicker{display:inline-flex;align-items:center;gap:10px;font-family:inherit;font-size:11px;letter-spacing:.16em;color:#5575bd;font-weight:700;text-transform:uppercase}
+.referenceKicker:before{content:"";width:28px;height:1px;background:#6b8ff0}
+.referenceHeroCopy h1{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Arial,sans-serif;font-size:clamp(42px,5vw,70px);line-height:1.12;letter-spacing:-.065em;font-weight:700;color:#101a2d;margin:18px 0 18px}
+.referenceHeroCopy h1 strong{background:linear-gradient(110deg,#2f73e8,#6b50e9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.referenceHeroCopy p{font-size:14px;line-height:1.9;color:#5d687b;font-weight:400;max-width:540px;margin-bottom:28px}
+.referenceHeroButtons{gap:12px}.referencePrimary{padding:14px 24px;font-size:11px;box-shadow:0 12px 26px rgba(65,126,236,.22);transition:.25s}
+.referenceSecondary{padding:13px 22px;border-color:#d2d8e3;background:rgba(255,255,255,.72);transition:.2s}
+.referenceSecondary:hover{background:#fff;transform:translateY(-1px)}
+.referenceStores{margin-top:22px;gap:10px}.referenceStore{width:116px;height:34px;border-radius:7px;box-shadow:0 7px 18px rgba(15,23,42,.12)}
+.referenceHero:after{content:"UNIVERSAL MATCHING PLATFORM";position:absolute;right:clamp(22px,5vw,76px);bottom:24px;font-size:8px;letter-spacing:.28em;color:rgba(255,255,255,.72);writing-mode:vertical-rl;z-index:2}
+#reference-purchase{padding:110px 6vw!important;background:linear-gradient(180deg,#f7f9fc 0%,#eef3fa 100%)!important;position:relative}
+#reference-purchase:before{content:"";position:absolute;width:420px;height:420px;right:-140px;top:-120px;border-radius:50%;background:radial-gradient(circle,rgba(92,117,239,.13),transparent 68%);pointer-events:none}
+#reference-purchase h2{font-weight:700!important;color:#101a2d!important}
+#reference-purchase article{border-radius:22px!important;border-color:rgba(116,132,163,.18)!important;box-shadow:0 16px 45px rgba(35,55,90,.07)!important;transition:.25s}
+#reference-purchase article:hover{transform:translateY(-6px);box-shadow:0 25px 55px rgba(35,55,90,.12)!important;border-color:rgba(89,113,235,.24)!important}
+.referenceFeatures{min-height:620px;padding:78px clamp(45px,7vw,110px);background:#fff}
+.referenceFeatureCopy h2,.referenceStepsCopy h2{font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic',Arial,sans-serif;font-weight:700;letter-spacing:-.055em;font-size:clamp(30px,3vw,44px)}
+.referenceFeatureCopy>p{font-size:12px;color:#697589;line-height:1.9}
+.referenceFeatureGrid{gap:30px 28px}.referenceFeatureIcon{box-shadow:0 10px 22px rgba(50,70,100,.08)}
+.referencePhones{height:520px}
+.referencePhone{border-width:6px;border-radius:38px;box-shadow:0 28px 70px rgba(25,42,72,.2)}
+.referencePhoneFront{transform:translate(-5px,-4px)}.referencePhoneBack{transform:translate(24px,32px) scale(.91)}
+.referenceSteps{height:390px;background:#f7f9fc}
+.referenceStepsCopy{padding:70px clamp(45px,7vw,110px)}
+.referenceStepGrid{gap:32px}.referenceStepIcon{box-shadow:0 10px 22px rgba(56,93,160,.09)}
+.referenceCouple{border-radius:0 0 0 100px}
+.referenceStats{height:230px}.referenceStatsOverlay{background:linear-gradient(90deg,rgba(11,25,48,.78),rgba(33,48,78,.52))}
+.referenceStatGrid{margin:16px auto 15px}.referenceStatsButton{padding:11px 30px;transition:.25s}
+@media(max-width:760px){
+ .referenceNav{height:66px}.referenceHero{height:680px}.referenceHeroImage{inset:300px 0 0;background-position:center 25%}.referenceHeroCopy{width:auto;margin:0;padding:62px 24px 0}.referenceHeroCopy h1{font-size:40px}.referenceHeroCopy p{font-size:12px}.referenceHero:after{display:none}
+ #reference-purchase{padding:78px 20px!important}.referenceFeatures{padding:62px 24px 40px}.referencePhones{height:450px}.referenceSteps{height:auto}.referenceStepsCopy{padding:62px 24px 40px}.referenceCouple{border-radius:0}
+}
+@media(max-width:500px){
+ .referenceHero{height:650px}.referenceHeroCopy{padding:52px 18px 0}.referenceHeroCopy h1{font-size:34px}.referenceHeroCopy p{font-size:11px}.referenceHeroButtons{align-items:stretch}.referencePrimary,.referenceSecondary{padding:12px 15px}.referenceFeatures{padding-left:18px;padding-right:18px}.referencePhones{height:390px}
+}
