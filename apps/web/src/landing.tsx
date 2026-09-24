@@ -72,7 +72,7 @@ function LandingPage(){
  return <div className="referenceTop" id="top">
   <header className="referenceHeader">
    <button className="referenceBrand" type="button" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}><span className="referenceLogo"><i/><b/></span><strong>Universal Matching</strong></button>
-   <nav><button onClick={()=>scroll('ref-features')}>機能紹介</button><button onClick={()=>scroll('ref-plan')}>料金プラン</button><button onClick={()=>scroll('ref-faq')}>よくある質問</button></nav>
+   <nav><button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}>ホーム</button><button onClick={()=>scroll('ref-features')}>機能紹介</button><button onClick={()=>scroll('ref-plan')}>料金プラン</button><button onClick={()=>scroll('ref-faq')}>よくある質問</button></nav>
    <div className="referenceHeaderActions"><button className="referenceLogin" type="button" onClick={()=>scroll('demo')}>ログイン</button><button className="referenceStart" type="button" onClick={()=>scroll('demo')}>無料で始める <span>→</span></button></div>
   </header>
 
