@@ -77,7 +77,8 @@ function LandingPage(){
   <header className="referenceNav">
    <button className="referenceBrand" type="button" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}><span className="referenceBrandMark"><i/><b/></span><strong>Universal Matching</strong></button>
    <nav><button onClick={()=>go('reference-features')}>ホーム</button><button onClick={()=>go('reference-features')}>機能紹介</button><button onClick={()=>go('reference-plans')}>料金プラン</button><button onClick={()=>go('reference-faq')}>よくある質問</button></nav>
-   <div className="referenceNavActions"><button className="referenceLogin" onClick={()=>go('demo')}>ログイン</button><button className="referenceStart" onClick={()=>go('demo')}>無料で始める <span>→</span></button></div>  </header>
+   <div className="referenceNavActions"><button className="referenceLogin" onClick={()=>go('demo')}>ログイン</button><button className="referenceStart" onClick={()=>go('demo')}>無料で始める <span>→</span></button></div>
+  </header>
 
   <main>
    <section className="referenceHero">
