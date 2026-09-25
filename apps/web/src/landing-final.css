@@ -1250,3 +1250,16 @@
     linear-gradient(rgba(8,13,23,.78),rgba(8,13,23,.78)),
     url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=70")!important;
 }
+
+
+/* READY TO USE — prevent bottom clipping and widen section */
+.premiumReadySection{
+  height:680px!important;
+  min-height:680px!important;
+  padding-bottom:110px!important;
+}
+.premiumReadyTags{
+  width:100%!important;
+  max-width:1280px!important;
+  gap:18px!important;
+}
