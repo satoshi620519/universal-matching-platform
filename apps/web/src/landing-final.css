@@ -548,3 +548,56 @@
   .premiumReadyTags span{min-height:92px!important;padding:18px 15px 16px 20px!important}
   .premiumReadyTags span::after{left:19px!important;top:17px!important;font-size:22px!important}
 }
+
+/* READY TO USE — cute card-only refinement */
+.premiumReadyTags span{
+  min-height:118px!important;
+  padding:24px 24px 21px 28px!important;
+  border:1px solid rgba(190,204,255,.22)!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,#202c4b 0%,#121b2d 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 16px 34px rgba(0,0,0,.20)!important;
+}
+.premiumReadyTags span::before{
+  left:0!important;right:auto!important;top:0!important;bottom:0!important;
+  width:4px!important;height:auto!important;
+  border-radius:24px 0 0 24px!important;
+  background:linear-gradient(180deg,#c8d2ff 0%,#91a6ff 48%,#b7a7ff 100%)!important;
+}
+.premiumReadyTags span::after{
+  left:24px!important;
+  top:20px!important;
+  width:42px!important;
+  height:42px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid rgba(201,211,255,.22)!important;
+  border-radius:50%!important;
+  background:rgba(174,190,255,.10)!important;
+  color:#c5d0ff!important;
+  font-size:13px!important;
+  font-weight:800!important;
+  letter-spacing:-.04em!important;
+  line-height:1!important;
+}
+.premiumReadyTags span:nth-child(1){background:linear-gradient(145deg,#243456,#151e31)!important}
+.premiumReadyTags span:nth-child(2){background:linear-gradient(145deg,#283250,#171e31)!important}
+.premiumReadyTags span:nth-child(3){background:linear-gradient(145deg,#302f50,#191d31)!important}
+.premiumReadyTags span:nth-child(4){background:linear-gradient(145deg,#263a50,#15202f)!important}
+.premiumReadyTags span:nth-child(5){background:linear-gradient(145deg,#303752,#191f31)!important}
+.premiumReadyTags span:nth-child(6){background:linear-gradient(145deg,#302f4b,#1a1e30)!important}
+.premiumReadyTags span{
+  font-size:12px!important;
+  font-weight:800!important;
+  letter-spacing:.16em!important;
+}
+.premiumReadyTags span:hover{
+  transform:translateY(-6px)!important;
+  border-color:rgba(207,216,255,.55)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 23px 46px rgba(0,0,0,.28),0 0 22px rgba(151,165,255,.08)!important;
+}
+@media(max-width:620px){
+  .premiumReadyTags span{min-height:92px!important;padding:18px 15px 16px 20px!important}
+  .premiumReadyTags span::after{left:18px!important;top:16px!important;width:34px!important;height:34px!important;font-size:11px!important}
+}
