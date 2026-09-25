@@ -1154,3 +1154,19 @@
   opacity:.97!important;
 }
 
+/* READY TO USE — final image visibility correction */
+.premiumReadyTags span:nth-child(1),
+.premiumReadyTags span:nth-child(2),
+.premiumReadyTags span:nth-child(3),
+.premiumReadyTags span:nth-child(4),
+.premiumReadyTags span:nth-child(5),
+.premiumReadyTags span:nth-child(6){
+  background-image:
+    linear-gradient(rgba(12,19,32,.94),rgba(12,19,32,.94)),
+    var(--ready-card-image)!important;
+}
+.premiumReadyTags span::before{
+  background:#0c1320!important;
+  opacity:.90!important;
+}
+
