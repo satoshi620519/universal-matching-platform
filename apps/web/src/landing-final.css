@@ -1135,7 +1135,7 @@
   background:linear-gradient(90deg,rgba(12,19,32,.985) 0%,rgba(12,19,32,.93) 45%,rgba(12,19,32,.78) 100%)!important;
 }
 
-/* READY TO USE — make background imagery more transparent */
+/* READY TO USE — make background imagery much darker and more transparent */
 .premiumReadyTags span::before{
-  background:linear-gradient(90deg,rgba(12,19,32,.995) 0%,rgba(12,19,32,.97) 52%,rgba(12,19,32,.90) 100%)!important;
+  background:linear-gradient(90deg,rgba(12,19,32,.999) 0%,rgba(12,19,32,.99) 58%,rgba(12,19,32,.96) 100%)!important;
 }
