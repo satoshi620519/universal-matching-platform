@@ -745,3 +745,62 @@
     border-radius:14px!important;font-size:10px!important;
   }
 }
+
+
+/* READY TO USE — refined product UI card direction */
+.premiumReadyTags span{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:118px!important;
+  max-height:118px!important;
+  box-sizing:border-box!important;
+  border-radius:18px!important;
+  border:1px solid rgba(210,220,240,.20)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
+  padding:22px 22px 20px 28px!important;
+  color:#f3f6fc!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 24px rgba(0,0,0,.14)!important;
+  transition:transform .22s ease,background .22s ease,border-color .22s ease,box-shadow .22s ease!important;
+}
+.premiumReadyTags span::before{
+  width:3px!important;
+  top:14px!important;
+  bottom:14px!important;
+  border-radius:3px!important;
+  background:#b9c6e8!important;
+  opacity:.75!important;
+}
+.premiumReadyTags span::after{
+  left:auto!important;
+  right:20px!important;
+  top:18px!important;
+  width:32px!important;
+  height:32px!important;
+  border-radius:50%!important;
+  background:rgba(215,225,250,.07)!important;
+  border:1px solid rgba(215,225,250,.18)!important;
+  color:#cbd5ee!important;
+  font-size:10px!important;
+  font-weight:600!important;
+  box-shadow:none!important;
+}
+.premiumReadyTags span:nth-child(1),
+.premiumReadyTags span:nth-child(2),
+.premiumReadyTags span:nth-child(3),
+.premiumReadyTags span:nth-child(4),
+.premiumReadyTags span:nth-child(5),
+.premiumReadyTags span:nth-child(6){
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
+}
+.premiumReadyTags span:nth-child(1)::before{background:#b8c7f0!important}
+.premiumReadyTags span:nth-child(2)::before{background:#b9d2e8!important}
+.premiumReadyTags span:nth-child(3)::before{background:#c9bce8!important}
+.premiumReadyTags span:nth-child(4)::before{background:#b8dcd5!important}
+.premiumReadyTags span:nth-child(5)::before{background:#d3c6e9!important}
+.premiumReadyTags span:nth-child(6)::before{background:#c2cde6!important}
+.premiumReadyTags span:hover{
+  transform:translateY(-5px)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.045))!important;
+  border-color:rgba(220,228,244,.38)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 16px 30px rgba(0,0,0,.18)!important;
+}
