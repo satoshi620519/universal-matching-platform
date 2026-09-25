@@ -646,3 +646,10 @@
     border-radius:12px!important;font-size:10px!important;
   }
 }
+
+/* READY TO USE — keep both card rows fully visible */
+.premiumReadyTags span{
+  min-height:118px!important;
+  max-height:118px!important;
+  box-sizing:border-box!important;
+}
