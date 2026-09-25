@@ -1139,3 +1139,18 @@
 .premiumReadyTags span::before{
   background:linear-gradient(90deg,rgba(12,19,32,.999) 0%,rgba(12,19,32,.99) 58%,rgba(12,19,32,.96) 100%)!important;
 }
+
+/* READY TO USE — force background imagery to near-invisible */
+.premiumReadyTags span:nth-child(1),
+.premiumReadyTags span:nth-child(2),
+.premiumReadyTags span:nth-child(3),
+.premiumReadyTags span:nth-child(4),
+.premiumReadyTags span:nth-child(5),
+.premiumReadyTags span:nth-child(6){
+  background-blend-mode:normal!important;
+}
+.premiumReadyTags span::before{
+  background:#0c1320!important;
+  opacity:.97!important;
+}
+
