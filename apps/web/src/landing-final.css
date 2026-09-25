@@ -898,3 +898,70 @@
   border-color:rgba(224,231,247,.40)!important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 18px 34px rgba(0,0,0,.20)!important;
 }
+
+
+/* READY TO USE — clean premium card system */
+.premiumReadyTags span{
+  position:relative!important;
+  overflow:hidden!important;
+  min-height:118px!important;
+  max-height:118px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  border-radius:14px!important;
+  border:1px solid rgba(226,231,240,.78)!important;
+  background:#f7f8fb!important;
+  padding:20px 22px 19px 24px!important;
+  color:#172033!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.10)!important;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease!important;
+}
+.premiumReadyTags span::before{
+  content:""!important;
+  position:absolute!important;
+  left:24px!important;
+  top:20px!important;
+  width:28px!important;
+  height:1px!important;
+  border-radius:0!important;
+  background:#aeb8cc!important;
+  opacity:1!important;
+}
+.premiumReadyTags span::after{
+  left:auto!important;
+  right:20px!important;
+  top:17px!important;
+  width:28px!important;
+  height:28px!important;
+  border-radius:50%!important;
+  background:transparent!important;
+  border:1px solid #cbd2df!important;
+  color:#69758b!important;
+  font-size:9px!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+  box-shadow:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.premiumReadyTags span:nth-child(1)::after{content:"01"!important}
+.premiumReadyTags span:nth-child(2)::after{content:"02"!important}
+.premiumReadyTags span:nth-child(3)::after{content:"03"!important}
+.premiumReadyTags span:nth-child(4)::after{content:"04"!important}
+.premiumReadyTags span:nth-child(5)::after{content:"05"!important}
+.premiumReadyTags span:nth-child(6)::after{content:"06"!important}
+.premiumReadyTags span:nth-child(1),
+.premiumReadyTags span:nth-child(2),
+.premiumReadyTags span:nth-child(3),
+.premiumReadyTags span:nth-child(4),
+.premiumReadyTags span:nth-child(5),
+.premiumReadyTags span:nth-child(6){
+  background:#f7f8fb!important;
+}
+.premiumReadyTags span:hover{
+  transform:translateY(-4px)!important;
+  border-color:#b8c2d3!important;
+  box-shadow:0 14px 26px rgba(0,0,0,.13)!important;
+}
