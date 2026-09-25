@@ -1263,3 +1263,15 @@
   max-width:1280px!important;
   gap:18px!important;
 }
+
+/* READY TO USE — keep the section content wide */
+.premiumReadySection{
+  padding-left:clamp(20px,4vw,64px)!important;
+  padding-right:clamp(20px,4vw,64px)!important;
+}
+.premiumReadyInner{
+  max-width:1400px!important;
+}
+.premiumReadyTags{
+  max-width:1400px!important;
+}
