@@ -1059,3 +1059,67 @@
   content:none!important;
   display:none!important;
 }
+
+
+/* READY TO USE — subtle thematic background imagery */
+.premiumReadyTags span{
+  isolation:isolate!important;
+  background-color:#111a2a!important;
+}
+.premiumReadyTags span::before{
+  z-index:1!important;
+  width:100%!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  background:linear-gradient(90deg,rgba(12,19,32,.96) 0%,rgba(12,19,32,.78) 42%,rgba(12,19,32,.42) 100%)!important;
+  opacity:1!important;
+}
+.premiumReadyTags span::after{
+  z-index:2!important;
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  left:auto!important;
+  right:20px!important;
+  top:18px!important;
+  width:34px!important;
+  height:34px!important;
+  border:1px solid rgba(220,228,244,.18)!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.035)!important;
+  box-shadow:none!important;
+}
+.premiumReadyTags span:nth-child(1){
+  background-image:url("https://images.unsplash.com/photo-1589466445478-bb536e11b967?auto=format&fit=crop&w=1200&q=70")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.premiumReadyTags span:nth-child(2){
+  background-image:url("https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1200&q=70")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.premiumReadyTags span:nth-child(3){
+  background-image:url("https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=70")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.premiumReadyTags span:nth-child(4){
+  background-image:url("https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=70")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.premiumReadyTags span:nth-child(5){
+  background-image:url("https://images.unsplash.com/photo-1521292270410-a8c4d716d518?auto=format&fit=crop&w=1200&q=70")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.premiumReadyTags span:nth-child(6){
+  background-image:url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=70")!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+.premiumReadyTags span:hover::before{
+  background:linear-gradient(90deg,rgba(12,19,32,.92) 0%,rgba(12,19,32,.70) 42%,rgba(12,19,32,.34) 100%)!important;
+}
