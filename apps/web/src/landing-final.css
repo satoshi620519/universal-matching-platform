@@ -1052,3 +1052,10 @@
   }
   .premiumReadyTags span:hover{padding-left:34px!important}
 }
+
+
+/* READY TO USE — remove numeric labels */
+.premiumReadyTags span::after{
+  content:none!important;
+  display:none!important;
+}
